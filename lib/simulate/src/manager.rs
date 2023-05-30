@@ -16,8 +16,8 @@ use revm::primitives::{AccountInfo, Address, Log, B160, U256};
 
 use crate::{
     agent::{
-        simple_arbitrageur::SimpleArbitrageur, user::User, AgentType, IsActive, NotActive,
-        TransactSettings,
+        chronos::Chronos, cozy_set_admin::CozySetAdmin, simple_arbitrageur::SimpleArbitrageur,
+        user::User, AgentType, IsActive, NotActive, TransactSettings,
     },
     environment::{
         contract::{IsDeployed, SimulationContract},
@@ -182,6 +182,39 @@ impl SimulationManager {
                     AgentType::SimpleArbitrageur(new_simple_arbitrageur),
                 );
             }
+            AgentType::CozySetAdmin(cozy_set_admin) => {
+                let new_cozy_set_admin = CozySetAdmin::<IsActive> {
+                    name: cozy_set_admin.name,
+                    address: new_agent_address,
+                    account_info,
+                    transact_settings: TransactSettings {
+                        gas_limit: u64::MAX,   // TODO: Users should have a gas limit.
+                        gas_price: U256::ZERO, // TODO: Users should have an associated gas price.
+                    },
+                    event_receiver,
+                    event_filters: cozy_set_admin.event_filters,
+                };
+                self.agents.insert(
+                    new_cozy_set_admin.name.clone(),
+                    AgentType::CozySetAdmin(new_cozy_set_admin),
+                );
+            }
+            AgentType::Chronos(chronos) => {
+                let new_chronos = Chronos::<IsActive> {
+                    name: chronos.name,
+                    address: new_agent_address,
+                    account_info,
+                    transact_settings: TransactSettings {
+                        gas_limit: u64::MAX,   // TODO: Users should have a gas limit.
+                        gas_price: U256::ZERO, // TODO: Users should have an associated gas price.
+                    },
+                    event_receiver,
+                    event_filters: chronos.event_filters,
+                };
+                self.agents
+                    .insert(new_chronos.name.clone(), AgentType::Chronos(new_chronos));
+            }
+            _ => {}
         };
         self.environment.add_sender(event_sender);
         Ok(())

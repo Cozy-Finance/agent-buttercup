@@ -30,6 +30,16 @@ impl SimulationEnvironment {
         let event_senders = vec![];
         Self { evm, event_senders }
     }
+
+    pub(crate) fn update_block_and_block_timestamp(
+        &mut self,
+        block_increment: U256,
+        block_timestamp_increment: U256,
+    ) {
+        self.evm.env.block.number += block_increment;
+        self.evm.env.block.timestamp += block_timestamp_increment;
+    }
+
     /// Execute a transaction in the execution environment.
     /// # Arguments
     /// * `tx` - The transaction environment that is used to execute the transaction.

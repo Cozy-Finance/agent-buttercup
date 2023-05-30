@@ -7,16 +7,18 @@ pub use example_flash_swap::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod example_flash_swap {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_factory\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_factoryV1\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"router\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount0\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount1\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"uniswapV2Call\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"receive\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static EXAMPLEFLASHSWAP_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static EXAMPLEFLASHSWAP_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -6526,38 +6528,38 @@ pub mod example_flash_swap {
         34,
         18,
         32,
-        196,
-        51,
-        139,
-        106,
-        226,
-        84,
-        153,
-        36,
-        202,
-        178,
-        241,
-        15,
+        24,
+        55,
+        245,
         67,
-        63,
-        99,
-        252,
-        85,
-        68,
-        222,
-        15,
-        40,
-        213,
-        237,
-        191,
-        12,
-        162,
-        15,
-        195,
-        104,
-        173,
-        18,
-        220,
+        55,
+        194,
+        94,
+        77,
+        151,
+        93,
+        207,
+        44,
+        239,
+        238,
+        8,
+        51,
+        250,
+        190,
+        58,
+        54,
+        30,
+        82,
+        119,
+        174,
+        154,
+        229,
+        7,
+        249,
+        76,
+        121,
+        253,
+        249,
         100,
         115,
         111,
@@ -6571,8 +6573,9 @@ pub mod example_flash_swap {
         51,
     ];
     ///The bytecode of the contract.
-    pub static EXAMPLEFLASHSWAP_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static EXAMPLEFLASHSWAP_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -12519,38 +12522,38 @@ pub mod example_flash_swap {
         34,
         18,
         32,
-        196,
-        51,
-        139,
-        106,
-        226,
-        84,
-        153,
-        36,
-        202,
-        178,
-        241,
-        15,
+        24,
+        55,
+        245,
         67,
-        63,
-        99,
-        252,
-        85,
-        68,
-        222,
-        15,
-        40,
-        213,
-        237,
-        191,
-        12,
-        162,
-        15,
-        195,
-        104,
-        173,
-        18,
-        220,
+        55,
+        194,
+        94,
+        77,
+        151,
+        93,
+        207,
+        44,
+        239,
+        238,
+        8,
+        51,
+        250,
+        190,
+        58,
+        54,
+        30,
+        82,
+        119,
+        174,
+        154,
+        229,
+        7,
+        249,
+        76,
+        121,
+        253,
+        249,
         100,
         115,
         111,
@@ -12564,8 +12567,9 @@ pub mod example_flash_swap {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static EXAMPLEFLASHSWAP_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static EXAMPLEFLASHSWAP_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct ExampleFlashSwap<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for ExampleFlashSwap<M> {
         fn clone(&self) -> Self {
@@ -12585,9 +12589,7 @@ pub mod example_flash_swap {
     }
     impl<M> ::core::fmt::Debug for ExampleFlashSwap<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ExampleFlashSwap))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(ExampleFlashSwap)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ExampleFlashSwap<M> {
@@ -12597,11 +12599,13 @@ pub mod example_flash_swap {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                EXAMPLEFLASHSWAP_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    EXAMPLEFLASHSWAP_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -12656,8 +12660,7 @@ pub mod example_flash_swap {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for ExampleFlashSwap<M>
-    {
+    for ExampleFlashSwap<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -12671,7 +12674,7 @@ pub mod example_flash_swap {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "uniswapV2Call",

@@ -2,7 +2,6 @@
 // compiler version must be greater than or equal to 0.8.17 and less than 0.9.0
 pragma solidity ^0.8.17;
 
-
 /**
  * @dev Implementation of the test interface for Arbiter writing contracts.
  */
@@ -16,5 +15,4 @@ contract Writer {
         emit WasWritten(test_string);
         return _test_string;
     }
-    
 }

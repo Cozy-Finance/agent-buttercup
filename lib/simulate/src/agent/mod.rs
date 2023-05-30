@@ -17,12 +17,20 @@ use crossbeam_channel::Receiver;
 use ethers::{prelude::BaseContract, types::H256};
 use revm::primitives::{AccountInfo, Address, ExecutionResult, Log, TransactTo, TxEnv, B160, U256};
 
-use self::{simple_arbitrageur::SimpleArbitrageur, user::User};
+use self::{
+    chronos::Chronos, cozy_passive_buyer::CozyPassiveBuyer,
+    cozy_passive_supplier::CozyPassiveSupplier, cozy_set_admin::CozySetAdmin,
+    simple_arbitrageur::SimpleArbitrageur, user::User,
+};
 use crate::environment::{
     contract::{IsDeployed, SimulationContract},
     sim_environment::SimulationEnvironment,
 };
 
+pub mod chronos;
+pub mod cozy_passive_buyer;
+pub mod cozy_passive_supplier;
+pub mod cozy_set_admin;
 pub mod simple_arbitrageur;
 pub mod user;
 
@@ -85,6 +93,14 @@ pub enum AgentType<AgentState: AgentStatus> {
     User(User<AgentState>),
     /// A [`SimpleArbitrageur`] is an agent that can perform arbitrage between two pools.
     SimpleArbitrageur(SimpleArbitrageur<AgentState>),
+    /// A ['CozyPassiveSupplier`] is a price-insensitive agent that suppliers to Cozy sets.
+    CozyPassiveSupplier(CozyPassiveSupplier<AgentState>),
+    /// A ['CozyPassiveBuyer`] is a price-insensitive agent that purchases from Cozy markets.
+    CozyPassiveBuyer(CozyPassiveBuyer<AgentState>),
+    /// A ['CozySetAdmin`] deploys Sets.
+    CozySetAdmin(CozySetAdmin<AgentState>),
+    //A ['Chronos`] agent fastforwards blocks and block timestamps.
+    Chronos(Chronos<AgentState>),
 }
 
 impl AgentType<IsActive> {
@@ -93,6 +109,10 @@ impl AgentType<IsActive> {
         match self {
             AgentType::User(inner) => inner,
             AgentType::SimpleArbitrageur(inner) => inner,
+            AgentType::CozyPassiveBuyer(inner) => inner,
+            AgentType::CozyPassiveSupplier(inner) => inner,
+            AgentType::CozySetAdmin(inner) => inner,
+            AgentType::Chronos(inner) => inner,
         }
     }
 }
@@ -103,6 +123,10 @@ impl AgentType<NotActive> {
         match self {
             AgentType::User(inner) => inner,
             AgentType::SimpleArbitrageur(inner) => inner,
+            AgentType::CozyPassiveBuyer(inner) => inner,
+            AgentType::CozyPassiveSupplier(inner) => inner,
+            AgentType::CozySetAdmin(inner) => inner,
+            AgentType::Chronos(inner) => inner,
         }
     }
 }
@@ -156,6 +180,15 @@ pub trait Agent: Identifiable {
     /// Gets the event filter for the [`Agent`]
     fn event_filters(&self) -> Vec<SimulationEventFilter>;
 
+    fn update_block_and_block_timestamp(
+        &self,
+        simulation_environment: &mut SimulationEnvironment,
+        block_number: U256,
+        block_timestamp: U256,
+    ) {
+        simulation_environment.update_block_and_block_timestamp(block_number, block_timestamp);
+    }
+
     /// Used to allow agents to make a generic call a specific smart contract.
     fn call_contract(
         &self,
@@ -165,6 +198,18 @@ pub trait Agent: Identifiable {
         value: U256,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(contract.address, call_data, value);
+        simulation_environment.execute(tx)
+    }
+
+    /// Used to allow agents to make a generic call a specific smart contract by address.
+    fn call_contract_by_address(
+        &self,
+        simulation_environment: &mut SimulationEnvironment,
+        contract_address: Address,
+        call_data: Bytes,
+        value: U256,
+    ) -> ExecutionResult {
+        let tx = self.build_call_transaction(contract_address, call_data, value);
         simulation_environment.execute(tx)
     }
 

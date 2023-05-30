@@ -28,3 +28,12 @@
 	path = contracts/solidity-lib
 	url = https://github.com/Uniswap/solidity-lib
 	branch = v2.1.0
+[submodule "contracts/cozy-protocol-v2"]
+	path = contracts/cozy-protocol-v2
+	url = https://github.com/Cozy-Finance/cozy-protocol-v2
+[submodule "contracts/cozy-models-v2-simulation"]
+	path = contracts/cozy-models-v2-simulation
+	url = https://github.com/Cozy-Finance/cozy-models-v2-simulation
+[submodule "contracts/cozy-triggers-v2-simulation"]
+	path = contracts/cozy-triggers-v2-simulation
+	url = https://github.com/Cozy-Finance/cozy-triggers-v2-simulation

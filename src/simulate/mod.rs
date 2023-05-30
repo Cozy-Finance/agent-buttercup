@@ -9,6 +9,7 @@ use simulate::stochastic::price_process::PriceProcess;
 
 use crate::{Configurable, ConfigurationError};
 
+pub mod cozy;
 pub mod portfolio;
 pub mod uniswap;
 

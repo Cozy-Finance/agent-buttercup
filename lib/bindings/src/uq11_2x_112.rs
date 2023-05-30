@@ -7,16 +7,14 @@ pub use uq11_2x_112::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod uq11_2x_112 {
     #[rustfmt::skip]
     const __ABI: &str = "[]";
     ///The parsed JSON ABI of the contract.
-    pub static UQ112X112_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static UQ112X112_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -96,38 +94,38 @@ pub mod uq11_2x_112 {
         49,
         88,
         32,
-        14,
-        203,
-        239,
-        210,
-        179,
-        136,
-        254,
-        161,
-        91,
-        4,
-        174,
+        104,
+        255,
+        231,
+        118,
+        113,
+        101,
+        39,
+        69,
+        36,
         234,
-        111,
-        239,
-        188,
-        221,
-        162,
-        57,
-        65,
-        228,
-        98,
-        126,
-        60,
-        143,
-        239,
-        122,
-        15,
-        132,
-        148,
-        188,
-        23,
+        131,
+        178,
+        88,
+        45,
+        92,
+        231,
+        194,
         68,
+        185,
+        95,
+        116,
+        164,
+        165,
+        37,
+        189,
+        225,
+        80,
+        220,
+        58,
+        249,
+        140,
+        89,
         100,
         115,
         111,
@@ -141,8 +139,9 @@ pub mod uq11_2x_112 {
         50,
     ];
     ///The bytecode of the contract.
-    pub static UQ112X112_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static UQ112X112_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         115,
@@ -187,38 +186,38 @@ pub mod uq11_2x_112 {
         49,
         88,
         32,
-        14,
-        203,
-        239,
-        210,
-        179,
-        136,
-        254,
-        161,
-        91,
-        4,
-        174,
+        104,
+        255,
+        231,
+        118,
+        113,
+        101,
+        39,
+        69,
+        36,
         234,
-        111,
-        239,
-        188,
-        221,
-        162,
-        57,
-        65,
-        228,
-        98,
-        126,
-        60,
-        143,
-        239,
-        122,
-        15,
-        132,
-        148,
-        188,
-        23,
+        131,
+        178,
+        88,
+        45,
+        92,
+        231,
+        194,
         68,
+        185,
+        95,
+        116,
+        164,
+        165,
+        37,
+        189,
+        225,
+        80,
+        220,
+        58,
+        249,
+        140,
+        89,
         100,
         115,
         111,
@@ -232,8 +231,9 @@ pub mod uq11_2x_112 {
         50,
     ];
     ///The deployed bytecode of the contract.
-    pub static UQ112X112_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static UQ112X112_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct UQ112x112<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for UQ112x112<M> {
         fn clone(&self) -> Self {
@@ -253,9 +253,7 @@ pub mod uq11_2x_112 {
     }
     impl<M> ::core::fmt::Debug for UQ112x112<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(UQ112x112))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(UQ112x112)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> UQ112x112<M> {
@@ -265,11 +263,13 @@ pub mod uq11_2x_112 {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                UQ112X112_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    UQ112X112_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -311,7 +311,8 @@ pub mod uq11_2x_112 {
             Ok(deployer)
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for UQ112x112<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for UQ112x112<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
