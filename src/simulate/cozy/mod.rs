@@ -13,10 +13,9 @@ use simulate::{
     utils::{float_to_wad, unpack_execution},
 };
 
-pub mod chronos_actions;
-pub mod cozy_set_admin_actions;
 pub mod cozy_passive_buyer_actions;
 pub mod cozy_passive_supplier_actions;
+pub mod cozy_set_admin_actions;
 pub mod startup;
 
 pub struct CozyProtocolParams {

@@ -7,15 +7,17 @@ pub use configurator_lib::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod configurator_lib {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct SetConfig\",\"name\":\"setConfig\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"struct MarketConfig[]\",\"name\":\"marketConfigs\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"ConfigUpdatesFinalized\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct SetConfig\",\"name\":\"setConfig\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"struct MarketConfig[]\",\"name\":\"marketConfigs\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"updateTime\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"updateDeadline\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"ConfigUpdatesQueued\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId\",\"type\":\"uint16\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"ptokenAddress\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"MarketCreated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_FEE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static CONFIGURATORLIB_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static CONFIGURATORLIB_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -10995,9 +10997,8 @@ pub mod configurator_lib {
         51,
     ];
     ///The bytecode of the contract.
-    pub static CONFIGURATORLIB_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static CONFIGURATORLIB_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         115,
@@ -21919,9 +21920,8 @@ pub mod configurator_lib {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static CONFIGURATORLIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static CONFIGURATORLIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct ConfiguratorLib<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for ConfiguratorLib<M> {
         fn clone(&self) -> Self {
@@ -21941,7 +21941,9 @@ pub mod configurator_lib {
     }
     impl<M> ::core::fmt::Debug for ConfiguratorLib<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ConfiguratorLib)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(ConfiguratorLib))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ConfiguratorLib<M> {
@@ -21951,13 +21953,11 @@ pub mod configurator_lib {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    CONFIGURATORLIB_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                CONFIGURATORLIB_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -22009,46 +22009,36 @@ pub mod configurator_lib {
         ///Gets the contract's `ConfigUpdatesFinalized` event
         pub fn config_updates_finalized_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ConfigUpdatesFinalizedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ConfigUpdatesFinalizedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `ConfigUpdatesQueued` event
         pub fn config_updates_queued_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ConfigUpdatesQueuedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ConfigUpdatesQueuedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `MarketCreated` event
         pub fn market_created_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            MarketCreatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, MarketCreatedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ConfiguratorLibEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ConfiguratorLibEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for ConfiguratorLib<M> {
+        for ConfiguratorLib<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -22062,7 +22052,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidConfiguration", abi = "InvalidConfiguration()")]
     pub struct InvalidConfiguration;
@@ -22075,7 +22065,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidState", abi = "InvalidState()")]
     pub struct InvalidState;
@@ -22088,7 +22078,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -22101,7 +22091,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
@@ -22121,30 +22111,25 @@ pub mod configurator_lib {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidConfiguration(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidState(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SafeCastFailed(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -22156,15 +22141,11 @@ pub mod configurator_lib {
                 Self::InvalidConfiguration(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::SafeCastFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SafeCastFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -22174,17 +22155,17 @@ pub mod configurator_lib {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
+                _ if selector == <InvalidState as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -22194,13 +22175,9 @@ pub mod configurator_lib {
     impl ::core::fmt::Display for ConfiguratorLibErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InvalidConfiguration(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidConfiguration(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidState(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SafeCastFailed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }
@@ -22239,7 +22216,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "ConfigUpdatesFinalized",
@@ -22257,7 +22234,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "ConfigUpdatesQueued",
@@ -22277,7 +22254,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "MarketCreated", abi = "MarketCreated(uint16,address)")]
     pub struct MarketCreatedFilter {
@@ -22314,12 +22291,8 @@ pub mod configurator_lib {
                 Self::ConfigUpdatesFinalizedFilter(element) => {
                     ::core::fmt::Display::fmt(element, f)
                 }
-                Self::ConfigUpdatesQueuedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::MarketCreatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ConfigUpdatesQueuedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::MarketCreatedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
@@ -22347,7 +22320,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "MAX_FEE", abi = "MAX_FEE()")]
     pub struct MaxFeeCall;
@@ -22360,7 +22333,7 @@ pub mod configurator_lib {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxFeeReturn(pub ::ethers::core::types::U256);
 }

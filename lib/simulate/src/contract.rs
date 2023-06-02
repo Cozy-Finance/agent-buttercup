@@ -8,18 +8,19 @@ use ethers::{
     prelude::BaseContract,
     types::{Bytes as EthersBytes, H256},
 };
-use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, B256, U256};
+use revm::primitives::{B160, B256, U256, TransactTo, TxEnv, Output, ExecutionResult};
 
 use crate::{
-    agent::{AgentType, IsActive},
+    agent::{Agent, AgentTxGasSettings},
     environment::sim_environment::SimulationEnvironment,
 };
 
+
 #[derive(Debug, Clone)]
-/// A struct use for [`PhantomData`] to indicate a lock on contracts that are not deployed.
+/// A struct to indicate a lock on contracts that are not deployed.
 pub struct NotDeployed;
 #[derive(Debug)]
-/// A struct use for `PhantomData` to indicate an unlocked contract that is deployed.
+/// A struct to indicate an unlocked contract that is deployed.
 pub struct IsDeployed;
 
 /// Trait that is used to allow for different statuses of contract fields depending on whether a contract is deployed or not.
@@ -58,8 +59,6 @@ pub struct SimulationContract<DeployedState: DeploymentStatus> {
     pub base_contract: BaseContract,
     /// The contract's deployed bytecode.
     pub bytecode: DeployedState::Bytecode,
-    // /// A [`PhantomData`] marker to indicate whether the contract is deployed or not.
-    // deployed: PhantomData<DeployedState>,
     /// The constructor arguments for the contract.
     pub constructor_arguments: DeployedState::ConstructorArguments,
 }
@@ -71,7 +70,6 @@ impl SimulationContract<NotDeployed> {
             base_contract: BaseContract::from(contract),
             bytecode: bytecode.to_vec(),
             address: (),
-            // deployed: PhantomData,
             constructor_arguments: (),
         }
     }
@@ -87,8 +85,10 @@ impl SimulationContract<NotDeployed> {
     pub fn deploy<T: Tokenize>(
         &self,
         simulation_environment: &mut SimulationEnvironment,
-        deployer: &AgentType<IsActive>,
+        deployer: Box<dyn Agent>,
         constructor_arguments: T,
+        value: Option<U256>,
+        gas_settings: Option<AgentTxGasSettings>,
     ) -> SimulationContract<IsDeployed> {
         // Append constructor args (if available) to generate the deploy bytecode.
         let tokenized_args = constructor_arguments.into_tokens();
@@ -102,18 +102,9 @@ impl SimulationContract<NotDeployed> {
         };
 
         // Take the execution result and extract the contract address.
-        let deploy_txenv = TxEnv {
-            caller: deployer.inner().address(),
-            gas_limit: deployer.inner().transact_settings().gas_limit,
-            gas_price: deployer.inner().transact_settings().gas_price,
-            gas_priority_fee: None,
-            transact_to: TransactTo::create(),
-            value: U256::ZERO,
-            data: bytecode,
-            chain_id: None,
-            nonce: None,
-            access_list: Vec::new(),
-        };
+        let deploy_txenv = Self::build_deploy_tx(deployer, bytecode, value, gas_settings);
+        
+
         let execution_result = simulation_environment.execute(deploy_txenv);
         let output = match execution_result {
             ExecutionResult::Success { output, .. } => output,
@@ -130,6 +121,28 @@ impl SimulationContract<NotDeployed> {
             address,
             base_contract: self.base_contract.clone(),
             constructor_arguments: tokenized_args,
+        }
+    }
+
+    /// A constructor to build a `TxEnv` for a contract deployment.
+    pub fn build_deploy_tx(
+        deployer: Box<dyn Agent>,
+        bytecode: Bytes,
+        value: Option<U256>,
+        gas_settings: Option<AgentTxGasSettings>,
+    ) -> TxEnv {
+        let tx_gas_settings = gas_settings.unwrap_or_default();
+        TxEnv {
+            caller: deployer.address(),
+            gas_limit: tx_gas_settings.gas_limit,
+            gas_price: tx_gas_settings.gas_price,
+            gas_priority_fee: tx_gas_settings.gas_priority_fee,
+            transact_to: TransactTo::create(),
+            value: value.unwrap_or(U256::ZERO),
+            data: bytecode,
+            chain_id: None,
+            nonce: None,
+            access_list: Vec::new(),
         }
     }
 }

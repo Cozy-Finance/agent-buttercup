@@ -7,14 +7,16 @@ pub use i_drip_decay_model::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_drip_decay_model {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"dripDecayRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IDRIPDECAYMODEL_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static IDRIPDECAYMODEL_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IDripDecayModel<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IDripDecayModel<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_drip_decay_model {
     }
     impl<M> ::core::fmt::Debug for IDripDecayModel<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IDripDecayModel)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IDripDecayModel))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IDripDecayModel<M> {
@@ -44,13 +48,11 @@ pub mod i_drip_decay_model {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    IDRIPDECAYMODEL_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                IDRIPDECAYMODEL_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `dripDecayRate` (0x406b6627) function
         pub fn drip_decay_rate(
@@ -63,7 +65,8 @@ pub mod i_drip_decay_model {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IDripDecayModel<M> {
+        for IDripDecayModel<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -77,7 +80,7 @@ pub mod i_drip_decay_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "dripDecayRate", abi = "dripDecayRate(uint256)")]
     pub struct DripDecayRateCall {
@@ -92,7 +95,7 @@ pub mod i_drip_decay_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DripDecayRateReturn(pub ::ethers::core::types::U256);
 }
