@@ -7,18 +7,16 @@ pub use cost_model_jump_rate::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod cost_model_jump_rate {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_kink\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtZeroUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtKinkUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtFullUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidReferencePoint\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidUtilization\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtFullUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtKinkUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtZeroUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"kink\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"registerSet\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"update\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COSTMODELJUMPRATE_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static COSTMODELJUMPRATE_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -3356,9 +3354,8 @@ pub mod cost_model_jump_rate {
         51,
     ];
     ///The bytecode of the contract.
-    pub static COSTMODELJUMPRATE_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static COSTMODELJUMPRATE_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -6009,9 +6006,8 @@ pub mod cost_model_jump_rate {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static COSTMODELJUMPRATE_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static COSTMODELJUMPRATE_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct CostModelJumpRate<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelJumpRate<M> {
         fn clone(&self) -> Self {
@@ -6031,7 +6027,9 @@ pub mod cost_model_jump_rate {
     }
     impl<M> ::core::fmt::Debug for CostModelJumpRate<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(CostModelJumpRate)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(CostModelJumpRate))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> CostModelJumpRate<M> {
@@ -6041,13 +6039,11 @@ pub mod cost_model_jump_rate {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    COSTMODELJUMPRATE_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                COSTMODELJUMPRATE_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -6158,7 +6154,8 @@ pub mod cost_model_jump_rate {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for CostModelJumpRate<M> {
+        for CostModelJumpRate<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -6172,7 +6169,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidConfiguration", abi = "InvalidConfiguration()")]
     pub struct InvalidConfiguration;
@@ -6185,7 +6182,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidReferencePoint", abi = "InvalidReferencePoint()")]
     pub struct InvalidReferencePoint;
@@ -6198,7 +6195,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidUtilization", abi = "InvalidUtilization()")]
     pub struct InvalidUtilization;
@@ -6217,26 +6214,24 @@ pub mod cost_model_jump_rate {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidConfiguration(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidReferencePoint as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidReferencePoint as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidReferencePoint(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidUtilization as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InvalidUtilization as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidUtilization(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -6263,15 +6258,18 @@ pub mod cost_model_jump_rate {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ => false,
@@ -6281,15 +6279,9 @@ pub mod cost_model_jump_rate {
     impl ::core::fmt::Display for CostModelJumpRateErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InvalidConfiguration(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::InvalidReferencePoint(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::InvalidUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidConfiguration(element) => ::core::fmt::Display::fmt(element, f),
+                Self::InvalidReferencePoint(element) => ::core::fmt::Display::fmt(element, f),
+                Self::InvalidUtilization(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }
         }
@@ -6323,7 +6315,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "costFactor", abi = "costFactor(uint256,uint256)")]
     pub struct CostFactorCall {
@@ -6339,7 +6331,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "costFactorAtFullUtilization",
@@ -6355,7 +6347,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "costFactorAtKinkUtilization",
@@ -6371,7 +6363,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "costFactorAtZeroUtilization",
@@ -6387,7 +6379,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "kink", abi = "kink()")]
     pub struct KinkCall;
@@ -6400,7 +6392,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "refundFactor", abi = "refundFactor(uint256,uint256)")]
     pub struct RefundFactorCall {
@@ -6416,7 +6408,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "registerSet", abi = "registerSet()")]
     pub struct RegisterSetCall;
@@ -6429,7 +6421,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "update", abi = "update(uint256,uint256)")]
     pub struct UpdateCall {
@@ -6453,42 +6445,35 @@ pub mod cost_model_jump_rate {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::CostFactor(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorAtFullUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorAtFullUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorAtFullUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorAtKinkUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorAtKinkUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorAtKinkUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorAtZeroUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorAtZeroUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorAtZeroUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <KinkCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <KinkCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Kink(decoded));
             }
-            if let Ok(decoded)
-                = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RefundFactor(decoded));
             }
-            if let Ok(decoded)
-                = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RegisterSet(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Update(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -6497,9 +6482,7 @@ pub mod cost_model_jump_rate {
     impl ::ethers::core::abi::AbiEncode for CostModelJumpRateCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::CostFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CostFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::CostFactorAtFullUtilization(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -6510,12 +6493,8 @@ pub mod cost_model_jump_rate {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Kink(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::RefundFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RegisterSet(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::RefundFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RegisterSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Update(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -6524,15 +6503,9 @@ pub mod cost_model_jump_rate {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::CostFactor(element) => ::core::fmt::Display::fmt(element, f),
-                Self::CostFactorAtFullUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::CostFactorAtKinkUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::CostFactorAtZeroUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::CostFactorAtFullUtilization(element) => ::core::fmt::Display::fmt(element, f),
+                Self::CostFactorAtKinkUtilization(element) => ::core::fmt::Display::fmt(element, f),
+                Self::CostFactorAtZeroUtilization(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Kink(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RefundFactor(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RegisterSet(element) => ::core::fmt::Display::fmt(element, f),
@@ -6545,20 +6518,17 @@ pub mod cost_model_jump_rate {
             Self::CostFactor(value)
         }
     }
-    impl ::core::convert::From<CostFactorAtFullUtilizationCall>
-    for CostModelJumpRateCalls {
+    impl ::core::convert::From<CostFactorAtFullUtilizationCall> for CostModelJumpRateCalls {
         fn from(value: CostFactorAtFullUtilizationCall) -> Self {
             Self::CostFactorAtFullUtilization(value)
         }
     }
-    impl ::core::convert::From<CostFactorAtKinkUtilizationCall>
-    for CostModelJumpRateCalls {
+    impl ::core::convert::From<CostFactorAtKinkUtilizationCall> for CostModelJumpRateCalls {
         fn from(value: CostFactorAtKinkUtilizationCall) -> Self {
             Self::CostFactorAtKinkUtilization(value)
         }
     }
-    impl ::core::convert::From<CostFactorAtZeroUtilizationCall>
-    for CostModelJumpRateCalls {
+    impl ::core::convert::From<CostFactorAtZeroUtilizationCall> for CostModelJumpRateCalls {
         fn from(value: CostFactorAtZeroUtilizationCall) -> Self {
             Self::CostFactorAtZeroUtilization(value)
         }
@@ -6592,7 +6562,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
@@ -6604,7 +6574,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorAtFullUtilizationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorAtKinkUtilization` function with signature `costFactorAtKinkUtilization()` and selector `0xa2614e9f`
@@ -6616,7 +6586,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorAtKinkUtilizationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
@@ -6628,7 +6598,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorAtZeroUtilizationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `kink` function with signature `kink()` and selector `0xfd2da339`
@@ -6640,7 +6610,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct KinkReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
@@ -6652,7 +6622,7 @@ pub mod cost_model_jump_rate {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RefundFactorReturn(pub ::ethers::core::types::U256);
 }

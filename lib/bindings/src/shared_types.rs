@@ -7,7 +7,7 @@
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct BackstopApproval {
     pub set: ::ethers::core::types::Address,
@@ -22,7 +22,7 @@ pub struct BackstopApproval {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct Delays {
     pub config_update_delay: ::ethers::core::types::U256,
@@ -40,7 +40,7 @@ pub struct Delays {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct DepositFeesAssets {
     pub reserve_fee_assets: u128,
@@ -56,7 +56,7 @@ pub struct DepositFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct Fees {
     pub deposit_fee_reserves: u16,
@@ -75,7 +75,7 @@ pub struct Fees {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct MarketConfig {
     pub trigger: ::ethers::core::types::Address,
@@ -94,7 +94,7 @@ pub struct MarketConfig {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct MarketConfigStorage {
     pub cost_model: ::ethers::core::types::Address,
@@ -112,7 +112,7 @@ pub struct MarketConfigStorage {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct MintData {
     pub amount: ::ethers::core::types::U256,
@@ -127,7 +127,7 @@ pub struct MintData {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct Request {
     pub proposer: ::ethers::core::types::Address,
@@ -150,7 +150,7 @@ pub struct Request {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct RequestSettings {
     pub event_based: bool,
@@ -170,7 +170,7 @@ pub struct RequestSettings {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct Order {
     pub input: u128,
@@ -188,7 +188,7 @@ pub struct Order {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct PortfolioCurve {
     pub strike_price: u128,
@@ -207,7 +207,7 @@ pub struct PortfolioCurve {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct PortfolioPair {
     pub token_asset: ::ethers::core::types::Address,
@@ -224,7 +224,7 @@ pub struct PortfolioPair {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct ProtocolFees {
     pub reserve_fee: u16,
@@ -239,7 +239,7 @@ pub struct ProtocolFees {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct PurchaseFeesAssets {
     pub total_cost: u128,
@@ -257,7 +257,7 @@ pub struct PurchaseFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct RedemptionPreview {
     pub delay_remaining: u64,
@@ -275,7 +275,7 @@ pub struct RedemptionPreview {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct SaleFeesAssets {
     pub reserve_fee_assets: u128,
@@ -291,7 +291,7 @@ pub struct SaleFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct SetConfig {
     pub leverage_factor: u32,
@@ -306,7 +306,7 @@ pub struct SetConfig {
     Debug,
     PartialEq,
     Eq,
-    Hash
+    Hash,
 )]
 pub struct TriggerMetadata {
     pub name: ::std::string::String,

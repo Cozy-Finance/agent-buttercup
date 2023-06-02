@@ -7,18 +7,16 @@ pub use drip_decay_model_constant::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod drip_decay_model_constant {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_ratePerSecond\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"dripDecayRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ratePerSecond\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static DRIPDECAYMODELCONSTANT_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static DRIPDECAYMODELCONSTANT_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -782,9 +780,8 @@ pub mod drip_decay_model_constant {
         51,
     ];
     ///The bytecode of the contract.
-    pub static DRIPDECAYMODELCONSTANT_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static DRIPDECAYMODELCONSTANT_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -1283,9 +1280,8 @@ pub mod drip_decay_model_constant {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static DRIPDECAYMODELCONSTANT_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static DRIPDECAYMODELCONSTANT_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct DripDecayModelConstant<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for DripDecayModelConstant<M> {
         fn clone(&self) -> Self {
@@ -1317,13 +1313,11 @@ pub mod drip_decay_model_constant {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    DRIPDECAYMODELCONSTANT_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                DRIPDECAYMODELCONSTANT_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -1383,7 +1377,8 @@ pub mod drip_decay_model_constant {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for DripDecayModelConstant<M> {
+        for DripDecayModelConstant<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -1397,7 +1392,7 @@ pub mod drip_decay_model_constant {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "dripDecayRate", abi = "dripDecayRate(uint256)")]
     pub struct DripDecayRateCall(pub ::ethers::core::types::U256);
@@ -1410,7 +1405,7 @@ pub mod drip_decay_model_constant {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "ratePerSecond", abi = "ratePerSecond()")]
     pub struct RatePerSecondCall;
@@ -1425,12 +1420,12 @@ pub mod drip_decay_model_constant {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <DripDecayRateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DripDecayRateCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DripDecayRate(decoded));
             }
-            if let Ok(decoded)
-                = <RatePerSecondCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RatePerSecondCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RatePerSecond(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -1439,12 +1434,8 @@ pub mod drip_decay_model_constant {
     impl ::ethers::core::abi::AbiEncode for DripDecayModelConstantCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DripDecayRate(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RatePerSecond(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::DripDecayRate(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RatePerSecond(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -1475,7 +1466,7 @@ pub mod drip_decay_model_constant {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DripDecayRateReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `ratePerSecond` function with signature `ratePerSecond()` and selector `0x8eff1a98`
@@ -1487,7 +1478,7 @@ pub mod drip_decay_model_constant {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RatePerSecondReturn(pub ::ethers::core::types::U256);
 }

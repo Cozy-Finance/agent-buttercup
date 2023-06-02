@@ -5,9 +5,11 @@
 use crossbeam_channel::Sender;
 use revm::{
     db::{CacheDB, EmptyDB},
-    primitives::{ExecutionResult, Log, TxEnv, U256},
+    primitives::{AccountInfo, Address, ExecutionResult, Log, TxEnv, U256},
     EVM,
 };
+
+use crate::block_time_policy::BlockTimeEnv;
 
 /// The simulation environment that houses the execution environment and event logs.
 /// # Fields
@@ -31,13 +33,20 @@ impl SimulationEnvironment {
         Self { evm, event_senders }
     }
 
-    pub(crate) fn update_block_and_block_timestamp(
-        &mut self,
-        block_increment: U256,
-        block_timestamp_increment: U256,
-    ) {
-        self.evm.env.block.number += block_increment;
-        self.evm.env.block.timestamp += block_timestamp_increment;
+    /// Update the block time env.
+    /// # Arguments
+    /// * `block_time_env` - The block time env.
+    pub(crate) fn update_block_time_env(&mut self, block_time_env: BlockTimeEnv) {
+        self.evm.env.block.number = block_time_env.number;
+        self.evm.env.block.timestamp = block_time_env.timestamp;
+    }
+
+    // Add an account to evm.
+    pub(crate) fn add_account_info(&mut self, address: Address, account_info: AccountInfo) {
+        self.evm
+            .db()
+            .unwrap()
+            .insert_account_info(address, account_info);
     }
 
     /// Execute a transaction in the execution environment.
