@@ -53,7 +53,7 @@ pub trait Agent {
         contract: &SimulationContract<IsDeployed>,
         call_data: Bytes,
         value: Option<U256>,
-        gas_settings: Option<AgentTxGasSettings>
+        gas_settings: Option<AgentTxGasSettings>,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(contract.address, call_data, value, gas_settings);
         simulation_environment.execute(tx)

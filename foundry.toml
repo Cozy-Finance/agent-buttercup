@@ -4,20 +4,3 @@ out = 'out/' # default
 test = 'test' # default
 libs = ['contracts']
 cache = false # !important! breaks echidna if cache = true.
-remappings = [
-    '@forge-std/=contracts/forge-std/src/',
-    '@solmate/=contracts/portfolio/lib/solmate/src/',
-    '@solstat/=contracts/solstat/src/',
-    '@uniswap/lib/=contracts/solidity-lib/',
-    '@uniswap/v2-core/=contracts/v2-core/',
-    '@uniswap/v2-periphery/=contracts/v2-periphery/',
-    
-]
-libraries = [
-  "contracts/cozy-protocol-v2/src/lib/ConfiguratorLib.sol:ConfiguratorLib:0x83769BeEB7e5405ef0B7dc3C66C43E3a51A6d27f",
-  "contracts/cozy-protocol-v2/src/lib/DelayLib.sol:DelayLib:0x00EFd0D4639191C49908A7BddbB9A11A994A8527",  
-  "contracts/cozy-protocol-v2/src/lib/DemandSideLib.sol:DemandSideLib:0x147B09A8C7d5E4A8253a3e01De4356D3c132010D", 
-  "contracts/cozy-protocol-v2/src/lib/RedemptionLib.sol:RedemptionLib:0x062C88B4ba954955746eDA6f475C26eeaC04614B", 
-  "contracts/cozy-protocol-v2/src/lib/StateTransitionsLib.sol:StateTransitionsLib:0x90A5b0DD8c4b06636A4BEf7BA82D9C58f44fAaAd", 
-  "contracts/cozy-protocol-v2/src/lib/SupplySideLib.sol:SupplySideLib:0x94EDc320466d68c0e80C3e6F454375Fb957e1038"
-]

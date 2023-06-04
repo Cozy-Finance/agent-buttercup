@@ -1,8 +1,9 @@
 [workspace]
 members = [
-    "lib/bindings",
+    "lib/binder",
     "lib/simulate",
     "lib/onchain",
+    "lib/bindings"
 ]
 
 [package]
@@ -12,9 +13,10 @@ edition = "2021"
 
 [dependencies]
 # Local
+binder = {path = "lib/binder"}
 simulate = {path = "lib/simulate"}
-bindings = {path = "lib/bindings"}
 onchain = {path = "lib/onchain"}
+bindings = {path = "lib/bindings"}
 
 # Primitive
 visualize = { git = "https://github.com/primitivefinance/visualization-rs.git"}
