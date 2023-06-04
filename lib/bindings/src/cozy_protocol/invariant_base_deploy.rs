@@ -7,19 +7,17 @@ pub use invariant_base_deploy::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod invariant_base_deploy {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"ClaimCalled\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint128\",\"name\":\"reserveAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"CozyFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"DelaysUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"depositCap_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DepositCapUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"marketId\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"MockPToken_AddInactivePeriodCalled\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"MockPToken_Burned\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"marketId\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint64\",\"name\":\"timestamp\",\"type\":\"uint64\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"MockPToken_UpdateInactiveTransitionTimeCalled\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"amount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_address\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_bytes\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_bytes32\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_int\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_address\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_array\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_bytes\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_bytes32\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_decimal_int\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_decimal_uint\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_int\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_string\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_named_uint\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_string\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"log_uint\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"logs\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployMockProtocol\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"excludeArtifacts\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"excludedArtifacts_\",\"type\":\"string[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"excludeContracts\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"excludedContracts_\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"excludeSenders\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"excludedSenders_\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"set\",\"outputs\":[{\"internalType\":\"contract Set\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setHandler\",\"outputs\":[{\"internalType\":\"contract SetHandler\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"targetArtifactSelectors\",\"outputs\":[{\"internalType\":\"struct StdInvariant.FuzzSelector[]\",\"name\":\"targetedArtifactSelectors_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes4[]\",\"name\":\"selectors\",\"type\":\"bytes4[]\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"targetArtifacts\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"targetedArtifacts_\",\"type\":\"string[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"targetContracts\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"targetedContracts_\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"targetSelectors\",\"outputs\":[{\"internalType\":\"struct StdInvariant.FuzzSelector[]\",\"name\":\"targetedSelectors_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes4[]\",\"name\":\"selectors\",\"type\":\"bytes4[]\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"targetSenders\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"targetedSenders_\",\"type\":\"address[]\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static INVARIANTBASEDEPLOY_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static INVARIANTBASEDEPLOY_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct InvariantBaseDeploy<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for InvariantBaseDeploy<M> {
         fn clone(&self) -> Self {
@@ -51,13 +49,11 @@ pub mod invariant_base_deploy {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    INVARIANTBASEDEPLOY_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                INVARIANTBASEDEPLOY_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `IS_TEST` (0xfa7626d4) function
         pub fn is_test(&self) -> ::ethers::contract::builders::ContractCall<M, bool> {
@@ -66,9 +62,7 @@ pub mod invariant_base_deploy {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `deployMockProtocol` (0x6ebda74b) function
-        pub fn deploy_mock_protocol(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn deploy_mock_protocol(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([110, 189, 167, 75], ())
                 .expect("method not found (this should never happen)")
@@ -76,10 +70,8 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `excludeArtifacts` (0xb5508aa9) function
         pub fn exclude_artifacts(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::std::vec::Vec<::std::string::String>,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::std::vec::Vec<::std::string::String>>
+        {
             self.0
                 .method_hash([181, 80, 138, 169], ())
                 .expect("method not found (this should never happen)")
@@ -115,10 +107,7 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `set` (0xb8e010de) function
         pub fn set(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([184, 224, 16, 222], ())
                 .expect("method not found (this should never happen)")
@@ -126,10 +115,7 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `setHandler` (0xc17ddee0) function
         pub fn set_handler(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([193, 125, 222, 224], ())
                 .expect("method not found (this should never happen)")
@@ -137,10 +123,7 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `targetArtifactSelectors` (0x66d9a9a0) function
         pub fn target_artifact_selectors(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::std::vec::Vec<FuzzSelector>,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::std::vec::Vec<FuzzSelector>> {
             self.0
                 .method_hash([102, 217, 169, 160], ())
                 .expect("method not found (this should never happen)")
@@ -148,10 +131,8 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `targetArtifacts` (0x85226c81) function
         pub fn target_artifacts(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::std::vec::Vec<::std::string::String>,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::std::vec::Vec<::std::string::String>>
+        {
             self.0
                 .method_hash([133, 34, 108, 129], ())
                 .expect("method not found (this should never happen)")
@@ -170,10 +151,7 @@ pub mod invariant_base_deploy {
         ///Calls the contract's `targetSelectors` (0x916a17c6) function
         pub fn target_selectors(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::std::vec::Vec<FuzzSelector>,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::std::vec::Vec<FuzzSelector>> {
             self.0
                 .method_hash([145, 106, 23, 198], ())
                 .expect("method not found (this should never happen)")
@@ -192,51 +170,36 @@ pub mod invariant_base_deploy {
         ///Gets the contract's `ClaimCalled` event
         pub fn claim_called_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ClaimCalledFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ClaimCalledFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `CozyFeesClaimed` event
         pub fn cozy_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            CozyFeesClaimedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, CozyFeesClaimedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DelaysUpdated` event
         pub fn delays_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DelaysUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DelaysUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DepositCapUpdated` event
         pub fn deposit_cap_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DepositCapUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DepositCapUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `FeesUpdated` event
         pub fn fees_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FeesUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, FeesUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `MockPToken_AddInactivePeriodCalled` event
@@ -252,11 +215,8 @@ pub mod invariant_base_deploy {
         ///Gets the contract's `MockPToken_Burned` event
         pub fn mock_p_token_burned_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            MockPTokenBurnedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, MockPTokenBurnedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `MockPToken_UpdateInactiveTransitionTimeCalled` event
@@ -272,11 +232,8 @@ pub mod invariant_base_deploy {
         ///Gets the contract's `SetFeesClaimed` event
         pub fn set_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetFeesClaimedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetFeesClaimedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log` event
@@ -288,61 +245,37 @@ pub mod invariant_base_deploy {
         ///Gets the contract's `log_address` event
         pub fn log_address_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogAddressFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogAddressFilter> {
             self.0.event()
         }
         ///Gets the contract's `log_array` event
         pub fn log_array_1_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogArray1Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogArray1Filter> {
             self.0.event()
         }
         ///Gets the contract's `log_array` event
         pub fn log_array_2_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogArray2Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogArray2Filter> {
             self.0.event()
         }
         ///Gets the contract's `log_array` event
         pub fn log_array_3_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogArray3Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogArray3Filter> {
             self.0.event()
         }
         ///Gets the contract's `log_bytes` event
         pub fn log_bytes_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogBytesFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogBytesFilter> {
             self.0.event()
         }
         ///Gets the contract's `log_bytes32` event
         pub fn log_bytes_32_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogBytes32Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogBytes32Filter> {
             self.0.event()
         }
         ///Gets the contract's `log_int` event
@@ -354,121 +287,84 @@ pub mod invariant_base_deploy {
         ///Gets the contract's `log_named_address` event
         pub fn log_named_address_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedAddressFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedAddressFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_array` event
         pub fn log_named_array_1_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedArray1Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedArray1Filter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_array` event
         pub fn log_named_array_2_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedArray2Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedArray2Filter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_array` event
         pub fn log_named_array_3_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedArray3Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedArray3Filter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_bytes` event
         pub fn log_named_bytes_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedBytesFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedBytesFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_bytes32` event
         pub fn log_named_bytes_32_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedBytes32Filter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedBytes32Filter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_decimal_int` event
         pub fn log_named_decimal_int_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedDecimalIntFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedDecimalIntFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_decimal_uint` event
         pub fn log_named_decimal_uint_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedDecimalUintFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedDecimalUintFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_int` event
         pub fn log_named_int_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedIntFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedIntFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_string` event
         pub fn log_named_string_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedStringFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedStringFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_named_uint` event
         pub fn log_named_uint_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogNamedUintFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogNamedUintFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `log_string` event
         pub fn log_string_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            LogStringFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, LogStringFilter> {
             self.0.event()
         }
         ///Gets the contract's `log_uint` event
@@ -486,16 +382,15 @@ pub mod invariant_base_deploy {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            InvariantBaseDeployEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, InvariantBaseDeployEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for InvariantBaseDeploy<M> {
+        for InvariantBaseDeploy<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -509,7 +404,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidState", abi = "InvalidState()")]
     pub struct InvalidState;
@@ -522,7 +417,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -535,7 +430,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "RoundsToZero", abi = "RoundsToZero()")]
     pub struct RoundsToZero;
@@ -554,24 +449,20 @@ pub mod invariant_base_deploy {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidState(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RoundsToZero(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -580,15 +471,11 @@ pub mod invariant_base_deploy {
     impl ::ethers::core::abi::AbiEncode for InvariantBaseDeployErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::RoundsToZero(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::RoundsToZero(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -597,14 +484,13 @@ pub mod invariant_base_deploy {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
+                _ if selector == <InvalidState as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -613,9 +499,7 @@ pub mod invariant_base_deploy {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::InvalidState(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RoundsToZero(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }
@@ -649,7 +533,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "ClaimCalled", abi = "ClaimCalled(address,uint256)")]
     pub struct ClaimCalledFilter {
@@ -666,7 +550,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "CozyFeesClaimed",
@@ -686,7 +570,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "DelaysUpdated",
@@ -703,7 +587,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "DepositCapUpdated", abi = "DepositCapUpdated(address,uint256)")]
     pub struct DepositCapUpdatedFilter {
@@ -719,7 +603,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "FeesUpdated",
@@ -736,7 +620,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "MockPToken_AddInactivePeriodCalled",
@@ -753,7 +637,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "MockPToken_Burned",
@@ -774,7 +658,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "MockPToken_UpdateInactiveTransitionTimeCalled",
@@ -792,9 +676,12 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethevent(name = "SetFeesClaimed", abi = "SetFeesClaimed(address,address,uint128)")]
+    #[ethevent(
+        name = "SetFeesClaimed",
+        abi = "SetFeesClaimed(address,address,uint128)"
+    )]
     pub struct SetFeesClaimedFilter {
         #[ethevent(indexed)]
         pub set: ::ethers::core::types::Address,
@@ -809,7 +696,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log", abi = "log(string)")]
     pub struct LogFilter(pub ::std::string::String);
@@ -821,7 +708,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_address", abi = "log_address(address)")]
     pub struct LogAddressFilter(pub ::ethers::core::types::Address);
@@ -833,7 +720,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_array", abi = "log_array(uint256[])")]
     pub struct LogArray1Filter {
@@ -847,7 +734,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_array", abi = "log_array(int256[])")]
     pub struct LogArray2Filter {
@@ -861,7 +748,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_array", abi = "log_array(address[])")]
     pub struct LogArray3Filter {
@@ -875,7 +762,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_bytes", abi = "log_bytes(bytes)")]
     pub struct LogBytesFilter(pub ::ethers::core::types::Bytes);
@@ -887,7 +774,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_bytes32", abi = "log_bytes32(bytes32)")]
     pub struct LogBytes32Filter(pub [u8; 32]);
@@ -899,7 +786,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_int", abi = "log_int(int256)")]
     pub struct LogIntFilter(pub ::ethers::core::types::I256);
@@ -911,7 +798,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_address", abi = "log_named_address(string,address)")]
     pub struct LogNamedAddressFilter {
@@ -926,7 +813,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_array", abi = "log_named_array(string,uint256[])")]
     pub struct LogNamedArray1Filter {
@@ -941,7 +828,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_array", abi = "log_named_array(string,int256[])")]
     pub struct LogNamedArray2Filter {
@@ -956,7 +843,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_array", abi = "log_named_array(string,address[])")]
     pub struct LogNamedArray3Filter {
@@ -971,7 +858,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_bytes", abi = "log_named_bytes(string,bytes)")]
     pub struct LogNamedBytesFilter {
@@ -986,7 +873,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_bytes32", abi = "log_named_bytes32(string,bytes32)")]
     pub struct LogNamedBytes32Filter {
@@ -1001,7 +888,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "log_named_decimal_int",
@@ -1020,7 +907,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "log_named_decimal_uint",
@@ -1039,7 +926,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_int", abi = "log_named_int(string,int256)")]
     pub struct LogNamedIntFilter {
@@ -1054,7 +941,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_string", abi = "log_named_string(string,string)")]
     pub struct LogNamedStringFilter {
@@ -1069,7 +956,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_named_uint", abi = "log_named_uint(string,uint256)")]
     pub struct LogNamedUintFilter {
@@ -1084,7 +971,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_string", abi = "log_string(string)")]
     pub struct LogStringFilter(pub ::std::string::String);
@@ -1096,7 +983,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "log_uint", abi = "log_uint(uint256)")]
     pub struct LogUintFilter(pub ::ethers::core::types::U256);
@@ -1108,7 +995,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "logs", abi = "logs(bytes)")]
     pub struct LogsFilter(pub ::ethers::core::types::Bytes);
@@ -1168,19 +1055,16 @@ pub mod invariant_base_deploy {
             if let Ok(decoded) = FeesUpdatedFilter::decode_log(log) {
                 return Ok(InvariantBaseDeployEvents::FeesUpdatedFilter(decoded));
             }
-            if let Ok(decoded)
-                = MockPTokenAddInactivePeriodCalledFilter::decode_log(log) {
+            if let Ok(decoded) = MockPTokenAddInactivePeriodCalledFilter::decode_log(log) {
                 return Ok(
-                    InvariantBaseDeployEvents::MockPTokenAddInactivePeriodCalledFilter(
-                        decoded,
-                    ),
+                    InvariantBaseDeployEvents::MockPTokenAddInactivePeriodCalledFilter(decoded),
                 );
             }
             if let Ok(decoded) = MockPTokenBurnedFilter::decode_log(log) {
                 return Ok(InvariantBaseDeployEvents::MockPTokenBurnedFilter(decoded));
             }
-            if let Ok(decoded)
-                = MockPTokenUpdateInactiveTransitionTimeCalledFilter::decode_log(log) {
+            if let Ok(decoded) = MockPTokenUpdateInactiveTransitionTimeCalledFilter::decode_log(log)
+            {
                 return Ok(
                     InvariantBaseDeployEvents::MockPTokenUpdateInactiveTransitionTimeCalledFilter(
                         decoded,
@@ -1236,7 +1120,9 @@ pub mod invariant_base_deploy {
                 return Ok(InvariantBaseDeployEvents::LogNamedDecimalIntFilter(decoded));
             }
             if let Ok(decoded) = LogNamedDecimalUintFilter::decode_log(log) {
-                return Ok(InvariantBaseDeployEvents::LogNamedDecimalUintFilter(decoded));
+                return Ok(InvariantBaseDeployEvents::LogNamedDecimalUintFilter(
+                    decoded,
+                ));
             }
             if let Ok(decoded) = LogNamedIntFilter::decode_log(log) {
                 return Ok(InvariantBaseDeployEvents::LogNamedIntFilter(decoded));
@@ -1263,28 +1149,18 @@ pub mod invariant_base_deploy {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::ClaimCalledFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::CozyFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DelaysUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DepositCapUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::CozyFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DelaysUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DepositCapUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::FeesUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::MockPTokenAddInactivePeriodCalledFilter(element) => {
                     ::core::fmt::Display::fmt(element, f)
                 }
-                Self::MockPTokenBurnedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::MockPTokenBurnedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::MockPTokenUpdateInactiveTransitionTimeCalledFilter(element) => {
                     ::core::fmt::Display::fmt(element, f)
                 }
-                Self::SetFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::SetFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogAddressFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogArray1Filter(element) => ::core::fmt::Display::fmt(element, f),
@@ -1293,37 +1169,17 @@ pub mod invariant_base_deploy {
                 Self::LogBytesFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogBytes32Filter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogIntFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::LogNamedAddressFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedArray1Filter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedArray2Filter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedArray3Filter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedBytesFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedBytes32Filter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedDecimalIntFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedDecimalUintFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::LogNamedAddressFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedArray1Filter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedArray2Filter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedArray3Filter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedBytesFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedBytes32Filter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedDecimalIntFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedDecimalUintFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogNamedIntFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::LogNamedStringFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::LogNamedUintFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::LogNamedStringFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::LogNamedUintFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogStringFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogUintFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LogsFilter(element) => ::core::fmt::Display::fmt(element, f),
@@ -1355,8 +1211,7 @@ pub mod invariant_base_deploy {
             Self::FeesUpdatedFilter(value)
         }
     }
-    impl ::core::convert::From<MockPTokenAddInactivePeriodCalledFilter>
-    for InvariantBaseDeployEvents {
+    impl ::core::convert::From<MockPTokenAddInactivePeriodCalledFilter> for InvariantBaseDeployEvents {
         fn from(value: MockPTokenAddInactivePeriodCalledFilter) -> Self {
             Self::MockPTokenAddInactivePeriodCalledFilter(value)
         }
@@ -1367,7 +1222,8 @@ pub mod invariant_base_deploy {
         }
     }
     impl ::core::convert::From<MockPTokenUpdateInactiveTransitionTimeCalledFilter>
-    for InvariantBaseDeployEvents {
+        for InvariantBaseDeployEvents
+    {
         fn from(value: MockPTokenUpdateInactiveTransitionTimeCalledFilter) -> Self {
             Self::MockPTokenUpdateInactiveTransitionTimeCalledFilter(value)
         }
@@ -1496,7 +1352,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "IS_TEST", abi = "IS_TEST()")]
     pub struct IsTestCall;
@@ -1509,7 +1365,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "deployMockProtocol", abi = "deployMockProtocol()")]
     pub struct DeployMockProtocolCall;
@@ -1522,7 +1378,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "excludeArtifacts", abi = "excludeArtifacts()")]
     pub struct ExcludeArtifactsCall;
@@ -1535,7 +1391,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "excludeContracts", abi = "excludeContracts()")]
     pub struct ExcludeContractsCall;
@@ -1548,7 +1404,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "excludeSenders", abi = "excludeSenders()")]
     pub struct ExcludeSendersCall;
@@ -1561,7 +1417,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "failed", abi = "failed()")]
     pub struct FailedCall;
@@ -1574,7 +1430,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "set", abi = "set()")]
     pub struct SetCall;
@@ -1587,7 +1443,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "setHandler", abi = "setHandler()")]
     pub struct SetHandlerCall;
@@ -1600,7 +1456,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "targetArtifactSelectors", abi = "targetArtifactSelectors()")]
     pub struct TargetArtifactSelectorsCall;
@@ -1613,7 +1469,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "targetArtifacts", abi = "targetArtifacts()")]
     pub struct TargetArtifactsCall;
@@ -1626,7 +1482,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "targetContracts", abi = "targetContracts()")]
     pub struct TargetContractsCall;
@@ -1639,7 +1495,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "targetSelectors", abi = "targetSelectors()")]
     pub struct TargetSelectorsCall;
@@ -1652,7 +1508,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "targetSenders", abi = "targetSenders()")]
     pub struct TargetSendersCall;
@@ -1678,64 +1534,60 @@ pub mod invariant_base_deploy {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <IsTestCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <IsTestCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsTest(decoded));
             }
-            if let Ok(decoded)
-                = <DeployMockProtocolCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <DeployMockProtocolCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DeployMockProtocol(decoded));
             }
-            if let Ok(decoded)
-                = <ExcludeArtifactsCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ExcludeArtifactsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ExcludeArtifacts(decoded));
             }
-            if let Ok(decoded)
-                = <ExcludeContractsCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ExcludeContractsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ExcludeContracts(decoded));
             }
-            if let Ok(decoded)
-                = <ExcludeSendersCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <ExcludeSendersCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ExcludeSenders(decoded));
             }
-            if let Ok(decoded)
-                = <FailedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FailedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Failed(decoded));
             }
-            if let Ok(decoded)
-                = <SetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Set(decoded));
             }
-            if let Ok(decoded)
-                = <SetHandlerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetHandlerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetHandler(decoded));
             }
-            if let Ok(decoded)
-                = <TargetArtifactSelectorsCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <TargetArtifactSelectorsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TargetArtifactSelectors(decoded));
             }
-            if let Ok(decoded)
-                = <TargetArtifactsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TargetArtifactsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TargetArtifacts(decoded));
             }
-            if let Ok(decoded)
-                = <TargetContractsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TargetContractsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TargetContracts(decoded));
             }
-            if let Ok(decoded)
-                = <TargetSelectorsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TargetSelectorsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TargetSelectors(decoded));
             }
-            if let Ok(decoded)
-                = <TargetSendersCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TargetSendersCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TargetSenders(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -1748,35 +1600,19 @@ pub mod invariant_base_deploy {
                 Self::DeployMockProtocol(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::ExcludeArtifacts(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ExcludeContracts(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ExcludeSenders(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::ExcludeArtifacts(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ExcludeContracts(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ExcludeSenders(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Failed(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Set(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SetHandler(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SetHandler(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::TargetArtifactSelectors(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::TargetArtifacts(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TargetContracts(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TargetSelectors(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TargetSenders(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::TargetArtifacts(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TargetContracts(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TargetSelectors(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TargetSenders(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -1784,18 +1620,14 @@ pub mod invariant_base_deploy {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::IsTest(element) => ::core::fmt::Display::fmt(element, f),
-                Self::DeployMockProtocol(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::DeployMockProtocol(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ExcludeArtifacts(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ExcludeContracts(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ExcludeSenders(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Failed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Set(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetHandler(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TargetArtifactSelectors(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TargetArtifactSelectors(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TargetArtifacts(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TargetContracts(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TargetSelectors(element) => ::core::fmt::Display::fmt(element, f),
@@ -1843,8 +1675,7 @@ pub mod invariant_base_deploy {
             Self::SetHandler(value)
         }
     }
-    impl ::core::convert::From<TargetArtifactSelectorsCall>
-    for InvariantBaseDeployCalls {
+    impl ::core::convert::From<TargetArtifactSelectorsCall> for InvariantBaseDeployCalls {
         fn from(value: TargetArtifactSelectorsCall) -> Self {
             Self::TargetArtifactSelectors(value)
         }
@@ -1878,7 +1709,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct IsTestReturn(pub bool);
     ///Container type for all return fields from the `excludeArtifacts` function with signature `excludeArtifacts()` and selector `0xb5508aa9`
@@ -1890,7 +1721,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ExcludeArtifactsReturn {
         pub excluded_artifacts: ::std::vec::Vec<::std::string::String>,
@@ -1904,7 +1735,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ExcludeContractsReturn {
         pub excluded_contracts: ::std::vec::Vec<::ethers::core::types::Address>,
@@ -1918,7 +1749,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ExcludeSendersReturn {
         pub excluded_senders: ::std::vec::Vec<::ethers::core::types::Address>,
@@ -1932,7 +1763,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct FailedReturn(pub bool);
     ///Container type for all return fields from the `set` function with signature `set()` and selector `0xb8e010de`
@@ -1944,7 +1775,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `setHandler` function with signature `setHandler()` and selector `0xc17ddee0`
@@ -1956,7 +1787,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetHandlerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `targetArtifactSelectors` function with signature `targetArtifactSelectors()` and selector `0x66d9a9a0`
@@ -1968,7 +1799,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TargetArtifactSelectorsReturn {
         pub targeted_artifact_selectors: ::std::vec::Vec<FuzzSelector>,
@@ -1982,7 +1813,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TargetArtifactsReturn {
         pub targeted_artifacts: ::std::vec::Vec<::std::string::String>,
@@ -1996,7 +1827,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TargetContractsReturn {
         pub targeted_contracts: ::std::vec::Vec<::ethers::core::types::Address>,
@@ -2010,7 +1841,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TargetSelectorsReturn {
         pub targeted_selectors: ::std::vec::Vec<FuzzSelector>,
@@ -2024,7 +1855,7 @@ pub mod invariant_base_deploy {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TargetSendersReturn {
         pub targeted_senders: ::std::vec::Vec<::ethers::core::types::Address>,

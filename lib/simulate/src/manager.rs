@@ -26,22 +26,21 @@ pub enum ManagerError {
 /// * `environment` - The simulation environment that the manager controls.
 /// * `time_policy` - The block time policy that the manager calls.
 /// * `agents` - The agents that are currently running in the simulation environment.
-pub struct SimulationManager<T: BlockTimePolicy> {
+pub struct SimulationManager {
     /// [`SimulationEnvironment`] that the simulation manager controls.
     pub environment: SimulationEnvironment,
     /// Implements the [`BlockTimePolicy`] trait to manage time in the simulation.
-    pub time_policy: T,
+    pub time_policy: Box<dyn BlockTimePolicy>,
     /// The agents that are currently running in the [`SimulationEnvironment`].
     pub agents: BTreeMap<AgentId, Box<dyn Agent>>,
     /// Rng seed used to generate reproducible random agent addresses.
-    pub rng_seed: u64,
     pub rng: StdRng,
 }
 
-impl<T: BlockTimePolicy> SimulationManager<T> {
+impl SimulationManager {
     pub fn new(
         environment: SimulationEnvironment,
-        time_policy: T,
+        time_policy: Box<dyn BlockTimePolicy>,
         agents: BTreeMap<AgentId, Box<dyn Agent>>,
         rng_seed: u64,
     ) -> Self {
@@ -49,7 +48,6 @@ impl<T: BlockTimePolicy> SimulationManager<T> {
             environment,
             time_policy,
             agents,
-            rng_seed,
             rng: StdRng::seed_from_u64(rng_seed),
         }
     }

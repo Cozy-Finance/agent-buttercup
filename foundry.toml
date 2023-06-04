@@ -4,3 +4,8 @@ out = 'out/' # default
 test = 'test' # default
 libs = ['contracts']
 cache = false # !important! breaks echidna if cache = true.
+
+
+[profile.lite]
+optimize = false
+via_ir = false

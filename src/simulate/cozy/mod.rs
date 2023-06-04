@@ -7,11 +7,12 @@ use revm::primitives::B160;
 use ruint::Uint;
 use simulate::{
     agent::Agent,
-    contract::{IsDeployed, SimulationContract},
+    contract::sim_contract::{IsDeployed, SimulationContract},
     manager::SimulationManager,
     utils::{float_to_wad, unpack_execution},
 };
 
+pub mod agents;
 pub mod cozy_passive_buyer_actions;
 pub mod cozy_passive_supplier_actions;
 pub mod cozy_set_admin_actions;

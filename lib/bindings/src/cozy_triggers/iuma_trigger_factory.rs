@@ -7,19 +7,17 @@ pub use iuma_trigger_factory::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod iuma_trigger_factory {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes32\",\"name\":\"triggerConfigId\",\"type\":\"bytes32\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"umaOracleFinder\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"string\",\"name\":\"query\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"rewardToken\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"rewardAmount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"refundRecipient\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"bondAmount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"category\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"logoURI\",\"type\":\"string\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"TriggerDeployed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_query\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"_rewardToken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_rewardAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_refundRecipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_bondAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_triggerCount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"computeTriggerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"_address\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_query\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"_rewardToken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_rewardAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_refundRecipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_bondAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"struct TriggerMetadata\",\"name\":\"_metadata\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"category\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"logoURI\",\"type\":\"string\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployTrigger\",\"outputs\":[{\"internalType\":\"contract IUMATrigger\",\"name\":\"_trigger\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_query\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"_rewardToken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_rewardAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_refundRecipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_bondAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"findAvailableTrigger\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"oracleFinder\",\"outputs\":[{\"internalType\":\"contract FinderInterface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_query\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"_rewardToken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_rewardAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_refundRecipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_bondAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerConfigId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IUMATRIGGERFACTORY_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static IUMATRIGGERFACTORY_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IUMATriggerFactory<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IUMATriggerFactory<M> {
         fn clone(&self) -> Self {
@@ -39,7 +37,9 @@ pub mod iuma_trigger_factory {
     }
     impl<M> ::core::fmt::Debug for IUMATriggerFactory<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IUMATriggerFactory)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IUMATriggerFactory))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IUMATriggerFactory<M> {
@@ -49,13 +49,11 @@ pub mod iuma_trigger_factory {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    IUMATRIGGERFACTORY_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                IUMATRIGGERFACTORY_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `computeTriggerAddress` (0x9d616791) function
         pub fn compute_trigger_address(
@@ -67,10 +65,7 @@ pub mod iuma_trigger_factory {
             bond_amount: ::ethers::core::types::U256,
             proposal_dispute_window: ::ethers::core::types::U256,
             trigger_count: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash(
                     [157, 97, 103, 145],
@@ -96,10 +91,7 @@ pub mod iuma_trigger_factory {
             bond_amount: ::ethers::core::types::U256,
             proposal_dispute_window: ::ethers::core::types::U256,
             metadata: TriggerMetadata,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash(
                     [105, 34, 165, 18],
@@ -124,10 +116,7 @@ pub mod iuma_trigger_factory {
             refund_recipient: ::ethers::core::types::Address,
             bond_amount: ::ethers::core::types::U256,
             proposal_dispute_window: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash(
                     [231, 173, 5, 43],
@@ -145,10 +134,7 @@ pub mod iuma_trigger_factory {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -156,10 +142,7 @@ pub mod iuma_trigger_factory {
         ///Calls the contract's `oracleFinder` (0x9ceb3ea2) function
         pub fn oracle_finder(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([156, 235, 62, 162], ())
                 .expect("method not found (this should never happen)")
@@ -200,26 +183,22 @@ pub mod iuma_trigger_factory {
         ///Gets the contract's `TriggerDeployed` event
         pub fn trigger_deployed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TriggerDeployedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, TriggerDeployedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TriggerDeployedFilter,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, TriggerDeployedFilter>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IUMATriggerFactory<M> {
+        for IUMATriggerFactory<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -232,7 +211,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "TriggerDeployed",
@@ -265,7 +244,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "computeTriggerAddress",
@@ -289,7 +268,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "deployTrigger",
@@ -313,7 +292,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "findAvailableTrigger",
@@ -336,7 +315,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -349,7 +328,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "oracleFinder", abi = "oracleFinder()")]
     pub struct OracleFinderCall;
@@ -362,7 +341,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "triggerConfigId",
@@ -385,7 +364,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "triggerCount", abi = "triggerCount(bytes32)")]
     pub struct TriggerCountCall(pub [u8; 32]);
@@ -405,36 +384,34 @@ pub mod iuma_trigger_factory {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <ComputeTriggerAddressCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ComputeTriggerAddressCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ComputeTriggerAddress(decoded));
             }
-            if let Ok(decoded)
-                = <DeployTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DeployTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DeployTrigger(decoded));
             }
-            if let Ok(decoded)
-                = <FindAvailableTriggerCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <FindAvailableTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::FindAvailableTrigger(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <OracleFinderCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <OracleFinderCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::OracleFinder(decoded));
             }
-            if let Ok(decoded)
-                = <TriggerConfigIdCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TriggerConfigIdCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TriggerConfigId(decoded));
             }
-            if let Ok(decoded)
-                = <TriggerCountCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TriggerCountCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TriggerCount(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -446,35 +423,23 @@ pub mod iuma_trigger_factory {
                 Self::ComputeTriggerAddress(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::DeployTrigger(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::DeployTrigger(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::FindAvailableTrigger(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::OracleFinder(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TriggerConfigId(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TriggerCount(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::OracleFinder(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TriggerConfigId(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TriggerCount(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
     impl ::core::fmt::Display for IUMATriggerFactoryCalls {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::ComputeTriggerAddress(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ComputeTriggerAddress(element) => ::core::fmt::Display::fmt(element, f),
                 Self::DeployTrigger(element) => ::core::fmt::Display::fmt(element, f),
-                Self::FindAvailableTrigger(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::FindAvailableTrigger(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Manager(element) => ::core::fmt::Display::fmt(element, f),
                 Self::OracleFinder(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TriggerConfigId(element) => ::core::fmt::Display::fmt(element, f),
@@ -526,7 +491,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ComputeTriggerAddressReturn {
         pub address: ::ethers::core::types::Address,
@@ -540,7 +505,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DeployTriggerReturn {
         pub trigger: ::ethers::core::types::Address,
@@ -554,7 +519,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct FindAvailableTriggerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -566,7 +531,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `oracleFinder` function with signature `oracleFinder()` and selector `0x9ceb3ea2`
@@ -578,7 +543,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct OracleFinderReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `triggerConfigId` function with signature `triggerConfigId(string,address,uint256,address,uint256,uint256)` and selector `0xdf86c083`
@@ -590,7 +555,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TriggerConfigIdReturn(pub [u8; 32]);
     ///Container type for all return fields from the `triggerCount` function with signature `triggerCount(bytes32)` and selector `0x33ae6662`
@@ -602,7 +567,7 @@ pub mod iuma_trigger_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TriggerCountReturn(pub ::ethers::core::types::U256);
 }
