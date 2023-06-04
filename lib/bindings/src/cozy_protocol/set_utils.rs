@@ -7,41 +7,52 @@ pub use set_utils::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod set_utils {
     #[rustfmt::skip]
     const __ABI: &str = "[]";
     ///The parsed JSON ABI of the contract.
-    pub static SETUTILS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static SETUTILS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
-        128,
         128,
         96,
         64,
         82,
         52,
+        128,
+        21,
         96,
-        19,
+        15,
         87,
-        96,
-        17,
-        144,
-        129,
-        96,
-        25,
-        130,
-        57,
-        243,
-        91,
         96,
         0,
         128,
         253,
+        91,
+        80,
+        96,
+        22,
+        128,
+        96,
+        29,
+        96,
+        0,
+        57,
+        96,
+        0,
+        243,
         254,
+        96,
+        128,
+        96,
+        64,
+        82,
         96,
         0,
         128,
@@ -61,11 +72,15 @@ pub mod set_utils {
         10,
     ];
     ///The bytecode of the contract.
-    pub static SETUTILS_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static SETUTILS_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
+        96,
+        128,
+        96,
+        64,
+        82,
         96,
         0,
         128,
@@ -85,9 +100,8 @@ pub mod set_utils {
         10,
     ];
     ///The deployed bytecode of the contract.
-    pub static SETUTILS_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static SETUTILS_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct SetUtils<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for SetUtils<M> {
         fn clone(&self) -> Self {
@@ -107,7 +121,9 @@ pub mod set_utils {
     }
     impl<M> ::core::fmt::Debug for SetUtils<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(SetUtils)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(SetUtils))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> SetUtils<M> {
@@ -117,13 +133,11 @@ pub mod set_utils {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    SETUTILS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                SETUTILS_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -165,8 +179,7 @@ pub mod set_utils {
             Ok(deployer)
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for SetUtils<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for SetUtils<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }

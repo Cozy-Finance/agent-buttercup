@@ -9,6 +9,7 @@ edition = "2021"
 # execution
 revm = "3.3.0"
 bytes = "1.4.0"
+ethers-solc = { git = "https://github.com/gakonst/ethers-rs" }
 
 # Error handling
 eyre = "0.6"

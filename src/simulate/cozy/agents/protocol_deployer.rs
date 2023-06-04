@@ -1,36 +1,208 @@
 use bindings::{
-    backstop, chainlink_trigger_factory, configurator_lib, cost_model_dynamic_level_factory,
-    cost_model_jump_rate_factory, cozy_router, delay_lib, demand_side_lib,
-    drip_decay_model_constant_factory, manager, p_token, p_token_factory, redemption_lib, set,
-    set_factory,
-    shared_types::{Delays, Fees, MarketConfig, SetConfig},
-    state_transitions_lib, supply_side_lib, uma_trigger_factory, weth9,
+    configurator_lib::*, 
+    delay_lib::*, 
+    demand_side_lib::*, 
+    redemption_lib::*,
+    state_transitions_lib::*,
+    supply_side_lib::*,
+    manager::*,
+    set::*,
+    set_factory::*,
+    p_token::*
 };
-use simulate::agent::{Agent, SimulationEnvironment};
+use simulate::{
+    agent::Agent,
+    environment::sim_environment::SimulationEnvironment,
+    contract::sim_contract::{IsDeployed, SimulationContract},
+    utils::recast_address
+};
+use revm::primitives::{create_address, B160, U256};
+
+#[derive(Debug, Clone)]
+pub struct ProtocolDeployParams {
+    owner: B160,
+    pauser: B160,
+    delays: Delays,
+    fees: Fees,
+    allowed_markets_per_set: U256,
+}
 
 pub struct ProtocolDeployer {
-    name: String
+    name: String,
+    deploy_params: ProtocolDeployParams
 }
 
 impl ProtocolDeployer {
-    fn new(name: String) -> Self {
-        Self {name}
+    fn new(name: String, deploy_params: ProtocolDeployParams) -> Self {
+        Self { name , deploy_params }
     }
 }
 
 impl Agent for ProtocolDeployer {
-
     fn name(&self) -> Option<String> {
         Ok(self.name)
     }
 
     fn activation_step(&self, simulation_environment: &mut SimulationEnvironment) {
-
+        // Deploy external libraries.
+        self.deploy_libraries(simulation_environment);
+        // Deploy core protocol.
+        self.deploy_core_protocol(simulation_environment);
     }
 
-    fn deploy_
-
     fn step(&self, simulation_environment: &mut SimulationEnvironment) {}
+}
+
+impl ProtocolDeployer {
+    fn deploy_libraries(&self, simulation_environment: &mut SimulationEnvironment) {
+        let configurator_lib = SimulationContract::new(
+            CONFIGURATORLIB_ABI.clone(),
+            CONFIGURATORLIB_BYTECODE.clone(),
+        );
+        let configurator_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &configurator_lib,
+            (),
+        );
+        println!("Configurator lib deployed at: {}.", configurator_lib.address);
+
+        let delay_lib = SimulationContract::new(
+            DELAYLIB_ABI.clone(),
+            DELAYLIB_BYTECODE.clone(),
+        );
+        let delay_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &delay_lib,
+            (),
+        );
+        println!("Delay lib deployed at: {}.", configurator_lib.address);
+
+        let demand_side_lib = SimulationContract::new(
+            DEMANDSIDELIB_ABI.clone(),
+            DEMANDSIDELIB_BYTECODE.clone(),
+        );
+        let demand_side_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &demand_side_lib,
+            (),
+        );
+        println!("Demand side lib deployed at: {}.", demand_side_lib.address);
+
+        let redemption_lib = SimulationContract::new(
+            REDEMPTIONLIB_ABI.clone(),
+            REDEMPTIONLIB_BYTECODE.clone(),
+        );
+        let redemption_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &redemption_lib,
+            (),
+        );
+        println!("Redemption lib deployed at: {}.", redemption_lib.address);
+
+        let state_transitions_lib = SimulationContract::new(
+            STATETRANSITIONSLIB_ABI.clone(),
+            STATETRANSITIONSLIB_BYTECODE.clone(),
+        );
+        let state_transitions_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &state_transitions_lib,
+            (),
+        );
+        println!("State transitions lib deployed at: {}.", state_transitions_lib.address);
+
+        let supply_side_lib = SimulationContract::new(
+            SUPPLYSIDELIB_ABI.clone(),
+            SUPPLYSIDELIB_BYTECODE.clone(),
+        );
+        let supply_side_lib = self.deploy_contract(
+            &mut simulation_environment,
+            &supply_side_lib,
+            (),
+        );
+        println!("Supply side lib deployed at: {}.", supply_side_lib.address);
+    }
+
+    fn link_set_logic_bytecode(&self) {
+        
+    }
+
+    fn deploy_core_protocol(&self, simulation_environment: &mut SimulationEnvironment) {
+        // Pre-compute Cozy protocol addresses
+        let current_nonce = self.get_nonce(simulation_environment);
+        let manager_address = create_address(self.address(), current_nonce);
+        let set_logic_address = create_address(self.address(), current_nonce + 1);
+        // current_nonce + 2 is initialization of the Set logic.
+        let set_factory_address = create_address(self.address(), current_nonce + 3);
+        let p_token_logic_address = create_address(self.address(), current_nonce + 4);
+        // current_nonce + 5 is initialization of the PToken logic.
+        let p_token_factory_address = create_address(self.address(), current_nonce + 6);
+        let backstop_address = create_address(self.address(), current_nonce + 7);
+        
+        let manager = SimulationContract::new(
+            MANAGER_ABI.clone(),
+            MANAGER_BYTECODE.clone()
+        );
+        let manager = self.deploy_contract(
+            &mut simulation_environment,
+            &manager,
+            (
+                manager_address,
+                set_factory_address,
+                self.deploy_params.owner,
+                self.deploy_params.pauser,
+                self.deploy_params.delays,
+                self.deploy_params.fees,
+                self.deploy_params.allowed_markets_per_set,
+            ).to_tokens(),
+        );
+        println!("Cozy manager deployed at: {}.", manager.address);
+
+
+
+        let set_logic = SimulationContract::new(set::SET_ABI.clone(), set::SET_BYTECODE.clone());
+        let set_logic = set_logic.deploy(
+            &mut manager.environment,
+            admin,
+            (
+                computed_address_manager,
+                computed_address_p_token_factory,
+                computed_address_backstop,
+            ),
+        );
+        println!("Set logic deployed at: {}", set_logic.address);
+        assert!(set_logic.address == computed_address_set_logic.into());
+    
+        let set_factory = SimulationContract::new(
+            SETFACTORY_ABI.clone(),
+            SETFACTORY_BYTECODE.clone(),
+        );
+        let set_factory = self.deploy_contract(
+            &mut simulation_environment,
+            &set_factory,
+            (manager_address, set_logic_address).to_tokens()
+        );
+    
+        let p_token_logic = SimulationContract::new(
+            PTOKEN_ABI.clone(),
+            PTOKEN_BYTECODE.clone(),
+        );
+        let p_token_logic =
+            p_token_logic.deploy(
+                &mut simulation_environment, 
+                &p_token_logic, 
+                (manager_address,).to_tokens()
+            );
+        println!("PToken logic deployed at: {}.", p_token_logic.address);
+    
+        self.call_contract(
+            &mut simulation_environment,
+            &p_token_logic,
+            p_token_logic.encode_function("initialize", (B160::ZERO, B160::ZERO, 0_u8))?,
+        );
+        println!("Ptoken logic initialized.");
+    
+
+    }
 }
 
 
@@ -56,51 +228,9 @@ fn deploy_cozy_protocol_contracts(
     let wsteth = wsteth.deploy(&mut manager.environment, admin, ());
     println!("wstEth deployed at: {}", wsteth.address);
 
-    // Deploy libraries
-    let configurator_lib = SimulationContract::new(
-        configurator_lib::CONFIGURATORLIB_ABI.clone(),
-        configurator_lib::CONFIGURATORLIB_BYTECODE.clone(),
-    );
-    let configurator_lib = configurator_lib.deploy(&mut manager.environment, admin, ());
-    println!("Configurator lib deployed at: {}", configurator_lib.address);
 
-    let delay_lib = SimulationContract::new(
-        delay_lib::DELAYLIB_ABI.clone(),
-        delay_lib::DELAYLIB_BYTECODE.clone(),
-    );
-    let delay_lib = delay_lib.deploy(&mut manager.environment, admin, ());
-    println!("Delay lib deployed at: {}", delay_lib.address);
 
-    let demand_side_lib = SimulationContract::new(
-        demand_side_lib::DEMANDSIDELIB_ABI.clone(),
-        demand_side_lib::DEMANDSIDELIB_BYTECODE.clone(),
-    );
-    let demand_side_lib = demand_side_lib.deploy(&mut manager.environment, admin, ());
-    println!("Demand side lib deployed at: {}", demand_side_lib.address);
 
-    let redemption_lib = SimulationContract::new(
-        redemption_lib::REDEMPTIONLIB_ABI.clone(),
-        redemption_lib::REDEMPTIONLIB_BYTECODE.clone(),
-    );
-    let redemption_lib = redemption_lib.deploy(&mut manager.environment, admin, ());
-    println!("Redemption lib deployed at: {}", redemption_lib.address);
-
-    let state_transitions_lib = SimulationContract::new(
-        state_transitions_lib::STATETRANSITIONSLIB_ABI.clone(),
-        state_transitions_lib::STATETRANSITIONSLIB_BYTECODE.clone(),
-    );
-    let state_transitions_lib = state_transitions_lib.deploy(&mut manager.environment, admin, ());
-    println!(
-        "State transitions lib deployed at: {}",
-        state_transitions_lib.address
-    );
-
-    let supply_side_lib = SimulationContract::new(
-        supply_side_lib::SUPPLYSIDELIB_ABI.clone(),
-        supply_side_lib::SUPPLYSIDELIB_BYTECODE.clone(),
-    );
-    let supply_side_lib = supply_side_lib.deploy(&mut manager.environment, admin, ());
-    println!("Supply side lib deployed at: {}", supply_side_lib.address);
 
     let current_nonce = match admin {
         AgentType::User(inner) => 10,
