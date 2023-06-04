@@ -8,8 +8,6 @@ edition = "2021"
 [dependencies]
 # Internal
 
-bindings = { path = "../bindings" }
-
 # External
 serde = {version = "1.0.163", features= ["derive"]}
 tokio = { version = "1.28.1", features = ["macros"] }

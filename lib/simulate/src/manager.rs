@@ -5,14 +5,14 @@
 
 use std::collections::BTreeMap;
 
+use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::{AccountInfo, Address};
-use rand::{SeedableRng, rngs::StdRng};
 use thiserror::Error;
 
 use crate::{
     agent::{Agent, AgentId},
     block_time_policy::BlockTimePolicy,
-    environment::sim_environment::SimulationEnvironment
+    environment::sim_environment::SimulationEnvironment,
 };
 
 #[derive(Error, Debug)]
@@ -35,23 +35,22 @@ pub struct SimulationManager<T: BlockTimePolicy> {
     pub agents: BTreeMap<AgentId, Box<dyn Agent>>,
     /// Rng seed used to generate reproducible random agent addresses.
     pub rng_seed: u64,
-    pub rng: StdRng
+    pub rng: StdRng,
 }
 
-impl<T: BlockTimePolicy> SimulationManager<T>
-{
-    fn new(
+impl<T: BlockTimePolicy> SimulationManager<T> {
+    pub fn new(
         environment: SimulationEnvironment,
         time_policy: T,
         agents: BTreeMap<AgentId, Box<dyn Agent>>,
-        rng_seed: u64
+        rng_seed: u64,
     ) -> Self {
         Self {
             environment,
             time_policy,
             agents,
             rng_seed,
-            rng: StdRng::seed_from_u64(rng_seed)
+            rng: StdRng::seed_from_u64(rng_seed),
         }
     }
 
@@ -81,11 +80,15 @@ impl<T: BlockTimePolicy> SimulationManager<T>
     /// * `new_agent` - The agent to be added to the collection of agents.
     pub fn activate_agent(&mut self, new_agent: Box<dyn Agent>) -> Result<(), ManagerError> {
         let new_agent_address = Address::random_using(&mut self.rng);
-        self.environment.add_account_info(new_agent_address, AccountInfo::default());
+        self.environment
+            .add_account_info(new_agent_address, AccountInfo::default());
         new_agent.activation_step(&mut self.environment);
         self.agents.insert(
-            AgentId { id_num: self.agents.len() as u64, name: new_agent.name() },
-            new_agent
+            AgentId {
+                id_num: self.agents.len() as u64,
+                name: new_agent.name(),
+            },
+            new_agent,
         );
         Ok(())
     }

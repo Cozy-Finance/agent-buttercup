@@ -8,13 +8,12 @@ use ethers::{
     prelude::BaseContract,
     types::{Bytes as EthersBytes, H256},
 };
-use revm::primitives::{B160, B256, U256, TransactTo, TxEnv, Output, ExecutionResult};
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, B256, U256};
 
 use crate::{
     agent::{Agent, AgentTxGasSettings},
     environment::sim_environment::SimulationEnvironment,
 };
-
 
 #[derive(Debug, Clone)]
 /// A struct to indicate a lock on contracts that are not deployed.
@@ -103,7 +102,6 @@ impl SimulationContract<NotDeployed> {
 
         // Take the execution result and extract the contract address.
         let deploy_txenv = Self::build_deploy_tx(deployer, bytecode, value, gas_settings);
-        
 
         let execution_result = simulation_environment.execute(deploy_txenv);
         let output = match execution_result {
