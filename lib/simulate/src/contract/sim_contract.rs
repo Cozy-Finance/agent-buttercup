@@ -1,25 +1,25 @@
-#![warn(missing_docs)]
 //! This module contains the [`SimulationContract`] struct that is used to wrap around the ethers `BaseContract` and add some additional information relevant for revm and the simulation.
-
-use bytes::Bytes;
 use ethers::{
     abi::{Contract as EthersContract, Detokenize, Token, Tokenize},
-    contract::AbiError,
-    prelude::{BaseContract as EthersBaseContract},
-    types::{Bytes as EthersBytes, H256 as EthersAddress},
+    prelude::BaseContract as EthersBaseContract,
+    types::H256 as EthersH256
 };
-use revm::primitives::{B160 as EVMAddress, B256};
+use revm::primitives::{B256};
 use thiserror::Error;
 use eyre::Result;
 
+use crate::{EthersAddress, EthersBytes, EvmBytes};
+
 #[derive(Error, Debug)]
-pub enum ContractError {
+pub enum SimContractError {
     #[error("could not encode function")]
-    EncodeFunc,
+    EncodeFuncFailure,
     #[error("could not decode output")]
-    DecodeOutput,
+    DecodeOutputFailure,
     #[error("could not decode event")]
-    DecodeEvent
+    DecodeEventFailure,
+    #[error("could not decode error")]
+    DecodeErrorFailure
 }
 
 #[derive(Debug, Clone)]
@@ -41,7 +41,7 @@ pub trait DeploymentStatus {
 
 impl DeploymentStatus for NotDeployed {
     type Address = ();
-    type Bytecode = Vec<u8>;
+    type Bytecode = EvmBytes;
     type ConstructorArguments = ();
 }
 
@@ -57,7 +57,7 @@ impl DeploymentStatus for IsDeployed {
 /// * `address` - The address of the contract within the relevant [`SimulationEnvironment`].
 /// * `base_contract` - The ethers [`BaseContract`] that holds the ABI.
 /// * `bytecode` - The contract's deployed bytecode.
-pub struct SimulationContract<DeployedState: DeploymentStatus> {
+pub struct SimContract<DeployedState: DeploymentStatus> {
     /// The address of the contract within the relevant [`SimulationEnvironment`].
     pub address: DeployedState::Address,
     /// The ethers [`BaseContract`] that holds the ABI.
@@ -66,29 +66,30 @@ pub struct SimulationContract<DeployedState: DeploymentStatus> {
     pub bytecode: DeployedState::Bytecode,
 }
 
-impl SimulationContract<NotDeployed> {
+impl SimContract<NotDeployed> {
     /// A constructor function for [`SimulationContract`] that takes a [`BaseContract`] and the deployment bytecode.
     pub fn new(contract: EthersContract, bytecode: EthersBytes) -> Self {
         Self {
             base_contract: EthersBaseContract::from(contract),
-            bytecode: bytecode.to_vec(),
+            bytecode: bytecode.0,
             address: (),
         }
     }
 
-    pub fn encode_constructor(&self, args: impl Tokenize) -> Result<Bytes, ContractError> {
-        match self.base_contract.abi().constructor.clone() {
+    pub fn encode_constructor(&self, args: impl Tokenize) -> Result<EvmBytes, SimContractError> {
+        match &self.base_contract.abi().constructor {
             Some(constructor) => {
-                let encoded_vec =
-                    constructor.encode_input(self.bytecode.clone(), &args.into_tokens()).map_err(|_| ContractError::EncodeFunc)?;
-                Ok(Bytes::from(encoded_vec))
+                let encoded_vec = constructor
+                    .encode_input(self.bytecode.to_vec(), &args.into_tokens())
+                    .map_err(|_| SimContractError::EncodeFuncFailure)?;
+                Ok(EvmBytes::from(encoded_vec))
             }
-            None => Ok(Bytes::from(self.bytecode.clone())),
+            None => Ok(self.bytecode.clone()),
         }
     }
 }
 
-impl SimulationContract<IsDeployed> {
+impl SimContract<IsDeployed> {
     /// Encodes the arguments for a function call for the [`SimulationContract`].
     /// # Arguments
     /// * `function_name` - The name of the function to encode.
@@ -99,13 +100,13 @@ impl SimulationContract<IsDeployed> {
         &self,
         function_name: &str,
         args: impl Tokenize,
-    ) -> Result<Bytes, ContractError> {
+    ) -> Result<EvmBytes, SimContractError> {
         match self.base_contract.encode(function_name, args) {
             Ok(encoded) => Ok(encoded.into_iter().collect()),
-            _ => Err(ContractError::EncodeFunc)
+            _ => Err(SimContractError::EncodeFuncFailure),
         }
     }
-    
+
     /// Decodes the output of a function call for the [`SimulationContract`].
     /// # Arguments
     /// * `function_name` - The name of the function to decode.
@@ -115,11 +116,13 @@ impl SimulationContract<IsDeployed> {
     pub fn decode_output<D: Detokenize>(
         &self,
         function_name: &str,
-        value: Bytes,
-    ) -> Result<D, ContractError> {
+        value: EvmBytes,
+    ) -> Result<D, SimContractError> {
         self.base_contract
-            .decode_output::<D, Bytes>(function_name, value).map_err(|e| ContractError::DecodeOutput)
+            .decode_output::<D, EvmBytes>(function_name, value)
+            .map_err(|_| SimContractError::DecodeOutputFailure)
     }
+
     /// Decodes the logs for an event with the [`SimulationContract`].
     /// # Arguments
     /// * `function_name` - The name of the event to decode.
@@ -131,14 +134,15 @@ impl SimulationContract<IsDeployed> {
         &self,
         function_name: &str,
         log_topics: Vec<B256>,
-        log_data: Bytes,
-    ) -> Result<D, ContractError> {
-        let log_topics: Vec<EthersAddress> = log_topics
+        log_data: EvmBytes,
+    ) -> Result<D, SimContractError> {
+        let log_topics: Vec<EthersH256> = log_topics
             .into_iter()
-            .map(|topic| EthersAddress::from_slice(&topic.0))
+            .map(|topic| EthersH256::from_slice(&topic.0))
             .collect();
         self.base_contract
-            .decode_event(function_name, log_topics, log_data.into()).map_err(|_| ContractError::DecodeEvent)
+            .decode_event(function_name, log_topics, log_data.into())
+            .map_err(|_| SimContractError::DecodeEventFailure)
     }
 
     /// Decodes the error for an error with the [`SimulationContract`].
@@ -147,10 +151,12 @@ impl SimulationContract<IsDeployed> {
     /// * `value` - The data of the error.
     /// # Returns
     /// * `Vec<Token>` - The raw decoded error.
-    pub fn decode_error(&self, name: String, value: Bytes) -> Result<Vec<Token>, ContractError> {
+    pub fn decode_error(&self, name: String, value: EvmBytes) -> Result<Vec<Token>, SimContractError> {
         let mut abi_errors = self.base_contract.abi().errors();
         let predicate = |error: &&ethers::abi::ethabi::AbiError| error.name == name;
-        let error = abi_errors.find(predicate).ok_or(ContractError::DecodeEvent)?;
-        error.decode(&value).map_err(|_| ContractError::DecodeEvent)
+        let error = abi_errors
+            .find(predicate)
+            .ok_or(SimContractError::DecodeErrorFailure)?;
+        error.decode(&value).map_err(|_| SimContractError::DecodeErrorFailure)
     }
 }

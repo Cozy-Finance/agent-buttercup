@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 #![allow(clippy::all)]
 //! This module contains the middleware for the Revm simulation environment.
 //! Most of the middleware is essentially a placeholder, but it is necessary to have a middleware to work with bindings more efficiently.

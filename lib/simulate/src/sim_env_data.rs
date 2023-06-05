@@ -1,8 +1,9 @@
-use revm::primitives::B160;
 use std::collections::HashMap;
 
+use crate::EvmAddress;
+
 pub struct SimEnvData {
-    pub address_registry: HashMap<String, B160>,
+    pub address_registry: HashMap<String, EvmAddress>,
 }
 
 impl SimEnvData {

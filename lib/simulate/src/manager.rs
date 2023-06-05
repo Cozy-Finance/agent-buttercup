@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
@@ -12,7 +11,7 @@ use thiserror::Error;
 use crate::{
     agent::{Agent, AgentId},
     block_time_policy::BlockTimePolicy,
-    environment::sim_environment::SimulationEnvironment,
+    environment::sim_env::SimEnv,
 };
 
 #[derive(Error, Debug)]
@@ -28,7 +27,7 @@ pub enum ManagerError {
 /// * `agents` - The agents that are currently running in the simulation environment.
 pub struct SimulationManager {
     /// [`SimulationEnvironment`] that the simulation manager controls.
-    pub environment: SimulationEnvironment,
+    pub environment: SimEnv,
     /// Implements the [`BlockTimePolicy`] trait to manage time in the simulation.
     pub time_policy: Box<dyn BlockTimePolicy>,
     /// The agents that are currently running in the [`SimulationEnvironment`].
@@ -39,7 +38,7 @@ pub struct SimulationManager {
 
 impl SimulationManager {
     pub fn new(
-        environment: SimulationEnvironment,
+        environment: SimEnv,
         time_policy: Box<dyn BlockTimePolicy>,
         agents: BTreeMap<AgentId, Box<dyn Agent>>,
         rng_seed: u64,

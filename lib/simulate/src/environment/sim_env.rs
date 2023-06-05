@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 #![warn(unsafe_code)]
 //! The environment that constitutes a simulation is handled here.
 
@@ -16,7 +15,7 @@ use crate::sim_env_data::SimEnvData;
 /// # Fields
 /// * `evm` - The EVM that is used for the simulation.
 /// * `event_senders` - The senders on the event channel that is used to send events to the agents and simulation manager.
-pub struct SimulationEnvironment {
+pub struct SimEnv {
     /// The EVM that is used for the simulation.
     pub(crate) evm: EVM<CacheDB<EmptyDB>>,
     /// The sender on the event channel that is used to send events to the agents and simulation manager.
@@ -25,7 +24,7 @@ pub struct SimulationEnvironment {
     pub data: SimEnvData,
 }
 
-impl SimulationEnvironment {
+impl SimEnv {
     pub(crate) fn new() -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
@@ -65,24 +64,21 @@ impl SimulationEnvironment {
     pub(crate) fn execute(&mut self, tx: TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx;
 
-        let execution_result = match self.evm.transact_commit() {
-            Ok(val) => val,
-            // URGENT: change this to a custom error
-            Err(_) => panic!("failed"),
-        };
+        let execution_result = self.evm.transact_commit().unwrap();
         self.echo_logs(execution_result.logs());
 
         execution_result
     }
+
     /// Echo the logs to the event channel.
     /// # Arguments
     /// * `logs` - The logs that are to be echoed.
     fn echo_logs(&mut self, logs: Vec<Log>) {
         for event_sender in self.event_senders.iter() {
-            event_sender.send(logs.clone()).unwrap();
+            event_sender.send(logs.clone());
         }
-        // self.event_sender.send(logs).unwrap();
     }
+
     pub(crate) fn add_sender(&mut self, sender: Sender<Vec<Log>>) {
         self.event_senders.push(sender);
     }

@@ -1,15 +1,11 @@
-#![warn(missing_docs)]
-#![warn(unsafe_code)]
-
-use bytes::Bytes;
-use ethers::abi::Token;
-use revm::primitives::B160;
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256};
+use eyre::Result;
 use thiserror::Error;
 
 use crate::{
-    contract::sim_contract::{IsDeployed, NotDeployed, SimulationContract},
-    environment::sim_environment::SimulationEnvironment,
+    contract::sim_contract::{IsDeployed, NotDeployed, SimContract},
+    environment::sim_env::SimEnv,
+    EvmBytes, EvmAddress
 };
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -37,63 +33,51 @@ impl Default for AgentTxGasSettings {
 
 #[derive(Error, Debug)]
 pub enum AgentError {
-    #[error("Failed to deploy contract.")]
+    #[error("failed to deploy contract")]
     ContractDeploymentFailure,
 }
 
 /// Basic traits that every `Agent` must implement in order to properly interact with an EVM and simulation.
 pub trait Agent {
     /// Returns the address of the agent.
-    fn address(&self) -> B160;
+    fn address(&self) -> EvmAddress;
 
-    /// Returns the name of the agent.
+    /// Returns the address of the agent.
     fn name(&self) -> Option<String>;
 
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn activation_step(&self, simulation_environment: &mut SimulationEnvironment);
+    fn activation_step(&self, sim_env: &mut SimEnv);
 
     /// Executes the agents actions against the simulation environment.
-    fn step(&self, simulation_environment: &mut SimulationEnvironment);
-
-    /// Gets the agents current nonce.
-    fn get_nonce(&self, simulation_environment: &mut SimulationEnvironment) -> u64 {
-        simulation_environment
-            .evm
-            .db()
-            .unwrap()
-            .load_account(self.address())
-            .unwrap()
-            .info
-            .nonce
-    }
+    fn step(&self, sim_env: &mut SimEnv);
 
     /// Used to allow agents to make a generic call a specific smart contract.
     fn call_contract(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract: &SimulationContract<IsDeployed>,
-        call_data: Bytes,
+        sim_env: &mut SimEnv,
+        contract: &SimContract<IsDeployed>,
+        call_data: EvmBytes,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(contract.address.into(), call_data, None, None);
-        simulation_environment.execute(tx)
+        sim_env.execute(tx)
     }
 
     fn call_contract_with_value(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract: &SimulationContract<IsDeployed>,
-        call_data: Bytes,
+        sim_env: &mut SimEnv,
+        contract: &SimContract<IsDeployed>,
+        call_data: EvmBytes,
         value: U256,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(contract.address.into(), call_data, Some(value), None);
-        simulation_environment.execute(tx)
+        sim_env.execute(tx)
     }
 
     fn call_contract_with_gas_settings(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract: &SimulationContract<IsDeployed>,
-        call_data: Bytes,
+        sim_env: &mut SimEnv,
+        contract: &SimContract<IsDeployed>,
+        call_data: EvmBytes,
         gas_settings: AgentTxGasSettings,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(
@@ -102,14 +86,14 @@ pub trait Agent {
             None,
             Some(gas_settings),
         );
-        simulation_environment.execute(tx)
+        sim_env.execute(tx)
     }
 
     fn call_contract_with_value_and_gas_settings(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract: &SimulationContract<IsDeployed>,
-        call_data: Bytes,
+        sim_env: &mut SimEnv,
+        contract: &SimContract<IsDeployed>,
+        call_data: EvmBytes,
         value: U256,
         gas_settings: AgentTxGasSettings,
     ) -> ExecutionResult {
@@ -119,33 +103,33 @@ pub trait Agent {
             Some(value),
             Some(gas_settings),
         );
-        simulation_environment.execute(tx)
+        sim_env.execute(tx)
     }
 
     /// Used to allow agents to make a generic call a specific smart contract by address.
     fn call_contract_by_address(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract_address: Address,
-        call_data: Bytes,
+        sim_env: &mut SimEnv,
+        contract_address: EvmAddress,
+        call_data: EvmBytes,
         value: Option<U256>,
         gas_settings: Option<AgentTxGasSettings>,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(contract_address, call_data, value, gas_settings);
-        simulation_environment.execute(tx)
+        sim_env.execute(tx)
     }
 
     /// A constructor to build a `TxEnv` for an agent contract call.
     fn build_call_transaction(
         &self,
-        receiver_address: Address,
-        call_data: Bytes,
+        receiver_address: EvmAddress,
+        call_data: EvmBytes,
         value: Option<U256>,
         gas_settings: Option<AgentTxGasSettings>,
     ) -> TxEnv {
         let tx_gas_settings = gas_settings.unwrap_or_default();
         TxEnv {
-            caller: self.address().into(),
+            caller: self.address(),
             gas_limit: tx_gas_settings.gas_limit,
             gas_price: tx_gas_settings.gas_price,
             gas_priority_fee: tx_gas_settings.gas_priority_fee,
@@ -168,12 +152,12 @@ pub trait Agent {
     /// * `SimulationContract<IsDeployed>` - The deployed contract.
     fn deploy_contract(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        contract: &SimulationContract<NotDeployed>,
-        call_data: Bytes,
-    ) -> Result<SimulationContract<IsDeployed>, AgentError> {
+        sim_env: &mut SimEnv,
+        contract: &SimContract<NotDeployed>,
+        call_data: EvmBytes,
+    ) -> Result<SimContract<IsDeployed>, AgentError> {
         let tx = self.build_deploy_tx(call_data, None, None);
-        let execution_result = simulation_environment.execute(tx);
+        let execution_result = sim_env.execute(tx);
 
         let address = match execution_result {
             ExecutionResult::Success { output, .. } => match output {
@@ -183,9 +167,9 @@ pub trait Agent {
             _ => return Err(AgentError::ContractDeploymentFailure),
         };
 
-        Ok(SimulationContract {
+        Ok(SimContract {
             bytecode: (),
-            address: address.ok_or(return Err(AgentError::ContractDeploymentFailure))?,
+            address: address.unwrap().into(),
             base_contract: contract.base_contract.clone(),
         })
     }
@@ -193,7 +177,7 @@ pub trait Agent {
     /// A constructor to build a `TxEnv` for a contract deployment.
     fn build_deploy_tx(
         &self,
-        bytecode: Bytes,
+        bytecode: EvmBytes,
         value: Option<U256>,
         gas_settings: Option<AgentTxGasSettings>,
     ) -> TxEnv {
