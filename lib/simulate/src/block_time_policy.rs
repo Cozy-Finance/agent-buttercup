@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 #![warn(unsafe_code)]
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 

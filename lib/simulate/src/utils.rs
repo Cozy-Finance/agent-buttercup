@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 //! Module for utility functionality.
 use std::{
     error::Error,
