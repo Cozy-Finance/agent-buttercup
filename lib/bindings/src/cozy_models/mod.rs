@@ -16,4 +16,4 @@ pub mod exponential_decay;
 pub mod fixed_point_math_lib;
 pub mod i_cost_model;
 pub mod i_drip_decay_model;
-pub mod raw_abis;
+pub mod metadata;

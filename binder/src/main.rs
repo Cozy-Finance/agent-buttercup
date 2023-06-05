@@ -5,9 +5,9 @@ use ethers_contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, Sel
 use eyre::{Context as _, Result};
 use regex;
 
-use multi_raw_abis::{MultiRawAbigen, RawAbiData};
+use multi_metadata::{MultiMetadataAbigen, RawAbiData};
 
-mod multi_raw_abis;
+mod multi_metadata;
 mod utils;
 
 #[derive(Parser)]
@@ -85,7 +85,7 @@ impl Binder {
     }
 
     /// Instantiate the `MultiAbigen` and `MultiRawAbis`.
-    fn get_multi(&self) -> Result<(MultiAbigen, MultiRawAbigen)> {
+    fn get_multi(&self) -> Result<(MultiAbigen, MultiMetadataAbigen)> {
         // Counter to increment contract names in case of collisions.
         let mut contract_name_counter: HashMap<String, u64> = HashMap::new();
         // Build a vec of raw abigen data.
@@ -107,17 +107,20 @@ impl Binder {
         let multi_abigen = MultiAbigen::from_abigens(abigens);
         eyre::ensure!(!multi_abigen.is_empty(), "No contract artifacts found.");
 
-        // Build MultiRawAbis.
-        let multi_raw_abis = MultiRawAbigen::new(multi_raw_abigen_data);
-        eyre::ensure!(!multi_raw_abis.is_empty(), "No contract artifacts found.");
+        // Build `MultiMetadataAbigen`.
+        let multi_metadata_abigen = MultiMetadataAbigen::new(multi_raw_abigen_data);
+        eyre::ensure!(
+            !multi_metadata_abigen.is_empty(),
+            "No contract artifacts found."
+        );
 
-        Ok((multi_abigen, multi_raw_abis))
+        Ok((multi_abigen, multi_metadata_abigen))
     }
 
     /// Check that the existing bindings match the expected abigen output
     fn check_existing_bindings(&self) -> Result<()> {
-        let (multi_abi_gen, _) = self.get_multi()?;
-        let contract_bindings = multi_abi_gen.build()?;
+        let (multi_abigen, _) = self.get_multi()?;
+        let contract_bindings = multi_abigen.build()?;
 
         println!(
             "Checking bindings for {} contracts.",
@@ -130,10 +133,10 @@ impl Binder {
     }
 
     fn generate_bindings(&self, write_exports: bool) -> Result<()> {
-        let (multi_abi_gen, multi_raw_abis) = self.get_multi()?;
+        let (multi_abigen, multi_metadata_abigen) = self.get_multi()?;
 
         // Write contract bindings to crate.
-        let contract_bindings = multi_abi_gen.build()?;
+        let contract_bindings = multi_abigen.build()?;
         println!(
             "Generating contract bindings for {} contracts.",
             contract_bindings.len()
@@ -141,12 +144,12 @@ impl Binder {
 
         contract_bindings.write_to_module(&self.module_root(), false)?;
 
-        let raw_abis_binding = multi_raw_abis.build()?;
+        let metadata_binding = multi_metadata_abigen.build()?;
         println!(
-            "Generating raw abi bindings for {} contracts.",
-            multi_raw_abis.len()
+            "Generating metadata bindings for {} contracts.",
+            multi_metadata_abigen.len()
         );
-        MultiRawAbigen::write_to_module(raw_abis_binding, &self.module_root())?;
+        MultiMetadataAbigen::write_to_module(metadata_binding, &self.module_root())?;
 
         if write_exports {
             // Include project module in bindings module.

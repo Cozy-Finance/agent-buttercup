@@ -3,7 +3,8 @@
 
 use bytes::Bytes;
 use ethers::abi::Token;
-use revm::primitives::{Address, ExecutionResult, Output, TransactTo, TxEnv, U256};
+use revm::primitives::B160;
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256};
 use thiserror::Error;
 
 use crate::{
@@ -43,7 +44,7 @@ pub enum AgentError {
 /// Basic traits that every `Agent` must implement in order to properly interact with an EVM and simulation.
 pub trait Agent {
     /// Returns the address of the agent.
-    fn address(&self) -> Address;
+    fn address(&self) -> B160;
 
     /// Returns the name of the agent.
     fn name(&self) -> Option<String>;
@@ -56,7 +57,14 @@ pub trait Agent {
 
     /// Gets the agents current nonce.
     fn get_nonce(&self, simulation_environment: &mut SimulationEnvironment) -> u64 {
-        simulation_environment.evm.db().unwrap().load_account(self.address()).unwrap().info.nonce
+        simulation_environment
+            .evm
+            .db()
+            .unwrap()
+            .load_account(self.address())
+            .unwrap()
+            .info
+            .nonce
     }
 
     /// Used to allow agents to make a generic call a specific smart contract.
@@ -66,7 +74,7 @@ pub trait Agent {
         contract: &SimulationContract<IsDeployed>,
         call_data: Bytes,
     ) -> ExecutionResult {
-        let tx = self.build_call_transaction(contract.address, call_data, None, None);
+        let tx = self.build_call_transaction(contract.address.into(), call_data, None, None);
         simulation_environment.execute(tx)
     }
 
@@ -77,7 +85,7 @@ pub trait Agent {
         call_data: Bytes,
         value: U256,
     ) -> ExecutionResult {
-        let tx = self.build_call_transaction(contract.address, call_data, Some(value), None);
+        let tx = self.build_call_transaction(contract.address.into(), call_data, Some(value), None);
         simulation_environment.execute(tx)
     }
 
@@ -88,7 +96,12 @@ pub trait Agent {
         call_data: Bytes,
         gas_settings: AgentTxGasSettings,
     ) -> ExecutionResult {
-        let tx = self.build_call_transaction(contract.address, call_data, None, Some(gas_settings));
+        let tx = self.build_call_transaction(
+            contract.address.into(),
+            call_data,
+            None,
+            Some(gas_settings),
+        );
         simulation_environment.execute(tx)
     }
 
@@ -101,7 +114,7 @@ pub trait Agent {
         gas_settings: AgentTxGasSettings,
     ) -> ExecutionResult {
         let tx = self.build_call_transaction(
-            contract.address,
+            contract.address.into(),
             call_data,
             Some(value),
             Some(gas_settings),
@@ -132,11 +145,11 @@ pub trait Agent {
     ) -> TxEnv {
         let tx_gas_settings = gas_settings.unwrap_or_default();
         TxEnv {
-            caller: self.address(),
+            caller: self.address().into(),
             gas_limit: tx_gas_settings.gas_limit,
             gas_price: tx_gas_settings.gas_price,
             gas_priority_fee: tx_gas_settings.gas_priority_fee,
-            transact_to: TransactTo::Call(receiver_address),
+            transact_to: TransactTo::Call(receiver_address.into()),
             value: value.unwrap_or(U256::ZERO),
             data: call_data,
             chain_id: None,
@@ -157,22 +170,11 @@ pub trait Agent {
         &self,
         simulation_environment: &mut SimulationEnvironment,
         contract: &SimulationContract<NotDeployed>,
-        constructor_arguments: Vec<Token>,
+        call_data: Bytes,
     ) -> Result<SimulationContract<IsDeployed>, AgentError> {
-        // Append constructor args (if available) to generate the deploy bytecode.
-        let bytecode = match contract.base_contract.abi().constructor.clone() {
-            Some(constructor) => Bytes::from(
-                constructor
-                    .encode_input(contract.bytecode.clone(), &constructor_arguments)
-                    .unwrap(),
-            ),
-            None => Bytes::from(contract.bytecode.clone()),
-        };
+        let tx = self.build_deploy_tx(call_data, None, None);
+        let execution_result = simulation_environment.execute(tx);
 
-        // Take the execution result and extract the contract address.
-        let deploy_txenv = self.build_deploy_tx(bytecode, None, None);
-
-        let execution_result = simulation_environment.execute(deploy_txenv);
         let address = match execution_result {
             ExecutionResult::Success { output, .. } => match output {
                 Output::Create(_, address) => address,
@@ -185,7 +187,6 @@ pub trait Agent {
             bytecode: (),
             address: address.ok_or(return Err(AgentError::ContractDeploymentFailure))?,
             base_contract: contract.base_contract.clone(),
-            constructor_arguments,
         })
     }
 
@@ -198,7 +199,7 @@ pub trait Agent {
     ) -> TxEnv {
         let tx_gas_settings = gas_settings.unwrap_or_default();
         TxEnv {
-            caller: self.address(),
+            caller: self.address().into(),
             gas_limit: tx_gas_settings.gas_limit,
             gas_price: tx_gas_settings.gas_price,
             gas_priority_fee: tx_gas_settings.gas_priority_fee,

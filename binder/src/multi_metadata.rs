@@ -5,11 +5,13 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use ethers_solc::{
+    artifacts::{BytecodeObject, ContractBytecode},
+    ConfigurableContractArtifact,
+};
 use eyre::{Context as _, Result};
 use proc_macro2::{Literal, TokenStream};
 use quote::{format_ident, quote};
-
-use crate::utils;
 
 pub struct RawAbiData {
     pub name: String,
@@ -56,11 +58,11 @@ impl RawAbiData {
 }
 
 #[derive(Debug)]
-pub struct MultiRawAbigen {
+pub struct MultiMetadataAbigen {
     names_and_abi_paths: Vec<(String, PathBuf)>,
 }
 
-impl std::ops::Deref for MultiRawAbigen {
+impl std::ops::Deref for MultiMetadataAbigen {
     type Target = Vec<(String, PathBuf)>;
 
     fn deref(&self) -> &Self::Target {
@@ -68,13 +70,13 @@ impl std::ops::Deref for MultiRawAbigen {
     }
 }
 
-impl std::ops::DerefMut for MultiRawAbigen {
+impl std::ops::DerefMut for MultiMetadataAbigen {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.names_and_abi_paths
     }
 }
 
-impl From<Vec<(String, PathBuf)>> for MultiRawAbigen {
+impl From<Vec<(String, PathBuf)>> for MultiMetadataAbigen {
     fn from(names_and_abi_paths: Vec<(String, PathBuf)>) -> Self {
         Self {
             names_and_abi_paths,
@@ -82,15 +84,15 @@ impl From<Vec<(String, PathBuf)>> for MultiRawAbigen {
     }
 }
 
-impl std::iter::FromIterator<(String, PathBuf)> for MultiRawAbigen {
+impl std::iter::FromIterator<(String, PathBuf)> for MultiMetadataAbigen {
     fn from_iter<I: IntoIterator<Item = (String, PathBuf)>>(iter: I) -> Self {
         iter.into_iter().collect::<Vec<_>>().into()
     }
 }
 
-impl MultiRawAbigen {
+impl MultiMetadataAbigen {
     pub fn new(raw_abis_data: Vec<RawAbiData>) -> Self {
-        MultiRawAbigen {
+        MultiMetadataAbigen {
             names_and_abi_paths: raw_abis_data
                 .iter()
                 .map(|data| (data.name.clone(), data.path.clone()))
@@ -99,28 +101,49 @@ impl MultiRawAbigen {
     }
 
     pub fn build(&self) -> Result<TokenStream> {
-        let include_strs_code = self
-            .names_and_abi_paths
-            .iter()
-            .map(
-                |(name, path)| match utils::get_canonical_path_string(path) {
-                    Ok(path_string) => {
-                        let var_name = format_ident!("{}_RAW_ABI", name.to_uppercase());
-                        let full_path = Literal::string(&path_string);
-                        return Ok(quote! {
-                            pub static #var_name: &str =  include_str!(#full_path);
+        let mut ok_include_strs_code: Vec<TokenStream> = vec![];
+
+        for (name, path) in self.names_and_abi_paths.clone() {
+            let raw_abi_source = fs::read_to_string(path)?;
+            let configurable_contract =
+                serde_json::from_str::<ConfigurableContractArtifact>(&raw_abi_source)?;
+
+            if let Some(mut metadata) = configurable_contract.metadata.clone() {
+                let (abi_contract_path, abi_contract_name) = metadata
+                    .settings
+                    .compilation_target
+                    .pop_first()
+                    .ok_or_else(|| eyre::eyre!("Could not get name and lib from abi metadata."))?;
+                let var_abi_contract_name = format_ident!("{}_NAME", name.to_uppercase());
+                let var_abi_contract_path = format_ident!("{}_PATH", name.to_uppercase());
+                let abi_contract_name = Literal::string(&abi_contract_name);
+                let abi_contract_path = Literal::string(&abi_contract_path);
+
+                let bytecode: ContractBytecode =
+                    configurable_contract.into_contract_bytecode().into();
+                let mut bytecode = bytecode.bytecode.ok_or_else(|| {
+                    eyre::eyre!("Could not convert raw abi bytecode to bytecode.")
+                })?;
+
+                let bytecode_str = match bytecode.object {
+                    BytecodeObject::Bytecode(_) => ok_include_strs_code.push(quote! {
+                        pub static #var_abi_contract_name: &str = #abi_contract_name;
+                        pub static #var_abi_contract_path: &str = #abi_contract_path;
+                    }),
+                    BytecodeObject::Unlinked(s) => {
+                        let var_bytecode = format_ident!("{}_RAW_BYTECODE", name.to_uppercase());
+                        let bytecode_str = Literal::string(&s);
+                        ok_include_strs_code.push(quote! {
+                            pub static #var_abi_contract_name: &str = #abi_contract_name;
+                            pub static #var_abi_contract_path: &str = #abi_contract_path;
+                            pub static #var_bytecode: &str = #bytecode_str;
                         });
                     }
-                    Err(e) => return Err(e),
-                },
-            )
-            .collect::<Vec<Result<_>>>();
-        let ok_include_strs_code = include_strs_code
-            .iter()
-            .filter_map(|code| code.as_ref().ok())
-            .collect::<Vec<_>>();
+                };
+            }
+        }
 
-        let mod_name = format_ident!("raw_abis");
+        let mod_name = format_ident!("metadata");
         Ok(quote! {
             pub use #mod_name::*;
 
@@ -132,16 +155,16 @@ impl MultiRawAbigen {
 
     pub fn write_to_module(binding: TokenStream, mod_path: impl AsRef<Path>) -> Result<()> {
         let mod_path = mod_path.as_ref();
-        let file = mod_path.join("raw_abis.rs");
+        let file = mod_path.join("metadata.rs");
         let syntax_tree = syn::parse2::<syn::File>(binding.clone())?;
         let pretty_string = prettyplease::unparse(&syntax_tree);
         fs::write(file, &pretty_string)?;
 
-        // Include raw_abis module in project module.
+        // Include metadata module in project module.
         let mut file = fs::OpenOptions::new()
             .append(true)
             .open(mod_path.join("mod.rs"))?;
-        writeln!(file, r#"pub mod {};"#, "raw_abis")?;
+        writeln!(file, r#"pub mod {};"#, "metadata")?;
 
         Ok(())
     }
