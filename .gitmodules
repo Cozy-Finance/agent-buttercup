@@ -1,18 +1,15 @@
 [submodule "contracts/ds-test"]
 	path = contracts/ds-test
 	url = https://github.com/dapphub/ds-test
-[submodule "contracts/v3-periphery"]
-	path = contracts/v3-periphery
-	url = https://github.com/Uniswap/v3-periphery
 [submodule "contracts/openzeppelin-contracts"]
 	path = contracts/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts@v3.4.2-solc-0.7
 [submodule "contracts/cozy-protocol-v2"]
 	path = contracts/cozy-protocol-v2
 	url = https://github.com/Cozy-Finance/cozy-protocol-v2
-[submodule "contracts/cozy-models-v2-simulation"]
-	path = contracts/cozy-models-v2-simulation
-	url = https://github.com/Cozy-Finance/cozy-models-v2-simulation
-[submodule "contracts/cozy-triggers-v2-simulation"]
-	path = contracts/cozy-triggers-v2-simulation
-	url = https://github.com/Cozy-Finance/cozy-triggers-v2-simulation
+[submodule "contracts/cozy-models-v2"]
+	path = contracts/cozy-models-v2
+	url = https://github.com/Cozy-Finance/cozy-models-v2
+[submodule "contracts/cozy-triggers-v2"]
+	path = contracts/cozy-triggers-v2
+	url = https://github.com/Cozy-Finance/cozy-triggers-v2

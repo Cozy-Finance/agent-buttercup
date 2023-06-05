@@ -10,6 +10,7 @@ use revm::{
 };
 
 use crate::block_time_policy::BlockTimeEnv;
+use crate::sim_env_data::SimEnvData;
 
 /// The simulation environment that houses the execution environment and event logs.
 /// # Fields
@@ -20,6 +21,8 @@ pub struct SimulationEnvironment {
     pub(crate) evm: EVM<CacheDB<EmptyDB>>,
     /// The sender on the event channel that is used to send events to the agents and simulation manager.
     pub(crate) event_senders: Vec<Sender<Vec<Log>>>,
+    /// Shared sim env data that is accessed by different agents.
+    pub data: SimEnvData,
 }
 
 impl SimulationEnvironment {
@@ -30,7 +33,12 @@ impl SimulationEnvironment {
         evm.env.block.gas_limit = U256::MAX;
         evm.database(db);
         let event_senders = vec![];
-        Self { evm, event_senders }
+        let data = SimEnvData::new();
+        Self {
+            evm,
+            event_senders,
+            data,
+        }
     }
 
     /// Update the block time env.

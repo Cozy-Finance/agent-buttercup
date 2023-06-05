@@ -1,9 +1,9 @@
 [workspace]
 members = [
-    "lib/binder",
+    "lib/bindings",
     "lib/simulate",
     "lib/onchain",
-    "lib/bindings"
+    "binder"
 ]
 
 [package]
@@ -13,13 +13,16 @@ edition = "2021"
 
 [dependencies]
 # Local
-binder = {path = "lib/binder"}
 simulate = {path = "lib/simulate"}
 onchain = {path = "lib/onchain"}
 bindings = {path = "lib/bindings"}
+binder = {path = "binder"}
 
 # Primitive
 visualize = { git = "https://github.com/primitivefinance/visualization-rs.git"}
+
+# Error handling
+thiserror = "1.0.40"
 
 # External
 tokio = { version = "1.28.1", features = [
@@ -28,10 +31,9 @@ tokio = { version = "1.28.1", features = [
 ]}
 clap = { version = "4.3.0", features = ["derive"] }
 serde = { version = "1.0.163", features =["derive"] }
-thiserror = "1.0.40"
 eyre = "0.6.8"
 toml = "0.7.4"
-ethers = "2.0.4"
+ethers = { version = "2", default-features = false, features = ["abigen"] }
 csv = "1.2.1"
 itertools-num = "0.1.3"
 rand = "0.7.3"
