@@ -7,17 +7,15 @@ pub use i_backstop::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_backstop {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bool\",\"name\":\"status_\",\"type\":\"bool\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"BackstopApprovalStatusUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Claim\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"claim\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isApproved\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"struct BackstopApproval[]\",\"name\":\"approvals_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateApprovals\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IBACKSTOP_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IBACKSTOP_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     pub struct IBackstop<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IBackstop<M> {
         fn clone(&self) -> Self {
@@ -37,9 +35,7 @@ pub mod i_backstop {
     }
     impl<M> ::core::fmt::Debug for IBackstop<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IBackstop))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(IBackstop)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IBackstop<M> {
@@ -49,11 +45,13 @@ pub mod i_backstop {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                IBACKSTOP_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    IBACKSTOP_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `claim` (0x379607f5) function
         pub fn claim(
@@ -101,12 +99,16 @@ pub mod i_backstop {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IBackstopEvents> {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            IBackstopEvents,
+        > {
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for IBackstop<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for IBackstop<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -119,7 +121,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "BackstopApprovalStatusUpdated",
@@ -138,7 +140,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "Claim", abi = "Claim(address,address,uint256)")]
     pub struct ClaimFilter {
@@ -159,9 +161,7 @@ pub mod i_backstop {
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
             if let Ok(decoded) = BackstopApprovalStatusUpdatedFilter::decode_log(log) {
-                return Ok(IBackstopEvents::BackstopApprovalStatusUpdatedFilter(
-                    decoded,
-                ));
+                return Ok(IBackstopEvents::BackstopApprovalStatusUpdatedFilter(decoded));
             }
             if let Ok(decoded) = ClaimFilter::decode_log(log) {
                 return Ok(IBackstopEvents::ClaimFilter(decoded));
@@ -198,7 +198,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "claim", abi = "claim(uint256)")]
     pub struct ClaimCall {
@@ -213,7 +213,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isApproved", abi = "isApproved(address)")]
     pub struct IsApprovedCall {
@@ -228,7 +228,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "updateApprovals", abi = "updateApprovals((address,bool)[])")]
     pub struct UpdateApprovalsCall {
@@ -246,15 +246,16 @@ pub mod i_backstop {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Claim(decoded));
             }
-            if let Ok(decoded) = <IsApprovedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsApprovedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsApproved(decoded));
             }
-            if let Ok(decoded) =
-                <UpdateApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <UpdateApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::UpdateApprovals(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -264,8 +265,12 @@ pub mod i_backstop {
         fn encode(self) -> Vec<u8> {
             match self {
                 Self::Claim(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::IsApproved(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::UpdateApprovals(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::IsApproved(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::UpdateApprovals(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
             }
         }
     }
@@ -302,7 +307,7 @@ pub mod i_backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsApprovedReturn(pub bool);
 }

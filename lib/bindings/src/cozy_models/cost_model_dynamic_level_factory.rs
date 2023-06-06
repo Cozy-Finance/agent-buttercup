@@ -7,7 +7,7 @@ pub use cost_model_dynamic_level_factory::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod cost_model_dynamic_level_factory {
     #[rustfmt::skip]
@@ -16,7 +16,8 @@ pub mod cost_model_dynamic_level_factory {
     pub static COSTMODELDYNAMICLEVELFACTORY_ABI: ::ethers::contract::Lazy<
         ::ethers::core::abi::Abi,
     > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
     });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -5034,38 +5035,38 @@ pub mod cost_model_dynamic_level_factory {
         34,
         18,
         32,
-        230,
-        182,
-        129,
-        195,
-        114,
-        219,
-        99,
-        164,
-        239,
-        254,
-        57,
+        241,
+        238,
+        77,
+        0,
+        80,
+        7,
+        115,
+        93,
+        172,
+        168,
         243,
+        133,
+        112,
+        46,
+        169,
+        99,
+        99,
+        201,
         98,
-        210,
-        19,
-        127,
-        222,
-        251,
-        248,
-        136,
-        239,
-        30,
-        182,
         175,
-        78,
-        54,
-        42,
-        153,
-        167,
-        180,
-        253,
-        42,
+        184,
+        183,
+        3,
+        254,
+        132,
+        45,
+        132,
+        225,
+        164,
+        23,
+        1,
+        150,
         100,
         115,
         111,
@@ -5087,38 +5088,38 @@ pub mod cost_model_dynamic_level_factory {
         34,
         18,
         32,
+        134,
+        125,
+        38,
+        11,
+        182,
+        193,
+        239,
+        65,
         85,
-        78,
-        12,
-        211,
-        177,
-        96,
-        121,
-        252,
-        22,
-        116,
-        168,
-        25,
         84,
-        33,
-        219,
-        56,
-        29,
-        133,
+        157,
+        246,
+        187,
+        91,
+        198,
+        184,
+        178,
+        7,
+        162,
         27,
-        160,
-        199,
-        247,
-        218,
-        118,
-        60,
-        226,
-        104,
-        18,
-        46,
-        54,
-        243,
-        60,
+        70,
+        185,
+        146,
+        80,
+        34,
+        115,
+        175,
+        137,
+        109,
+        52,
+        68,
+        32,
         100,
         115,
         111,
@@ -5132,8 +5133,9 @@ pub mod cost_model_dynamic_level_factory {
         51,
     ];
     ///The bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVELFACTORY_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static COSTMODELDYNAMICLEVELFACTORY_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -10118,38 +10120,38 @@ pub mod cost_model_dynamic_level_factory {
         34,
         18,
         32,
-        230,
-        182,
-        129,
-        195,
-        114,
-        219,
-        99,
-        164,
-        239,
-        254,
-        57,
+        241,
+        238,
+        77,
+        0,
+        80,
+        7,
+        115,
+        93,
+        172,
+        168,
         243,
+        133,
+        112,
+        46,
+        169,
+        99,
+        99,
+        201,
         98,
-        210,
-        19,
-        127,
-        222,
-        251,
-        248,
-        136,
-        239,
-        30,
-        182,
         175,
-        78,
-        54,
-        42,
-        153,
-        167,
-        180,
-        253,
-        42,
+        184,
+        183,
+        3,
+        254,
+        132,
+        45,
+        132,
+        225,
+        164,
+        23,
+        1,
+        150,
         100,
         115,
         111,
@@ -10171,38 +10173,38 @@ pub mod cost_model_dynamic_level_factory {
         34,
         18,
         32,
+        134,
+        125,
+        38,
+        11,
+        182,
+        193,
+        239,
+        65,
         85,
-        78,
-        12,
-        211,
-        177,
-        96,
-        121,
-        252,
-        22,
-        116,
-        168,
-        25,
         84,
-        33,
-        219,
-        56,
-        29,
-        133,
+        157,
+        246,
+        187,
+        91,
+        198,
+        184,
+        178,
+        7,
+        162,
         27,
-        160,
-        199,
-        247,
-        218,
-        118,
-        60,
-        226,
-        104,
-        18,
-        46,
-        54,
-        243,
-        60,
+        70,
+        185,
+        146,
+        80,
+        34,
+        115,
+        175,
+        137,
+        109,
+        52,
+        68,
+        32,
         100,
         115,
         111,
@@ -10216,8 +10218,9 @@ pub mod cost_model_dynamic_level_factory {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVELFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static COSTMODELDYNAMICLEVELFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct CostModelDynamicLevelFactory<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelDynamicLevelFactory<M> {
         fn clone(&self) -> Self {
@@ -10249,11 +10252,13 @@ pub mod cost_model_dynamic_level_factory {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                COSTMODELDYNAMICLEVELFACTORY_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    COSTMODELDYNAMICLEVELFACTORY_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -10303,7 +10308,10 @@ pub mod cost_model_dynamic_level_factory {
             cost_factor_at_full_utilization: ::ethers::core::types::U256,
             cost_factor_in_optimal_zone: ::ethers::core::types::U256,
             optimal_zone_rate: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash(
                     [227, 219, 252, 50],
@@ -10345,13 +10353,11 @@ pub mod cost_model_dynamic_level_factory {
             M,
             DeployedCostModelDynamicLevelFilter,
         > {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for CostModelDynamicLevelFactory<M>
-    {
+    for CostModelDynamicLevelFactory<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -10364,7 +10370,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "DeployedCostModelDynamicLevel",
@@ -10389,7 +10395,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "deployModel",
@@ -10412,7 +10418,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isDeployed", abi = "isDeployed(address)")]
     pub struct IsDeployedCall(pub ::ethers::core::types::Address);
@@ -10427,10 +10433,12 @@ pub mod cost_model_dynamic_level_factory {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DeployModel(decoded));
             }
-            if let Ok(decoded) = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsDeployed(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -10439,8 +10447,12 @@ pub mod cost_model_dynamic_level_factory {
     impl ::ethers::core::abi::AbiEncode for CostModelDynamicLevelFactoryCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DeployModel(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::IsDeployed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DeployModel(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::IsDeployed(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
             }
         }
     }
@@ -10471,7 +10483,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DeployModelReturn {
         pub model: ::ethers::core::types::Address,
@@ -10485,7 +10497,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsDeployedReturn(pub bool);
 }

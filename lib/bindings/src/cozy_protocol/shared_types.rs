@@ -1,23 +1,3 @@
-///`AssetStorage(uint128,uint128,uint128,uint128,uint128,uint128,uint128)`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct AssetStorage {
-    pub asset_balance: u128,
-    pub accrued_set_owner_fees: u128,
-    pub accrued_cozy_reserve_fees: u128,
-    pub accrued_cozy_backstop_fees: u128,
-    pub total_purchases_fees: u128,
-    pub total_sales_fees: u128,
-    pub assets_pending_redemption: u128,
-}
 ///`BackstopApproval(address,bool)`
 #[derive(
     Clone,
@@ -27,7 +7,7 @@ pub struct AssetStorage {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct BackstopApproval {
     pub set: ::ethers::core::types::Address,
@@ -42,7 +22,7 @@ pub struct BackstopApproval {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct Delays {
     pub config_update_delay: ::ethers::core::types::U256,
@@ -60,7 +40,7 @@ pub struct Delays {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct DepositFeesAssets {
     pub reserve_fee_assets: u128,
@@ -76,7 +56,7 @@ pub struct DepositFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct Fees {
     pub deposit_fee_reserves: u16,
@@ -95,7 +75,7 @@ pub struct Fees {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MarketConfig {
     pub trigger: ::ethers::core::types::Address,
@@ -114,7 +94,7 @@ pub struct MarketConfig {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MarketConfigStorage {
     pub cost_model: ::ethers::core::types::Address,
@@ -122,29 +102,6 @@ pub struct MarketConfigStorage {
     pub weight: u16,
     pub purchase_fee: u16,
     pub sale_fee: u16,
-}
-///`MarketStorage(address,address,(address,address,uint16,uint16,uint16),uint8,uint256,uint256,uint256,uint128,uint128,uint64)`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct MarketStorage {
-    pub ptoken: ::ethers::core::types::Address,
-    pub trigger: ::ethers::core::types::Address,
-    pub config: MarketConfigStorage,
-    pub state: u8,
-    pub active_protection: ::ethers::core::types::U256,
-    pub last_decay_rate: ::ethers::core::types::U256,
-    pub last_drip_rate: ::ethers::core::types::U256,
-    pub purchases_fee_pool: u128,
-    pub sales_fee_pool: u128,
-    pub last_decay_time: u64,
 }
 ///`MintData(uint216,uint40)`
 #[derive(
@@ -155,7 +112,7 @@ pub struct MarketStorage {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MintData {
     pub amount: ::ethers::core::types::U256,
@@ -170,7 +127,7 @@ pub struct MintData {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct ProtocolFees {
     pub reserve_fee: u16,
@@ -185,7 +142,7 @@ pub struct ProtocolFees {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct PurchaseFeesAssets {
     pub total_cost: u128,
@@ -203,7 +160,7 @@ pub struct PurchaseFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct RedemptionPreview {
     pub delay_remaining: u64,
@@ -221,7 +178,7 @@ pub struct RedemptionPreview {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct SaleFeesAssets {
     pub reserve_fee_assets: u128,
@@ -237,71 +194,9 @@ pub struct SaleFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct SetConfig {
     pub leverage_factor: u32,
     pub deposit_fee: u16,
-}
-///`ActorAssets(uint256,uint256)`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct ActorAssets {
-    pub shares: ::ethers::core::types::U256,
-    pub assets: ::ethers::core::types::U256,
-}
-///`AssetUpdate(uint256,uint256)`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct AssetUpdate {
-    pub before: ::ethers::core::types::U256,
-    pub afterwards: ::ethers::core::types::U256,
-}
-///`GhostRedemption(uint64,uint256,uint256,bool)`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct GhostRedemption {
-    pub id: u64,
-    pub assets: ::ethers::core::types::U256,
-    pub shares: ::ethers::core::types::U256,
-    pub completed: bool,
-}
-///`FuzzSelector(address,bytes4[])`
-#[derive(
-    Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
-    Default,
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-)]
-pub struct FuzzSelector {
-    pub addr: ::ethers::core::types::Address,
-    pub selectors: ::std::vec::Vec<[u8; 4]>,
 }

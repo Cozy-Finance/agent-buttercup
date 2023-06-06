@@ -13,6 +13,7 @@ use eyre::{Context as _, Result};
 use proc_macro2::{Literal, TokenStream};
 use quote::{format_ident, quote};
 
+#[derive(Debug)]
 pub struct RawAbiData {
     pub name: String,
     pub abi_source: String,
@@ -33,6 +34,8 @@ impl RawAbiData {
             .split('.') // ignore everything after the first `.`
             .next()
             .unwrap(); // file_name is not empty as asserted by .file_name() already
+        let abi_source = fs::read_to_string(&path)?;
+
         let name = match name_counter {
             Some(nc) => match nc.get_mut(name) {
                 Some(count) => {
@@ -46,8 +49,6 @@ impl RawAbiData {
             },
             None => name.to_string(),
         };
-
-        let abi_source = fs::read_to_string(&path)?;
 
         Ok(RawAbiData {
             name,
@@ -125,7 +126,7 @@ impl MultiMetadataAbigen {
                     eyre::eyre!("Could not convert raw abi bytecode to bytecode.")
                 })?;
 
-                let bytecode_str = match bytecode.object {
+                match bytecode.object {
                     BytecodeObject::Bytecode(_) => ok_include_strs_code.push(quote! {
                         pub static #var_abi_contract_name: &str = #abi_contract_name;
                         pub static #var_abi_contract_path: &str = #abi_contract_path;

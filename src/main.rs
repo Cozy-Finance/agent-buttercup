@@ -11,9 +11,12 @@ use std::fs;
 use std::path::Path;
 
 mod simulator;
+use crate::simulator::cozy::bindings_wrapper::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    println!("{:?}", *CONFIGURATORLIB);
+
     let configurator_address: [u8; 20] = hex::decode("83769BeEB7e5405ef0B7dc3C66C43E3a51A6d27f")
         .unwrap()
         .try_into()
@@ -45,31 +48,36 @@ async fn main() -> Result<(), Box<dyn Error>> {
             (
                 CONFIGURATORLIB_PATH,
                 CONFIGURATORLIB_NAME,
-                B160::from(configurator_address),
+                B160::from(configurator_address).into(),
             ),
             (
                 DEMANDSIDELIB_PATH,
                 DEMANDSIDELIB_NAME,
-                B160::from(demand_address),
+                B160::from(demand_address).into(),
             ),
-            (DELAYLIB_PATH, DELAYLIB_NAME, B160::from(delay_address)),
+            (
+                DELAYLIB_PATH,
+                DELAYLIB_NAME,
+                B160::from(delay_address).into(),
+            ),
             (
                 REDEMPTIONLIB_PATH,
                 REDEMPTIONLIB_NAME,
-                B160::from(redemption_address),
+                B160::from(redemption_address).into(),
             ),
             (
                 STATETRANSITIONSLIB_PATH,
                 STATETRANSITIONSLIB_NAME,
-                B160::from(state_address),
+                B160::from(state_address).into(),
             ),
             (
                 SUPPLYSIDELIB_PATH,
                 SUPPLYSIDELIB_NAME,
-                B160::from(supply_address),
+                B160::from(supply_address).into(),
             ),
         ],
     );
     let s = b.unwrap();
+    println!("{:?}", s.to_owned());
     Ok(())
 }

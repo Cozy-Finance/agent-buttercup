@@ -2,11 +2,11 @@
 use ethers::{
     abi::{Contract as EthersContract, Detokenize, Token, Tokenize},
     prelude::BaseContract as EthersBaseContract,
-    types::H256 as EthersH256
+    types::H256 as EthersH256,
 };
-use revm::primitives::{B256};
-use thiserror::Error;
 use eyre::Result;
+use revm::primitives::B256;
+use thiserror::Error;
 
 use crate::{EthersAddress, EthersBytes, EvmBytes};
 
@@ -19,7 +19,7 @@ pub enum SimContractError {
     #[error("could not decode event")]
     DecodeEventFailure,
     #[error("could not decode error")]
-    DecodeErrorFailure
+    DecodeErrorFailure,
 }
 
 #[derive(Debug, Clone)]
@@ -151,12 +151,18 @@ impl SimContract<IsDeployed> {
     /// * `value` - The data of the error.
     /// # Returns
     /// * `Vec<Token>` - The raw decoded error.
-    pub fn decode_error(&self, name: String, value: EvmBytes) -> Result<Vec<Token>, SimContractError> {
+    pub fn decode_error(
+        &self,
+        name: String,
+        value: EvmBytes,
+    ) -> Result<Vec<Token>, SimContractError> {
         let mut abi_errors = self.base_contract.abi().errors();
         let predicate = |error: &&ethers::abi::ethabi::AbiError| error.name == name;
         let error = abi_errors
             .find(predicate)
             .ok_or(SimContractError::DecodeErrorFailure)?;
-        error.decode(&value).map_err(|_| SimContractError::DecodeErrorFailure)
+        error
+            .decode(&value)
+            .map_err(|_| SimContractError::DecodeErrorFailure)
     }
 }

@@ -1,11 +1,11 @@
-use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256};
 use eyre::Result;
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256};
 use thiserror::Error;
 
 use crate::{
     contract::sim_contract::{IsDeployed, NotDeployed, SimContract},
     environment::sim_env::SimEnv,
-    EvmBytes, EvmAddress
+    EvmAddress, EvmBytes,
 };
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -42,14 +42,17 @@ pub trait Agent {
     /// Returns the address of the agent.
     fn address(&self) -> EvmAddress;
 
+    /// Allows manager to register address with the agent.
+    fn register_address(&mut self, address: &EvmAddress);
+
     /// Returns the address of the agent.
     fn name(&self) -> Option<String>;
 
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn activation_step(&self, sim_env: &mut SimEnv);
+    fn activation_step(&mut self, sim_env: &mut SimEnv);
 
     /// Executes the agents actions against the simulation environment.
-    fn step(&self, sim_env: &mut SimEnv);
+    fn step(&mut self, sim_env: &mut SimEnv);
 
     /// Used to allow agents to make a generic call a specific smart contract.
     fn call_contract(
@@ -183,7 +186,7 @@ pub trait Agent {
     ) -> TxEnv {
         let tx_gas_settings = gas_settings.unwrap_or_default();
         TxEnv {
-            caller: self.address().into(),
+            caller: self.address(),
             gas_limit: tx_gas_settings.gas_limit,
             gas_price: tx_gas_settings.gas_price,
             gas_priority_fee: tx_gas_settings.gas_priority_fee,
