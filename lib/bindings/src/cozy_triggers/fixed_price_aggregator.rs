@@ -7,16 +7,18 @@ pub use fixed_price_aggregator::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod fixed_price_aggregator {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"_decimals\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"_price\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"description\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint80\",\"name\":\"_roundId\",\"type\":\"uint80\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getRoundData\",\"outputs\":[{\"internalType\":\"uint80\",\"name\":\"roundId\",\"type\":\"uint80\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"answer\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"startedAt\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"updatedAt\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint80\",\"name\":\"answeredInRound\",\"type\":\"uint80\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"latestRoundData\",\"outputs\":[{\"internalType\":\"uint80\",\"name\":\"roundId\",\"type\":\"uint80\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"answer\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"startedAt\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"updatedAt\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint80\",\"name\":\"answeredInRound\",\"type\":\"uint80\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"version\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static FIXEDPRICEAGGREGATOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static FIXEDPRICEAGGREGATOR_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -751,38 +753,38 @@ pub mod fixed_price_aggregator {
         34,
         18,
         32,
-        216,
-        141,
-        54,
-        45,
-        184,
-        23,
-        20,
-        119,
-        82,
-        8,
-        179,
-        72,
-        104,
-        119,
-        116,
-        2,
-        161,
-        163,
-        42,
-        62,
-        242,
-        20,
-        64,
-        137,
-        253,
-        200,
-        209,
-        70,
-        16,
-        152,
-        176,
-        170,
+        237,
+        51,
+        85,
+        223,
+        1,
+        158,
+        3,
+        238,
+        108,
+        39,
+        245,
+        236,
+        75,
+        218,
+        175,
+        14,
+        71,
+        208,
+        31,
+        107,
+        94,
+        128,
+        26,
+        149,
+        88,
+        190,
+        241,
+        207,
+        238,
+        36,
+        52,
+        9,
         100,
         115,
         111,
@@ -796,8 +798,9 @@ pub mod fixed_price_aggregator {
         51,
     ];
     ///The bytecode of the contract.
-    pub static FIXEDPRICEAGGREGATOR_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static FIXEDPRICEAGGREGATOR_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -1376,38 +1379,38 @@ pub mod fixed_price_aggregator {
         34,
         18,
         32,
-        216,
-        141,
-        54,
-        45,
-        184,
-        23,
-        20,
-        119,
-        82,
-        8,
-        179,
-        72,
-        104,
-        119,
-        116,
-        2,
-        161,
-        163,
-        42,
-        62,
-        242,
-        20,
-        64,
-        137,
-        253,
-        200,
-        209,
-        70,
-        16,
-        152,
-        176,
-        170,
+        237,
+        51,
+        85,
+        223,
+        1,
+        158,
+        3,
+        238,
+        108,
+        39,
+        245,
+        236,
+        75,
+        218,
+        175,
+        14,
+        71,
+        208,
+        31,
+        107,
+        94,
+        128,
+        26,
+        149,
+        88,
+        190,
+        241,
+        207,
+        238,
+        36,
+        52,
+        9,
         100,
         115,
         111,
@@ -1421,8 +1424,9 @@ pub mod fixed_price_aggregator {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static FIXEDPRICEAGGREGATOR_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static FIXEDPRICEAGGREGATOR_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct FixedPriceAggregator<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for FixedPriceAggregator<M> {
         fn clone(&self) -> Self {
@@ -1454,11 +1458,13 @@ pub mod fixed_price_aggregator {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                FIXEDPRICEAGGREGATOR_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    FIXEDPRICEAGGREGATOR_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -1558,8 +1564,7 @@ pub mod fixed_price_aggregator {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for FixedPriceAggregator<M>
-    {
+    for FixedPriceAggregator<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -1573,7 +1578,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
@@ -1586,7 +1591,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "description", abi = "description()")]
     pub struct DescriptionCall;
@@ -1599,7 +1604,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getRoundData", abi = "getRoundData(uint80)")]
     pub struct GetRoundDataCall {
@@ -1614,7 +1619,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "latestRoundData", abi = "latestRoundData()")]
     pub struct LatestRoundDataCall;
@@ -1627,7 +1632,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "version", abi = "version()")]
     pub struct VersionCall;
@@ -1645,22 +1650,24 @@ pub mod fixed_price_aggregator {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Decimals(decoded));
             }
-            if let Ok(decoded) = <DescriptionCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DescriptionCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Description(decoded));
             }
-            if let Ok(decoded) = <GetRoundDataCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <GetRoundDataCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetRoundData(decoded));
             }
-            if let Ok(decoded) =
-                <LatestRoundDataCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <LatestRoundDataCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LatestRoundData(decoded));
             }
-            if let Ok(decoded) = <VersionCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <VersionCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Version(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -1669,10 +1676,18 @@ pub mod fixed_price_aggregator {
     impl ::ethers::core::abi::AbiEncode for FixedPriceAggregatorCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::Decimals(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Description(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetRoundData(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::LatestRoundData(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Decimals(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Description(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetRoundData(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::LatestRoundData(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Version(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -1722,7 +1737,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DecimalsReturn(pub u8);
     ///Container type for all return fields from the `description` function with signature `description()` and selector `0x7284e416`
@@ -1734,7 +1749,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DescriptionReturn(pub ::std::string::String);
     ///Container type for all return fields from the `getRoundData` function with signature `getRoundData(uint80)` and selector `0x9a6fc8f5`
@@ -1746,7 +1761,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetRoundDataReturn {
         pub round_id: u128,
@@ -1764,7 +1779,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct LatestRoundDataReturn {
         pub round_id: u128,
@@ -1782,7 +1797,7 @@ pub mod fixed_price_aggregator {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct VersionReturn(pub ::ethers::core::types::U256);
 }

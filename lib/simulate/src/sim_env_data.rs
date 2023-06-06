@@ -1,15 +1,15 @@
 use std::collections::HashMap;
 
-use crate::EvmAddress;
+use crate::contract::sim_contract::{IsDeployed, SimContract};
 
 pub struct SimEnvData {
-    pub address_registry: HashMap<String, EvmAddress>,
+    pub contract_registry: HashMap<String, SimContract<IsDeployed>>,
 }
 
 impl SimEnvData {
     pub fn new() -> Self {
         SimEnvData {
-            address_registry: HashMap::new(),
+            contract_registry: HashMap::new(),
         }
     }
 }

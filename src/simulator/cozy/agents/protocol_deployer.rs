@@ -1,288 +1,233 @@
-use std::collections::HashMap;
-
-use bindings::{
-    backstop_1::*,
-    configurator_lib::*,
-    cozy_protocol::metadata::*,
-    cozy_protocol::shared_types::{MarketConfig, SetConfig},
-    cozy_router::*,
-    delay_lib::*,
-    demand_side_lib::*,
-    manager::*,
-    p_token::*,
-    p_token_factory::*,
-    redemption_lib::*,
-    set::*,
-    set_factory::*,
-    state_transitions_lib::*,
-    supply_side_lib::*,
-};
-use ethers::abi::{Contract as EthersContract, Token, Tokenize};
-use ethers::types::{Address as EthersAddress, Bytes as EthersBytes, U256 as EthersU256};
+use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
+use ethers::abi::{Contract as EthersContract, Tokenize};
+use ethers::types::U256 as EthersU256;
 use eyre::Result;
-use revm::primitives::{create_address, Address as EVMAddress, U256 as EVMU256};
+use revm::primitives::create_address;
 use simulate::{
     agent::Agent,
     contract::{
-        sim_contract::{IsDeployed, SimulationContract},
+        sim_contract::{IsDeployed, SimContract},
         utils,
     },
-    environment::sim_environment::SimulationEnvironment,
+    environment::sim_env::SimEnv,
 };
 use thiserror::Error;
 
+use crate::simulator::cozy::{
+    bindings_wrapper::*,
+    {EthersAddress, EthersBytes, EvmAddress},
+};
+
 #[derive(Error, Debug)]
-pub enum ProtocolDeployerErrors {
+pub enum ProtocolDeployerError {
     #[error("tried accessing a non-existent library addr")]
     NonExistentLibraryAddr,
     #[error("failed to link set bytecode")]
-    SetBytecodeFailure,
+    LinkingBytecodeFailure,
+    #[error("missing linked bytecode")]
+    MissingLinkedBytecode,
+    #[error("missing unlinked bytecode")]
+    MissingUnlinkedBytecode,
+    #[error("uninitialized address")]
+    UninitializedAddr,
 }
 
 #[derive(Debug, Clone)]
 pub struct ProtocolDeployerParams {
-    owner: EthersAddress,
-    pauser: EthersAddress,
-    delays: Delays,
-    fees: Fees,
-    allowed_markets_per_set: EthersU256,
+    pub delays: Delays,
+    pub fees: Fees,
+    pub allowed_markets_per_set: EthersU256,
 }
 
 pub struct ProtocolDeployer {
     name: String,
     deploy_params: ProtocolDeployerParams,
+    address: Option<EvmAddress>,
 }
 
 impl ProtocolDeployer {
-    fn new(name: String, deploy_params: ProtocolDeployerParams) -> Self {
+    pub fn new(name: String, deploy_params: ProtocolDeployerParams) -> Self {
         Self {
             name,
             deploy_params,
+            address: None,
         }
     }
 }
 
 impl Agent for ProtocolDeployer {
+    fn address(&self) -> EvmAddress {
+        self.address.unwrap()
+    }
+
+    fn register_address(&mut self, address: &EvmAddress) {
+        self.address = Some(*address);
+    }
+
     fn name(&self) -> Option<String> {
-        Option::Some(self.name)
+        Option::Some(self.name.clone())
     }
 
-    fn activation_step(&self, simulation_environment: &mut SimulationEnvironment) {
+    fn activation_step(&mut self, sim_env: &mut SimEnv) {
         // Deploy external libraries.
-        let mut library_addresses: HashMap<&str, EthersAddress> = HashMap::new();
-        self.deploy_libraries(simulation_environment, &mut library_addresses);
+        self.deploy_libraries(sim_env);
         // Deploy core protocol.
-        self.deploy_core_protocol(simulation_environment, &mut library_addresses);
+        self.deploy_core_protocol(sim_env);
+        // Deploy periphery.
+        self.deploy_periphery(sim_env);
     }
 
-    fn step(&self, simulation_environment: &mut SimulationEnvironment) {}
+    fn step(&mut self, sim_env: &mut SimEnv) {}
 }
 
 impl ProtocolDeployer {
-    fn deploy_contract_with_args<T: Tokenize>(
+    fn create_and_deploy_sim_contract<T: Tokenize>(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
+        sim_env: &mut SimEnv,
         abi: EthersContract,
         bytecode: EthersBytes,
-        args: T,
         name: &str,
-        add_to_registry: bool,
-    ) -> Result<SimulationContract<IsDeployed>> {
-        let contract = SimulationContract::new(abi, bytecode);
-        let contract = self.deploy_contract(
-            simulation_environment,
-            &contract,
-            contract.encode_constructor(args)?,
-        )?;
+        args: T,
+    ) -> Result<()> {
+        let contract = SimContract::new(abi, bytecode);
+        let contract =
+            self.deploy_contract(sim_env, &contract, contract.encode_constructor(args)?)?;
         println!("{} deployed at address: {}.", name, contract.address);
 
-        if add_to_registry {
-            simulation_environment
-                .data
-                .address_registry
-                .insert(name.to_string(), contract.address);
-        }
-
-        Ok(contract)
-    }
-
-    fn deploy_libraries(
-        &self,
-        simulation_environment: &mut SimulationEnvironment,
-        library_addresses: &mut HashMap<&str, Address>,
-    ) -> Result<()> {
-        let configurator_lib = self.deploy_contract_with_args(
-            simulation_environment,
-            CONFIGURATORLIB_ABI.clone(),
-            CONFIGURATORLIB_BYTECODE.clone(),
-            (),
-            CONFIGURATORLIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(CONFIGURATORLIB_NAME, configurator_lib.address);
-
-        let delay_lib_addr = self.deploy_contract_with_args(
-            simulation_environment,
-            DELAYLIB_ABI.clone(),
-            DELAYLIB_BYTECODE.clone(),
-            (),
-            DELAYLIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(DELAYLIB_NAME, delay_lib_addr.address);
-
-        let demand_side_lib = self.deploy_contract_with_args(
-            simulation_environment,
-            DEMANDSIDELIB_ABI.clone(),
-            DEMANDSIDELIB_BYTECODE.clone(),
-            (),
-            DEMANDSIDELIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(DEMANDSIDELIB_NAME, demand_side_lib.address);
-
-        let redemption_lib = self.deploy_contract_with_args(
-            simulation_environment,
-            REDEMPTIONLIB_ABI.clone(),
-            REDEMPTIONLIB_BYTECODE.clone(),
-            (),
-            REDEMPTIONLIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(REDEMPTIONLIB_NAME, redemption_lib.address);
-
-        let state_transitions_lib = self.deploy_contract_with_args(
-            simulation_environment,
-            STATETRANSITIONSLIB_ABI.clone(),
-            STATETRANSITIONSLIB_BYTECODE.clone(),
-            (),
-            STATETRANSITIONSLIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(STATETRANSITIONSLIB_NAME, state_transitions_lib.address);
-
-        let supply_side_lib = self.deploy_contract_with_args(
-            simulation_environment,
-            SUPPLYSIDELIB_ABI.clone(),
-            SUPPLYSIDELIB_BYTECODE.clone(),
-            (),
-            SUPPLYSIDELIB_NAME,
-            false,
-        )?;
-        library_addresses.insert(SUPPLYSIDELIB_NAME, supply_side_lib.address);
+        sim_env
+            .data
+            .contract_registry
+            .insert(name.to_string(), contract);
 
         Ok(())
     }
 
-    fn deploy_core_protocol(
+    fn deploy_linked_contract_with_args<T: Tokenize>(
         &self,
-        simulation_environment: &mut SimulationEnvironment,
-        library_addresses: &mut HashMap<&str, Address>,
+        sim_env: &mut SimEnv,
+        contract_bindings: &BindingsWrapper,
+        args: T,
     ) -> Result<()> {
-        // Pre-compute Cozy protocol addresses
-        let current_nonce = self.get_nonce(simulation_environment);
-        let manager_addr = Address::from(create_address(self.address(), current_nonce));
-        let set_logic_addr = Address::from(create_address(self.address(), current_nonce + 1));
-        // current_nonce + 2 is initialization of the Set logic.
-        let set_factory_addr = Address::from(create_address(self.address(), current_nonce + 3));
-        let p_token_logic_addr = Address::from(create_address(self.address(), current_nonce + 4));
-        // current_nonce + 5 is initialization of the PToken logic.
-        let p_token_factory_addr = Address::from(create_address(self.address(), current_nonce + 6));
-        let backstop_addr = Address::from(create_address(self.address(), current_nonce + 7));
+        let abi = (*contract_bindings).abi.clone();
+        let bytecode = (*contract_bindings)
+            .bytecode
+            .ok_or(ProtocolDeployerError::MissingLinkedBytecode)?
+            .clone();
+        let name = (*contract_bindings).name;
 
-        self.deploy_contract_with_args(
-            simulation_environment,
-            MANAGER_ABI.clone(),
-            MANAGER_BYTECODE.clone(),
+        self.create_and_deploy_sim_contract(sim_env, abi, bytecode, name, args)
+    }
+
+    fn deploy_unlinked_contract_with_args<T: Tokenize>(
+        &self,
+        sim_env: &mut SimEnv,
+        contract_bindings: &BindingsWrapper,
+        libraries: Vec<&BindingsWrapper>,
+        args: T,
+    ) -> Result<()> {
+        let mut links: Vec<(&str, &str, EthersAddress)> = vec![];
+        for lib_binding in libraries.iter() {
+            links.push((
+                lib_binding.path,
+                lib_binding.name,
+                (*sim_env
+                    .data
+                    .contract_registry
+                    .get(lib_binding.name)
+                    .ok_or(ProtocolDeployerError::NonExistentLibraryAddr)?)
+                .address,
+            ));
+        }
+
+        let bytecode = utils::build_linked_bytecode(
+            (*contract_bindings)
+                .unlinked_bytecode
+                .ok_or(ProtocolDeployerError::MissingUnlinkedBytecode)?,
+            links,
+        )?;
+
+        let abi = (*contract_bindings).abi.clone();
+        let name = (*contract_bindings).name;
+
+        self.create_and_deploy_sim_contract(sim_env, abi, bytecode.into(), name, args)
+    }
+
+    fn deploy_libraries(&self, sim_env: &mut SimEnv) -> Result<()> {
+        self.deploy_linked_contract_with_args(sim_env, &CONFIGURATORLIB, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &DELAYLIB, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &DEMANDSIDELIB, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &REDEMPTIONLIB, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &STATETRANSITIONSLIB, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &SUPPLYSIDELIB, ())?;
+        Ok(())
+    }
+
+    fn deploy_core_protocol(&self, mut sim_env: &mut SimEnv) -> Result<()> {
+        // Pre-compute Cozy protocol addresses
+        let current_nonce = sim_env.get_account_info(self.address()).nonce;
+        let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
+        let set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
+        // current_nonce + 2 is initialization of the Set logic.
+        let set_factory_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 3));
+        let ptoken_logic_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 4));
+        // current_nonce + 5 is initialization of the PToken logic.
+        let ptoken_factory_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 6));
+        let backstop_addr = EthersAddress::from(create_address(self.address(), current_nonce + 7));
+
+        // Deploy manager.
+        self.deploy_linked_contract_with_args(
+            sim_env,
+            &MANAGER,
             (
                 backstop_addr,
                 set_factory_addr,
-                self.deploy_params.owner,
-                self.deploy_params.pauser,
-                self.deploy_params.delays,
-                self.deploy_params.fees,
+                EthersAddress::from(self.address()),
+                EthersAddress::from(self.address()),
+                self.deploy_params.delays.clone(),
+                self.deploy_params.fees.clone(),
                 self.deploy_params.allowed_markets_per_set,
             ),
-            MANAGER_NAME,
-            true,
         )?;
 
-        let set_bytecode = utils::build_linked_bytecode(
-            SET_RAW_BYTECODE,
-            vec![
-                (
-                    CONFIGURATORLIB_PATH,
-                    CONFIGURATORLIB_NAME,
-                    *library_addresses
-                        .get(CONFIGURATORLIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-                (
-                    DEMANDSIDELIB_PATH,
-                    DEMANDSIDELIB_NAME,
-                    *library_addresses
-                        .get(DEMANDSIDELIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-                (
-                    DELAYLIB_PATH,
-                    DELAYLIB_NAME,
-                    *library_addresses
-                        .get(DELAYLIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-                (
-                    REDEMPTIONLIB_PATH,
-                    REDEMPTIONLIB_NAME,
-                    *library_addresses
-                        .get(REDEMPTIONLIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-                (
-                    STATETRANSITIONSLIB_PATH,
-                    STATETRANSITIONSLIB_NAME,
-                    *library_addresses
-                        .get(STATETRANSITIONSLIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-                (
-                    SUPPLYSIDELIB_PATH,
-                    SUPPLYSIDELIB_NAME,
-                    *library_addresses
-                        .get(SUPPLYSIDELIB_NAME)
-                        .ok_or(ProtocolDeployerErrors::NonExistentLibraryAddr)?,
-                ),
-            ],
-        )
-        .map_err(|_| ProtocolDeployerErrors::SetBytecodeFailure)?;
+        // Deploy set logic.
+        self
+            .deploy_unlinked_contract_with_args(
+                sim_env,
+                &SET,
+                vec![
+                    &CONFIGURATORLIB,
+                    &REDEMPTIONLIB,
+                    &SUPPLYSIDELIB,
+                    &DEMANDSIDELIB,
+                    &DELAYLIB,
+                    &STATETRANSITIONSLIB,
+                ],
+                (manager_addr, ptoken_factory_addr, backstop_addr),
+            )
+            .map_err(|_| ProtocolDeployerError::LinkingBytecodeFailure)?;
+        let set_logic = sim_env.data.contract_registry.get(SET.name).unwrap();
 
-        let set_logic = self.deploy_contract_with_args(
-            simulation_environment,
-            SET_ABI.clone(),
-            set_bytecode,
-            (
-                manager_addr,
-                p_token_logic_addr,
-                self.deploy_params.owner,
-                self.deploy_params.pauser,
-                self.deploy_params.delays,
-                self.deploy_params.fees,
-                self.deploy_params.allowed_markets_per_set,
-            ),
-            MANAGER_NAME,
-            true,
-        )?;
-
+        // Initialize set logic.
         let empty_market_configs: Vec<MarketConfig> = vec![];
+        let weth_addr =
+            sim_env
+                .data
+                .contract_registry
+                .get("Weth")
+                .ok_or(ProtocolDeployerError::UninitializedAddr)?
+                .address;
         self.call_contract(
-            &mut manager.environment,
-            &set_logic_addr,
+            &mut sim_env,
+            &set_logic,
             set_logic.encode_function(
                 "initialize",
                 (
-                    H160::ZERO,
-                    H160::ZERO,
-                    simulation_environment.contract_registry.get("Weth"),
+                    EthersAddress::zero(),
+                    EthersAddress::zero(),
+                    weth_addr,
                     SetConfig {
                         deposit_fee: 0,
                         leverage_factor: 0,
@@ -290,67 +235,52 @@ impl ProtocolDeployer {
                     empty_market_configs,
                 ),
             )?,
-        )?;
+        );
         println!("Set logic initialized.");
 
-        self.deploy_contract_with_args(
-            simulation_environment,
-            SETFACTORY_ABI.clone(),
-            SETFACTORY_BYTECODE.clone(),
+        // Deploy ptoken logic.
+        self.deploy_linked_contract_with_args(
+            sim_env,
+            &PTOKEN,
             (manager_addr, set_logic_addr),
-            SETFACTORY_NAME,
-            true,
         )?;
 
-        let p_token_logic = self.deploy_contract_with_args(
-            simulation_environment,
-            PTOKEN_ABI.clone(),
-            PTOKEN_BYTECODE.clone(),
-            (manager_addr,),
-            PTOKEN_NAME,
-            true,
-        )?;
+        self.deploy_linked_contract_with_args(sim_env, &PTOKEN, (manager_addr,))?;
+        let mut ptoken_logic = sim_env.data.contract_registry.get(PTOKEN.name).unwrap();
 
+        // Initialize ptoken logic.
         self.call_contract(
-            &mut simulation_environment,
-            &p_token_logic,
-            p_token_logic.encode_function("initialize", (B160::ZERO, B160::ZERO, 0_u8))?,
+            &mut sim_env,
+            &ptoken_logic,
+            ptoken_logic.encode_function(
+                "initialize",
+                (EthersAddress::zero(), EthersAddress::zero(), 0_u8),
+            )?,
         );
         println!("Ptoken logic initialized.");
 
-        self.deploy_contract_with_args(
-            simulation_environment,
-            PTOKENFACTORY_ABI.clone(),
-            PTOKENFACTORY_BYTECODE.clone(),
-            (p_token_logic_address,),
-            PTOKENFACTORY_NAME,
-            true,
+        // Deploy ptoken factory.
+        self.deploy_linked_contract_with_args(sim_env, &PTOKENFACTORY, (ptoken_logic_addr,))?;
+
+        // Deploy backstop.
+        self.deploy_linked_contract_with_args(sim_env, &BACKSTOP, (manager_addr, weth_addr))?;
+
+        // Deploy cozy router.
+        self.deploy_linked_contract_with_args(
+            sim_env,
+            &COZYROUTER,
+            (weth_addr, weth_addr, weth_addr),
         )?;
 
-        self.deploy_contract_with_args(
-            simulation_environment,
-            BACKSTOP_1_ABI.clone(),
-            BACKSTOP_1_BYTECODE.clone(),
-            (
-                manager_address,
-                simulation_environment.contract_registry.get("Weth"),
-            ),
-            BACKSTOP_1_NAME,
-            true,
-        )?;
+        Ok(())
+    }
 
-        self.deploy_contract_with_args(
-            simulation_environment,
-            COZYROUTER_ABI.clone(),
-            COZYROUTER_BYTECODE.clone(),
-            (
-                manager_address,
-                simulation_environment.contract_registry.get("Weth"),
-                simulation_environment.contract_registry.get("Weth"),
-                simulation_environment.contract_registry.get("Weth"),
-            ),
-            COZYROUTER_NAME,
-            true,
-        )?;
+    fn deploy_periphery(&self, sim_env: &mut SimEnv) -> Result<()> {
+        self.deploy_linked_contract_with_args(sim_env, &COSTMODELJUMPRATEFACTORY, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &COSTMODELDYNAMICLEVELFACTORY, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &DRIPDECAYMODELCONSTANTFACTORY, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &UMATRIGGERFACTORY, ())?;
+        self.deploy_linked_contract_with_args(sim_env, &CHAINLINKTRIGGERFACTORY, ())?;
+        Ok(())
     }
 }

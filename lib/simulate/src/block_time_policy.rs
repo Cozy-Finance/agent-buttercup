@@ -45,8 +45,9 @@ pub enum FixedBlockTimePolicyError {
 }
 
 impl FixedBlockTimePolicy {
-    fn new(
-        start_block_time_env: BlockTimeEnv,
+    pub fn new(
+        start_block_number: U256,
+        start_block_timestamp: U256,
         time_per_block: u64,
         blocks_per_step: u64,
         blocks_to_generate: Option<u64>,
@@ -56,7 +57,10 @@ impl FixedBlockTimePolicy {
             return Err(FixedBlockTimePolicyError::UnspecifiedEndTime);
         }
         Ok(FixedBlockTimePolicy {
-            current_block_time_env: start_block_time_env,
+            current_block_time_env: BlockTimeEnv {
+                number: start_block_number,
+                timestamp: start_block_timestamp,
+            },
             time_per_block,
             blocks_per_step,
             blocks_to_generate,

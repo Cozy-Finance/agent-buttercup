@@ -7,16 +7,18 @@ pub use cost_model_jump_rate_factory::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod cost_model_jump_rate_factory {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"kink\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"costFactorAtZeroUtilization\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"costFactorAtKinkUtilization\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"costFactorAtFullUtilization\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DeployedCostModelJumpRate\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_kink\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtZeroUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtKinkUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtFullUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployModel\",\"outputs\":[{\"internalType\":\"contract CostModelJumpRate\",\"name\":\"_model\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_kink\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtZeroUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtKinkUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtFullUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getModel\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isDeployed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COSTMODELJUMPRATEFACTORY_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static COSTMODELJUMPRATEFACTORY_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -4225,38 +4227,38 @@ pub mod cost_model_jump_rate_factory {
         34,
         18,
         32,
-        157,
-        106,
-        171,
+        115,
+        13,
+        66,
+        17,
+        242,
+        119,
+        66,
         45,
-        106,
-        103,
-        88,
+        241,
+        109,
+        80,
+        188,
+        112,
         117,
-        175,
-        64,
-        82,
-        155,
-        179,
-        0,
-        45,
+        59,
+        118,
         34,
         120,
-        105,
-        74,
-        131,
-        26,
-        49,
-        86,
-        19,
-        5,
-        66,
-        165,
-        218,
-        55,
-        31,
-        74,
-        116,
+        25,
+        129,
+        36,
+        154,
+        211,
+        123,
+        72,
+        242,
+        113,
+        45,
+        188,
+        195,
+        148,
+        1,
         100,
         115,
         111,
@@ -4278,38 +4280,38 @@ pub mod cost_model_jump_rate_factory {
         34,
         18,
         32,
-        233,
-        229,
+        51,
+        34,
+        53,
+        44,
+        59,
+        244,
+        66,
+        116,
+        124,
+        39,
+        3,
+        143,
+        92,
+        35,
         99,
-        174,
-        200,
-        198,
-        68,
-        8,
-        153,
-        72,
-        106,
-        232,
-        247,
-        229,
-        252,
-        235,
-        165,
-        157,
+        13,
+        240,
         209,
-        212,
-        120,
-        206,
-        61,
-        84,
-        169,
-        118,
-        109,
-        159,
-        230,
-        254,
-        11,
-        138,
+        65,
+        16,
+        49,
+        12,
+        184,
+        102,
+        145,
+        80,
+        132,
+        128,
+        129,
+        176,
+        170,
+        234,
         100,
         115,
         111,
@@ -4323,8 +4325,9 @@ pub mod cost_model_jump_rate_factory {
         51,
     ];
     ///The bytecode of the contract.
-    pub static COSTMODELJUMPRATEFACTORY_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static COSTMODELJUMPRATEFACTORY_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -8501,38 +8504,38 @@ pub mod cost_model_jump_rate_factory {
         34,
         18,
         32,
-        157,
-        106,
-        171,
+        115,
+        13,
+        66,
+        17,
+        242,
+        119,
+        66,
         45,
-        106,
-        103,
-        88,
+        241,
+        109,
+        80,
+        188,
+        112,
         117,
-        175,
-        64,
-        82,
-        155,
-        179,
-        0,
-        45,
+        59,
+        118,
         34,
         120,
-        105,
-        74,
-        131,
-        26,
-        49,
-        86,
-        19,
-        5,
-        66,
-        165,
-        218,
-        55,
-        31,
-        74,
-        116,
+        25,
+        129,
+        36,
+        154,
+        211,
+        123,
+        72,
+        242,
+        113,
+        45,
+        188,
+        195,
+        148,
+        1,
         100,
         115,
         111,
@@ -8554,38 +8557,38 @@ pub mod cost_model_jump_rate_factory {
         34,
         18,
         32,
-        233,
-        229,
+        51,
+        34,
+        53,
+        44,
+        59,
+        244,
+        66,
+        116,
+        124,
+        39,
+        3,
+        143,
+        92,
+        35,
         99,
-        174,
-        200,
-        198,
-        68,
-        8,
-        153,
-        72,
-        106,
-        232,
-        247,
-        229,
-        252,
-        235,
-        165,
-        157,
+        13,
+        240,
         209,
-        212,
-        120,
-        206,
-        61,
-        84,
-        169,
-        118,
-        109,
-        159,
-        230,
-        254,
-        11,
-        138,
+        65,
+        16,
+        49,
+        12,
+        184,
+        102,
+        145,
+        80,
+        132,
+        128,
+        129,
+        176,
+        170,
+        234,
         100,
         115,
         111,
@@ -8599,8 +8602,9 @@ pub mod cost_model_jump_rate_factory {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static COSTMODELJUMPRATEFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static COSTMODELJUMPRATEFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct CostModelJumpRateFactory<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelJumpRateFactory<M> {
         fn clone(&self) -> Self {
@@ -8632,11 +8636,13 @@ pub mod cost_model_jump_rate_factory {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                COSTMODELJUMPRATEFACTORY_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    COSTMODELJUMPRATEFACTORY_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -8684,7 +8690,10 @@ pub mod cost_model_jump_rate_factory {
             cost_factor_at_zero_utilization: ::ethers::core::types::U256,
             cost_factor_at_kink_utilization: ::ethers::core::types::U256,
             cost_factor_at_full_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash(
                     [191, 80, 165, 141],
@@ -8704,7 +8713,10 @@ pub mod cost_model_jump_rate_factory {
             cost_factor_at_zero_utilization: ::ethers::core::types::U256,
             cost_factor_at_kink_utilization: ::ethers::core::types::U256,
             cost_factor_at_full_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash(
                     [164, 130, 66, 197],
@@ -8744,13 +8756,11 @@ pub mod cost_model_jump_rate_factory {
             M,
             DeployedCostModelJumpRateFilter,
         > {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for CostModelJumpRateFactory<M>
-    {
+    for CostModelJumpRateFactory<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -8763,7 +8773,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "DeployedCostModelJumpRate",
@@ -8786,7 +8796,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "deployModel",
@@ -8807,7 +8817,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getModel", abi = "getModel(uint256,uint256,uint256,uint256)")]
     pub struct GetModelCall {
@@ -8825,7 +8835,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isDeployed", abi = "isDeployed(address)")]
     pub struct IsDeployedCall(pub ::ethers::core::types::Address);
@@ -8841,13 +8851,16 @@ pub mod cost_model_jump_rate_factory {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DeployModel(decoded));
             }
-            if let Ok(decoded) = <GetModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetModel(decoded));
             }
-            if let Ok(decoded) = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsDeployed(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -8856,9 +8869,15 @@ pub mod cost_model_jump_rate_factory {
     impl ::ethers::core::abi::AbiEncode for CostModelJumpRateFactoryCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DeployModel(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetModel(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::IsDeployed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DeployModel(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetModel(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::IsDeployed(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
             }
         }
     }
@@ -8895,7 +8914,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DeployModelReturn {
         pub model: ::ethers::core::types::Address,
@@ -8909,7 +8928,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetModelReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `isDeployed` function with signature `isDeployed(address)` and selector `0x90184b02`
@@ -8921,7 +8940,7 @@ pub mod cost_model_jump_rate_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsDeployedReturn(pub bool);
 }

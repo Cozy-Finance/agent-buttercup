@@ -1,17 +1,17 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-
 use std::collections::BTreeMap;
 
 use rand::{rngs::StdRng, SeedableRng};
-use revm::primitives::{AccountInfo, Address};
+use revm::primitives::AccountInfo;
 use thiserror::Error;
 
 use crate::{
     agent::{Agent, AgentId},
     block_time_policy::BlockTimePolicy,
     environment::sim_env::SimEnv,
+    EvmAddress,
 };
 
 #[derive(Error, Debug)]
@@ -25,7 +25,7 @@ pub enum ManagerError {
 /// * `environment` - The simulation environment that the manager controls.
 /// * `time_policy` - The block time policy that the manager calls.
 /// * `agents` - The agents that are currently running in the simulation environment.
-pub struct SimulationManager {
+pub struct SimManager {
     /// [`SimulationEnvironment`] that the simulation manager controls.
     pub environment: SimEnv,
     /// Implements the [`BlockTimePolicy`] trait to manage time in the simulation.
@@ -36,17 +36,12 @@ pub struct SimulationManager {
     pub rng: StdRng,
 }
 
-impl SimulationManager {
-    pub fn new(
-        environment: SimEnv,
-        time_policy: Box<dyn BlockTimePolicy>,
-        agents: BTreeMap<AgentId, Box<dyn Agent>>,
-        rng_seed: u64,
-    ) -> Self {
+impl SimManager {
+    pub fn new(environment: SimEnv, time_policy: Box<dyn BlockTimePolicy>, rng_seed: u64) -> Self {
         Self {
             environment,
             time_policy,
-            agents,
+            agents: BTreeMap::new(),
             rng: StdRng::seed_from_u64(rng_seed),
         }
     }
@@ -57,7 +52,7 @@ impl SimulationManager {
             .update_block_time_env(self.time_policy.current_block_time_env());
 
         while self.time_policy.is_active() {
-            for (_, agent) in &self.agents {
+            for (_, agent) in &mut self.agents {
                 agent.step(&mut self.environment);
             }
             self.environment
@@ -75,10 +70,11 @@ impl SimulationManager {
     /// Adds and activates an agent to be put in the collection of agents under the manager's control.
     /// # Arguments
     /// * `new_agent` - The agent to be added to the collection of agents.
-    pub fn activate_agent(&mut self, new_agent: Box<dyn Agent>) -> Result<(), ManagerError> {
-        let new_agent_address = Address::random_using(&mut self.rng);
+    pub fn activate_agent(&mut self, mut new_agent: Box<dyn Agent>) -> Result<(), ManagerError> {
+        let new_agent_address = EvmAddress::random_using(&mut self.rng);
         self.environment
             .add_account_info(new_agent_address, AccountInfo::default());
+        new_agent.register_address(&new_agent_address);
         new_agent.activation_step(&mut self.environment);
         self.agents.insert(
             AgentId {

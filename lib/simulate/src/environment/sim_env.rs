@@ -2,14 +2,21 @@
 //! The environment that constitutes a simulation is handled here.
 
 use crossbeam_channel::Sender;
+use eyre::Result;
+use revm::primitives::SpecId;
 use revm::{
     db::{CacheDB, EmptyDB},
     primitives::{AccountInfo, Address, ExecutionResult, Log, TxEnv, U256},
-    EVM,
+    Database, EVM,
 };
+use thiserror::Error;
 
 use crate::block_time_policy::BlockTimeEnv;
 use crate::sim_env_data::SimEnvData;
+
+pub enum SimEnvError {
+    DbError,
+}
 
 /// The simulation environment that houses the execution environment and event logs.
 /// # Fields
@@ -25,10 +32,10 @@ pub struct SimEnv {
 }
 
 impl SimEnv {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
-        evm.env.cfg.limit_contract_code_size = Some(0x100000); // This is a large contract size limit, beware!
+        evm.env.cfg.limit_contract_code_size = Some(0x100000000000); // This is a large contract size limit, beware!
         evm.env.block.gas_limit = U256::MAX;
         evm.database(db);
         let event_senders = vec![];
@@ -43,17 +50,21 @@ impl SimEnv {
     /// Update the block time env.
     /// # Arguments
     /// * `block_time_env` - The block time env.
-    pub(crate) fn update_block_time_env(&mut self, block_time_env: BlockTimeEnv) {
+    pub fn update_block_time_env(&mut self, block_time_env: BlockTimeEnv) {
         self.evm.env.block.number = block_time_env.number;
         self.evm.env.block.timestamp = block_time_env.timestamp;
     }
 
     // Add an account to evm.
-    pub(crate) fn add_account_info(&mut self, address: Address, account_info: AccountInfo) {
+    pub fn add_account_info(&mut self, address: Address, account_info: AccountInfo) {
         self.evm
             .db()
             .unwrap()
             .insert_account_info(address, account_info);
+    }
+
+    pub fn get_account_info(&mut self, address: Address) -> AccountInfo {
+        self.evm.db().unwrap().basic(address).unwrap().unwrap()
     }
 
     /// Execute a transaction in the execution environment.
@@ -61,7 +72,7 @@ impl SimEnv {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub(crate) fn execute(&mut self, tx: TxEnv) -> ExecutionResult {
+    pub fn execute(&mut self, tx: TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx;
 
         let execution_result = self.evm.transact_commit().unwrap();
@@ -79,7 +90,7 @@ impl SimEnv {
         }
     }
 
-    pub(crate) fn add_sender(&mut self, sender: Sender<Vec<Log>>) {
+    pub fn add_sender(&mut self, sender: Sender<Vec<Log>>) {
         self.event_senders.push(sender);
     }
 }

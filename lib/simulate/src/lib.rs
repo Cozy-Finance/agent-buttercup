@@ -11,4 +11,4 @@ pub mod stochastic;
 pub mod utils;
 
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
-pub use revm::primitives::{B160 as EvmAddress, Bytes as EvmBytes};
+pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};

@@ -1,49 +1,43 @@
-#![warn(missing_docs)]
-use std::error::Error;
+use std::{collections::BTreeMap, error::Error};
 
-use ethers::types::{Address, H160, U256};
+use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
+use ethers::types::U256 as EthersU256;
 use eyre::Result;
-use revm::primitives::B160;
-use ruint::Uint;
+use revm::primitives::U256 as EvmU256;
 use simulate::{
-    agent::Agent,
-    contract::sim_contract::{IsDeployed, SimulationContract},
-    manager::SimulationManager,
-    utils::{float_to_wad, unpack_execution},
+    block_time_policy::FixedBlockTimePolicy, environment::sim_env::SimEnv, manager::SimManager,
 };
 
-pub mod agents;
-pub mod cozy_passive_buyer_actions;
-pub mod cozy_passive_supplier_actions;
-pub mod cozy_set_admin_actions;
-pub mod startup;
+pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
+pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 
-/*
-pub struct CozyProtocolParams {
-    pub owner: Address,
-    pub pauser: Address,
-    pub delays: Delays,
-    pub fees: Fees,
-    pub allowed_markets_per_set: U256,
-}
+use agents::protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams};
+
+pub mod agents;
+pub mod bindings_wrapper;
+pub mod sim_types;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
     // Create a `SimulationManager` that runs simulations in their `SimulationEnvironment`.
-    // let mut manager = SimulationManager::new();
-    // Address iterator
-    let mut address_iter: u64 = 99;
-    // Define the Cozy protocol params
-    let cozy_protocol_owner_address = B160::from_low_u64_be(address_iter);
-    address_iter += 1;
-    let cozy_protocol_params = CozyProtocolParams {
-        owner: cozy_protocol_owner_address.into(),
-        pauser: cozy_protocol_owner_address.into(),
+    let sim_env = SimEnv::new();
+    let time_policy = Box::new(FixedBlockTimePolicy::new(
+        EvmU256::from(0),
+        EvmU256::from(1),
+        12_u64,
+        10_u64,
+        Some(500_000_u64),
+        None,
+    )?);
+    let mut sim_manager = SimManager::new(sim_env, time_policy, 99_u64);
+
+    // Create and activate agents.
+    let deploy_params = ProtocolDeployerParams {
         delays: Delays {
-            config_update_delay: U256::from(172800),
-            config_update_grace_period: U256::from(259200),
-            min_deposit_duration: U256::from(86400),
-            redemption_delay: U256::from(43200),
-            purchase_delay: U256::from(57600),
+            config_update_delay: EthersU256::from(172800),
+            config_update_grace_period: EthersU256::from(259200),
+            min_deposit_duration: EthersU256::from(86400),
+            redemption_delay: EthersU256::from(43200),
+            purchase_delay: EthersU256::from(57600),
         },
         fees: Fees {
             deposit_fee_reserves: 0_u16,
@@ -53,17 +47,26 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             sale_fee_reserves: 0_u16,
             sale_fee_backstop: 0_u16,
         },
-        allowed_markets_per_set: U256::from(10),
+        allowed_markets_per_set: EthersU256::from(10),
     };
+    let protocol_deployer = Box::new(ProtocolDeployer::new(
+        "Protocol deployer".to_owned(),
+        deploy_params,
+    ));
+    sim_manager.activate_agent(protocol_deployer);
 
+    sim_manager.run_simulation();
     Ok(())
 }
-
-*/
 
 #[cfg(test)]
 mod tests {
     #![allow(unused_imports)]
 
     use super::*;
+
+    #[test]
+    fn run_sim() {
+        run();
+    }
 }
