@@ -7,16 +7,18 @@ pub use optimistic_oracle_v2_interface::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod optimistic_oracle_v2_interface {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DisputePrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"expirationTimestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"currency\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"ProposePrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"currency\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"RequestPrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"price\",\"type\":\"int256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"payout\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Settle\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ancillaryBytesLimit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"defaultLiveness\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"disputePrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"disputePriceFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"finder\",\"outputs\":[{\"internalType\":\"contract FinderInterface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getCurrentTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getRequest\",\"outputs\":[{\"internalType\":\"struct OptimisticOracleV2Interface.Request\",\"name\":\"\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"struct OptimisticOracleV2Interface.RequestSettings\",\"name\":\"requestSettings\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"bool\",\"name\":\"eventBased\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"refundOnDispute\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"resolvedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getState\",\"outputs\":[{\"internalType\":\"enum OptimisticOracleV2Interface.State\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"hasPrice\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"proposePrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"proposePriceFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"requestPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"requests\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"struct OptimisticOracleV2Interface.RequestSettings\",\"name\":\"requestSettings\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"bool\",\"name\":\"eventBased\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"refundOnDispute\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"resolvedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setBond\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setCallbacks\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setCustomLiveness\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setEventBased\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setRefundOnDispute\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"settle\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"payout\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"settleAndGetPrice\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"stampAncillaryData\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static OPTIMISTICORACLEV2INTERFACE_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static OPTIMISTICORACLEV2INTERFACE_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     pub struct OptimisticOracleV2Interface<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for OptimisticOracleV2Interface<M> {
         fn clone(&self) -> Self {
@@ -48,11 +50,13 @@ pub mod optimistic_oracle_v2_interface {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                OPTIMISTICORACLEV2INTERFACE_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    OPTIMISTICORACLEV2INTERFACE_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `ancillaryBytesLimit` (0xc371dda7) function
         pub fn ancillary_bytes_limit(
@@ -104,7 +108,10 @@ pub mod optimistic_oracle_v2_interface {
         ///Calls the contract's `finder` (0xb9a3c84c) function
         pub fn finder(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([185, 163, 200, 76], ())
                 .expect("method not found (this should never happen)")
@@ -174,13 +181,7 @@ pub mod optimistic_oracle_v2_interface {
             self.0
                 .method_hash(
                     [184, 180, 249, 8],
-                    (
-                        requester,
-                        identifier,
-                        timestamp,
-                        ancillary_data,
-                        proposed_price,
-                    ),
+                    (requester, identifier, timestamp, ancillary_data, proposed_price),
                 )
                 .expect("method not found (this should never happen)")
         }
@@ -357,7 +358,10 @@ pub mod optimistic_oracle_v2_interface {
             &self,
             ancillary_data: ::ethers::core::types::Bytes,
             requester: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Bytes> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Bytes,
+        > {
             self.0
                 .method_hash([175, 93, 47, 57], (ancillary_data, requester))
                 .expect("method not found (this should never happen)")
@@ -365,22 +369,31 @@ pub mod optimistic_oracle_v2_interface {
         ///Gets the contract's `DisputePrice` event
         pub fn dispute_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DisputePriceFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            DisputePriceFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `ProposePrice` event
         pub fn propose_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ProposePriceFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            ProposePriceFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `RequestPrice` event
         pub fn request_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, RequestPriceFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            RequestPriceFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `Settle` event
@@ -397,13 +410,11 @@ pub mod optimistic_oracle_v2_interface {
             M,
             OptimisticOracleV2InterfaceEvents,
         > {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for OptimisticOracleV2Interface<M>
-    {
+    for OptimisticOracleV2Interface<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -416,7 +427,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "DisputePrice",
@@ -442,7 +453,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "ProposePrice",
@@ -468,7 +479,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "RequestPrice",
@@ -492,7 +503,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "Settle",
@@ -524,19 +535,19 @@ pub mod optimistic_oracle_v2_interface {
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
             if let Ok(decoded) = DisputePriceFilter::decode_log(log) {
-                return Ok(OptimisticOracleV2InterfaceEvents::DisputePriceFilter(
-                    decoded,
-                ));
+                return Ok(
+                    OptimisticOracleV2InterfaceEvents::DisputePriceFilter(decoded),
+                );
             }
             if let Ok(decoded) = ProposePriceFilter::decode_log(log) {
-                return Ok(OptimisticOracleV2InterfaceEvents::ProposePriceFilter(
-                    decoded,
-                ));
+                return Ok(
+                    OptimisticOracleV2InterfaceEvents::ProposePriceFilter(decoded),
+                );
             }
             if let Ok(decoded) = RequestPriceFilter::decode_log(log) {
-                return Ok(OptimisticOracleV2InterfaceEvents::RequestPriceFilter(
-                    decoded,
-                ));
+                return Ok(
+                    OptimisticOracleV2InterfaceEvents::RequestPriceFilter(decoded),
+                );
             }
             if let Ok(decoded) = SettleFilter::decode_log(log) {
                 return Ok(OptimisticOracleV2InterfaceEvents::SettleFilter(decoded));
@@ -547,24 +558,33 @@ pub mod optimistic_oracle_v2_interface {
     impl ::core::fmt::Display for OptimisticOracleV2InterfaceEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::DisputePriceFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ProposePriceFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RequestPriceFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DisputePriceFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::ProposePriceFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::RequestPriceFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::SettleFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
-    impl ::core::convert::From<DisputePriceFilter> for OptimisticOracleV2InterfaceEvents {
+    impl ::core::convert::From<DisputePriceFilter>
+    for OptimisticOracleV2InterfaceEvents {
         fn from(value: DisputePriceFilter) -> Self {
             Self::DisputePriceFilter(value)
         }
     }
-    impl ::core::convert::From<ProposePriceFilter> for OptimisticOracleV2InterfaceEvents {
+    impl ::core::convert::From<ProposePriceFilter>
+    for OptimisticOracleV2InterfaceEvents {
         fn from(value: ProposePriceFilter) -> Self {
             Self::ProposePriceFilter(value)
         }
     }
-    impl ::core::convert::From<RequestPriceFilter> for OptimisticOracleV2InterfaceEvents {
+    impl ::core::convert::From<RequestPriceFilter>
+    for OptimisticOracleV2InterfaceEvents {
         fn from(value: RequestPriceFilter) -> Self {
             Self::RequestPriceFilter(value)
         }
@@ -583,7 +603,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "ancillaryBytesLimit", abi = "ancillaryBytesLimit()")]
     pub struct AncillaryBytesLimitCall;
@@ -596,7 +616,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "defaultLiveness", abi = "defaultLiveness()")]
     pub struct DefaultLivenessCall;
@@ -609,7 +629,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "disputePrice",
@@ -630,7 +650,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "disputePriceFor",
@@ -652,7 +672,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "finder", abi = "finder()")]
     pub struct FinderCall;
@@ -665,7 +685,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getCurrentTime", abi = "getCurrentTime()")]
     pub struct GetCurrentTimeCall;
@@ -678,7 +698,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getRequest", abi = "getRequest(address,bytes32,uint256,bytes)")]
     pub struct GetRequestCall {
@@ -696,7 +716,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getState", abi = "getState(address,bytes32,uint256,bytes)")]
     pub struct GetStateCall {
@@ -714,7 +734,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "hasPrice", abi = "hasPrice(address,bytes32,uint256,bytes)")]
     pub struct HasPriceCall {
@@ -732,7 +752,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "proposePrice",
@@ -754,7 +774,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "proposePriceFor",
@@ -777,7 +797,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "requestPrice",
@@ -799,7 +819,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "requests", abi = "requests(bytes32)")]
     pub struct RequestsCall(pub [u8; 32]);
@@ -812,7 +832,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "setBond", abi = "setBond(bytes32,uint256,bytes,uint256)")]
     pub struct SetBondCall {
@@ -830,7 +850,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "setCallbacks",
@@ -853,7 +873,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "setCustomLiveness",
@@ -874,7 +894,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "setEventBased", abi = "setEventBased(bytes32,uint256,bytes)")]
     pub struct SetEventBasedCall {
@@ -891,7 +911,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "setRefundOnDispute",
@@ -911,7 +931,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "settle", abi = "settle(address,bytes32,uint256,bytes)")]
     pub struct SettleCall {
@@ -929,7 +949,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "settleAndGetPrice",
@@ -949,7 +969,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "stampAncillaryData", abi = "stampAncillaryData(bytes,address)")]
     pub struct StampAncillaryDataCall {
@@ -986,90 +1006,98 @@ pub mod optimistic_oracle_v2_interface {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) =
-                <AncillaryBytesLimitCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <AncillaryBytesLimitCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::AncillaryBytesLimit(decoded));
             }
-            if let Ok(decoded) =
-                <DefaultLivenessCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <DefaultLivenessCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DefaultLiveness(decoded));
             }
-            if let Ok(decoded) = <DisputePriceCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <DisputePriceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DisputePrice(decoded));
             }
-            if let Ok(decoded) =
-                <DisputePriceForCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <DisputePriceForCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DisputePriceFor(decoded));
             }
-            if let Ok(decoded) = <FinderCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <FinderCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Finder(decoded));
             }
-            if let Ok(decoded) =
-                <GetCurrentTimeCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <GetCurrentTimeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetCurrentTime(decoded));
             }
-            if let Ok(decoded) = <GetRequestCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetRequestCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetRequest(decoded));
             }
-            if let Ok(decoded) = <GetStateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetStateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetState(decoded));
             }
-            if let Ok(decoded) = <HasPriceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <HasPriceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::HasPrice(decoded));
             }
-            if let Ok(decoded) = <ProposePriceCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ProposePriceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::ProposePrice(decoded));
             }
-            if let Ok(decoded) =
-                <ProposePriceForCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ProposePriceForCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::ProposePriceFor(decoded));
             }
-            if let Ok(decoded) = <RequestPriceCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <RequestPriceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RequestPrice(decoded));
             }
-            if let Ok(decoded) = <RequestsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <RequestsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Requests(decoded));
             }
-            if let Ok(decoded) = <SetBondCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SetBondCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetBond(decoded));
             }
-            if let Ok(decoded) = <SetCallbacksCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <SetCallbacksCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetCallbacks(decoded));
             }
-            if let Ok(decoded) =
-                <SetCustomLivenessCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <SetCustomLivenessCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::SetCustomLiveness(decoded));
             }
-            if let Ok(decoded) = <SetEventBasedCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <SetEventBasedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetEventBased(decoded));
             }
-            if let Ok(decoded) =
-                <SetRefundOnDisputeCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <SetRefundOnDisputeCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::SetRefundOnDispute(decoded));
             }
-            if let Ok(decoded) = <SettleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SettleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Settle(decoded));
             }
-            if let Ok(decoded) =
-                <SettleAndGetPriceCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <SettleAndGetPriceCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::SettleAndGetPrice(decoded));
             }
-            if let Ok(decoded) =
-                <StampAncillaryDataCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <StampAncillaryDataCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::StampAncillaryData(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -1081,27 +1109,57 @@ pub mod optimistic_oracle_v2_interface {
                 Self::AncillaryBytesLimit(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::DefaultLiveness(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::DisputePrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::DisputePriceFor(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DefaultLiveness(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::DisputePrice(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::DisputePriceFor(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Finder(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetCurrentTime(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetRequest(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetState(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::HasPrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::ProposePrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::ProposePriceFor(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::RequestPrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Requests(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::GetCurrentTime(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetRequest(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetState(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::HasPrice(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::ProposePrice(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::ProposePriceFor(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::RequestPrice(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Requests(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::SetBond(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SetCallbacks(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SetCustomLiveness(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SetEventBased(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetCallbacks(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::SetCustomLiveness(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::SetEventBased(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::SetRefundOnDispute(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Settle(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SettleAndGetPrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SettleAndGetPrice(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::StampAncillaryData(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -1111,7 +1169,9 @@ pub mod optimistic_oracle_v2_interface {
     impl ::core::fmt::Display for OptimisticOracleV2InterfaceCalls {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::AncillaryBytesLimit(element) => ::core::fmt::Display::fmt(element, f),
+                Self::AncillaryBytesLimit(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::DefaultLiveness(element) => ::core::fmt::Display::fmt(element, f),
                 Self::DisputePrice(element) => ::core::fmt::Display::fmt(element, f),
                 Self::DisputePriceFor(element) => ::core::fmt::Display::fmt(element, f),
@@ -1128,19 +1188,25 @@ pub mod optimistic_oracle_v2_interface {
                 Self::SetCallbacks(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetCustomLiveness(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetEventBased(element) => ::core::fmt::Display::fmt(element, f),
-                Self::SetRefundOnDispute(element) => ::core::fmt::Display::fmt(element, f),
+                Self::SetRefundOnDispute(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::Settle(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SettleAndGetPrice(element) => ::core::fmt::Display::fmt(element, f),
-                Self::StampAncillaryData(element) => ::core::fmt::Display::fmt(element, f),
+                Self::StampAncillaryData(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
             }
         }
     }
-    impl ::core::convert::From<AncillaryBytesLimitCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<AncillaryBytesLimitCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: AncillaryBytesLimitCall) -> Self {
             Self::AncillaryBytesLimit(value)
         }
     }
-    impl ::core::convert::From<DefaultLivenessCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<DefaultLivenessCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: DefaultLivenessCall) -> Self {
             Self::DefaultLiveness(value)
         }
@@ -1150,7 +1216,8 @@ pub mod optimistic_oracle_v2_interface {
             Self::DisputePrice(value)
         }
     }
-    impl ::core::convert::From<DisputePriceForCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<DisputePriceForCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: DisputePriceForCall) -> Self {
             Self::DisputePriceFor(value)
         }
@@ -1185,7 +1252,8 @@ pub mod optimistic_oracle_v2_interface {
             Self::ProposePrice(value)
         }
     }
-    impl ::core::convert::From<ProposePriceForCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<ProposePriceForCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: ProposePriceForCall) -> Self {
             Self::ProposePriceFor(value)
         }
@@ -1210,7 +1278,8 @@ pub mod optimistic_oracle_v2_interface {
             Self::SetCallbacks(value)
         }
     }
-    impl ::core::convert::From<SetCustomLivenessCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<SetCustomLivenessCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: SetCustomLivenessCall) -> Self {
             Self::SetCustomLiveness(value)
         }
@@ -1220,7 +1289,8 @@ pub mod optimistic_oracle_v2_interface {
             Self::SetEventBased(value)
         }
     }
-    impl ::core::convert::From<SetRefundOnDisputeCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<SetRefundOnDisputeCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: SetRefundOnDisputeCall) -> Self {
             Self::SetRefundOnDispute(value)
         }
@@ -1230,12 +1300,14 @@ pub mod optimistic_oracle_v2_interface {
             Self::Settle(value)
         }
     }
-    impl ::core::convert::From<SettleAndGetPriceCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<SettleAndGetPriceCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: SettleAndGetPriceCall) -> Self {
             Self::SettleAndGetPrice(value)
         }
     }
-    impl ::core::convert::From<StampAncillaryDataCall> for OptimisticOracleV2InterfaceCalls {
+    impl ::core::convert::From<StampAncillaryDataCall>
+    for OptimisticOracleV2InterfaceCalls {
         fn from(value: StampAncillaryDataCall) -> Self {
             Self::StampAncillaryData(value)
         }
@@ -1249,7 +1321,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct AncillaryBytesLimitReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `defaultLiveness` function with signature `defaultLiveness()` and selector `0xfe4e1983`
@@ -1261,7 +1333,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DefaultLivenessReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `disputePrice` function with signature `disputePrice(address,bytes32,uint256,bytes)` and selector `0xfba7f1e3`
@@ -1273,7 +1345,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DisputePriceReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1287,7 +1359,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DisputePriceForReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1301,7 +1373,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct FinderReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `getCurrentTime` function with signature `getCurrentTime()` and selector `0x29cb924d`
@@ -1313,7 +1385,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetCurrentTimeReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getRequest` function with signature `getRequest(address,bytes32,uint256,bytes)` and selector `0xa9904f9b`
@@ -1325,7 +1397,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetRequestReturn(pub Request);
     ///Container type for all return fields from the `getState` function with signature `getState(address,bytes32,uint256,bytes)` and selector `0xba4b930c`
@@ -1337,7 +1409,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetStateReturn(pub u8);
     ///Container type for all return fields from the `hasPrice` function with signature `hasPrice(address,bytes32,uint256,bytes)` and selector `0xbc58ccaa`
@@ -1349,7 +1421,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct HasPriceReturn(pub bool);
     ///Container type for all return fields from the `proposePrice` function with signature `proposePrice(address,bytes32,uint256,bytes,int256)` and selector `0xb8b4f908`
@@ -1361,7 +1433,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ProposePriceReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1375,7 +1447,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ProposePriceForReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1389,7 +1461,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RequestPriceReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1403,7 +1475,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RequestsReturn {
         pub proposer: ::ethers::core::types::Address,
@@ -1426,7 +1498,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SetBondReturn {
         pub total_bond: ::ethers::core::types::U256,
@@ -1440,7 +1512,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SettleReturn {
         pub payout: ::ethers::core::types::U256,
@@ -1454,7 +1526,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SettleAndGetPriceReturn(pub ::ethers::core::types::I256);
     ///Container type for all return fields from the `stampAncillaryData` function with signature `stampAncillaryData(bytes,address)` and selector `0xaf5d2f39`
@@ -1466,7 +1538,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct StampAncillaryDataReturn(pub ::ethers::core::types::Bytes);
     ///`Request(address,address,address,bool,(bool,bool,bool,bool,bool,uint256,uint256),int256,int256,uint256,uint256,uint256)`
@@ -1478,7 +1550,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct Request {
         pub proposer: ::ethers::core::types::Address,
@@ -1501,7 +1573,7 @@ pub mod optimistic_oracle_v2_interface {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RequestSettings {
         pub event_based: bool,

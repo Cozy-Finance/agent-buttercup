@@ -4,3 +4,5 @@ pub mod cozy_models;
 pub use cozy_models::*;
 pub mod cozy_protocol;
 pub use cozy_protocol::*;
+pub mod weth;
+pub use weth::*;

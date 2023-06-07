@@ -19,18 +19,15 @@ pub mod metadata {
     pub static CHAINLINKTRIGGER_NAME: &str = "ChainlinkTrigger";
     pub static CHAINLINKTRIGGER_PATH: &str = "contracts/ChainlinkTrigger.sol";
     pub static FINDERINTERFACE_NAME: &str = "FinderInterface";
-    pub static FINDERINTERFACE_PATH: &str =
-        "lib/uma-protocol/packages/core/contracts/oracle/interfaces/FinderInterface.sol";
+    pub static FINDERINTERFACE_PATH: &str = "lib/uma-protocol/packages/core/contracts/oracle/interfaces/FinderInterface.sol";
     pub static AGGREGATORV3INTERFACE_NAME: &str = "AggregatorV3Interface";
-    pub static AGGREGATORV3INTERFACE_PATH: &str =
-        "lib/chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+    pub static AGGREGATORV3INTERFACE_PATH: &str = "lib/chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
     pub static FIXEDPOINTMATHLIB_NAME: &str = "FixedPointMathLib";
     pub static FIXEDPOINTMATHLIB_PATH: &str = "lib/solmate/src/utils/FixedPointMathLib.sol";
     pub static UMATRIGGERFACTORY_NAME: &str = "UMATriggerFactory";
     pub static UMATRIGGERFACTORY_PATH: &str = "contracts/UMATriggerFactory.sol";
     pub static ICHAINLINKTRIGGERFACTORY_NAME: &str = "IChainlinkTriggerFactory";
-    pub static ICHAINLINKTRIGGERFACTORY_PATH: &str =
-        "contracts/interfaces/IChainlinkTriggerFactory.sol";
+    pub static ICHAINLINKTRIGGERFACTORY_PATH: &str = "contracts/interfaces/IChainlinkTriggerFactory.sol";
     pub static CHAINLINKTRIGGERFACTORY_NAME: &str = "ChainlinkTriggerFactory";
     pub static CHAINLINKTRIGGERFACTORY_PATH: &str = "contracts/ChainlinkTriggerFactory.sol";
     pub static DUMMYTRIGGER_NAME: &str = "DummyTrigger";
@@ -38,8 +35,7 @@ pub mod metadata {
     pub static IBASETRIGGER_NAME: &str = "IBaseTrigger";
     pub static IBASETRIGGER_PATH: &str = "contracts/interfaces/IBaseTrigger.sol";
     pub static OPTIMISTICORACLEV2INTERFACE_NAME: &str = "OptimisticOracleV2Interface";
-    pub static OPTIMISTICORACLEV2INTERFACE_PATH: &str =
-        "contracts/interfaces/OptimisticOracleV2Interface.sol";
+    pub static OPTIMISTICORACLEV2INTERFACE_PATH: &str = "contracts/interfaces/OptimisticOracleV2Interface.sol";
     pub static SAFETRANSFERLIB_NAME: &str = "SafeTransferLib";
     pub static SAFETRANSFERLIB_PATH: &str = "contracts/lib/SafeTransferLib.sol";
     pub static IMANAGER_NAME: &str = "IManager";

@@ -7,16 +7,18 @@ pub use base_model_factory::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod base_model_factory {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isDeployed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static BASEMODELFACTORY_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static BASEMODELFACTORY_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     pub struct BaseModelFactory<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for BaseModelFactory<M> {
         fn clone(&self) -> Self {
@@ -36,9 +38,7 @@ pub mod base_model_factory {
     }
     impl<M> ::core::fmt::Debug for BaseModelFactory<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(BaseModelFactory))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(BaseModelFactory)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> BaseModelFactory<M> {
@@ -48,11 +48,13 @@ pub mod base_model_factory {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                BASEMODELFACTORY_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    BASEMODELFACTORY_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `isDeployed` (0x90184b02) function
         pub fn is_deployed(
@@ -65,8 +67,7 @@ pub mod base_model_factory {
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for BaseModelFactory<M>
-    {
+    for BaseModelFactory<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -80,7 +81,7 @@ pub mod base_model_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isDeployed", abi = "isDeployed(address)")]
     pub struct IsDeployedCall(pub ::ethers::core::types::Address);
@@ -93,7 +94,7 @@ pub mod base_model_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsDeployedReturn(pub bool);
 }

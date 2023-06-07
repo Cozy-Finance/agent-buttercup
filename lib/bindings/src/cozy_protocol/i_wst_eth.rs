@@ -7,16 +7,14 @@ pub use i_wst_eth::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_wst_eth {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"wstETHAmount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unwrap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"stETHAmount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IWSTETH_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IWSTETH_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     pub struct IWstETH<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IWstETH<M> {
         fn clone(&self) -> Self {
@@ -36,9 +34,7 @@ pub mod i_wst_eth {
     }
     impl<M> ::core::fmt::Debug for IWstETH<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IWstETH))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(IWstETH)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IWstETH<M> {
@@ -48,11 +44,13 @@ pub mod i_wst_eth {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                IWSTETH_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    IWSTETH_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `balanceOf` (0x70a08231) function
         pub fn balance_of(
@@ -92,7 +90,8 @@ pub mod i_wst_eth {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for IWstETH<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for IWstETH<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -106,7 +105,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall {
@@ -121,7 +120,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
@@ -137,7 +136,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "unwrap", abi = "unwrap(uint256)")]
     pub struct UnwrapCall {
@@ -152,7 +151,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "wrap", abi = "wrap(uint256)")]
     pub struct WrapCall {
@@ -171,16 +170,20 @@ pub mod i_wst_eth {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BalanceOf(decoded));
             }
-            if let Ok(decoded) = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Transfer(decoded));
             }
-            if let Ok(decoded) = <UnwrapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <UnwrapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unwrap(decoded));
             }
-            if let Ok(decoded) = <WrapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <WrapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Wrap(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -189,8 +192,12 @@ pub mod i_wst_eth {
     impl ::ethers::core::abi::AbiEncode for IWstETHCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::BalanceOf(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Transfer(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BalanceOf(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Transfer(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Unwrap(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Wrap(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
@@ -235,7 +242,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct BalanceOfReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
@@ -247,7 +254,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct TransferReturn(pub bool);
     ///Container type for all return fields from the `unwrap` function with signature `unwrap(uint256)` and selector `0xde0e9a3e`
@@ -259,7 +266,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct UnwrapReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `wrap` function with signature `wrap(uint256)` and selector `0xea598cb0`
@@ -271,7 +278,7 @@ pub mod i_wst_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct WrapReturn(pub ::ethers::core::types::U256);
 }

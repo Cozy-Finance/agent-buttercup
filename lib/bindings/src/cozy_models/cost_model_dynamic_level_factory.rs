@@ -7,7 +7,7 @@ pub use cost_model_dynamic_level_factory::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod cost_model_dynamic_level_factory {
     #[rustfmt::skip]
@@ -16,7 +16,8 @@ pub mod cost_model_dynamic_level_factory {
     pub static COSTMODELDYNAMICLEVELFACTORY_ABI: ::ethers::contract::Lazy<
         ::ethers::core::abi::Abi,
     > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
     });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -5132,8 +5133,9 @@ pub mod cost_model_dynamic_level_factory {
         51,
     ];
     ///The bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVELFACTORY_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static COSTMODELDYNAMICLEVELFACTORY_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -10216,8 +10218,9 @@ pub mod cost_model_dynamic_level_factory {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVELFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static COSTMODELDYNAMICLEVELFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct CostModelDynamicLevelFactory<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelDynamicLevelFactory<M> {
         fn clone(&self) -> Self {
@@ -10249,11 +10252,13 @@ pub mod cost_model_dynamic_level_factory {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                COSTMODELDYNAMICLEVELFACTORY_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    COSTMODELDYNAMICLEVELFACTORY_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -10303,7 +10308,10 @@ pub mod cost_model_dynamic_level_factory {
             cost_factor_at_full_utilization: ::ethers::core::types::U256,
             cost_factor_in_optimal_zone: ::ethers::core::types::U256,
             optimal_zone_rate: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash(
                     [227, 219, 252, 50],
@@ -10345,13 +10353,11 @@ pub mod cost_model_dynamic_level_factory {
             M,
             DeployedCostModelDynamicLevelFilter,
         > {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for CostModelDynamicLevelFactory<M>
-    {
+    for CostModelDynamicLevelFactory<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -10364,7 +10370,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "DeployedCostModelDynamicLevel",
@@ -10389,7 +10395,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(
         name = "deployModel",
@@ -10412,7 +10418,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isDeployed", abi = "isDeployed(address)")]
     pub struct IsDeployedCall(pub ::ethers::core::types::Address);
@@ -10427,10 +10433,12 @@ pub mod cost_model_dynamic_level_factory {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DeployModelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DeployModel(decoded));
             }
-            if let Ok(decoded) = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsDeployedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsDeployed(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -10439,8 +10447,12 @@ pub mod cost_model_dynamic_level_factory {
     impl ::ethers::core::abi::AbiEncode for CostModelDynamicLevelFactoryCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DeployModel(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::IsDeployed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DeployModel(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::IsDeployed(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
             }
         }
     }
@@ -10471,7 +10483,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DeployModelReturn {
         pub model: ::ethers::core::types::Address,
@@ -10485,7 +10497,7 @@ pub mod cost_model_dynamic_level_factory {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsDeployedReturn(pub bool);
 }
