@@ -7,14 +7,16 @@ pub use i_common_errors::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_common_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICOMMONERRORS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static ICOMMONERRORS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct ICommonErrors<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for ICommonErrors<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_common_errors {
     }
     impl<M> ::core::fmt::Debug for ICommonErrors<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ICommonErrors)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(ICommonErrors))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ICommonErrors<M> {
@@ -44,17 +48,16 @@ pub mod i_common_errors {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    ICOMMONERRORS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                ICOMMONERRORS_ABI.clone(),
+                client,
+            ))
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for ICommonErrors<M> {
+        for ICommonErrors<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -68,7 +71,7 @@ pub mod i_common_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidState", abi = "InvalidState()")]
     pub struct InvalidState;
@@ -81,7 +84,7 @@ pub mod i_common_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -94,7 +97,7 @@ pub mod i_common_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "RoundsToZero", abi = "RoundsToZero()")]
     pub struct RoundsToZero;
@@ -113,24 +116,20 @@ pub mod i_common_errors {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidState(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RoundsToZero(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -139,15 +138,11 @@ pub mod i_common_errors {
     impl ::ethers::core::abi::AbiEncode for ICommonErrorsErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::RoundsToZero(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::RoundsToZero(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -156,14 +151,13 @@ pub mod i_common_errors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
+                _ if selector == <InvalidState as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -172,9 +166,7 @@ pub mod i_common_errors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::InvalidState(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RoundsToZero(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }

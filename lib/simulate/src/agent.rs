@@ -5,6 +5,7 @@ use thiserror::Error;
 use crate::{
     contract::sim_contract::{IsDeployed, NotDeployed, SimContract},
     environment::sim_env::SimEnv,
+    sim_env_data::SimEnvData,
     EvmAddress, EvmBytes,
 };
 
@@ -49,10 +50,10 @@ pub trait Agent {
     fn name(&self) -> Option<String>;
 
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn activation_step(&mut self, sim_env: &mut SimEnv);
+    fn activation_step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData);
 
     /// Executes the agents actions against the simulation environment.
-    fn step(&mut self, sim_env: &mut SimEnv);
+    fn step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData);
 
     /// Used to allow agents to make a generic call a specific smart contract.
     fn call_contract(

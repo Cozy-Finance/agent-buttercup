@@ -7,14 +7,16 @@ pub use uma_trigger::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod uma_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"_manager\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract OptimisticOracleV2Interface\",\"name\":\"_oracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"_query\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"_rewardToken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_refundRecipient\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_bondAmount\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_proposalDisputeWindow\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidProposal\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetLimitReached\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unacknowledged\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unsettleable\",\"outputs\":[]},{\"inputs\":[],\"type\":\"event\",\"name\":\"ProposalDisputed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"type\":\"event\",\"name\":\"QueryResubmitted\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"_set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"bondAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"oracle\",\"outputs\":[{\"internalType\":\"contract OptimisticOracleV2Interface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceDisputed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceProposed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"_answer\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceSettled\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"proposalDisputeWindow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"query\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"queryIdentifier\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundRecipient\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"requestTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"rewardToken\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static UMATRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static UMATRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -11228,9 +11230,8 @@ pub mod uma_trigger {
         51,
     ];
     ///The bytecode of the contract.
-    pub static UMATRIGGER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static UMATRIGGER_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -19989,9 +19990,8 @@ pub mod uma_trigger {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static UMATRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static UMATRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct UMATrigger<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for UMATrigger<M> {
         fn clone(&self) -> Self {
@@ -20011,7 +20011,9 @@ pub mod uma_trigger {
     }
     impl<M> ::core::fmt::Debug for UMATrigger<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(UMATrigger)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(UMATrigger))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> UMATrigger<M> {
@@ -20021,13 +20023,11 @@ pub mod uma_trigger {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    UMATRIGGER_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                UMATRIGGER_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -20077,9 +20077,7 @@ pub mod uma_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledged` (0x086c298d) function
-        pub fn acknowledged(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        pub fn acknowledged(&self) -> ::ethers::contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -20123,10 +20121,7 @@ pub mod uma_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -20134,10 +20129,7 @@ pub mod uma_trigger {
         ///Calls the contract's `oracle` (0x7dc0d1d0) function
         pub fn oracle(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([125, 192, 209, 208], ())
                 .expect("method not found (this should never happen)")
@@ -20165,10 +20157,7 @@ pub mod uma_trigger {
             ancillary_data: ::ethers::core::types::Bytes,
         ) -> ::ethers::contract::builders::ContractCall<M, ()> {
             self.0
-                .method_hash(
-                    [156, 47, 209, 223],
-                    (identifier, timestamp, ancillary_data),
-                )
+                .method_hash([156, 47, 209, 223], (identifier, timestamp, ancillary_data))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `priceSettled` (0x04cc1fd5) function
@@ -20203,9 +20192,7 @@ pub mod uma_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `queryIdentifier` (0x51119862) function
-        pub fn query_identifier(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        pub fn query_identifier(&self) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([81, 17, 152, 98], ())
                 .expect("method not found (this should never happen)")
@@ -20213,10 +20200,7 @@ pub mod uma_trigger {
         ///Calls the contract's `refundRecipient` (0x01f5ad5a) function
         pub fn refund_recipient(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([1, 245, 173, 90], ())
                 .expect("method not found (this should never happen)")
@@ -20232,18 +20216,13 @@ pub mod uma_trigger {
         ///Calls the contract's `rewardToken` (0xf7c618c1) function
         pub fn reward_token(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([247, 198, 24, 193], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
-        pub fn run_programmatic_check(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        pub fn run_programmatic_check(&self) -> ::ethers::contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -20252,10 +20231,7 @@ pub mod uma_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([91, 34, 127, 155], p0)
                 .expect("method not found (this should never happen)")
@@ -20269,56 +20245,39 @@ pub mod uma_trigger {
         ///Gets the contract's `ProposalDisputed` event
         pub fn proposal_disputed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ProposalDisputedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ProposalDisputedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `QueryResubmitted` event
         pub fn query_resubmitted_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            QueryResubmittedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, QueryResubmittedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `SetAdded` event
         pub fn set_added_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetAddedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetAddedFilter> {
             self.0.event()
         }
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TriggerStateUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, TriggerStateUpdatedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            UMATriggerEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, UMATriggerEvents> {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for UMATrigger<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for UMATrigger<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -20332,7 +20291,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidProposal", abi = "InvalidProposal()")]
     pub struct InvalidProposal;
@@ -20345,7 +20304,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -20358,7 +20317,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SetLimitReached", abi = "SetLimitReached()")]
     pub struct SetLimitReached;
@@ -20371,7 +20330,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unacknowledged", abi = "Unacknowledged()")]
     pub struct Unacknowledged;
@@ -20384,7 +20343,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -20397,7 +20356,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unsettleable", abi = "Unsettleable()")]
     pub struct Unsettleable;
@@ -20419,36 +20378,29 @@ pub mod uma_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidProposal as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidProposal as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidProposal(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetLimitReached(decoded));
             }
-            if let Ok(decoded)
-                = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unacknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
-            if let Ok(decoded)
-                = <Unsettleable as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unsettleable as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unsettleable(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -20457,24 +20409,14 @@ pub mod uma_trigger {
     impl ::ethers::core::abi::AbiEncode for UMATriggerErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidProposal(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidProposal(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::SetLimitReached(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unacknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unsettleable(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SetLimitReached(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unacknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unsettleable(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -20483,26 +20425,22 @@ pub mod uma_trigger {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
-                _ if selector
-                    == <InvalidProposal as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <InvalidProposal as ::ethers::contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <SetLimitReached as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <SetLimitReached as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unacknowledged as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <Unacknowledged as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <Unsettleable as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <Unsettleable as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -20511,9 +20449,7 @@ pub mod uma_trigger {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::InvalidProposal(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetLimitReached(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unacknowledged(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
@@ -20565,7 +20501,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "ProposalDisputed", abi = "ProposalDisputed()")]
     pub struct ProposalDisputedFilter;
@@ -20577,7 +20513,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "QueryResubmitted", abi = "QueryResubmitted()")]
     pub struct QueryResubmittedFilter;
@@ -20589,7 +20525,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "SetAdded", abi = "SetAdded(address)")]
     pub struct SetAddedFilter {
@@ -20603,7 +20539,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "TriggerStateUpdated", abi = "TriggerStateUpdated(uint8)")]
     pub struct TriggerStateUpdatedFilter {
@@ -20640,16 +20576,10 @@ pub mod uma_trigger {
     impl ::core::fmt::Display for UMATriggerEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::ProposalDisputedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::QueryResubmittedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ProposalDisputedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::QueryResubmittedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TriggerStateUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TriggerStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
@@ -20682,7 +20612,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "MAX_SET_LENGTH", abi = "MAX_SET_LENGTH()")]
     pub struct MaxSetLengthCall;
@@ -20695,7 +20625,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "acknowledged", abi = "acknowledged()")]
     pub struct AcknowledgedCall;
@@ -20708,7 +20638,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "addSet", abi = "addSet(address)")]
     pub struct AddSetCall {
@@ -20723,7 +20653,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "bondAmount", abi = "bondAmount()")]
     pub struct BondAmountCall;
@@ -20736,7 +20666,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSets", abi = "getSets()")]
     pub struct GetSetsCall;
@@ -20749,7 +20679,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSetsLength", abi = "getSetsLength()")]
     pub struct GetSetsLengthCall;
@@ -20762,7 +20692,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -20775,7 +20705,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "oracle", abi = "oracle()")]
     pub struct OracleCall;
@@ -20788,7 +20718,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "priceDisputed",
@@ -20809,7 +20739,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "priceProposed", abi = "priceProposed(bytes32,uint256,bytes)")]
     pub struct PriceProposedCall {
@@ -20826,9 +20756,12 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "priceSettled", abi = "priceSettled(bytes32,uint256,bytes,int256)")]
+    #[ethcall(
+        name = "priceSettled",
+        abi = "priceSettled(bytes32,uint256,bytes,int256)"
+    )]
     pub struct PriceSettledCall {
         pub identifier: [u8; 32],
         pub timestamp: ::ethers::core::types::U256,
@@ -20844,7 +20777,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "proposalDisputeWindow", abi = "proposalDisputeWindow()")]
     pub struct ProposalDisputeWindowCall;
@@ -20857,7 +20790,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "query", abi = "query()")]
     pub struct QueryCall;
@@ -20870,7 +20803,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "queryIdentifier", abi = "queryIdentifier()")]
     pub struct QueryIdentifierCall;
@@ -20883,7 +20816,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "refundRecipient", abi = "refundRecipient()")]
     pub struct RefundRecipientCall;
@@ -20896,7 +20829,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "requestTimestamp", abi = "requestTimestamp()")]
     pub struct RequestTimestampCall;
@@ -20909,7 +20842,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "rewardToken", abi = "rewardToken()")]
     pub struct RewardTokenCall;
@@ -20922,7 +20855,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "runProgrammaticCheck", abi = "runProgrammaticCheck()")]
     pub struct RunProgrammaticCheckCall;
@@ -20935,7 +20868,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "sets", abi = "sets(uint256)")]
     pub struct SetsCall(pub ::ethers::core::types::U256);
@@ -20948,7 +20881,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
@@ -20981,90 +20914,80 @@ pub mod uma_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MaxSetLength(decoded));
             }
-            if let Ok(decoded)
-                = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::Acknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::AddSet(decoded));
             }
-            if let Ok(decoded)
-                = <BondAmountCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BondAmountCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BondAmount(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSets(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetSetsLength(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <OracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <OracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Oracle(decoded));
             }
-            if let Ok(decoded)
-                = <PriceDisputedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PriceDisputedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PriceDisputed(decoded));
             }
-            if let Ok(decoded)
-                = <PriceProposedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PriceProposedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PriceProposed(decoded));
             }
-            if let Ok(decoded)
-                = <PriceSettledCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PriceSettledCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PriceSettled(decoded));
             }
-            if let Ok(decoded)
-                = <ProposalDisputeWindowCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ProposalDisputeWindowCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ProposalDisputeWindow(decoded));
             }
-            if let Ok(decoded)
-                = <QueryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <QueryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Query(decoded));
             }
-            if let Ok(decoded)
-                = <QueryIdentifierCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <QueryIdentifierCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::QueryIdentifier(decoded));
             }
-            if let Ok(decoded)
-                = <RefundRecipientCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <RefundRecipientCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RefundRecipient(decoded));
             }
-            if let Ok(decoded)
-                = <RequestTimestampCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RequestTimestampCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RequestTimestamp(decoded));
             }
-            if let Ok(decoded)
-                = <RewardTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RewardTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RewardToken(decoded));
             }
-            if let Ok(decoded)
-                = <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RunProgrammaticCheck(decoded));
             }
-            if let Ok(decoded)
-                = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sets(decoded));
             }
-            if let Ok(decoded)
-                = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::State(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -21073,47 +20996,25 @@ pub mod uma_trigger {
     impl ::ethers::core::abi::AbiEncode for UMATriggerCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::MaxSetLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Acknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::MaxSetLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Acknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::AddSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::BondAmount(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::BondAmount(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::GetSets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetSetsLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetSetsLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Oracle(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PriceDisputed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PriceProposed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PriceSettled(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::PriceDisputed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PriceProposed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PriceSettled(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::ProposalDisputeWindow(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Query(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::QueryIdentifier(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RefundRecipient(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RequestTimestamp(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RewardToken(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::QueryIdentifier(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RefundRecipient(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RequestTimestamp(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RewardToken(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RunProgrammaticCheck(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -21136,17 +21037,13 @@ pub mod uma_trigger {
                 Self::PriceDisputed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PriceProposed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PriceSettled(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ProposalDisputeWindow(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ProposalDisputeWindow(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Query(element) => ::core::fmt::Display::fmt(element, f),
                 Self::QueryIdentifier(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RefundRecipient(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RequestTimestamp(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RewardToken(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RunProgrammaticCheck(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::RunProgrammaticCheck(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Sets(element) => ::core::fmt::Display::fmt(element, f),
                 Self::State(element) => ::core::fmt::Display::fmt(element, f),
             }
@@ -21261,7 +21158,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxSetLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
@@ -21273,7 +21170,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AcknowledgedReturn(pub bool);
     ///Container type for all return fields from the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
@@ -21285,7 +21182,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AddSetReturn(pub bool);
     ///Container type for all return fields from the `bondAmount` function with signature `bondAmount()` and selector `0x80f323a7`
@@ -21297,7 +21194,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BondAmountReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
@@ -21309,7 +21206,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsReturn(pub ::std::vec::Vec<::ethers::core::types::Address>);
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
@@ -21321,7 +21218,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -21333,7 +21230,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `oracle` function with signature `oracle()` and selector `0x7dc0d1d0`
@@ -21345,7 +21242,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct OracleReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `proposalDisputeWindow` function with signature `proposalDisputeWindow()` and selector `0xb365441b`
@@ -21357,7 +21254,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ProposalDisputeWindowReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `query` function with signature `query()` and selector `0x2c46b205`
@@ -21369,7 +21266,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct QueryReturn(pub ::std::string::String);
     ///Container type for all return fields from the `queryIdentifier` function with signature `queryIdentifier()` and selector `0x51119862`
@@ -21381,7 +21278,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct QueryIdentifierReturn(pub [u8; 32]);
     ///Container type for all return fields from the `refundRecipient` function with signature `refundRecipient()` and selector `0x01f5ad5a`
@@ -21393,7 +21290,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RefundRecipientReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `requestTimestamp` function with signature `requestTimestamp()` and selector `0x3e66a647`
@@ -21405,7 +21302,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RequestTimestampReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `rewardToken` function with signature `rewardToken()` and selector `0xf7c618c1`
@@ -21417,7 +21314,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RewardTokenReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
@@ -21429,7 +21326,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RunProgrammaticCheckReturn(pub u8);
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
@@ -21441,7 +21338,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetsReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
@@ -21453,7 +21350,7 @@ pub mod uma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct StateReturn(pub u8);
 }

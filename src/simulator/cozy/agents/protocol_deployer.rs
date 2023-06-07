@@ -10,6 +10,7 @@ use simulate::{
         utils,
     },
     environment::sim_env::SimEnv,
+    sim_env_data::SimEnvData
 };
 use thiserror::Error;
 
@@ -68,16 +69,16 @@ impl Agent for ProtocolDeployer {
         Option::Some(self.name.clone())
     }
 
-    fn activation_step(&mut self, sim_env: &mut SimEnv) {
+    fn activation_step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {
         // Deploy external libraries.
         self.deploy_libraries(sim_env);
         // Deploy core protocol.
-        self.deploy_core_protocol(sim_env);
+        self.deploy_core_protocol(sim_env, sim_data);
         // Deploy periphery.
         self.deploy_periphery(sim_env);
     }
 
-    fn step(&mut self, sim_env: &mut SimEnv) {}
+    fn step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {}
 }
 
 impl ProtocolDeployer {
@@ -162,7 +163,7 @@ impl ProtocolDeployer {
         Ok(())
     }
 
-    fn deploy_core_protocol(&self, mut sim_env: &mut SimEnv) -> Result<()> {
+    fn deploy_core_protocol(&self, mut sim_env: &mut SimEnv, sim_data: &mut SimEnvData) -> Result<()> {
         // Pre-compute Cozy protocol addresses
         let current_nonce = sim_env.get_account_info(self.address()).nonce;
         let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
@@ -193,32 +194,29 @@ impl ProtocolDeployer {
         )?;
 
         // Deploy set logic.
-        self
-            .deploy_unlinked_contract_with_args(
-                sim_env,
-                &SET,
-                vec![
-                    &CONFIGURATORLIB,
-                    &REDEMPTIONLIB,
-                    &SUPPLYSIDELIB,
-                    &DEMANDSIDELIB,
-                    &DELAYLIB,
-                    &STATETRANSITIONSLIB,
-                ],
-                (manager_addr, ptoken_factory_addr, backstop_addr),
-            )
-            .map_err(|_| ProtocolDeployerError::LinkingBytecodeFailure)?;
-        let set_logic = sim_env.data.contract_registry.get(SET.name).unwrap();
+        self.deploy_unlinked_contract_with_args(
+            sim_env,
+            &SET,
+            vec![
+                &CONFIGURATORLIB,
+                &REDEMPTIONLIB,
+                &SUPPLYSIDELIB,
+                &DEMANDSIDELIB,
+                &DELAYLIB,
+                &STATETRANSITIONSLIB,
+            ],
+            (manager_addr, ptoken_factory_addr, backstop_addr),
+        )
+        .map_err(|_| ProtocolDeployerError::LinkingBytecodeFailure)?;
+        let set_logic = sim_data.contract_registry.get(SET.name).unwrap();
 
         // Initialize set logic.
         let empty_market_configs: Vec<MarketConfig> = vec![];
-        let weth_addr =
-            sim_env
-                .data
-                .contract_registry
-                .get("Weth")
-                .ok_or(ProtocolDeployerError::UninitializedAddr)?
-                .address;
+        let weth_addr = sim_data
+            .contract_registry
+            .get("Weth")
+            .ok_or(ProtocolDeployerError::UninitializedAddr)?
+            .address;
         self.call_contract(
             &mut sim_env,
             &set_logic,
@@ -239,14 +237,10 @@ impl ProtocolDeployer {
         println!("Set logic initialized.");
 
         // Deploy ptoken logic.
-        self.deploy_linked_contract_with_args(
-            sim_env,
-            &PTOKEN,
-            (manager_addr, set_logic_addr),
-        )?;
+        self.deploy_linked_contract_with_args(sim_env, &PTOKEN, (manager_addr, set_logic_addr))?;
 
         self.deploy_linked_contract_with_args(sim_env, &PTOKEN, (manager_addr,))?;
-        let mut ptoken_logic = sim_env.data.contract_registry.get(PTOKEN.name).unwrap();
+        let mut ptoken_logic = sim_data.contract_registry.get(PTOKEN.name).unwrap();
 
         // Initialize ptoken logic.
         self.call_contract(

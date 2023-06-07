@@ -5,7 +5,7 @@ use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::U256 as EvmU256;
 use simulate::{
-    block_time_policy::FixedBlockTimePolicy, environment::sim_env::SimEnv, manager::SimManager,
+    block_time_policy::FixedBlockTimePolicy, environment::sim_env::SimEnv, manager::SimManager, sim_env_data::SimEnvData
 };
 
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
@@ -20,6 +20,7 @@ pub mod sim_types;
 pub fn run() -> Result<(), Box<dyn Error>> {
     // Create a `SimulationManager` that runs simulations in their `SimulationEnvironment`.
     let sim_env = SimEnv::new();
+    let sim_data = SimEnvData::new();
     let time_policy = Box::new(FixedBlockTimePolicy::new(
         EvmU256::from(0),
         EvmU256::from(1),
@@ -28,7 +29,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         Some(500_000_u64),
         None,
     )?);
-    let mut sim_manager = SimManager::new(sim_env, time_policy, 99_u64);
+    let mut sim_manager = SimManager::new(sim_env, sim_data, time_policy, 99_u64);
 
     // Create and activate agents.
     let deploy_params = ProtocolDeployerParams {

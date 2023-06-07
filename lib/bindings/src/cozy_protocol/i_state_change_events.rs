@@ -7,18 +7,16 @@ pub use i_state_change_events::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_state_change_events {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"enum MarketState\",\"name\":\"updatedTo_\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"MarketStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum SetState\",\"name\":\"updatedTo_\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"SetStateUpdated\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static ISTATECHANGEEVENTS_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static ISTATECHANGEEVENTS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IStateChangeEvents<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IStateChangeEvents<M> {
         fn clone(&self) -> Self {
@@ -38,7 +36,9 @@ pub mod i_state_change_events {
     }
     impl<M> ::core::fmt::Debug for IStateChangeEvents<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IStateChangeEvents)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IStateChangeEvents))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IStateChangeEvents<M> {
@@ -48,47 +48,38 @@ pub mod i_state_change_events {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    ISTATECHANGEEVENTS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                ISTATECHANGEEVENTS_ABI.clone(),
+                client,
+            ))
         }
         ///Gets the contract's `MarketStateUpdated` event
         pub fn market_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            MarketStateUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, MarketStateUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `SetStateUpdated` event
         pub fn set_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetStateUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetStateUpdatedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            IStateChangeEventsEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IStateChangeEventsEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IStateChangeEvents<M> {
+        for IStateChangeEvents<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -101,7 +92,7 @@ pub mod i_state_change_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "MarketStateUpdated",
@@ -123,7 +114,7 @@ pub mod i_state_change_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "SetStateUpdated", abi = "SetStateUpdated(uint8)")]
     pub struct SetStateUpdatedFilter {
@@ -152,12 +143,8 @@ pub mod i_state_change_events {
     impl ::core::fmt::Display for IStateChangeEventsEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::MarketStateUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::SetStateUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::MarketStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::SetStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }

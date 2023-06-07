@@ -1,18 +1,18 @@
 pub use bindings::{
     cost_model_dynamic_level_factory::DeployModelCall as DeployCostModelDynamicLevelParams,
     cost_model_jump_rate_factory::DeployModelCall as DeployCostModelJumpRateParams,
-    drip_decay_model_constant_factory::DeployModelCall as DeployDripDecayModelConstantParams
+    drip_decay_model_constant_factory::DeployModelCall as DeployDripDecayModelConstantParams,
 };
 
 #[derive(Debug, Clone)]
 pub enum CozySimCostModel {
     JumpRate(DeployCostModelJumpRateParams),
-    DynamicLevel(DeployCostModelDynamicLevelParams)
+    DynamicLevel(DeployCostModelDynamicLevelParams),
 }
 
 #[derive(Debug, Clone)]
 pub enum CozySimDripDecayModel {
-    Constant(DeployDripDecayModelConstantParams)
+    Constant(DeployDripDecayModelConstantParams),
 }
 
 #[derive(Debug, Clone)]
