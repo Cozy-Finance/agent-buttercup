@@ -3,7 +3,6 @@
 
 use crossbeam_channel::Sender;
 use eyre::Result;
-use revm::primitives::SpecId;
 use revm::{
     db::{CacheDB, EmptyDB},
     primitives::{AccountInfo, Address, ExecutionResult, Log, TxEnv, U256},
@@ -12,7 +11,6 @@ use revm::{
 use thiserror::Error;
 
 use crate::block_time_policy::BlockTimeEnv;
-use crate::sim_env_data::SimEnvData;
 
 pub enum SimEnvError {
     DbError,
@@ -27,8 +25,6 @@ pub struct SimEnv {
     pub(crate) evm: EVM<CacheDB<EmptyDB>>,
     /// The sender on the event channel that is used to send events to the agents and simulation manager.
     pub(crate) event_senders: Vec<Sender<Vec<Log>>>,
-    /// Shared sim env data that is accessed by different agents.
-    pub data: SimEnvData,
 }
 
 impl SimEnv {
@@ -39,12 +35,7 @@ impl SimEnv {
         evm.env.block.gas_limit = U256::MAX;
         evm.database(db);
         let event_senders = vec![];
-        let data = SimEnvData::new();
-        Self {
-            evm,
-            event_senders,
-            data,
-        }
+        Self { evm, event_senders }
     }
 
     /// Update the block time env.

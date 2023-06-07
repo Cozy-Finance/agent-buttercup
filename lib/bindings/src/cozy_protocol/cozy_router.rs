@@ -7,15 +7,17 @@ pub use cozy_router::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod cozy_router {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"manager_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IWeth\",\"name\":\"weth_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IStETH\",\"name\":\"stEth_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IWstETH\",\"name\":\"wstEth_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\",\"components\":[]}],\"type\":\"error\",\"name\":\"CallFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InsufficientBalance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SlippageExceeded\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"TransferFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes[]\",\"name\":\"calls_\",\"type\":\"bytes[]\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"aggregate\",\"outputs\":[{\"internalType\":\"bytes[]\",\"name\":\"returnData_\",\"type\":\"bytes[]\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minRefund_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"cancel\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"claim\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"id_\",\"type\":\"uint64\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"completeRedeem\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"id_\",\"type\":\"uint64\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"completeWithdraw\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"depositWithoutTransfer\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"maxWithdrawalRequest\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawableAssets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redeemableShares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"payout\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protectionClaimed_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"deadline_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"v_\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"r_\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"s_\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"permitRouter\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"previewCancellation\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"struct SaleFeesAssets\",\"name\":\"saleFeesAssets_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint128\",\"name\":\"reserveFeeAssets\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"backstopFeeAssets\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"supplierFeeAssets\",\"type\":\"uint128\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"pullToken\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"purchase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"assetsNeeded_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"purchaseWithoutTransfer\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minAssetsReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minRefund_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"sell\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"stEth\",\"outputs\":[{\"internalType\":\"contract IStETH\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amountMin_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"sweepToken\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"transferTokens\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unwrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWrappedAssetViaConnector\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWrappedAssetViaConnectorForWithdraw\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"weth\",\"outputs\":[{\"internalType\":\"contract IWeth\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxSharesBurned_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapBaseAssetViaConnectorAndDeposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapBaseAssetViaConnectorAndPurchase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapStEthForPurchase\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWethForPurchase\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"wstEth\",\"outputs\":[{\"internalType\":\"contract IWstETH\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"receive\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COZYROUTER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static COZYROUTER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -10453,9 +10455,8 @@ pub mod cozy_router {
         10,
     ];
     ///The bytecode of the contract.
-    pub static COZYROUTER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static COZYROUTER_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -20394,9 +20395,8 @@ pub mod cozy_router {
         10,
     ];
     ///The deployed bytecode of the contract.
-    pub static COZYROUTER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static COZYROUTER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct CozyRouter<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CozyRouter<M> {
         fn clone(&self) -> Self {
@@ -20416,7 +20416,9 @@ pub mod cozy_router {
     }
     impl<M> ::core::fmt::Debug for CozyRouter<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(CozyRouter)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(CozyRouter))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> CozyRouter<M> {
@@ -20426,13 +20428,11 @@ pub mod cozy_router {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    COZYROUTER_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                COZYROUTER_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -20569,10 +20569,7 @@ pub mod cozy_router {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -20627,7 +20624,11 @@ pub mod cozy_router {
             protection: ::ethers::core::types::U256,
         ) -> ::ethers::contract::builders::ContractCall<
             M,
-            (::ethers::core::types::U256, ::ethers::core::types::U256, SaleFeesAssets),
+            (
+                ::ethers::core::types::U256,
+                ::ethers::core::types::U256,
+                SaleFeesAssets,
+            ),
         > {
             self.0
                 .method_hash([24, 66, 114, 169], (set, market_id, protection))
@@ -20712,10 +20713,7 @@ pub mod cozy_router {
         ///Calls the contract's `stEth` (0x99940ece) function
         pub fn st_eth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([153, 148, 14, 206], ())
                 .expect("method not found (this should never happen)")
@@ -20794,10 +20792,7 @@ pub mod cozy_router {
         ///Calls the contract's `weth` (0x3fc8cef3) function
         pub fn weth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([63, 200, 206, 243], ())
                 .expect("method not found (this should never happen)")
@@ -20915,17 +20910,13 @@ pub mod cozy_router {
         ///Calls the contract's `wstEth` (0x91815a98) function
         pub fn wst_eth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([145, 129, 90, 152], ())
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for CozyRouter<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for CozyRouter<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -20939,7 +20930,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "CallFailed", abi = "CallFailed(uint256,bytes)")]
     pub struct CallFailed {
@@ -20955,7 +20946,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InsufficientBalance", abi = "InsufficientBalance()")]
     pub struct InsufficientBalance;
@@ -20968,7 +20959,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidAddress", abi = "InvalidAddress()")]
     pub struct InvalidAddress;
@@ -20981,7 +20972,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SlippageExceeded", abi = "SlippageExceeded()")]
     pub struct SlippageExceeded;
@@ -20994,7 +20985,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "TransferFailed", abi = "TransferFailed()")]
     pub struct TransferFailed;
@@ -21007,7 +20998,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -21029,34 +21020,30 @@ pub mod cozy_router {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <CallFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CallFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::CallFailed(decoded));
             }
-            if let Ok(decoded)
-                = <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InsufficientBalance(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidAddress(decoded));
             }
-            if let Ok(decoded)
-                = <SlippageExceeded as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SlippageExceeded as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::SlippageExceeded(decoded));
             }
-            if let Ok(decoded)
-                = <TransferFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::TransferFailed(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -21065,24 +21052,14 @@ pub mod cozy_router {
     impl ::ethers::core::abi::AbiEncode for CozyRouterErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::CallFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CallFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InsufficientBalance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidAddress(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SlippageExceeded(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidAddress(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SlippageExceeded(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -21091,26 +21068,22 @@ pub mod cozy_router {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
+                _ if selector == <CallFailed as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <CallFailed as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() => {
+                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <InvalidAddress as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <InvalidAddress as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <SlippageExceeded as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <SlippageExceeded as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <TransferFailed as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <TransferFailed as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -21119,9 +21092,7 @@ pub mod cozy_router {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::CallFailed(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InsufficientBalance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InsufficientBalance(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidAddress(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SlippageExceeded(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TransferFailed(element) => ::core::fmt::Display::fmt(element, f),
@@ -21174,7 +21145,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "aggregate", abi = "aggregate(bytes[])")]
     pub struct AggregateCall {
@@ -21189,9 +21160,12 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "cancel", abi = "cancel(address,uint16,uint256,address,uint256)")]
+    #[ethcall(
+        name = "cancel",
+        abi = "cancel(address,uint16,uint256,address,uint256)"
+    )]
     pub struct CancelCall {
         pub set: ::ethers::core::types::Address,
         pub market_id: u16,
@@ -21208,7 +21182,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "claim", abi = "claim(address,uint16,uint256,address)")]
     pub struct ClaimCall {
@@ -21226,7 +21200,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "completeRedeem", abi = "completeRedeem(address,uint64)")]
     pub struct CompleteRedeemCall {
@@ -21242,7 +21216,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "completeWithdraw", abi = "completeWithdraw(address,uint64)")]
     pub struct CompleteWithdrawCall {
@@ -21258,7 +21232,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "deposit", abi = "deposit(address,uint256,address,uint256)")]
     pub struct DepositCall {
@@ -21276,7 +21250,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "depositWithoutTransfer",
@@ -21297,7 +21271,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -21310,7 +21284,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "maxWithdrawalRequest",
@@ -21329,7 +21303,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "payout", abi = "payout(address,uint16,uint256,address)")]
     pub struct PayoutCall {
@@ -21347,7 +21321,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "permitRouter",
@@ -21370,7 +21344,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "previewCancellation",
@@ -21390,7 +21364,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "pullToken", abi = "pullToken(address,address,uint256)")]
     pub struct PullTokenCall {
@@ -21407,7 +21381,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "purchase",
@@ -21429,7 +21403,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "purchaseWithoutTransfer",
@@ -21450,7 +21424,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "redeem", abi = "redeem(address,uint256,address,uint256)")]
     pub struct RedeemCall {
@@ -21468,7 +21442,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "sell", abi = "sell(address,uint16,uint256,address,uint256)")]
     pub struct SellCall {
@@ -21487,7 +21461,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "stEth", abi = "stEth()")]
     pub struct StEthCall;
@@ -21500,7 +21474,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "sweepToken", abi = "sweepToken(address,address,uint256)")]
     pub struct SweepTokenCall {
@@ -21517,9 +21491,12 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "transferTokens", abi = "transferTokens(address,address,uint256)")]
+    #[ethcall(
+        name = "transferTokens",
+        abi = "transferTokens(address,address,uint256)"
+    )]
     pub struct TransferTokensCall {
         pub token: ::ethers::core::types::Address,
         pub recipient: ::ethers::core::types::Address,
@@ -21534,7 +21511,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "unwrapStEth", abi = "unwrapStEth(address)")]
     pub struct UnwrapStEthCall {
@@ -21549,7 +21526,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "unwrapWeth", abi = "unwrapWeth(address,uint256)")]
     pub struct UnwrapWethWithAmountCall {
@@ -21565,7 +21542,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "unwrapWeth", abi = "unwrapWeth(address)")]
     pub struct UnwrapWethCall {
@@ -21580,7 +21557,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "unwrapWrappedAssetViaConnector",
@@ -21600,7 +21577,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "unwrapWrappedAssetViaConnectorForWithdraw",
@@ -21619,7 +21596,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "weth", abi = "weth()")]
     pub struct WethCall;
@@ -21632,7 +21609,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "withdraw", abi = "withdraw(address,uint256,address,uint256)")]
     pub struct WithdrawCall {
@@ -21650,7 +21627,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "wrapBaseAssetViaConnectorAndDeposit",
@@ -21672,7 +21649,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "wrapBaseAssetViaConnectorAndPurchase",
@@ -21695,7 +21672,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wrapStEth", abi = "wrapStEth(address)")]
     pub struct WrapStEthCall {
@@ -21710,7 +21687,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wrapStEth", abi = "wrapStEth(address,uint256)")]
     pub struct WrapStEthWithAmountCall {
@@ -21726,7 +21703,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "wrapStEthForPurchase",
@@ -21747,7 +21724,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wrapWeth", abi = "wrapWeth(address,uint256)")]
     pub struct WrapWethWithAmountCall {
@@ -21763,7 +21740,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wrapWeth", abi = "wrapWeth(address)")]
     pub struct WrapWethCall {
@@ -21778,7 +21755,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "wrapWethForPurchase",
@@ -21799,7 +21776,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wstEth", abi = "wstEth()")]
     pub struct WstEthCall;
@@ -21830,9 +21807,7 @@ pub mod cozy_router {
         UnwrapWethWithAmount(UnwrapWethWithAmountCall),
         UnwrapWeth(UnwrapWethCall),
         UnwrapWrappedAssetViaConnector(UnwrapWrappedAssetViaConnectorCall),
-        UnwrapWrappedAssetViaConnectorForWithdraw(
-            UnwrapWrappedAssetViaConnectorForWithdrawCall,
-        ),
+        UnwrapWrappedAssetViaConnectorForWithdraw(UnwrapWrappedAssetViaConnectorForWithdrawCall),
         Weth(WethCall),
         Withdraw(WithdrawCall),
         WrapBaseAssetViaConnectorAndDeposit(WrapBaseAssetViaConnectorAndDepositCall),
@@ -21850,114 +21825,95 @@ pub mod cozy_router {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <AggregateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AggregateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Aggregate(decoded));
             }
-            if let Ok(decoded)
-                = <CancelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CancelCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Cancel(decoded));
             }
-            if let Ok(decoded)
-                = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Claim(decoded));
             }
-            if let Ok(decoded)
-                = <CompleteRedeemCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <CompleteRedeemCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CompleteRedeem(decoded));
             }
-            if let Ok(decoded)
-                = <CompleteWithdrawCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CompleteWithdrawCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CompleteWithdraw(decoded));
             }
-            if let Ok(decoded)
-                = <DepositCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DepositCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Deposit(decoded));
             }
-            if let Ok(decoded)
-                = <DepositWithoutTransferCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <DepositWithoutTransferCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DepositWithoutTransfer(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <MaxWithdrawalRequestCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <MaxWithdrawalRequestCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MaxWithdrawalRequest(decoded));
             }
-            if let Ok(decoded)
-                = <PayoutCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PayoutCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Payout(decoded));
             }
-            if let Ok(decoded)
-                = <PermitRouterCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PermitRouterCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PermitRouter(decoded));
             }
-            if let Ok(decoded)
-                = <PreviewCancellationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <PreviewCancellationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PreviewCancellation(decoded));
             }
-            if let Ok(decoded)
-                = <PullTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PullTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::PullToken(decoded));
             }
-            if let Ok(decoded)
-                = <PurchaseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PurchaseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Purchase(decoded));
             }
-            if let Ok(decoded)
-                = <PurchaseWithoutTransferCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <PurchaseWithoutTransferCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PurchaseWithoutTransfer(decoded));
             }
-            if let Ok(decoded)
-                = <RedeemCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RedeemCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Redeem(decoded));
             }
-            if let Ok(decoded)
-                = <SellCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SellCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sell(decoded));
             }
-            if let Ok(decoded)
-                = <StEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::StEth(decoded));
             }
-            if let Ok(decoded)
-                = <SweepTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SweepTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SweepToken(decoded));
             }
-            if let Ok(decoded)
-                = <TransferTokensCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TransferTokensCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TransferTokens(decoded));
             }
-            if let Ok(decoded)
-                = <UnwrapStEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UnwrapStEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::UnwrapStEth(decoded));
             }
-            if let Ok(decoded)
-                = <UnwrapWethWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UnwrapWethWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UnwrapWethWithAmount(decoded));
             }
-            if let Ok(decoded)
-                = <UnwrapWethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UnwrapWethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::UnwrapWeth(decoded));
             }
-            if let Ok(decoded)
-                = <UnwrapWrappedAssetViaConnectorCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UnwrapWrappedAssetViaConnectorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UnwrapWrappedAssetViaConnector(decoded));
             }
             if let Ok(decoded)
@@ -21966,60 +21922,53 @@ pub mod cozy_router {
                 ) {
                 return Ok(Self::UnwrapWrappedAssetViaConnectorForWithdraw(decoded));
             }
-            if let Ok(decoded)
-                = <WethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Weth(decoded));
             }
-            if let Ok(decoded)
-                = <WithdrawCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WithdrawCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Withdraw(decoded));
             }
-            if let Ok(decoded)
-                = <WrapBaseAssetViaConnectorAndDepositCall as ::ethers::core::abi::AbiDecode>::decode(
+            if let Ok(decoded) =
+                <WrapBaseAssetViaConnectorAndDepositCall as ::ethers::core::abi::AbiDecode>::decode(
                     data,
-                ) {
+                )
+            {
                 return Ok(Self::WrapBaseAssetViaConnectorAndDeposit(decoded));
             }
-            if let Ok(decoded)
-                = <WrapBaseAssetViaConnectorAndPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(
+            if let Ok(decoded) =
+                <WrapBaseAssetViaConnectorAndPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(
                     data,
-                ) {
+                )
+            {
                 return Ok(Self::WrapBaseAssetViaConnectorAndPurchase(decoded));
             }
-            if let Ok(decoded)
-                = <WrapStEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WrapStEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::WrapStEth(decoded));
             }
-            if let Ok(decoded)
-                = <WrapStEthWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <WrapStEthWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::WrapStEthWithAmount(decoded));
             }
-            if let Ok(decoded)
-                = <WrapStEthForPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <WrapStEthForPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::WrapStEthForPurchase(decoded));
             }
-            if let Ok(decoded)
-                = <WrapWethWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <WrapWethWithAmountCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::WrapWethWithAmount(decoded));
             }
-            if let Ok(decoded)
-                = <WrapWethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WrapWethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::WrapWeth(decoded));
             }
-            if let Ok(decoded)
-                = <WrapWethForPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <WrapWethForPurchaseCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::WrapWethForPurchase(decoded));
             }
-            if let Ok(decoded)
-                = <WstEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WstEthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::WstEth(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -22028,17 +21977,11 @@ pub mod cozy_router {
     impl ::ethers::core::abi::AbiEncode for CozyRouterCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::Aggregate(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Aggregate(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Cancel(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Claim(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::CompleteRedeem(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::CompleteWithdraw(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CompleteRedeem(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::CompleteWithdraw(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Deposit(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::DepositWithoutTransfer(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
@@ -22048,39 +21991,25 @@ pub mod cozy_router {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Payout(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PermitRouter(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::PermitRouter(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::PreviewCancellation(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::PullToken(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Purchase(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::PullToken(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Purchase(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::PurchaseWithoutTransfer(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Redeem(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Sell(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::StEth(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SweepToken(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferTokens(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UnwrapStEth(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SweepToken(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferTokens(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UnwrapStEth(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::UnwrapWethWithAmount(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::UnwrapWeth(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::UnwrapWeth(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::UnwrapWrappedAssetViaConnector(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -22088,18 +22017,14 @@ pub mod cozy_router {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Weth(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Withdraw(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Withdraw(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::WrapBaseAssetViaConnectorAndDeposit(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::WrapBaseAssetViaConnectorAndPurchase(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::WrapStEth(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::WrapStEth(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::WrapStEthWithAmount(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -22109,9 +22034,7 @@ pub mod cozy_router {
                 Self::WrapWethWithAmount(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::WrapWeth(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::WrapWeth(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::WrapWethForPurchase(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -22128,32 +22051,22 @@ pub mod cozy_router {
                 Self::CompleteRedeem(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CompleteWithdraw(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Deposit(element) => ::core::fmt::Display::fmt(element, f),
-                Self::DepositWithoutTransfer(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::DepositWithoutTransfer(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Manager(element) => ::core::fmt::Display::fmt(element, f),
-                Self::MaxWithdrawalRequest(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::MaxWithdrawalRequest(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Payout(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PermitRouter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::PreviewCancellation(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::PreviewCancellation(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PullToken(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Purchase(element) => ::core::fmt::Display::fmt(element, f),
-                Self::PurchaseWithoutTransfer(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::PurchaseWithoutTransfer(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Redeem(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Sell(element) => ::core::fmt::Display::fmt(element, f),
                 Self::StEth(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SweepToken(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TransferTokens(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UnwrapStEth(element) => ::core::fmt::Display::fmt(element, f),
-                Self::UnwrapWethWithAmount(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::UnwrapWethWithAmount(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UnwrapWeth(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UnwrapWrappedAssetViaConnector(element) => {
                     ::core::fmt::Display::fmt(element, f)
@@ -22170,19 +22083,11 @@ pub mod cozy_router {
                     ::core::fmt::Display::fmt(element, f)
                 }
                 Self::WrapStEth(element) => ::core::fmt::Display::fmt(element, f),
-                Self::WrapStEthWithAmount(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::WrapStEthForPurchase(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::WrapWethWithAmount(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::WrapStEthWithAmount(element) => ::core::fmt::Display::fmt(element, f),
+                Self::WrapStEthForPurchase(element) => ::core::fmt::Display::fmt(element, f),
+                Self::WrapWethWithAmount(element) => ::core::fmt::Display::fmt(element, f),
                 Self::WrapWeth(element) => ::core::fmt::Display::fmt(element, f),
-                Self::WrapWethForPurchase(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::WrapWethForPurchase(element) => ::core::fmt::Display::fmt(element, f),
                 Self::WstEth(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
@@ -22307,8 +22212,7 @@ pub mod cozy_router {
             Self::UnwrapWrappedAssetViaConnector(value)
         }
     }
-    impl ::core::convert::From<UnwrapWrappedAssetViaConnectorForWithdrawCall>
-    for CozyRouterCalls {
+    impl ::core::convert::From<UnwrapWrappedAssetViaConnectorForWithdrawCall> for CozyRouterCalls {
         fn from(value: UnwrapWrappedAssetViaConnectorForWithdrawCall) -> Self {
             Self::UnwrapWrappedAssetViaConnectorForWithdraw(value)
         }
@@ -22323,14 +22227,12 @@ pub mod cozy_router {
             Self::Withdraw(value)
         }
     }
-    impl ::core::convert::From<WrapBaseAssetViaConnectorAndDepositCall>
-    for CozyRouterCalls {
+    impl ::core::convert::From<WrapBaseAssetViaConnectorAndDepositCall> for CozyRouterCalls {
         fn from(value: WrapBaseAssetViaConnectorAndDepositCall) -> Self {
             Self::WrapBaseAssetViaConnectorAndDeposit(value)
         }
     }
-    impl ::core::convert::From<WrapBaseAssetViaConnectorAndPurchaseCall>
-    for CozyRouterCalls {
+    impl ::core::convert::From<WrapBaseAssetViaConnectorAndPurchaseCall> for CozyRouterCalls {
         fn from(value: WrapBaseAssetViaConnectorAndPurchaseCall) -> Self {
             Self::WrapBaseAssetViaConnectorAndPurchase(value)
         }
@@ -22379,7 +22281,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AggregateReturn {
         pub return_data: ::std::vec::Vec<::ethers::core::types::Bytes>,
@@ -22393,7 +22295,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CancelReturn {
         pub refund: ::ethers::core::types::U256,
@@ -22408,7 +22310,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ClaimReturn {
         pub protection: ::ethers::core::types::U256,
@@ -22422,7 +22324,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DepositReturn {
         pub shares: ::ethers::core::types::U256,
@@ -22436,7 +22338,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DepositWithoutTransferReturn {
         pub shares: ::ethers::core::types::U256,
@@ -22450,7 +22352,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `maxWithdrawalRequest` function with signature `maxWithdrawalRequest(address,address)` and selector `0x1f6927a5`
@@ -22462,7 +22364,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxWithdrawalRequestReturn {
         pub withdrawable_assets: ::ethers::core::types::U256,
@@ -22477,7 +22379,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PayoutReturn {
         pub ptokens: ::ethers::core::types::U256,
@@ -22492,7 +22394,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PreviewCancellationReturn {
         pub refund: ::ethers::core::types::U256,
@@ -22508,7 +22410,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PurchaseReturn {
         pub assets_needed: ::ethers::core::types::U256,
@@ -22523,7 +22425,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PurchaseWithoutTransferReturn {
         pub ptokens: ::ethers::core::types::U256,
@@ -22537,7 +22439,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RedeemReturn {
         pub assets: ::ethers::core::types::U256,
@@ -22551,7 +22453,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SellReturn {
         pub refund: ::ethers::core::types::U256,
@@ -22566,7 +22468,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct StEthReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `sweepToken` function with signature `sweepToken(address,address,uint256)` and selector `0x64aff9ec`
@@ -22578,7 +22480,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SweepTokenReturn {
         pub amount: ::ethers::core::types::U256,
@@ -22592,7 +22494,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WethReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `withdraw` function with signature `withdraw(address,uint256,address,uint256)` and selector `0x4b2084e3`
@@ -22604,7 +22506,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WithdrawReturn {
         pub shares: ::ethers::core::types::U256,
@@ -22618,7 +22520,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WrapBaseAssetViaConnectorAndDepositReturn {
         pub shares: ::ethers::core::types::U256,
@@ -22632,7 +22534,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WrapBaseAssetViaConnectorAndPurchaseReturn {
         pub ptokens: ::ethers::core::types::U256,
@@ -22646,7 +22548,7 @@ pub mod cozy_router {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WstEthReturn(pub ::ethers::core::types::Address);
 }
