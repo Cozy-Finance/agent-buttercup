@@ -7,14 +7,16 @@ pub use i_connector::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_connector {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"baseAsset\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToBaseAssetsNeeded\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToWrappedAssets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unwrapWrappedAsset\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapBaseAsset\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICONNECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static ICONNECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IConnector<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IConnector<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_connector {
     }
     impl<M> ::core::fmt::Debug for IConnector<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IConnector)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IConnector))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IConnector<M> {
@@ -44,13 +48,11 @@ pub mod i_connector {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    ICONNECTOR_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                ICONNECTOR_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `balanceOf` (0x70a08231) function
         pub fn balance_of(
@@ -64,10 +66,7 @@ pub mod i_connector {
         ///Calls the contract's `baseAsset` (0xcdf456e1) function
         pub fn base_asset(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([205, 244, 86, 225], ())
                 .expect("method not found (this should never happen)")
@@ -111,8 +110,7 @@ pub mod i_connector {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IConnector<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for IConnector<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -126,7 +124,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall {
@@ -141,7 +139,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "baseAsset", abi = "baseAsset()")]
     pub struct BaseAssetCall;
@@ -154,7 +152,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "convertToBaseAssetsNeeded",
@@ -172,9 +170,12 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "convertToWrappedAssets", abi = "convertToWrappedAssets(uint256)")]
+    #[ethcall(
+        name = "convertToWrappedAssets",
+        abi = "convertToWrappedAssets(uint256)"
+    )]
     pub struct ConvertToWrappedAssetsCall {
         pub assets: ::ethers::core::types::U256,
     }
@@ -187,9 +188,12 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "unwrapWrappedAsset", abi = "unwrapWrappedAsset(address,uint256)")]
+    #[ethcall(
+        name = "unwrapWrappedAsset",
+        abi = "unwrapWrappedAsset(address,uint256)"
+    )]
     pub struct UnwrapWrappedAssetCall {
         pub recipient: ::ethers::core::types::Address,
         pub amount: ::ethers::core::types::U256,
@@ -203,7 +207,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "wrapBaseAsset", abi = "wrapBaseAsset(address,uint256)")]
     pub struct WrapBaseAssetCall {
@@ -225,34 +229,29 @@ pub mod i_connector {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BalanceOf(decoded));
             }
-            if let Ok(decoded)
-                = <BaseAssetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BaseAssetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BaseAsset(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToBaseAssetsNeededCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConvertToBaseAssetsNeededCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToBaseAssetsNeeded(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToWrappedAssetsCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConvertToWrappedAssetsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToWrappedAssets(decoded));
             }
-            if let Ok(decoded)
-                = <UnwrapWrappedAssetCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UnwrapWrappedAssetCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UnwrapWrappedAsset(decoded));
             }
-            if let Ok(decoded)
-                = <WrapBaseAssetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WrapBaseAssetCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::WrapBaseAsset(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -261,12 +260,8 @@ pub mod i_connector {
     impl ::ethers::core::abi::AbiEncode for IConnectorCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::BalanceOf(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::BaseAsset(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::BalanceOf(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BaseAsset(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::ConvertToBaseAssetsNeeded(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -276,9 +271,7 @@ pub mod i_connector {
                 Self::UnwrapWrappedAsset(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::WrapBaseAsset(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::WrapBaseAsset(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -287,15 +280,9 @@ pub mod i_connector {
             match self {
                 Self::BalanceOf(element) => ::core::fmt::Display::fmt(element, f),
                 Self::BaseAsset(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ConvertToBaseAssetsNeeded(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::ConvertToWrappedAssets(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::UnwrapWrappedAsset(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ConvertToBaseAssetsNeeded(element) => ::core::fmt::Display::fmt(element, f),
+                Self::ConvertToWrappedAssets(element) => ::core::fmt::Display::fmt(element, f),
+                Self::UnwrapWrappedAsset(element) => ::core::fmt::Display::fmt(element, f),
                 Self::WrapBaseAsset(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
@@ -339,7 +326,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `baseAsset` function with signature `baseAsset()` and selector `0xcdf456e1`
@@ -351,7 +338,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BaseAssetReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `convertToBaseAssetsNeeded` function with signature `convertToBaseAssetsNeeded(uint256)` and selector `0x366ccb22`
@@ -363,7 +350,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToBaseAssetsNeededReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `convertToWrappedAssets` function with signature `convertToWrappedAssets(uint256)` and selector `0x47525990`
@@ -375,7 +362,7 @@ pub mod i_connector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToWrappedAssetsReturn(pub ::ethers::core::types::U256);
 }

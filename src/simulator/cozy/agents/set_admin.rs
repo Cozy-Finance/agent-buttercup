@@ -215,7 +215,11 @@ impl SetAdmin {
         Ok(result.model)
     }
 
-    fn deploy_dummy_trigger(&self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) -> Result<EthersAddress> {
+    fn deploy_dummy_trigger(
+        &self,
+        sim_env: &mut SimEnv,
+        sim_data: &mut SimEnvData,
+    ) -> Result<EthersAddress> {
         let factory = sim_data
             .contract_registry
             .get(DUMMYTRIGGER.name)
@@ -230,7 +234,12 @@ impl SetAdmin {
         Ok(result)
     }
 
-    fn create_set(&self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData, args: CreateSetCall) -> Result<EthersAddress> {
+    fn create_set(
+        &self,
+        sim_env: &mut SimEnv,
+        sim_data: &mut SimEnvData,
+        args: CreateSetCall,
+    ) -> Result<EthersAddress> {
         let manager = sim_data
             .contract_registry
             .get(MANAGER.name)

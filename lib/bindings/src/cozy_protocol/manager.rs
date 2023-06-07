@@ -7,15 +7,17 @@ pub use manager::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod manager {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IBackstop\",\"name\":\"backstop_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract SetFactory\",\"name\":\"setFactory_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"pauser_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}]},{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}]},{\"internalType\":\"uint256\",\"name\":\"allowedMarketsPerSet_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidSet\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint128\",\"name\":\"reserveAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"CozyFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"DelaysUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"depositCap_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DepositCapUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"OwnershipTransferStarted\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"OwnershipTransferred\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newPauser_\",\"type\":\"address\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"PauserUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"amount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_FEE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"acceptOwnership\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowedMarketsPerSet\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"backstop\",\"outputs\":[{\"internalType\":\"contract IBackstop\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"claimCozyFees\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"claimSetFees\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateGracePeriod\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"pauser_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"struct SetConfig\",\"name\":\"setConfig_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}]},{\"internalType\":\"struct MarketConfig[]\",\"name\":\"marketConfigs_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}]},{\"internalType\":\"bytes32\",\"name\":\"salt_\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"createSet\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"depositFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"depositFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"fees\",\"outputs\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getDepositCap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"minDepositDuration\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"pause\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"pauser\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"pendingOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"purchaseFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"redemptionDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"saleFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"saleFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setFactory\",\"outputs\":[{\"internalType\":\"contract SetFactory\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferOwnership\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unpause\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct BackstopApproval[]\",\"name\":\"approvals_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateBackstopApprovals\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateDelays\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newDepositCap_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateDepositCap\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateFees\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newPauser\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updatePauser\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}]}],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"validateFees\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static MANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static MANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         52,
@@ -7551,9 +7553,8 @@ pub mod manager {
         10,
     ];
     ///The bytecode of the contract.
-    pub static MANAGER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static MANAGER_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -13624,9 +13625,8 @@ pub mod manager {
         10,
     ];
     ///The deployed bytecode of the contract.
-    pub static MANAGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static MANAGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct Manager<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for Manager<M> {
         fn clone(&self) -> Self {
@@ -13646,7 +13646,9 @@ pub mod manager {
     }
     impl<M> ::core::fmt::Debug for Manager<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(Manager)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(Manager))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> Manager<M> {
@@ -13656,13 +13658,11 @@ pub mod manager {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    MANAGER_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                MANAGER_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -13712,9 +13712,7 @@ pub mod manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acceptOwnership` (0x79ba5097) function
-        pub fn accept_ownership(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn accept_ownership(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([121, 186, 80, 151], ())
                 .expect("method not found (this should never happen)")
@@ -13730,10 +13728,7 @@ pub mod manager {
         ///Calls the contract's `backstop` (0x7dea1817) function
         pub fn backstop(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([125, 234, 24, 23], ())
                 .expect("method not found (this should never happen)")
@@ -13758,9 +13753,7 @@ pub mod manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `configUpdateDelay` (0xc5f755f0) function
-        pub fn config_update_delay(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn config_update_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([197, 247, 85, 240], ())
                 .expect("method not found (this should never happen)")
@@ -13782,10 +13775,7 @@ pub mod manager {
             set_config: SetConfig,
             market_configs: ::std::vec::Vec<MarketConfig>,
             salt: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash(
                     [7, 98, 234, 61],
@@ -13794,9 +13784,7 @@ pub mod manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `depositFees` (0x26741e7d) function
-        pub fn deposit_fees(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn deposit_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([38, 116, 30, 125], ())
                 .expect("method not found (this should never happen)")
@@ -13804,10 +13792,7 @@ pub mod manager {
         ///Calls the contract's `fees` (0x9af1d35a) function
         pub fn fees(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            (u16, u16, u16, u16, u16, u16),
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, (u16, u16, u16, u16, u16, u16)> {
             self.0
                 .method_hash([154, 241, 211, 90], ())
                 .expect("method not found (this should never happen)")
@@ -13831,9 +13816,7 @@ pub mod manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `minDepositDuration` (0x03814568) function
-        pub fn min_deposit_duration(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn min_deposit_duration(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([3, 129, 69, 104], ())
                 .expect("method not found (this should never happen)")
@@ -13841,10 +13824,7 @@ pub mod manager {
         ///Calls the contract's `owner` (0x8da5cb5b) function
         pub fn owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([141, 165, 203, 91], ())
                 .expect("method not found (this should never happen)")
@@ -13861,10 +13841,7 @@ pub mod manager {
         ///Calls the contract's `pauser` (0x9fd0506d) function
         pub fn pauser(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([159, 208, 80, 109], ())
                 .expect("method not found (this should never happen)")
@@ -13872,42 +13849,31 @@ pub mod manager {
         ///Calls the contract's `pendingOwner` (0xe30c3978) function
         pub fn pending_owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([227, 12, 57, 120], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `purchaseDelay` (0xb2eafefa) function
-        pub fn purchase_delay(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn purchase_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([178, 234, 254, 250], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `purchaseFees` (0xb996d0a1) function
-        pub fn purchase_fees(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn purchase_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([185, 150, 208, 161], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `redemptionDelay` (0x9b31c3a8) function
-        pub fn redemption_delay(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn redemption_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([155, 49, 195, 168], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `saleFees` (0x9c2d7d41) function
-        pub fn sale_fees(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn sale_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([156, 45, 125, 65], ())
                 .expect("method not found (this should never happen)")
@@ -13915,10 +13881,7 @@ pub mod manager {
         ///Calls the contract's `setFactory` (0x86eac4ad) function
         pub fn set_factory(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([134, 234, 196, 173], ())
                 .expect("method not found (this should never happen)")
@@ -13970,10 +13933,7 @@ pub mod manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `updateFees` (0x97ede0c5) function
-        pub fn update_fees(
-            &self,
-            fees: Fees,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn update_fees(&self, fees: Fees) -> ::ethers::contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([151, 237, 224, 197], (fees,))
                 .expect("method not found (this should never happen)")
@@ -13999,41 +13959,29 @@ pub mod manager {
         ///Gets the contract's `CozyFeesClaimed` event
         pub fn cozy_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            CozyFeesClaimedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, CozyFeesClaimedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DelaysUpdated` event
         pub fn delays_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DelaysUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DelaysUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DepositCapUpdated` event
         pub fn deposit_cap_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DepositCapUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DepositCapUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `FeesUpdated` event
         pub fn fees_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FeesUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, FeesUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `OwnershipTransferStarted` event
@@ -14049,42 +13997,33 @@ pub mod manager {
         ///Gets the contract's `OwnershipTransferred` event
         pub fn ownership_transferred_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            OwnershipTransferredFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, OwnershipTransferredFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `PauserUpdated` event
         pub fn pauser_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            PauserUpdatedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, PauserUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `SetFeesClaimed` event
         pub fn set_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetFeesClaimedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetFeesClaimedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
         ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ManagerEvents> {
-            self.0.event_with_filter(::core::default::Default::default())
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for Manager<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for Manager<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -14098,7 +14037,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidAddress", abi = "InvalidAddress()")]
     pub struct InvalidAddress;
@@ -14111,7 +14050,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidConfiguration", abi = "InvalidConfiguration()")]
     pub struct InvalidConfiguration;
@@ -14124,7 +14063,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidSet", abi = "InvalidSet()")]
     pub struct InvalidSet;
@@ -14137,7 +14076,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidState", abi = "InvalidState()")]
     pub struct InvalidState;
@@ -14150,7 +14089,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -14163,7 +14102,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
@@ -14176,7 +14115,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -14199,42 +14138,34 @@ pub mod manager {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidAddress(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidConfiguration(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidSet as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidSet as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidSet(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidState(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SafeCastFailed(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -14243,27 +14174,17 @@ pub mod manager {
     impl ::ethers::core::abi::AbiEncode for ManagerErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidAddress(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidAddress(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidConfiguration(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidSet(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::InvalidState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::InvalidState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::SafeCastFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SafeCastFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -14272,28 +14193,25 @@ pub mod manager {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
-                _ if selector
-                    == <InvalidAddress as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <InvalidAddress as ::ethers::contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
+                _ if selector == <InvalidSet as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <InvalidState as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidSet as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -14302,14 +14220,10 @@ pub mod manager {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::InvalidAddress(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidConfiguration(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidConfiguration(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidSet(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidState(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SafeCastFailed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
@@ -14364,7 +14278,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "CozyFeesClaimed",
@@ -14384,7 +14298,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "DelaysUpdated",
@@ -14401,7 +14315,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "DepositCapUpdated", abi = "DepositCapUpdated(address,uint256)")]
     pub struct DepositCapUpdatedFilter {
@@ -14417,7 +14331,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "FeesUpdated",
@@ -14434,7 +14348,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "OwnershipTransferStarted",
@@ -14454,7 +14368,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "OwnershipTransferred",
@@ -14474,7 +14388,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "PauserUpdated", abi = "PauserUpdated(address)")]
     pub struct PauserUpdatedFilter {
@@ -14489,9 +14403,12 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethevent(name = "SetFeesClaimed", abi = "SetFeesClaimed(address,address,uint128)")]
+    #[ethevent(
+        name = "SetFeesClaimed",
+        abi = "SetFeesClaimed(address,address,uint128)"
+    )]
     pub struct SetFeesClaimedFilter {
         #[ethevent(indexed)]
         pub set: ::ethers::core::types::Address,
@@ -14544,28 +14461,16 @@ pub mod manager {
     impl ::core::fmt::Display for ManagerEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::CozyFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DelaysUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DepositCapUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::CozyFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DelaysUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DepositCapUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::FeesUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::OwnershipTransferStartedFilter(element) => {
                     ::core::fmt::Display::fmt(element, f)
                 }
-                Self::OwnershipTransferredFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::PauserUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::SetFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::OwnershipTransferredFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::PauserUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::SetFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
@@ -14618,7 +14523,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "MAX_FEE", abi = "MAX_FEE()")]
     pub struct MaxFeeCall;
@@ -14631,7 +14536,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "acceptOwnership", abi = "acceptOwnership()")]
     pub struct AcceptOwnershipCall;
@@ -14644,7 +14549,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "allowedMarketsPerSet", abi = "allowedMarketsPerSet()")]
     pub struct AllowedMarketsPerSetCall;
@@ -14657,7 +14562,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "backstop", abi = "backstop()")]
     pub struct BackstopCall;
@@ -14670,7 +14575,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "claimCozyFees", abi = "claimCozyFees(address[])")]
     pub struct ClaimCozyFeesCall {
@@ -14685,7 +14590,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "claimSetFees", abi = "claimSetFees(address[],address)")]
     pub struct ClaimSetFeesCall {
@@ -14701,7 +14606,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "configUpdateDelay", abi = "configUpdateDelay()")]
     pub struct ConfigUpdateDelayCall;
@@ -14714,7 +14619,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "configUpdateGracePeriod", abi = "configUpdateGracePeriod()")]
     pub struct ConfigUpdateGracePeriodCall;
@@ -14727,7 +14632,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "createSet",
@@ -14750,7 +14655,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "depositFees", abi = "depositFees()")]
     pub struct DepositFeesCall;
@@ -14763,7 +14668,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "fees", abi = "fees()")]
     pub struct FeesCall;
@@ -14776,7 +14681,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getDepositCap", abi = "getDepositCap(address)")]
     pub struct GetDepositCapCall {
@@ -14791,7 +14696,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "isSet", abi = "isSet(address)")]
     pub struct IsSetCall(pub ::ethers::core::types::Address);
@@ -14804,7 +14709,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "minDepositDuration", abi = "minDepositDuration()")]
     pub struct MinDepositDurationCall;
@@ -14817,7 +14722,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "owner", abi = "owner()")]
     pub struct OwnerCall;
@@ -14830,7 +14735,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "pause", abi = "pause(address[])")]
     pub struct PauseCall {
@@ -14845,7 +14750,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "pauser", abi = "pauser()")]
     pub struct PauserCall;
@@ -14858,7 +14763,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "pendingOwner", abi = "pendingOwner()")]
     pub struct PendingOwnerCall;
@@ -14871,7 +14776,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "purchaseDelay", abi = "purchaseDelay()")]
     pub struct PurchaseDelayCall;
@@ -14884,7 +14789,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "purchaseFees", abi = "purchaseFees()")]
     pub struct PurchaseFeesCall;
@@ -14897,7 +14802,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "redemptionDelay", abi = "redemptionDelay()")]
     pub struct RedemptionDelayCall;
@@ -14910,7 +14815,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "saleFees", abi = "saleFees()")]
     pub struct SaleFeesCall;
@@ -14923,7 +14828,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "setFactory", abi = "setFactory()")]
     pub struct SetFactoryCall;
@@ -14936,7 +14841,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transferOwnership", abi = "transferOwnership(address)")]
     pub struct TransferOwnershipCall {
@@ -14951,7 +14856,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "unpause", abi = "unpause(address[])")]
     pub struct UnpauseCall {
@@ -14966,7 +14871,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "updateBackstopApprovals",
@@ -14984,7 +14889,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "updateDelays",
@@ -15002,7 +14907,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "updateDepositCap", abi = "updateDepositCap(address,uint256)")]
     pub struct UpdateDepositCapCall {
@@ -15018,7 +14923,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "updateFees",
@@ -15036,7 +14941,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "updatePauser", abi = "updatePauser(address)")]
     pub struct UpdatePauserCall {
@@ -15051,7 +14956,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "validateFees",
@@ -15100,142 +15005,124 @@ pub mod manager {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <MaxFeeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MaxFeeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::MaxFee(decoded));
             }
-            if let Ok(decoded)
-                = <AcceptOwnershipCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <AcceptOwnershipCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::AcceptOwnership(decoded));
             }
-            if let Ok(decoded)
-                = <AllowedMarketsPerSetCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <AllowedMarketsPerSetCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::AllowedMarketsPerSet(decoded));
             }
-            if let Ok(decoded)
-                = <BackstopCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BackstopCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Backstop(decoded));
             }
-            if let Ok(decoded)
-                = <ClaimCozyFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ClaimCozyFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ClaimCozyFees(decoded));
             }
-            if let Ok(decoded)
-                = <ClaimSetFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ClaimSetFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ClaimSetFees(decoded));
             }
-            if let Ok(decoded)
-                = <ConfigUpdateDelayCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConfigUpdateDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConfigUpdateDelay(decoded));
             }
-            if let Ok(decoded)
-                = <ConfigUpdateGracePeriodCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConfigUpdateGracePeriodCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConfigUpdateGracePeriod(decoded));
             }
-            if let Ok(decoded)
-                = <CreateSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CreateSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::CreateSet(decoded));
             }
-            if let Ok(decoded)
-                = <DepositFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DepositFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DepositFees(decoded));
             }
-            if let Ok(decoded)
-                = <FeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Fees(decoded));
             }
-            if let Ok(decoded)
-                = <GetDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetDepositCap(decoded));
             }
-            if let Ok(decoded)
-                = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsSet(decoded));
             }
-            if let Ok(decoded)
-                = <MinDepositDurationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <MinDepositDurationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MinDepositDuration(decoded));
             }
-            if let Ok(decoded)
-                = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Owner(decoded));
             }
-            if let Ok(decoded)
-                = <PauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Pause(decoded));
             }
-            if let Ok(decoded)
-                = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Pauser(decoded));
             }
-            if let Ok(decoded)
-                = <PendingOwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PendingOwnerCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PendingOwner(decoded));
             }
-            if let Ok(decoded)
-                = <PurchaseDelayCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PurchaseDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PurchaseDelay(decoded));
             }
-            if let Ok(decoded)
-                = <PurchaseFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PurchaseFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PurchaseFees(decoded));
             }
-            if let Ok(decoded)
-                = <RedemptionDelayCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <RedemptionDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RedemptionDelay(decoded));
             }
-            if let Ok(decoded)
-                = <SaleFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SaleFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SaleFees(decoded));
             }
-            if let Ok(decoded)
-                = <SetFactoryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetFactoryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetFactory(decoded));
             }
-            if let Ok(decoded)
-                = <TransferOwnershipCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <TransferOwnershipCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TransferOwnership(decoded));
             }
-            if let Ok(decoded)
-                = <UnpauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UnpauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unpause(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateBackstopApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UpdateBackstopApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdateBackstopApprovals(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateDelaysCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdateDelaysCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdateDelays(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UpdateDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdateDepositCap(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdateFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::UpdateFees(decoded));
             }
-            if let Ok(decoded)
-                = <UpdatePauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdatePauserCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdatePauser(decoded));
             }
-            if let Ok(decoded)
-                = <ValidateFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ValidateFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ValidateFees(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -15245,37 +15132,21 @@ pub mod manager {
         fn encode(self) -> Vec<u8> {
             match self {
                 Self::MaxFee(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::AcceptOwnership(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::AcceptOwnership(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::AllowedMarketsPerSet(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::Backstop(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ClaimCozyFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ClaimSetFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ConfigUpdateDelay(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Backstop(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ClaimCozyFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ClaimSetFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ConfigUpdateDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::ConfigUpdateGracePeriod(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::CreateSet(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::DepositFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CreateSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DepositFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Fees(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetDepositCap(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetDepositCap(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::IsSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::MinDepositDuration(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
@@ -15283,46 +15154,22 @@ pub mod manager {
                 Self::Owner(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Pause(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Pauser(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PendingOwner(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PurchaseDelay(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PurchaseFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RedemptionDelay(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SaleFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SetFactory(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferOwnership(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::PendingOwner(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PurchaseDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PurchaseFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RedemptionDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SaleFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetFactory(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferOwnership(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Unpause(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::UpdateBackstopApprovals(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::UpdateDelays(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UpdateDepositCap(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UpdateFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UpdatePauser(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ValidateFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::UpdateDelays(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UpdateDepositCap(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UpdateFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UpdatePauser(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ValidateFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -15331,24 +15178,18 @@ pub mod manager {
             match self {
                 Self::MaxFee(element) => ::core::fmt::Display::fmt(element, f),
                 Self::AcceptOwnership(element) => ::core::fmt::Display::fmt(element, f),
-                Self::AllowedMarketsPerSet(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::AllowedMarketsPerSet(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Backstop(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ClaimCozyFees(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ClaimSetFees(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ConfigUpdateDelay(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ConfigUpdateGracePeriod(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ConfigUpdateGracePeriod(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CreateSet(element) => ::core::fmt::Display::fmt(element, f),
                 Self::DepositFees(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Fees(element) => ::core::fmt::Display::fmt(element, f),
                 Self::GetDepositCap(element) => ::core::fmt::Display::fmt(element, f),
                 Self::IsSet(element) => ::core::fmt::Display::fmt(element, f),
-                Self::MinDepositDuration(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::MinDepositDuration(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Owner(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Pause(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Pauser(element) => ::core::fmt::Display::fmt(element, f),
@@ -15360,9 +15201,7 @@ pub mod manager {
                 Self::SetFactory(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TransferOwnership(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unpause(element) => ::core::fmt::Display::fmt(element, f),
-                Self::UpdateBackstopApprovals(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::UpdateBackstopApprovals(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UpdateDelays(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UpdateDepositCap(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UpdateFees(element) => ::core::fmt::Display::fmt(element, f),
@@ -15535,7 +15374,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxFeeReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `allowedMarketsPerSet` function with signature `allowedMarketsPerSet()` and selector `0x9aeae457`
@@ -15547,7 +15386,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AllowedMarketsPerSetReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `backstop` function with signature `backstop()` and selector `0x7dea1817`
@@ -15559,7 +15398,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BackstopReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `configUpdateDelay` function with signature `configUpdateDelay()` and selector `0xc5f755f0`
@@ -15571,7 +15410,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConfigUpdateDelayReturn(pub u32);
     ///Container type for all return fields from the `configUpdateGracePeriod` function with signature `configUpdateGracePeriod()` and selector `0x31cd4c9c`
@@ -15583,7 +15422,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConfigUpdateGracePeriodReturn(pub u32);
     ///Container type for all return fields from the `createSet` function with signature `createSet(address,address,address,(uint32,uint16),(address,address,address,uint16,uint16,uint16)[],bytes32)` and selector `0x0762ea3d`
@@ -15595,7 +15434,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CreateSetReturn {
         pub set: ::ethers::core::types::Address,
@@ -15609,7 +15448,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DepositFeesReturn {
         pub deposit_fees: ProtocolFees,
@@ -15623,7 +15462,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct FeesReturn {
         pub deposit_fee_reserves: u16,
@@ -15642,7 +15481,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetDepositCapReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `isSet` function with signature `isSet(address)` and selector `0x74ebe3ec`
@@ -15654,7 +15493,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct IsSetReturn(pub bool);
     ///Container type for all return fields from the `minDepositDuration` function with signature `minDepositDuration()` and selector `0x03814568`
@@ -15666,7 +15505,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MinDepositDurationReturn(pub u32);
     ///Container type for all return fields from the `owner` function with signature `owner()` and selector `0x8da5cb5b`
@@ -15678,7 +15517,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct OwnerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `pauser` function with signature `pauser()` and selector `0x9fd0506d`
@@ -15690,7 +15529,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PauserReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `pendingOwner` function with signature `pendingOwner()` and selector `0xe30c3978`
@@ -15702,7 +15541,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PendingOwnerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `purchaseDelay` function with signature `purchaseDelay()` and selector `0xb2eafefa`
@@ -15714,7 +15553,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PurchaseDelayReturn(pub u32);
     ///Container type for all return fields from the `purchaseFees` function with signature `purchaseFees()` and selector `0xb996d0a1`
@@ -15726,7 +15565,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PurchaseFeesReturn {
         pub purchase_fees: ProtocolFees,
@@ -15740,7 +15579,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RedemptionDelayReturn(pub u32);
     ///Container type for all return fields from the `saleFees` function with signature `saleFees()` and selector `0x9c2d7d41`
@@ -15752,7 +15591,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SaleFeesReturn {
         pub sale_fees: ProtocolFees,
@@ -15766,7 +15605,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetFactoryReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `validateFees` function with signature `validateFees((uint16,uint16,uint16,uint16,uint16,uint16))` and selector `0xb1bb227a`
@@ -15778,7 +15617,7 @@ pub mod manager {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ValidateFeesReturn(pub bool);
 }

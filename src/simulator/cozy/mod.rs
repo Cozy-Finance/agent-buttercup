@@ -5,7 +5,8 @@ use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::U256 as EvmU256;
 use simulate::{
-    block_time_policy::FixedBlockTimePolicy, environment::sim_env::SimEnv, manager::SimManager, sim_env_data::SimEnvData
+    block_time_policy::FixedBlockTimePolicy, environment::sim_env::SimEnv, manager::SimManager,
+    sim_env_data::SimEnvData,
 };
 
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
@@ -13,8 +14,11 @@ pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 
 use agents::protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams};
 
+use crate::simulator::cozy::agents::asset_deployer::AssetDeployer;
+
 pub mod agents;
 pub mod bindings_wrapper;
+pub mod deploy_utils;
 pub mod sim_types;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
@@ -32,6 +36,11 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let mut sim_manager = SimManager::new(sim_env, sim_data, time_policy, 99_u64);
 
     // Create and activate agents.
+    let asset_deployer = Box::new(AssetDeployer::new(
+        "Asset deployer".to_owned(),
+    ));
+    sim_manager.activate_agent(asset_deployer);
+
     let deploy_params = ProtocolDeployerParams {
         delays: Delays {
             config_update_delay: EthersU256::from(172800),
