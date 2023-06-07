@@ -7,15 +7,17 @@ pub use set_inspector::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod set_inspector {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InsufficientBalance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Approval\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"reserveFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"setOwnerFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesAccrued\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Transfer\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"DOMAIN_SEPARATOR\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"accounting\",\"outputs\":[{\"internalType\":\"uint128\",\"name\":\"assetBalance\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedSetOwnerFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedCozyReserveFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedCozyBackstopFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"totalPurchasesFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"totalSalesFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"assetsPendingRedemption\",\"type\":\"uint128\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"asset\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"backstop\",\"outputs\":[{\"internalType\":\"contract IBackstop\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOfMatured\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToAssets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToPTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToProtection\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"cumulativeMinted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"dripSupplierFees\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"effectiveActiveProtection\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getMints\",\"outputs\":[{\"internalType\":\"struct MintData[]\",\"name\":\"\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"markets\",\"outputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"ptoken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"struct MarketConfigStorage\",\"name\":\"config\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}]},{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"activeProtection\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"lastDecayRate\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"lastDripRate\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"purchasesFeePool\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"salesFeePool\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"lastDecayTime\",\"type\":\"uint64\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"mints\",\"outputs\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"nonces\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"permit\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ptokenFactory\",\"outputs\":[{\"internalType\":\"contract IPTokenFactory\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setConfig\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setState\",\"outputs\":[{\"internalType\":\"enum SetState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"totalCollateralAvailable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ITrigger\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerLookups\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"marketExists\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId\",\"type\":\"uint16\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"utilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static SETINSPECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static SETINSPECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct SetInspector<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for SetInspector<M> {
         fn clone(&self) -> Self {
@@ -35,7 +37,9 @@ pub mod set_inspector {
     }
     impl<M> ::core::fmt::Debug for SetInspector<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(SetInspector)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(SetInspector))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> SetInspector<M> {
@@ -45,18 +49,14 @@ pub mod set_inspector {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    SETINSPECTOR_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                SETINSPECTOR_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `DOMAIN_SEPARATOR` (0x3644e515) function
-        pub fn domain_separator(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        pub fn domain_separator(&self) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([54, 68, 229, 21], ())
                 .expect("method not found (this should never happen)")
@@ -64,10 +64,8 @@ pub mod set_inspector {
         ///Calls the contract's `accounting` (0x9624e83e) function
         pub fn accounting(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            (u128, u128, u128, u128, u128, u128, u128),
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, (u128, u128, u128, u128, u128, u128, u128)>
+        {
             self.0
                 .method_hash([150, 36, 232, 62], ())
                 .expect("method not found (this should never happen)")
@@ -95,10 +93,7 @@ pub mod set_inspector {
         ///Calls the contract's `asset` (0x38d52e0f) function
         pub fn asset(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([56, 213, 46, 15], ())
                 .expect("method not found (this should never happen)")
@@ -106,10 +101,7 @@ pub mod set_inspector {
         ///Calls the contract's `backstop` (0x7dea1817) function
         pub fn backstop(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([125, 234, 24, 23], ())
                 .expect("method not found (this should never happen)")
@@ -187,9 +179,7 @@ pub mod set_inspector {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `dripSupplierFees` (0x1891661c) function
-        pub fn drip_supplier_fees(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn drip_supplier_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([24, 145, 102, 28], ())
                 .expect("method not found (this should never happen)")
@@ -215,10 +205,7 @@ pub mod set_inspector {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -251,18 +238,14 @@ pub mod set_inspector {
             &self,
             p0: ::ethers::core::types::Address,
             p1: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            (::ethers::core::types::U256, u64),
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, (::ethers::core::types::U256, u64)>
+        {
             self.0
                 .method_hash([11, 237, 211, 167], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `name` (0x06fdde03) function
-        pub fn name(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::std::string::String> {
+        pub fn name(&self) -> ::ethers::contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([6, 253, 222, 3], ())
                 .expect("method not found (this should never happen)")
@@ -297,18 +280,13 @@ pub mod set_inspector {
         ///Calls the contract's `ptokenFactory` (0x764d6892) function
         pub fn ptoken_factory(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([118, 77, 104, 146], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `setConfig` (0x8b673e7a) function
-        pub fn set_config(
-            &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, (u32, u16)> {
+        pub fn set_config(&self) -> ::ethers::contract::builders::ContractCall<M, (u32, u16)> {
             self.0
                 .method_hash([139, 103, 62, 122], ())
                 .expect("method not found (this should never happen)")
@@ -385,46 +363,32 @@ pub mod set_inspector {
         ///Gets the contract's `Approval` event
         pub fn approval_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ApprovalFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ApprovalFilter> {
             self.0.event()
         }
         ///Gets the contract's `FeesAccrued` event
         pub fn fees_accrued_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FeesAccruedFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, FeesAccruedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `Transfer` event
         pub fn transfer_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TransferFilter,
-        > {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, TransferFilter> {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetInspectorEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetInspectorEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for SetInspector<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for SetInspector<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -438,7 +402,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InsufficientBalance", abi = "InsufficientBalance()")]
     pub struct InsufficientBalance;
@@ -451,7 +415,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidState", abi = "InvalidState()")]
     pub struct InvalidState;
@@ -464,7 +428,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -477,7 +441,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "RoundsToZero", abi = "RoundsToZero()")]
     pub struct RoundsToZero;
@@ -490,7 +454,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
@@ -511,32 +475,28 @@ pub mod set_inspector {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InsufficientBalance(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidState as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidState(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RoundsToZero as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RoundsToZero(decoded));
             }
-            if let Ok(decoded)
-                = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SafeCastFailed(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -548,18 +508,12 @@ pub mod set_inspector {
                 Self::InsufficientBalance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::RoundsToZero(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SafeCastFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::RoundsToZero(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SafeCastFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -569,19 +523,18 @@ pub mod set_inspector {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() => {
+                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
+                _ if selector == <InvalidState as ::ethers::contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
+                _ if selector == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -591,13 +544,9 @@ pub mod set_inspector {
     impl ::core::fmt::Display for SetInspectorErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InsufficientBalance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InsufficientBalance(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidState(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RoundsToZero(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SafeCastFailed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
@@ -642,7 +591,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Approval", abi = "Approval(address,address,uint256)")]
     pub struct ApprovalFilter {
@@ -660,7 +609,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "FeesAccrued", abi = "FeesAccrued(uint128,uint128,uint128)")]
     pub struct FeesAccruedFilter {
@@ -676,7 +625,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Transfer", abi = "Transfer(address,address,uint256)")]
     pub struct TransferFilter {
@@ -742,7 +691,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "DOMAIN_SEPARATOR", abi = "DOMAIN_SEPARATOR()")]
     pub struct DomainSeparatorCall;
@@ -755,7 +704,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "accounting", abi = "accounting()")]
     pub struct AccountingCall;
@@ -768,7 +717,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "allowance", abi = "allowance(address,address)")]
     pub struct AllowanceCall(
@@ -784,7 +733,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
@@ -800,7 +749,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "asset", abi = "asset()")]
     pub struct AssetCall;
@@ -813,7 +762,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "backstop", abi = "backstop()")]
     pub struct BackstopCall;
@@ -826,7 +775,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall(pub ::ethers::core::types::Address);
@@ -839,7 +788,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOfMatured", abi = "balanceOfMatured(address)")]
     pub struct BalanceOfMaturedCall {
@@ -854,7 +803,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "convertToAssets", abi = "convertToAssets(uint256)")]
     pub struct ConvertToAssetsCall {
@@ -869,7 +818,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "convertToPTokens", abi = "convertToPTokens(uint16,uint256)")]
     pub struct ConvertToPTokensCall {
@@ -885,9 +834,12 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "convertToProtection", abi = "convertToProtection(uint16,uint256)")]
+    #[ethcall(
+        name = "convertToProtection",
+        abi = "convertToProtection(uint16,uint256)"
+    )]
     pub struct ConvertToProtectionCall {
         pub market_id: u16,
         pub ptokens: ::ethers::core::types::U256,
@@ -901,7 +853,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "convertToShares", abi = "convertToShares(uint256)")]
     pub struct ConvertToSharesCall {
@@ -916,7 +868,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "cumulativeMinted", abi = "cumulativeMinted(address,uint256)")]
     pub struct CumulativeMintedCall(
@@ -932,7 +884,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
@@ -945,7 +897,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "dripSupplierFees", abi = "dripSupplierFees()")]
     pub struct DripSupplierFeesCall;
@@ -958,7 +910,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "effectiveActiveProtection",
@@ -976,7 +928,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getMints", abi = "getMints(address)")]
     pub struct GetMintsCall {
@@ -991,7 +943,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -1004,7 +956,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "markets", abi = "markets(uint256)")]
     pub struct MarketsCall(pub ::ethers::core::types::U256);
@@ -1017,7 +969,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "mints", abi = "mints(address,uint256)")]
     pub struct MintsCall(
@@ -1033,7 +985,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "name", abi = "name()")]
     pub struct NameCall;
@@ -1046,7 +998,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "nonces", abi = "nonces(address)")]
     pub struct NoncesCall(pub ::ethers::core::types::Address);
@@ -1059,7 +1011,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "permit",
@@ -1083,7 +1035,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "ptokenFactory", abi = "ptokenFactory()")]
     pub struct PtokenFactoryCall;
@@ -1096,7 +1048,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "setConfig", abi = "setConfig()")]
     pub struct SetConfigCall;
@@ -1109,7 +1061,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "setState", abi = "setState()")]
     pub struct SetStateCall;
@@ -1122,7 +1074,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "symbol", abi = "symbol()")]
     pub struct SymbolCall;
@@ -1135,7 +1087,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "totalCollateralAvailable", abi = "totalCollateralAvailable()")]
     pub struct TotalCollateralAvailableCall;
@@ -1148,7 +1100,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "totalSupply", abi = "totalSupply()")]
     pub struct TotalSupplyCall;
@@ -1161,7 +1113,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
@@ -1177,7 +1129,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -1194,7 +1146,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "triggerLookups", abi = "triggerLookups(address)")]
     pub struct TriggerLookupsCall(pub ::ethers::core::types::Address);
@@ -1207,7 +1159,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "utilization", abi = "utilization(uint16)")]
     pub struct UtilizationCall {
@@ -1255,150 +1207,127 @@ pub mod set_inspector {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <DomainSeparatorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <DomainSeparatorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DomainSeparator(decoded));
             }
-            if let Ok(decoded)
-                = <AccountingCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AccountingCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Accounting(decoded));
             }
-            if let Ok(decoded)
-                = <AllowanceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AllowanceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Allowance(decoded));
             }
-            if let Ok(decoded)
-                = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Approve(decoded));
             }
-            if let Ok(decoded)
-                = <AssetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AssetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Asset(decoded));
             }
-            if let Ok(decoded)
-                = <BackstopCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BackstopCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Backstop(decoded));
             }
-            if let Ok(decoded)
-                = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BalanceOf(decoded));
             }
-            if let Ok(decoded)
-                = <BalanceOfMaturedCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <BalanceOfMaturedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::BalanceOfMatured(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToAssetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <ConvertToAssetsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToAssets(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToPTokensCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConvertToPTokensCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToPTokens(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToProtectionCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <ConvertToProtectionCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToProtection(decoded));
             }
-            if let Ok(decoded)
-                = <ConvertToSharesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <ConvertToSharesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::ConvertToShares(decoded));
             }
-            if let Ok(decoded)
-                = <CumulativeMintedCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CumulativeMintedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CumulativeMinted(decoded));
             }
-            if let Ok(decoded)
-                = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Decimals(decoded));
             }
-            if let Ok(decoded)
-                = <DripSupplierFeesCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <DripSupplierFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DripSupplierFees(decoded));
             }
-            if let Ok(decoded)
-                = <EffectiveActiveProtectionCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <EffectiveActiveProtectionCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::EffectiveActiveProtection(decoded));
             }
-            if let Ok(decoded)
-                = <GetMintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetMintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetMints(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <MarketsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MarketsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Markets(decoded));
             }
-            if let Ok(decoded)
-                = <MintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Mints(decoded));
             }
-            if let Ok(decoded)
-                = <NameCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <NameCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Name(decoded));
             }
-            if let Ok(decoded)
-                = <NoncesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <NoncesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Nonces(decoded));
             }
-            if let Ok(decoded)
-                = <PermitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PermitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Permit(decoded));
             }
-            if let Ok(decoded)
-                = <PtokenFactoryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PtokenFactoryCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PtokenFactory(decoded));
             }
-            if let Ok(decoded)
-                = <SetConfigCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetConfigCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetConfig(decoded));
             }
-            if let Ok(decoded)
-                = <SetStateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetStateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetState(decoded));
             }
-            if let Ok(decoded)
-                = <SymbolCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SymbolCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Symbol(decoded));
             }
-            if let Ok(decoded)
-                = <TotalCollateralAvailableCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <TotalCollateralAvailableCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TotalCollateralAvailable(decoded));
             }
-            if let Ok(decoded)
-                = <TotalSupplyCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TotalSupplyCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::TotalSupply(decoded));
             }
-            if let Ok(decoded)
-                = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Transfer(decoded));
             }
-            if let Ok(decoded)
-                = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TransferFrom(decoded));
             }
-            if let Ok(decoded)
-                = <TriggerLookupsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TriggerLookupsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TriggerLookups(decoded));
             }
-            if let Ok(decoded)
-                = <UtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Utilization(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -1407,87 +1336,45 @@ pub mod set_inspector {
     impl ::ethers::core::abi::AbiEncode for SetInspectorCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DomainSeparator(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Accounting(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Allowance(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::DomainSeparator(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Accounting(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Allowance(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Approve(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Asset(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Backstop(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::BalanceOf(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::BalanceOfMatured(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ConvertToAssets(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::ConvertToPTokens(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Backstop(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BalanceOf(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BalanceOfMatured(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ConvertToAssets(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ConvertToPTokens(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::ConvertToProtection(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::ConvertToShares(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::CumulativeMinted(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Decimals(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::DripSupplierFees(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::ConvertToShares(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::CumulativeMinted(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Decimals(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DripSupplierFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::EffectiveActiveProtection(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::GetMints(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetMints(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Markets(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Mints(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Name(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Nonces(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Permit(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PtokenFactory(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SetConfig(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SetState(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::PtokenFactory(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetConfig(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetState(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Symbol(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::TotalCollateralAvailable(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::TotalSupply(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Transfer(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferFrom(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TriggerLookups(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Utilization(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::TotalSupply(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Transfer(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferFrom(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TriggerLookups(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Utilization(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -1504,16 +1391,12 @@ pub mod set_inspector {
                 Self::BalanceOfMatured(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ConvertToAssets(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ConvertToPTokens(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ConvertToProtection(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::ConvertToProtection(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ConvertToShares(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CumulativeMinted(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Decimals(element) => ::core::fmt::Display::fmt(element, f),
                 Self::DripSupplierFees(element) => ::core::fmt::Display::fmt(element, f),
-                Self::EffectiveActiveProtection(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::EffectiveActiveProtection(element) => ::core::fmt::Display::fmt(element, f),
                 Self::GetMints(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Manager(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Markets(element) => ::core::fmt::Display::fmt(element, f),
@@ -1525,9 +1408,7 @@ pub mod set_inspector {
                 Self::SetConfig(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetState(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Symbol(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TotalCollateralAvailable(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TotalCollateralAvailable(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TotalSupply(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Transfer(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TransferFrom(element) => ::core::fmt::Display::fmt(element, f),
@@ -1710,7 +1591,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DomainSeparatorReturn(pub [u8; 32]);
     ///Container type for all return fields from the `accounting` function with signature `accounting()` and selector `0x9624e83e`
@@ -1722,7 +1603,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AccountingReturn {
         pub asset_balance: u128,
@@ -1742,7 +1623,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AllowanceReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
@@ -1754,7 +1635,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ApproveReturn(pub bool);
     ///Container type for all return fields from the `asset` function with signature `asset()` and selector `0x38d52e0f`
@@ -1766,7 +1647,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AssetReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `backstop` function with signature `backstop()` and selector `0x7dea1817`
@@ -1778,7 +1659,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BackstopReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
@@ -1790,7 +1671,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `balanceOfMatured` function with signature `balanceOfMatured(address)` and selector `0x3489b7a4`
@@ -1802,7 +1683,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfMaturedReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `convertToAssets` function with signature `convertToAssets(uint256)` and selector `0x07a2d13a`
@@ -1814,7 +1695,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToAssetsReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `convertToPTokens` function with signature `convertToPTokens(uint16,uint256)` and selector `0x81c1a18c`
@@ -1826,7 +1707,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToPTokensReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `convertToProtection` function with signature `convertToProtection(uint16,uint256)` and selector `0x1437feaa`
@@ -1838,7 +1719,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToProtectionReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `convertToShares` function with signature `convertToShares(uint256)` and selector `0xc6e6f592`
@@ -1850,7 +1731,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ConvertToSharesReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `cumulativeMinted` function with signature `cumulativeMinted(address,uint256)` and selector `0xf6eab327`
@@ -1862,7 +1743,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CumulativeMintedReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `decimals` function with signature `decimals()` and selector `0x313ce567`
@@ -1874,7 +1755,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DecimalsReturn(pub u8);
     ///Container type for all return fields from the `effectiveActiveProtection` function with signature `effectiveActiveProtection(uint16)` and selector `0x17766c81`
@@ -1886,7 +1767,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct EffectiveActiveProtectionReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getMints` function with signature `getMints(address)` and selector `0x74ce5671`
@@ -1898,7 +1779,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetMintsReturn(pub ::std::vec::Vec<MintData>);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -1910,7 +1791,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `markets` function with signature `markets(uint256)` and selector `0xb1283e77`
@@ -1922,7 +1803,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MarketsReturn {
         pub ptoken: ::ethers::core::types::Address,
@@ -1945,7 +1826,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MintsReturn {
         pub amount: ::ethers::core::types::U256,
@@ -1960,7 +1841,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct NameReturn(pub ::std::string::String);
     ///Container type for all return fields from the `nonces` function with signature `nonces(address)` and selector `0x7ecebe00`
@@ -1972,7 +1853,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct NoncesReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `ptokenFactory` function with signature `ptokenFactory()` and selector `0x764d6892`
@@ -1984,7 +1865,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PtokenFactoryReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `setConfig` function with signature `setConfig()` and selector `0x8b673e7a`
@@ -1996,7 +1877,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetConfigReturn {
         pub leverage_factor: u32,
@@ -2011,7 +1892,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetStateReturn(pub u8);
     ///Container type for all return fields from the `symbol` function with signature `symbol()` and selector `0x95d89b41`
@@ -2023,7 +1904,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SymbolReturn(pub ::std::string::String);
     ///Container type for all return fields from the `totalCollateralAvailable` function with signature `totalCollateralAvailable()` and selector `0xaf04be85`
@@ -2035,7 +1916,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TotalCollateralAvailableReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `totalSupply` function with signature `totalSupply()` and selector `0x18160ddd`
@@ -2047,7 +1928,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TotalSupplyReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
@@ -2059,7 +1940,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferReturn(pub bool);
     ///Container type for all return fields from the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
@@ -2071,7 +1952,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferFromReturn(pub bool);
     ///Container type for all return fields from the `triggerLookups` function with signature `triggerLookups(address)` and selector `0x58cfaac7`
@@ -2083,7 +1964,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TriggerLookupsReturn {
         pub market_exists: bool,
@@ -2098,7 +1979,7 @@ pub mod set_inspector {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct UtilizationReturn(pub ::ethers::core::types::U256);
 }

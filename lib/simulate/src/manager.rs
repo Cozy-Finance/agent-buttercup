@@ -11,6 +11,7 @@ use crate::{
     agent::{Agent, AgentId},
     block_time_policy::BlockTimePolicy,
     environment::sim_env::SimEnv,
+    sim_env_data::SimEnvData,
     EvmAddress,
 };
 
@@ -28,6 +29,7 @@ pub enum ManagerError {
 pub struct SimManager {
     /// [`SimulationEnvironment`] that the simulation manager controls.
     pub environment: SimEnv,
+    pub data: SimEnvData,
     /// Implements the [`BlockTimePolicy`] trait to manage time in the simulation.
     pub time_policy: Box<dyn BlockTimePolicy>,
     /// The agents that are currently running in the [`SimulationEnvironment`].
@@ -37,9 +39,15 @@ pub struct SimManager {
 }
 
 impl SimManager {
-    pub fn new(environment: SimEnv, time_policy: Box<dyn BlockTimePolicy>, rng_seed: u64) -> Self {
+    pub fn new(
+        environment: SimEnv,
+        data: SimEnvData,
+        time_policy: Box<dyn BlockTimePolicy>,
+        rng_seed: u64,
+    ) -> Self {
         Self {
             environment,
+            data,
             time_policy,
             agents: BTreeMap::new(),
             rng: StdRng::seed_from_u64(rng_seed),
@@ -53,7 +61,7 @@ impl SimManager {
 
         while self.time_policy.is_active() {
             for (_, agent) in &mut self.agents {
-                agent.step(&mut self.environment);
+                agent.step(&mut self.environment, &mut self.data);
             }
             self.environment
                 .update_block_time_env(self.time_policy.step());
@@ -75,7 +83,7 @@ impl SimManager {
         self.environment
             .add_account_info(new_agent_address, AccountInfo::default());
         new_agent.register_address(&new_agent_address);
-        new_agent.activation_step(&mut self.environment);
+        new_agent.activation_step(&mut self.environment, &mut self.data);
         self.agents.insert(
             AgentId {
                 id_num: self.agents.len() as u64,

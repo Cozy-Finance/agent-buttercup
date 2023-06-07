@@ -7,18 +7,16 @@ pub use cost_model_dynamic_level::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod cost_model_dynamic_level {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"uLow_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"uHigh_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorAtZeroUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorAtFullUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorInOptimalZone_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"optimalZoneRate_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidReferencePoint\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidTime\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidUtilization\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetAlreadyRegistered\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"costFactorInOptimalZone\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"lastUpdateTime\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"UpdatedDynamicLevelModelParameters\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"a\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"b\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"_min\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"fromUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"toUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtFullUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtZeroUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorInOptimalZone\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"lastUpdateTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"optimalZoneRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"fromUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"toUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"registerSet\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uHigh\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uLow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uOpt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"update\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COSTMODELDYNAMICLEVEL_ABI: ::ethers::contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static COSTMODELDYNAMICLEVEL_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -4526,9 +4524,8 @@ pub mod cost_model_dynamic_level {
         51,
     ];
     ///The bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVEL_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static COSTMODELDYNAMICLEVEL_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -8279,9 +8276,8 @@ pub mod cost_model_dynamic_level {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static COSTMODELDYNAMICLEVEL_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static COSTMODELDYNAMICLEVEL_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct CostModelDynamicLevel<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelDynamicLevel<M> {
         fn clone(&self) -> Self {
@@ -8313,13 +8309,11 @@ pub mod cost_model_dynamic_level {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    COSTMODELDYNAMICLEVEL_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                COSTMODELDYNAMICLEVEL_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -8439,10 +8433,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `setAddress` (0xe6569275) function
         pub fn set_address(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([230, 86, 146, 117], ())
                 .expect("method not found (this should never happen)")
@@ -8499,11 +8490,13 @@ pub mod cost_model_dynamic_level {
             M,
             UpdatedDynamicLevelModelParametersFilter,
         > {
-            self.0.event_with_filter(::core::default::Default::default())
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for CostModelDynamicLevel<M> {
+        for CostModelDynamicLevel<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -8517,7 +8510,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidConfiguration", abi = "InvalidConfiguration()")]
     pub struct InvalidConfiguration;
@@ -8530,7 +8523,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidReferencePoint", abi = "InvalidReferencePoint()")]
     pub struct InvalidReferencePoint;
@@ -8543,7 +8536,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidTime", abi = "InvalidTime()")]
     pub struct InvalidTime;
@@ -8556,7 +8549,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidUtilization", abi = "InvalidUtilization()")]
     pub struct InvalidUtilization;
@@ -8569,7 +8562,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SetAlreadyRegistered", abi = "SetAlreadyRegistered()")]
     pub struct SetAlreadyRegistered;
@@ -8582,7 +8575,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -8604,40 +8597,35 @@ pub mod cost_model_dynamic_level {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidConfiguration as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidConfiguration(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidReferencePoint as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidReferencePoint as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidReferencePoint(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidTime as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidTime as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidTime(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidUtilization as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InvalidUtilization as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <SetAlreadyRegistered as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <SetAlreadyRegistered as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::SetAlreadyRegistered(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -8652,18 +8640,14 @@ pub mod cost_model_dynamic_level {
                 Self::InvalidReferencePoint(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidTime(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidTime(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidUtilization(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::SetAlreadyRegistered(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -8673,25 +8657,27 @@ pub mod cost_model_dynamic_level {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() =>
+                {
+                    true
+                }
+                _ if selector == <InvalidTime as ::ethers::contract::EthError>::selector() => true,
+                _ if selector
+                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <InvalidTime as ::ethers::contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() => {
+                    == <SetAlreadyRegistered as ::ethers::contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <SetAlreadyRegistered as ::ethers::contract::EthError>::selector() => {
-                    true
-                }
-                _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -8699,19 +8685,11 @@ pub mod cost_model_dynamic_level {
     impl ::core::fmt::Display for CostModelDynamicLevelErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InvalidConfiguration(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::InvalidReferencePoint(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidConfiguration(element) => ::core::fmt::Display::fmt(element, f),
+                Self::InvalidReferencePoint(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidTime(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::SetAlreadyRegistered(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidUtilization(element) => ::core::fmt::Display::fmt(element, f),
+                Self::SetAlreadyRegistered(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }
@@ -8760,7 +8738,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "UpdatedDynamicLevelModelParameters",
@@ -8779,7 +8757,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "_min", abi = "_min(uint256,uint256)")]
     pub struct MinCall {
@@ -8795,7 +8773,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "costFactor", abi = "costFactor(uint256,uint256)")]
     pub struct CostFactorCall {
@@ -8811,7 +8789,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "costFactorAtFullUtilization",
@@ -8827,7 +8805,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "costFactorAtZeroUtilization",
@@ -8843,7 +8821,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "costFactorInOptimalZone", abi = "costFactorInOptimalZone()")]
     pub struct CostFactorInOptimalZoneCall;
@@ -8856,7 +8834,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "lastUpdateTime", abi = "lastUpdateTime()")]
     pub struct LastUpdateTimeCall;
@@ -8869,7 +8847,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "optimalZoneRate", abi = "optimalZoneRate()")]
     pub struct OptimalZoneRateCall;
@@ -8882,7 +8860,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "refundFactor", abi = "refundFactor(uint256,uint256)")]
     pub struct RefundFactorCall {
@@ -8898,7 +8876,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "registerSet", abi = "registerSet()")]
     pub struct RegisterSetCall;
@@ -8911,7 +8889,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "setAddress", abi = "setAddress()")]
     pub struct SetAddressCall;
@@ -8924,7 +8902,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "uHigh", abi = "uHigh()")]
     pub struct UhighCall;
@@ -8937,7 +8915,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "uLow", abi = "uLow()")]
     pub struct UlowCall;
@@ -8950,7 +8928,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "uOpt", abi = "uOpt()")]
     pub struct UoptCall;
@@ -8963,7 +8941,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "update", abi = "update(uint256,uint256)")]
     pub struct UpdateCall {
@@ -8993,66 +8971,57 @@ pub mod cost_model_dynamic_level {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <MinCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MinCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Min(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::CostFactor(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorAtFullUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorAtFullUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorAtFullUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorAtZeroUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorAtZeroUtilizationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorAtZeroUtilization(decoded));
             }
-            if let Ok(decoded)
-                = <CostFactorInOptimalZoneCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CostFactorInOptimalZoneCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CostFactorInOptimalZone(decoded));
             }
-            if let Ok(decoded)
-                = <LastUpdateTimeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <LastUpdateTimeCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::LastUpdateTime(decoded));
             }
-            if let Ok(decoded)
-                = <OptimalZoneRateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <OptimalZoneRateCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::OptimalZoneRate(decoded));
             }
-            if let Ok(decoded)
-                = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RefundFactor(decoded));
             }
-            if let Ok(decoded)
-                = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RegisterSet(decoded));
             }
-            if let Ok(decoded)
-                = <SetAddressCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetAddressCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetAddress(decoded));
             }
-            if let Ok(decoded)
-                = <UhighCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UhighCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Uhigh(decoded));
             }
-            if let Ok(decoded)
-                = <UlowCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UlowCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Ulow(decoded));
             }
-            if let Ok(decoded)
-                = <UoptCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UoptCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Uopt(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Update(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -9062,9 +9031,7 @@ pub mod cost_model_dynamic_level {
         fn encode(self) -> Vec<u8> {
             match self {
                 Self::Min(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::CostFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CostFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::CostFactorAtFullUtilization(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -9074,21 +9041,11 @@ pub mod cost_model_dynamic_level {
                 Self::CostFactorInOptimalZone(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::LastUpdateTime(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::OptimalZoneRate(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RefundFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RegisterSet(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SetAddress(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::LastUpdateTime(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::OptimalZoneRate(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RefundFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RegisterSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetAddress(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Uhigh(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Ulow(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Uopt(element) => ::ethers::core::abi::AbiEncode::encode(element),
@@ -9101,15 +9058,9 @@ pub mod cost_model_dynamic_level {
             match self {
                 Self::Min(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CostFactor(element) => ::core::fmt::Display::fmt(element, f),
-                Self::CostFactorAtFullUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::CostFactorAtZeroUtilization(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::CostFactorInOptimalZone(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::CostFactorAtFullUtilization(element) => ::core::fmt::Display::fmt(element, f),
+                Self::CostFactorAtZeroUtilization(element) => ::core::fmt::Display::fmt(element, f),
+                Self::CostFactorInOptimalZone(element) => ::core::fmt::Display::fmt(element, f),
                 Self::LastUpdateTime(element) => ::core::fmt::Display::fmt(element, f),
                 Self::OptimalZoneRate(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RefundFactor(element) => ::core::fmt::Display::fmt(element, f),
@@ -9132,20 +9083,17 @@ pub mod cost_model_dynamic_level {
             Self::CostFactor(value)
         }
     }
-    impl ::core::convert::From<CostFactorAtFullUtilizationCall>
-    for CostModelDynamicLevelCalls {
+    impl ::core::convert::From<CostFactorAtFullUtilizationCall> for CostModelDynamicLevelCalls {
         fn from(value: CostFactorAtFullUtilizationCall) -> Self {
             Self::CostFactorAtFullUtilization(value)
         }
     }
-    impl ::core::convert::From<CostFactorAtZeroUtilizationCall>
-    for CostModelDynamicLevelCalls {
+    impl ::core::convert::From<CostFactorAtZeroUtilizationCall> for CostModelDynamicLevelCalls {
         fn from(value: CostFactorAtZeroUtilizationCall) -> Self {
             Self::CostFactorAtZeroUtilization(value)
         }
     }
-    impl ::core::convert::From<CostFactorInOptimalZoneCall>
-    for CostModelDynamicLevelCalls {
+    impl ::core::convert::From<CostFactorInOptimalZoneCall> for CostModelDynamicLevelCalls {
         fn from(value: CostFactorInOptimalZoneCall) -> Self {
             Self::CostFactorInOptimalZone(value)
         }
@@ -9204,7 +9152,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MinReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactor` function with signature `costFactor(uint256,uint256)` and selector `0xd7c856b3`
@@ -9216,7 +9164,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
@@ -9228,7 +9176,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorAtFullUtilizationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
@@ -9240,7 +9188,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorAtZeroUtilizationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `costFactorInOptimalZone` function with signature `costFactorInOptimalZone()` and selector `0x75df2826`
@@ -9252,7 +9200,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorInOptimalZoneReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `lastUpdateTime` function with signature `lastUpdateTime()` and selector `0xc8f33c91`
@@ -9264,7 +9212,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct LastUpdateTimeReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `optimalZoneRate` function with signature `optimalZoneRate()` and selector `0x003dfe60`
@@ -9276,7 +9224,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct OptimalZoneRateReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
@@ -9288,7 +9236,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RefundFactorReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `setAddress` function with signature `setAddress()` and selector `0xe6569275`
@@ -9300,7 +9248,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetAddressReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `uHigh` function with signature `uHigh()` and selector `0xbcc6f012`
@@ -9312,7 +9260,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct UhighReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `uLow` function with signature `uLow()` and selector `0x04ab36c9`
@@ -9324,7 +9272,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct UlowReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `uOpt` function with signature `uOpt()` and selector `0x80a3af36`
@@ -9336,7 +9284,7 @@ pub mod cost_model_dynamic_level {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct UoptReturn(pub ::ethers::core::types::U256);
 }

@@ -3,11 +3,12 @@ use lazy_static::lazy_static;
 
 use crate::simulator::cozy::EthersBytes;
 use bindings::{
-    backstop::*, chainlink_trigger_factory::*, configurator_lib::*, drip_decay_model_constant_factory::*,
+    backstop::*, chainlink_trigger_factory::*, configurator_lib::*,
     cost_model_dynamic_level_factory::*, cost_model_jump_rate_factory::*, cozy_models::metadata::*,
     cozy_protocol::metadata::*, cozy_router::*, cozy_triggers::metadata::*, delay_lib::*,
-    demand_side_lib::*, manager::*, p_token::*, p_token_factory::*, redemption_lib::*, set::*,
-    set_factory::*, state_transitions_lib::*, supply_side_lib::*, uma_trigger_factory::*, dummy_trigger::*
+    demand_side_lib::*, drip_decay_model_constant_factory::*, dummy_trigger::*, manager::*,
+    p_token::*, p_token_factory::*, redemption_lib::*, set::*, set_factory::*,
+    state_transitions_lib::*, supply_side_lib::*, uma_trigger_factory::*,
 };
 
 #[derive(Debug)]

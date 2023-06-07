@@ -7,14 +7,16 @@ pub use i_backstop_events::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_backstop_events {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bool\",\"name\":\"status_\",\"type\":\"bool\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"BackstopApprovalStatusUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Claim\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static IBACKSTOPEVENTS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static IBACKSTOPEVENTS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers::contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IBackstopEvents<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IBackstopEvents<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_backstop_events {
     }
     impl<M> ::core::fmt::Debug for IBackstopEvents<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IBackstopEvents)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IBackstopEvents))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IBackstopEvents<M> {
@@ -44,13 +48,11 @@ pub mod i_backstop_events {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers::contract::Contract::new(
-                    address.into(),
-                    IBACKSTOPEVENTS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers::contract::Contract::new(
+                address.into(),
+                IBACKSTOPEVENTS_ABI.clone(),
+                client,
+            ))
         }
         ///Gets the contract's `BackstopApprovalStatusUpdated` event
         pub fn backstop_approval_status_updated_filter(
@@ -71,16 +73,15 @@ pub mod i_backstop_events {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            IBackstopEventsEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IBackstopEventsEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IBackstopEvents<M> {
+        for IBackstopEvents<M>
+    {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -93,7 +94,7 @@ pub mod i_backstop_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "BackstopApprovalStatusUpdated",
@@ -112,7 +113,7 @@ pub mod i_backstop_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Claim", abi = "Claim(address,address,uint256)")]
     pub struct ClaimFilter {
@@ -133,9 +134,9 @@ pub mod i_backstop_events {
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
             if let Ok(decoded) = BackstopApprovalStatusUpdatedFilter::decode_log(log) {
-                return Ok(
-                    IBackstopEventsEvents::BackstopApprovalStatusUpdatedFilter(decoded),
-                );
+                return Ok(IBackstopEventsEvents::BackstopApprovalStatusUpdatedFilter(
+                    decoded,
+                ));
             }
             if let Ok(decoded) = ClaimFilter::decode_log(log) {
                 return Ok(IBackstopEventsEvents::ClaimFilter(decoded));
@@ -153,8 +154,7 @@ pub mod i_backstop_events {
             }
         }
     }
-    impl ::core::convert::From<BackstopApprovalStatusUpdatedFilter>
-    for IBackstopEventsEvents {
+    impl ::core::convert::From<BackstopApprovalStatusUpdatedFilter> for IBackstopEventsEvents {
         fn from(value: BackstopApprovalStatusUpdatedFilter) -> Self {
             Self::BackstopApprovalStatusUpdatedFilter(value)
         }
