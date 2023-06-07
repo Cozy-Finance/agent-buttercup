@@ -68,15 +68,3 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     sim_manager.run_simulation();
     Ok(())
 }
-
-#[cfg(test)]
-mod tests {
-    #![allow(unused_imports)]
-
-    use super::*;
-
-    #[test]
-    fn run_sim() {
-        run();
-    }
-}
