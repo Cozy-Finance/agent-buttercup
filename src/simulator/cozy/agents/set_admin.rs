@@ -30,6 +30,7 @@ use crate::simulator::cozy::{
     bindings_wrapper::*,
     sim_types::CozySimTrigger,
     {EthersAddress, EthersBytes, EvmAddress},
+    deploy_utils
 };
 
 #[derive(Debug, Error)]
@@ -83,7 +84,8 @@ impl Agent for SetAdmin {
         let trigger_addrs = self
             .set_admin_params
             .triggers
-            .iter()
+            .clone()
+            .into_iter()
             .map(|trigger| match trigger {
                 CozySimTrigger::DummyTrigger => self.deploy_dummy_trigger(sim_env, sim_data),
             })
@@ -171,6 +173,7 @@ impl SetAdmin {
             factory.encode_function("deployModel", args)?,
         ))?;
         let result = DeployCostModelJumpRateReturn::decode(result)?;
+        println!("Cost model deployed at address {}.", result.model);
 
         Ok(result.model)
     }
@@ -211,26 +214,25 @@ impl SetAdmin {
             factory.encode_function("deployModel", args)?,
         ))?;
         let result = DeployDripDecayModelConstantReturn::decode(result)?;
+        println!("Drip decay model deployed at address {}.", result.model);
 
         Ok(result.model)
     }
 
     fn deploy_dummy_trigger(
-        &self,
+        &mut self,
         sim_env: &mut SimEnv,
         sim_data: &mut SimEnvData,
     ) -> Result<EthersAddress> {
-        let factory = sim_data
-            .contract_registry
-            .get(DUMMYTRIGGER.name)
-            .ok_or(SetAdminError::UnregisteredAddress)?;
-        let result = self.call_contract(
+        let manager_addr = sim_data.contract_registry.get(MANAGER.name).unwrap().address;
+        deploy_utils::deploy_linked_contract_with_args(
+            self,
             sim_env,
-            factory,
-            factory.encode_function("deployModel", ())?,
-        );
-        let result = factory.decode_output("deployModel", unpack_execution(result)?)?;
-
+            sim_data,
+            &DUMMYTRIGGER,
+            (manager_addr,)
+        )?;
+        let result = sim_data.contract_registry.get(DUMMYTRIGGER.name).unwrap().address;
         Ok(result)
     }
 
@@ -250,6 +252,7 @@ impl SetAdmin {
             manager.encode_function("createSet", args)?,
         ))?;
         let result = CreateSetReturn::decode(result)?;
+        println!("Set deployed at address {}.", result.set);
         Ok(result.set)
     }
 }

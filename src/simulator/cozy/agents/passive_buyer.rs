@@ -49,7 +49,6 @@ use simulate::{
     utils::unpack_execution,
 };
 
-
 pub struct PassiveBuyer {
     name: String,
     deploy_params: ProtocolDeployerParams,
