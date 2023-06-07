@@ -7,7 +7,7 @@
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct BackstopApproval {
     pub set: ::ethers::core::types::Address,
@@ -22,7 +22,7 @@ pub struct BackstopApproval {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct Delays {
     pub config_update_delay: ::ethers::core::types::U256,
@@ -40,7 +40,7 @@ pub struct Delays {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct DepositFeesAssets {
     pub reserve_fee_assets: u128,
@@ -56,7 +56,7 @@ pub struct DepositFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct Fees {
     pub deposit_fee_reserves: u16,
@@ -75,7 +75,7 @@ pub struct Fees {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MarketConfig {
     pub trigger: ::ethers::core::types::Address,
@@ -94,7 +94,7 @@ pub struct MarketConfig {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MarketConfigStorage {
     pub cost_model: ::ethers::core::types::Address,
@@ -112,7 +112,7 @@ pub struct MarketConfigStorage {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct MintData {
     pub amount: ::ethers::core::types::U256,
@@ -127,7 +127,7 @@ pub struct MintData {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct ProtocolFees {
     pub reserve_fee: u16,
@@ -142,7 +142,7 @@ pub struct ProtocolFees {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct PurchaseFeesAssets {
     pub total_cost: u128,
@@ -160,7 +160,7 @@ pub struct PurchaseFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct RedemptionPreview {
     pub delay_remaining: u64,
@@ -178,7 +178,7 @@ pub struct RedemptionPreview {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct SaleFeesAssets {
     pub reserve_fee_assets: u128,
@@ -194,7 +194,7 @@ pub struct SaleFeesAssets {
     Debug,
     PartialEq,
     Eq,
-    Hash,
+    Hash
 )]
 pub struct SetConfig {
     pub leverage_factor: u32,

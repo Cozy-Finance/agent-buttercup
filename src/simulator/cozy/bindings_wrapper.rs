@@ -8,7 +8,10 @@ use bindings::{
     cozy_protocol::metadata::*, cozy_router::*, cozy_triggers::metadata::*, delay_lib::*,
     demand_side_lib::*, drip_decay_model_constant_factory::*, dummy_trigger::*, manager::*,
     p_token::*, p_token_factory::*, redemption_lib::*, set::*, set_factory::*,
-    state_transitions_lib::*, supply_side_lib::*, uma_trigger_factory::*,
+    state_transitions_lib::*, supply_side_lib::*, uma_trigger_factory::*, weth::{
+        metadata::*,
+        weth9::*
+    }
 };
 
 #[derive(Debug)]
@@ -153,5 +156,12 @@ lazy_static! {
         unlinked_bytecode: None,
         name: DUMMYTRIGGER_NAME,
         path: DUMMYTRIGGER_PATH
+    };
+    pub static ref WETH: BindingsWrapper = BindingsWrapper {
+        abi: &WETH9_ABI,
+        bytecode: Some(&WETH9_BYTECODE),
+        unlinked_bytecode: None,
+        name: WETH9_NAME,
+        path: WETH9_PATH
     };
 }

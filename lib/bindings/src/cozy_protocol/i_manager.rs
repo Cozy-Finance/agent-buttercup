@@ -7,17 +7,15 @@ pub use i_manager::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_manager {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint128\",\"name\":\"reserveAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"CozyFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"DelaysUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"depositCap_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DepositCapUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"amount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowedMarketsPerSet\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateGracePeriod\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"depositFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getDepositCap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"minDepositDuration\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"pause\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"pauser\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"redemptionDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"redemptionDelay_\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"saleFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unpause\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IMANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IMANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     pub struct IManager<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IManager<M> {
         fn clone(&self) -> Self {
@@ -37,9 +35,7 @@ pub mod i_manager {
     }
     impl<M> ::core::fmt::Debug for IManager<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IManager))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(IManager)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IManager<M> {
@@ -49,11 +45,13 @@ pub mod i_manager {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                IMANAGER_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    IMANAGER_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `allowedMarketsPerSet` (0x9aeae457) function
         pub fn allowed_markets_per_set(
@@ -64,7 +62,9 @@ pub mod i_manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `configUpdateDelay` (0xc5f755f0) function
-        pub fn config_update_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn config_update_delay(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([197, 247, 85, 240], ())
                 .expect("method not found (this should never happen)")
@@ -78,7 +78,9 @@ pub mod i_manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `depositFees` (0x26741e7d) function
-        pub fn deposit_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn deposit_fees(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([38, 116, 30, 125], ())
                 .expect("method not found (this should never happen)")
@@ -102,7 +104,9 @@ pub mod i_manager {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `minDepositDuration` (0x03814568) function
-        pub fn min_deposit_duration(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn min_deposit_duration(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([3, 129, 69, 104], ())
                 .expect("method not found (this should never happen)")
@@ -110,7 +114,10 @@ pub mod i_manager {
         ///Calls the contract's `owner` (0x8da5cb5b) function
         pub fn owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([141, 165, 203, 91], ())
                 .expect("method not found (this should never happen)")
@@ -127,31 +134,42 @@ pub mod i_manager {
         ///Calls the contract's `pauser` (0x9fd0506d) function
         pub fn pauser(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([159, 208, 80, 109], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `purchaseDelay` (0xb2eafefa) function
-        pub fn purchase_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn purchase_delay(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([178, 234, 254, 250], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `purchaseFees` (0xb996d0a1) function
-        pub fn purchase_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn purchase_fees(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([185, 150, 208, 161], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `redemptionDelay` (0x9b31c3a8) function
-        pub fn redemption_delay(&self) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        pub fn redemption_delay(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([155, 49, 195, 168], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `saleFees` (0x9c2d7d41) function
-        pub fn sale_fees(&self) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        pub fn sale_fees(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([156, 45, 125, 65], ())
                 .expect("method not found (this should never happen)")
@@ -168,47 +186,66 @@ pub mod i_manager {
         ///Gets the contract's `CozyFeesClaimed` event
         pub fn cozy_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, CozyFeesClaimedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            CozyFeesClaimedFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `DelaysUpdated` event
         pub fn delays_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DelaysUpdatedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            DelaysUpdatedFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `DepositCapUpdated` event
         pub fn deposit_cap_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DepositCapUpdatedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            DepositCapUpdatedFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `FeesUpdated` event
         pub fn fees_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, FeesUpdatedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            FeesUpdatedFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `SetFeesClaimed` event
         pub fn set_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetFeesClaimedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            SetFeesClaimedFilter,
+        > {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IManagerEvents> {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            IManagerEvents,
+        > {
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for IManager<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for IManager<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -221,7 +258,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "CozyFeesClaimed",
@@ -241,7 +278,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "DelaysUpdated",
@@ -258,7 +295,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "DepositCapUpdated", abi = "DepositCapUpdated(address,uint256)")]
     pub struct DepositCapUpdatedFilter {
@@ -274,7 +311,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(
         name = "FeesUpdated",
@@ -291,12 +328,9 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
-    #[ethevent(
-        name = "SetFeesClaimed",
-        abi = "SetFeesClaimed(address,address,uint128)"
-    )]
+    #[ethevent(name = "SetFeesClaimed", abi = "SetFeesClaimed(address,address,uint128)")]
     pub struct SetFeesClaimedFilter {
         #[ethevent(indexed)]
         pub set: ::ethers::core::types::Address,
@@ -337,11 +371,19 @@ pub mod i_manager {
     impl ::core::fmt::Display for IManagerEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::CozyFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::DelaysUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::DepositCapUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::CozyFeesClaimedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::DelaysUpdatedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::DepositCapUpdatedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::FeesUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::SetFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::SetFeesClaimedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
             }
         }
     }
@@ -379,7 +421,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "allowedMarketsPerSet", abi = "allowedMarketsPerSet()")]
     pub struct AllowedMarketsPerSetCall;
@@ -392,7 +434,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "configUpdateDelay", abi = "configUpdateDelay()")]
     pub struct ConfigUpdateDelayCall;
@@ -405,7 +447,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "configUpdateGracePeriod", abi = "configUpdateGracePeriod()")]
     pub struct ConfigUpdateGracePeriodCall;
@@ -418,7 +460,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "depositFees", abi = "depositFees()")]
     pub struct DepositFeesCall;
@@ -431,7 +473,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getDepositCap", abi = "getDepositCap(address)")]
     pub struct GetDepositCapCall {
@@ -446,7 +488,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isSet", abi = "isSet(address)")]
     pub struct IsSetCall {
@@ -461,7 +503,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "minDepositDuration", abi = "minDepositDuration()")]
     pub struct MinDepositDurationCall;
@@ -474,7 +516,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "owner", abi = "owner()")]
     pub struct OwnerCall;
@@ -487,7 +529,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "pause", abi = "pause(address[])")]
     pub struct PauseCall {
@@ -502,7 +544,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "pauser", abi = "pauser()")]
     pub struct PauserCall;
@@ -515,7 +557,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "purchaseDelay", abi = "purchaseDelay()")]
     pub struct PurchaseDelayCall;
@@ -528,7 +570,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "purchaseFees", abi = "purchaseFees()")]
     pub struct PurchaseFeesCall;
@@ -541,7 +583,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "redemptionDelay", abi = "redemptionDelay()")]
     pub struct RedemptionDelayCall;
@@ -554,7 +596,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "saleFees", abi = "saleFees()")]
     pub struct SaleFeesCall;
@@ -567,7 +609,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "unpause", abi = "unpause(address[])")]
     pub struct UnpauseCall {
@@ -597,62 +639,72 @@ pub mod i_manager {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) =
-                <AllowedMarketsPerSetCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <AllowedMarketsPerSetCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::AllowedMarketsPerSet(decoded));
             }
-            if let Ok(decoded) =
-                <ConfigUpdateDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ConfigUpdateDelayCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::ConfigUpdateDelay(decoded));
             }
-            if let Ok(decoded) =
-                <ConfigUpdateGracePeriodCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ConfigUpdateGracePeriodCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::ConfigUpdateGracePeriod(decoded));
             }
-            if let Ok(decoded) = <DepositFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <DepositFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DepositFees(decoded));
             }
-            if let Ok(decoded) = <GetDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <GetDepositCapCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetDepositCap(decoded));
             }
-            if let Ok(decoded) = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsSet(decoded));
             }
-            if let Ok(decoded) =
-                <MinDepositDurationCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <MinDepositDurationCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::MinDepositDuration(decoded));
             }
-            if let Ok(decoded) = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Owner(decoded));
             }
-            if let Ok(decoded) = <PauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <PauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Pause(decoded));
             }
-            if let Ok(decoded) = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Pauser(decoded));
             }
-            if let Ok(decoded) = <PurchaseDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <PurchaseDelayCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::PurchaseDelay(decoded));
             }
-            if let Ok(decoded) = <PurchaseFeesCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <PurchaseFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::PurchaseFees(decoded));
             }
-            if let Ok(decoded) =
-                <RedemptionDelayCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <RedemptionDelayCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RedemptionDelay(decoded));
             }
-            if let Ok(decoded) = <SaleFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SaleFeesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SaleFees(decoded));
             }
-            if let Ok(decoded) = <UnpauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <UnpauseCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unpause(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -664,12 +716,18 @@ pub mod i_manager {
                 Self::AllowedMarketsPerSet(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::ConfigUpdateDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ConfigUpdateDelay(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::ConfigUpdateGracePeriod(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::DepositFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetDepositCap(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::DepositFees(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetDepositCap(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::IsSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::MinDepositDuration(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
@@ -677,10 +735,18 @@ pub mod i_manager {
                 Self::Owner(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Pause(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Pauser(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PurchaseDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PurchaseFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::RedemptionDelay(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::SaleFees(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PurchaseDelay(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::PurchaseFees(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::RedemptionDelay(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::SaleFees(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Unpause(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -688,13 +754,19 @@ pub mod i_manager {
     impl ::core::fmt::Display for IManagerCalls {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::AllowedMarketsPerSet(element) => ::core::fmt::Display::fmt(element, f),
+                Self::AllowedMarketsPerSet(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::ConfigUpdateDelay(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ConfigUpdateGracePeriod(element) => ::core::fmt::Display::fmt(element, f),
+                Self::ConfigUpdateGracePeriod(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::DepositFees(element) => ::core::fmt::Display::fmt(element, f),
                 Self::GetDepositCap(element) => ::core::fmt::Display::fmt(element, f),
                 Self::IsSet(element) => ::core::fmt::Display::fmt(element, f),
-                Self::MinDepositDuration(element) => ::core::fmt::Display::fmt(element, f),
+                Self::MinDepositDuration(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::Owner(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Pause(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Pauser(element) => ::core::fmt::Display::fmt(element, f),
@@ -790,7 +862,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct AllowedMarketsPerSetReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `configUpdateDelay` function with signature `configUpdateDelay()` and selector `0xc5f755f0`
@@ -802,7 +874,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ConfigUpdateDelayReturn(pub u32);
     ///Container type for all return fields from the `configUpdateGracePeriod` function with signature `configUpdateGracePeriod()` and selector `0x31cd4c9c`
@@ -814,7 +886,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ConfigUpdateGracePeriodReturn(pub u32);
     ///Container type for all return fields from the `depositFees` function with signature `depositFees()` and selector `0x26741e7d`
@@ -826,7 +898,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct DepositFeesReturn {
         pub protocol_fees: ProtocolFees,
@@ -840,7 +912,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetDepositCapReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `isSet` function with signature `isSet(address)` and selector `0x74ebe3ec`
@@ -852,7 +924,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsSetReturn(pub bool);
     ///Container type for all return fields from the `minDepositDuration` function with signature `minDepositDuration()` and selector `0x03814568`
@@ -864,7 +936,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct MinDepositDurationReturn(pub u32);
     ///Container type for all return fields from the `owner` function with signature `owner()` and selector `0x8da5cb5b`
@@ -876,7 +948,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct OwnerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `pauser` function with signature `pauser()` and selector `0x9fd0506d`
@@ -888,7 +960,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct PauserReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `purchaseDelay` function with signature `purchaseDelay()` and selector `0xb2eafefa`
@@ -900,7 +972,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct PurchaseDelayReturn(pub u32);
     ///Container type for all return fields from the `purchaseFees` function with signature `purchaseFees()` and selector `0xb996d0a1`
@@ -912,7 +984,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct PurchaseFeesReturn {
         pub protocol_fees: ProtocolFees,
@@ -926,7 +998,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RedemptionDelayReturn {
         pub redemption_delay: u32,
@@ -940,7 +1012,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SaleFeesReturn {
         pub protocol_fees: ProtocolFees,

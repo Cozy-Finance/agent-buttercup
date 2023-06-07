@@ -7,16 +7,14 @@ pub use dummy_trigger::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod dummy_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"manager_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetLimitReached\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unacknowledged\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"_set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static DUMMYTRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static DUMMYTRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -1731,8 +1729,9 @@ pub mod dummy_trigger {
         51,
     ];
     ///The bytecode of the contract.
-    pub static DUMMYTRIGGER_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__BYTECODE);
+    pub static DUMMYTRIGGER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __BYTECODE,
+    );
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -3302,8 +3301,9 @@ pub mod dummy_trigger {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static DUMMYTRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
-        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
+    pub static DUMMYTRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
+        __DEPLOYED_BYTECODE,
+    );
     pub struct DummyTrigger<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for DummyTrigger<M> {
         fn clone(&self) -> Self {
@@ -3323,9 +3323,7 @@ pub mod dummy_trigger {
     }
     impl<M> ::core::fmt::Debug for DummyTrigger<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(DummyTrigger))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(DummyTrigger)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> DummyTrigger<M> {
@@ -3335,11 +3333,13 @@ pub mod dummy_trigger {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                DUMMYTRIGGER_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    DUMMYTRIGGER_ABI.clone(),
+                    client,
+                ),
+            )
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -3389,7 +3389,9 @@ pub mod dummy_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledged` (0x086c298d) function
-        pub fn acknowledged(&self) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        pub fn acknowledged(
+            &self,
+        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -3425,7 +3427,10 @@ pub mod dummy_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -3434,7 +3439,10 @@ pub mod dummy_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([91, 34, 127, 155], p0)
                 .expect("method not found (this should never happen)")
@@ -3448,26 +3456,36 @@ pub mod dummy_trigger {
         ///Gets the contract's `SetAdded` event
         pub fn set_added_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SetAddedFilter> {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            SetAddedFilter,
+        > {
             self.0.event()
         }
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, TriggerStateUpdatedFilter>
-        {
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            TriggerStateUpdatedFilter,
+        > {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, DummyTriggerEvents>
-        {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+        ) -> ::ethers::contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            DummyTriggerEvents,
+        > {
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for DummyTrigger<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for DummyTrigger<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -3481,7 +3499,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -3494,7 +3512,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[etherror(name = "SetLimitReached", abi = "SetLimitReached()")]
     pub struct SetLimitReached;
@@ -3507,7 +3525,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[etherror(name = "Unacknowledged", abi = "Unacknowledged()")]
     pub struct Unacknowledged;
@@ -3520,7 +3538,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -3540,23 +3558,28 @@ pub mod dummy_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) =
-                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded) =
-                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded) = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetLimitReached(decoded));
             }
-            if let Ok(decoded) = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unacknowledged(decoded));
             }
-            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -3568,9 +3591,15 @@ pub mod dummy_trigger {
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::SetLimitReached(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Unacknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetLimitReached(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Unacknowledged(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Unauthorized(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -3580,17 +3609,19 @@ pub mod dummy_trigger {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() =>
-                {
+                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector == <SetLimitReached as ::ethers::contract::EthError>::selector() => {
+                _ if selector
+                    == <SetLimitReached as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector == <Unacknowledged as ::ethers::contract::EthError>::selector() => {
+                _ if selector
+                    == <Unacknowledged as ::ethers::contract::EthError>::selector() => {
                     true
                 }
-                _ if selector == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                _ if selector
+                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -3598,7 +3629,9 @@ pub mod dummy_trigger {
     impl ::core::fmt::Display for DummyTriggerErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
+                Self::InvalidStateTransition(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::SetLimitReached(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unacknowledged(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
@@ -3639,7 +3672,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "SetAdded", abi = "SetAdded(address)")]
     pub struct SetAddedFilter {
@@ -3653,7 +3686,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "TriggerStateUpdated", abi = "TriggerStateUpdated(uint8)")]
     pub struct TriggerStateUpdatedFilter {
@@ -3683,7 +3716,9 @@ pub mod dummy_trigger {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::SetAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TriggerStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::TriggerStateUpdatedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
             }
         }
     }
@@ -3706,7 +3741,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "MAX_SET_LENGTH", abi = "MAX_SET_LENGTH()")]
     pub struct MaxSetLengthCall;
@@ -3719,7 +3754,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "acknowledged", abi = "acknowledged()")]
     pub struct AcknowledgedCall;
@@ -3732,7 +3767,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "addSet", abi = "addSet(address)")]
     pub struct AddSetCall {
@@ -3747,7 +3782,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getSets", abi = "getSets()")]
     pub struct GetSetsCall;
@@ -3760,7 +3795,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getSetsLength", abi = "getSetsLength()")]
     pub struct GetSetsLengthCall;
@@ -3773,7 +3808,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -3786,7 +3821,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "sets", abi = "sets(uint256)")]
     pub struct SetsCall(pub ::ethers::core::types::U256);
@@ -3799,7 +3834,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
@@ -3820,31 +3855,36 @@ pub mod dummy_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::MaxSetLength(decoded));
             }
-            if let Ok(decoded) = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Acknowledged(decoded));
             }
-            if let Ok(decoded) = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::AddSet(decoded));
             }
-            if let Ok(decoded) = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSets(decoded));
             }
-            if let Ok(decoded) = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSetsLength(decoded));
             }
-            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded) = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sets(decoded));
             }
-            if let Ok(decoded) = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::State(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -3853,11 +3893,17 @@ pub mod dummy_trigger {
     impl ::ethers::core::abi::AbiEncode for DummyTriggerCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::MaxSetLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Acknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::MaxSetLength(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Acknowledged(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::AddSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::GetSets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetSetsLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::GetSetsLength(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Sets(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::State(element) => ::ethers::core::abi::AbiEncode::encode(element),
@@ -3927,7 +3973,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct MaxSetLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
@@ -3939,7 +3985,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct AcknowledgedReturn(pub bool);
     ///Container type for all return fields from the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
@@ -3951,7 +3997,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct AddSetReturn(pub bool);
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
@@ -3963,7 +4009,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetSetsReturn(pub ::std::vec::Vec<::ethers::core::types::Address>);
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
@@ -3975,7 +4021,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetSetsLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -3987,7 +4033,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
@@ -3999,7 +4045,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SetsReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
@@ -4011,7 +4057,7 @@ pub mod dummy_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct StateReturn(pub u8);
 }

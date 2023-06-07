@@ -7,16 +7,14 @@ pub use i_manager::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_manager {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"pauser\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IMANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IMANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     pub struct IManager<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IManager<M> {
         fn clone(&self) -> Self {
@@ -36,9 +34,7 @@ pub mod i_manager {
     }
     impl<M> ::core::fmt::Debug for IManager<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IManager))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(stringify!(IManager)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IManager<M> {
@@ -48,11 +44,13 @@ pub mod i_manager {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                IMANAGER_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    IMANAGER_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `isSet` (0x74ebe3ec) function
         pub fn is_set(
@@ -66,7 +64,10 @@ pub mod i_manager {
         ///Calls the contract's `owner` (0x8da5cb5b) function
         pub fn owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([141, 165, 203, 91], ())
                 .expect("method not found (this should never happen)")
@@ -74,13 +75,17 @@ pub mod i_manager {
         ///Calls the contract's `pauser` (0x9fd0506d) function
         pub fn pauser(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers::contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([159, 208, 80, 109], ())
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>> for IManager<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    for IManager<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -94,7 +99,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "isSet", abi = "isSet(address)")]
     pub struct IsSetCall(pub ::ethers::core::types::Address);
@@ -107,7 +112,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "owner", abi = "owner()")]
     pub struct OwnerCall;
@@ -120,7 +125,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "pauser", abi = "pauser()")]
     pub struct PauserCall;
@@ -136,13 +141,16 @@ pub mod i_manager {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <IsSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsSet(decoded));
             }
-            if let Ok(decoded) = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <OwnerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Owner(decoded));
             }
-            if let Ok(decoded) = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <PauserCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Pauser(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -190,7 +198,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct IsSetReturn(pub bool);
     ///Container type for all return fields from the `owner` function with signature `owner()` and selector `0x8da5cb5b`
@@ -202,7 +210,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct OwnerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `pauser` function with signature `pauser()` and selector `0x9fd0506d`
@@ -214,7 +222,7 @@ pub mod i_manager {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct PauserReturn(pub ::ethers::core::types::Address);
 }

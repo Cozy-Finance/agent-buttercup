@@ -29,8 +29,7 @@ pub mod metadata {
     pub static FEEDRIPPER_NAME: &str = "FeeDripper";
     pub static FEEDRIPPER_PATH: &str = "src/lib/FeeDripper.sol";
     pub static IPROTECTIONPURCHASERERRORS_NAME: &str = "IProtectionPurchaserErrors";
-    pub static IPROTECTIONPURCHASERERRORS_PATH: &str =
-        "src/interfaces/IProtectionPurchaserErrors.sol";
+    pub static IPROTECTIONPURCHASERERRORS_PATH: &str = "src/interfaces/IProtectionPurchaserErrors.sol";
     pub static IDRIPDECAYMODEL_NAME: &str = "IDripDecayModel";
     pub static IDRIPDECAYMODEL_PATH: &str = "src/interfaces/IDripDecayModel.sol";
     pub static SETBASESTORAGE_NAME: &str = "SetBaseStorage";
@@ -52,8 +51,7 @@ pub mod metadata {
     pub static MATHCONSTANTS_NAME: &str = "MathConstants";
     pub static MATHCONSTANTS_PATH: &str = "src/lib/MathConstants.sol";
     pub static IPROTECTIONPURCHASEREVENTS_NAME: &str = "IProtectionPurchaserEvents";
-    pub static IPROTECTIONPURCHASEREVENTS_PATH: &str =
-        "src/interfaces/IProtectionPurchaserEvents.sol";
+    pub static IPROTECTIONPURCHASEREVENTS_PATH: &str = "src/interfaces/IProtectionPurchaserEvents.sol";
     pub static ISTETH_NAME: &str = "IStETH";
     pub static ISTETH_PATH: &str = "src/interfaces/IStETH.sol";
     pub static OWNABLE_NAME: &str = "Ownable";

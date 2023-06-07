@@ -7,16 +7,18 @@ pub use i_asset_depositer_errors::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_asset_depositer_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidDeposit\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IASSETDEPOSITERERRORS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers::contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IASSETDEPOSITERERRORS_ABI: ::ethers::contract::Lazy<
+        ::ethers::core::abi::Abi,
+    > = ::ethers::contract::Lazy::new(|| {
+        ::ethers::core::utils::__serde_json::from_str(__ABI)
+            .expect("ABI is always valid")
+    });
     pub struct IAssetDepositerErrors<M>(::ethers::contract::Contract<M>);
     impl<M> ::core::clone::Clone for IAssetDepositerErrors<M> {
         fn clone(&self) -> Self {
@@ -48,16 +50,17 @@ pub mod i_asset_depositer_errors {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers::contract::Contract::new(
-                address.into(),
-                IASSETDEPOSITERERRORS_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers::contract::Contract::new(
+                    address.into(),
+                    IASSETDEPOSITERERRORS_ABI.clone(),
+                    client,
+                ),
+            )
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-        for IAssetDepositerErrors<M>
-    {
+    for IAssetDepositerErrors<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -71,7 +74,7 @@ pub mod i_asset_depositer_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[etherror(name = "InvalidDeposit", abi = "InvalidDeposit()")]
     pub struct InvalidDeposit;
