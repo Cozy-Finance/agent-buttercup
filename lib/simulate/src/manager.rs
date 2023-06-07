@@ -4,7 +4,7 @@
 use std::collections::BTreeMap;
 
 use rand::{rngs::StdRng, SeedableRng};
-use revm::primitives::AccountInfo;
+use revm::primitives::{AccountInfo, U256 as EvmU256};
 use thiserror::Error;
 
 use crate::{
@@ -52,6 +52,13 @@ impl SimManager {
             agents: BTreeMap::new(),
             rng: StdRng::seed_from_u64(rng_seed),
         }
+    }
+
+    /// Allocate eth.
+    pub fn allocate_eth(&mut self, agent: Box<dyn Agent>, additional_balance: EvmU256) {
+        let mut account_info = self.environment.get_account_info(agent.address());
+        account_info.balance += additional_balance;
+        self.environment.add_account_info(agent.address(), account_info)
     }
 
     /// Run the time policy and agents to update the simulation environment.

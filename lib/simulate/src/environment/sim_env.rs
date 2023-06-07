@@ -54,6 +54,13 @@ impl SimEnv {
             .insert_account_info(address, account_info);
     }
 
+    pub fn update_account_info(&mut self, address: Address, account_info: AccountInfo) {
+        self.evm
+            .db()
+            .unwrap()
+            .insert_account_info(address, account_info);
+    }
+
     pub fn get_account_info(&mut self, address: Address) -> AccountInfo {
         self.evm.db().unwrap().basic(address).unwrap().unwrap()
     }

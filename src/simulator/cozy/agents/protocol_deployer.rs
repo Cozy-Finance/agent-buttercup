@@ -181,7 +181,7 @@ impl ProtocolDeployer {
             .contract_registry
             .get(SET.name)
             .ok_or(ProtocolDeployerError::UninitializedAddr)?;
-
+    
         // Initialize set logic.
         let empty_market_configs: Vec<MarketConfig> = vec![];
         let weth_addr = sim_data
@@ -207,6 +207,15 @@ impl ProtocolDeployer {
             )?,
         );
         println!("Set logic initialized.");
+
+        // Deploy set factory.
+        deploy_utils::deploy_linked_contract_with_args(
+            self,
+            sim_env,
+            sim_data,
+            &SETFACTORY,
+            (manager_addr, set_logic_addr),
+        )?;
 
         // Deploy ptoken logic.
         deploy_utils::deploy_linked_contract_with_args(
