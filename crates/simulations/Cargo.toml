@@ -1,0 +1,9 @@
+[package]
+name = "simulations"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+bindings.workspace = true
+onchain.workspace = true
+simulate.workspace = true
