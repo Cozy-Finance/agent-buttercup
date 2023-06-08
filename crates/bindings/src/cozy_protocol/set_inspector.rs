@@ -14,16 +14,16 @@ pub mod set_inspector {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InsufficientBalance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Approval\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"reserveFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"setOwnerFees_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesAccrued\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Transfer\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"DOMAIN_SEPARATOR\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"accounting\",\"outputs\":[{\"internalType\":\"uint128\",\"name\":\"assetBalance\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedSetOwnerFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedCozyReserveFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"accruedCozyBackstopFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"totalPurchasesFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"totalSalesFees\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"assetsPendingRedemption\",\"type\":\"uint128\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"asset\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"backstop\",\"outputs\":[{\"internalType\":\"contract IBackstop\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOfMatured\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToAssets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToPTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToProtection\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"cumulativeMinted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"dripSupplierFees\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"effectiveActiveProtection\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getMints\",\"outputs\":[{\"internalType\":\"struct MintData[]\",\"name\":\"\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"markets\",\"outputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"ptoken\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"struct MarketConfigStorage\",\"name\":\"config\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}]},{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"activeProtection\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"lastDecayRate\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"lastDripRate\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"purchasesFeePool\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"salesFeePool\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"lastDecayTime\",\"type\":\"uint64\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"mints\",\"outputs\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"nonces\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"permit\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ptokenFactory\",\"outputs\":[{\"internalType\":\"contract IPTokenFactory\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setConfig\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setState\",\"outputs\":[{\"internalType\":\"enum SetState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"totalCollateralAvailable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ITrigger\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerLookups\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"marketExists\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId\",\"type\":\"uint16\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"utilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static SETINSPECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static SETINSPECTOR_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct SetInspector<M>(::ethers::contract::Contract<M>);
+    pub struct SetInspector<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for SetInspector<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for SetInspector<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -46,7 +46,7 @@ pub mod set_inspector {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     SETINSPECTOR_ABI.clone(),
                     client,
@@ -56,7 +56,7 @@ pub mod set_inspector {
         ///Calls the contract's `DOMAIN_SEPARATOR` (0x3644e515) function
         pub fn domain_separator(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([54, 68, 229, 21], ())
                 .expect("method not found (this should never happen)")
@@ -64,7 +64,7 @@ pub mod set_inspector {
         ///Calls the contract's `accounting` (0x9624e83e) function
         pub fn accounting(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (u128, u128, u128, u128, u128, u128, u128),
         > {
@@ -77,7 +77,7 @@ pub mod set_inspector {
             &self,
             p0: ::ethers::core::types::Address,
             p1: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([221, 98, 237, 62], (p0, p1))
                 .expect("method not found (this should never happen)")
@@ -87,7 +87,7 @@ pub mod set_inspector {
             &self,
             spender: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([9, 94, 167, 179], (spender, amount))
                 .expect("method not found (this should never happen)")
@@ -95,7 +95,7 @@ pub mod set_inspector {
         ///Calls the contract's `asset` (0x38d52e0f) function
         pub fn asset(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -106,7 +106,7 @@ pub mod set_inspector {
         ///Calls the contract's `backstop` (0x7dea1817) function
         pub fn backstop(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -118,7 +118,7 @@ pub mod set_inspector {
         pub fn balance_of(
             &self,
             p0: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([112, 160, 130, 49], p0)
                 .expect("method not found (this should never happen)")
@@ -127,7 +127,7 @@ pub mod set_inspector {
         pub fn balance_of_matured(
             &self,
             user: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([52, 137, 183, 164], user)
                 .expect("method not found (this should never happen)")
@@ -136,7 +136,7 @@ pub mod set_inspector {
         pub fn convert_to_assets(
             &self,
             shares: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([7, 162, 209, 58], shares)
                 .expect("method not found (this should never happen)")
@@ -146,7 +146,7 @@ pub mod set_inspector {
             &self,
             market_id: u16,
             protection: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([129, 193, 161, 140], (market_id, protection))
                 .expect("method not found (this should never happen)")
@@ -156,7 +156,7 @@ pub mod set_inspector {
             &self,
             market_id: u16,
             ptokens: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([20, 55, 254, 170], (market_id, ptokens))
                 .expect("method not found (this should never happen)")
@@ -165,7 +165,7 @@ pub mod set_inspector {
         pub fn convert_to_shares(
             &self,
             assets: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([198, 230, 245, 146], assets)
                 .expect("method not found (this should never happen)")
@@ -175,13 +175,13 @@ pub mod set_inspector {
             &self,
             p0: ::ethers::core::types::Address,
             p1: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([246, 234, 179, 39], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `decimals` (0x313ce567) function
-        pub fn decimals(&self) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        pub fn decimals(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([49, 60, 229, 103], ())
                 .expect("method not found (this should never happen)")
@@ -189,7 +189,7 @@ pub mod set_inspector {
         ///Calls the contract's `dripSupplierFees` (0x1891661c) function
         pub fn drip_supplier_fees(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([24, 145, 102, 28], ())
                 .expect("method not found (this should never happen)")
@@ -198,7 +198,7 @@ pub mod set_inspector {
         pub fn effective_active_protection(
             &self,
             market_id: u16,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([23, 118, 108, 129], market_id)
                 .expect("method not found (this should never happen)")
@@ -207,7 +207,7 @@ pub mod set_inspector {
         pub fn get_mints(
             &self,
             user: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::std::vec::Vec<MintData>> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::std::vec::Vec<MintData>> {
             self.0
                 .method_hash([116, 206, 86, 113], user)
                 .expect("method not found (this should never happen)")
@@ -215,7 +215,7 @@ pub mod set_inspector {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -227,7 +227,7 @@ pub mod set_inspector {
         pub fn markets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (
                 ::ethers::core::types::Address,
@@ -251,7 +251,7 @@ pub mod set_inspector {
             &self,
             p0: ::ethers::core::types::Address,
             p1: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, u64),
         > {
@@ -262,7 +262,7 @@ pub mod set_inspector {
         ///Calls the contract's `name` (0x06fdde03) function
         pub fn name(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::std::string::String> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([6, 253, 222, 3], ())
                 .expect("method not found (this should never happen)")
@@ -271,7 +271,7 @@ pub mod set_inspector {
         pub fn nonces(
             &self,
             p0: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([126, 206, 190, 0], p0)
                 .expect("method not found (this should never happen)")
@@ -286,7 +286,7 @@ pub mod set_inspector {
             v: u8,
             r: [u8; 32],
             s: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [213, 5, 172, 207],
@@ -297,7 +297,7 @@ pub mod set_inspector {
         ///Calls the contract's `ptokenFactory` (0x764d6892) function
         pub fn ptoken_factory(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -308,13 +308,13 @@ pub mod set_inspector {
         ///Calls the contract's `setConfig` (0x8b673e7a) function
         pub fn set_config(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, (u32, u16)> {
+        ) -> ::ethers_contract::builders::ContractCall<M, (u32, u16)> {
             self.0
                 .method_hash([139, 103, 62, 122], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `setState` (0x1203402f) function
-        pub fn set_state(&self) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        pub fn set_state(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([18, 3, 64, 47], ())
                 .expect("method not found (this should never happen)")
@@ -322,7 +322,7 @@ pub mod set_inspector {
         ///Calls the contract's `symbol` (0x95d89b41) function
         pub fn symbol(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::std::string::String> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([149, 216, 155, 65], ())
                 .expect("method not found (this should never happen)")
@@ -330,7 +330,7 @@ pub mod set_inspector {
         ///Calls the contract's `totalCollateralAvailable` (0xaf04be85) function
         pub fn total_collateral_available(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([175, 4, 190, 133], ())
                 .expect("method not found (this should never happen)")
@@ -338,7 +338,7 @@ pub mod set_inspector {
         ///Calls the contract's `totalSupply` (0x18160ddd) function
         pub fn total_supply(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([24, 22, 13, 221], ())
                 .expect("method not found (this should never happen)")
@@ -348,7 +348,7 @@ pub mod set_inspector {
             &self,
             to: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([169, 5, 156, 187], (to, amount))
                 .expect("method not found (this should never happen)")
@@ -359,7 +359,7 @@ pub mod set_inspector {
             from: ::ethers::core::types::Address,
             to: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([35, 184, 114, 221], (from, to, amount))
                 .expect("method not found (this should never happen)")
@@ -368,7 +368,7 @@ pub mod set_inspector {
         pub fn trigger_lookups(
             &self,
             p0: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, (bool, u16)> {
+        ) -> ::ethers_contract::builders::ContractCall<M, (bool, u16)> {
             self.0
                 .method_hash([88, 207, 170, 199], p0)
                 .expect("method not found (this should never happen)")
@@ -377,7 +377,7 @@ pub mod set_inspector {
         pub fn utilization(
             &self,
             market_id: u16,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([177, 128, 67, 162], market_id)
                 .expect("method not found (this should never happen)")
@@ -385,17 +385,13 @@ pub mod set_inspector {
         ///Gets the contract's `Approval` event
         pub fn approval_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ApprovalFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, ApprovalFilter> {
             self.0.event()
         }
         ///Gets the contract's `FeesAccrued` event
         pub fn fees_accrued_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FeesAccruedFilter,
@@ -405,17 +401,13 @@ pub mod set_inspector {
         ///Gets the contract's `Transfer` event
         pub fn transfer_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TransferFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, TransferFilter> {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             SetInspectorEvents,
@@ -423,17 +415,17 @@ pub mod set_inspector {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for SetInspector<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InsufficientBalance` with signature `InsufficientBalance()` and selector `0xf4d678b8`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -445,8 +437,8 @@ pub mod set_inspector {
     ///Custom Error type `InvalidState` with signature `InvalidState()` and selector `0xbaf3f0f7`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -458,8 +450,8 @@ pub mod set_inspector {
     ///Custom Error type `InvalidStateTransition` with signature `InvalidStateTransition()` and selector `0x8f9a780c`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -471,8 +463,8 @@ pub mod set_inspector {
     ///Custom Error type `RoundsToZero` with signature `RoundsToZero()` and selector `0xc440e0aa`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -484,8 +476,8 @@ pub mod set_inspector {
     ///Custom Error type `SafeCastFailed` with signature `SafeCastFailed()` and selector `0x45eef127`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -495,7 +487,7 @@ pub mod set_inspector {
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum SetInspectorErrors {
         InsufficientBalance(InsufficientBalance),
         InvalidState(InvalidState),
@@ -564,24 +556,24 @@ pub mod set_inspector {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for SetInspectorErrors {
+    impl ::ethers_contract::ContractRevert for SetInspectorErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() => {
+                    == <InsufficientBalance as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
+                    == <InvalidState as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                    == <RoundsToZero as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
+                    == <SafeCastFailed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -636,8 +628,8 @@ pub mod set_inspector {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -654,8 +646,8 @@ pub mod set_inspector {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -670,8 +662,8 @@ pub mod set_inspector {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -687,13 +679,13 @@ pub mod set_inspector {
         pub amount: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum SetInspectorEvents {
         ApprovalFilter(ApprovalFilter),
         FeesAccruedFilter(FeesAccruedFilter),
         TransferFilter(TransferFilter),
     }
-    impl ::ethers::contract::EthLogDecode for SetInspectorEvents {
+    impl ::ethers_contract::EthLogDecode for SetInspectorEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -736,8 +728,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `DOMAIN_SEPARATOR` function with signature `DOMAIN_SEPARATOR()` and selector `0x3644e515`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -749,8 +741,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `accounting` function with signature `accounting()` and selector `0x9624e83e`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -762,8 +754,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `allowance` function with signature `allowance(address,address)` and selector `0xdd62ed3e`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -778,8 +770,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -794,8 +786,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `asset` function with signature `asset()` and selector `0x38d52e0f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -807,8 +799,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `backstop` function with signature `backstop()` and selector `0x7dea1817`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -820,8 +812,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -833,8 +825,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `balanceOfMatured` function with signature `balanceOfMatured(address)` and selector `0x3489b7a4`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -848,8 +840,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `convertToAssets` function with signature `convertToAssets(uint256)` and selector `0x07a2d13a`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -863,8 +855,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `convertToPTokens` function with signature `convertToPTokens(uint16,uint256)` and selector `0x81c1a18c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -879,8 +871,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `convertToProtection` function with signature `convertToProtection(uint16,uint256)` and selector `0x1437feaa`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -895,8 +887,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `convertToShares` function with signature `convertToShares(uint256)` and selector `0xc6e6f592`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -910,8 +902,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `cumulativeMinted` function with signature `cumulativeMinted(address,uint256)` and selector `0xf6eab327`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -926,8 +918,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `decimals` function with signature `decimals()` and selector `0x313ce567`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -939,8 +931,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `dripSupplierFees` function with signature `dripSupplierFees()` and selector `0x1891661c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -952,8 +944,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `effectiveActiveProtection` function with signature `effectiveActiveProtection(uint16)` and selector `0x17766c81`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -970,8 +962,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `getMints` function with signature `getMints(address)` and selector `0x74ce5671`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -985,8 +977,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -998,8 +990,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `markets` function with signature `markets(uint256)` and selector `0xb1283e77`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1011,8 +1003,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `mints` function with signature `mints(address,uint256)` and selector `0x0bedd3a7`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1027,8 +1019,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `name` function with signature `name()` and selector `0x06fdde03`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1040,8 +1032,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `nonces` function with signature `nonces(address)` and selector `0x7ecebe00`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1053,8 +1045,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `permit` function with signature `permit(address,address,uint256,uint256,uint8,bytes32,bytes32)` and selector `0xd505accf`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1077,8 +1069,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `ptokenFactory` function with signature `ptokenFactory()` and selector `0x764d6892`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1090,8 +1082,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `setConfig` function with signature `setConfig()` and selector `0x8b673e7a`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1103,8 +1095,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `setState` function with signature `setState()` and selector `0x1203402f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1116,8 +1108,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `symbol` function with signature `symbol()` and selector `0x95d89b41`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1129,8 +1121,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `totalCollateralAvailable` function with signature `totalCollateralAvailable()` and selector `0xaf04be85`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1142,8 +1134,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `totalSupply` function with signature `totalSupply()` and selector `0x18160ddd`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1155,8 +1147,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1171,8 +1163,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1188,8 +1180,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `triggerLookups` function with signature `triggerLookups(address)` and selector `0x58cfaac7`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1201,8 +1193,8 @@ pub mod set_inspector {
     ///Container type for all input parameters for the `utilization` function with signature `utilization(uint16)` and selector `0xb18043a2`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1214,7 +1206,7 @@ pub mod set_inspector {
         pub market_id: u16,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum SetInspectorCalls {
         DomainSeparator(DomainSeparatorCall),
         Accounting(AccountingCall),
@@ -1704,8 +1696,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `DOMAIN_SEPARATOR` function with signature `DOMAIN_SEPARATOR()` and selector `0x3644e515`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1716,8 +1708,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `accounting` function with signature `accounting()` and selector `0x9624e83e`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1736,8 +1728,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `allowance` function with signature `allowance(address,address)` and selector `0xdd62ed3e`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1748,8 +1740,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1760,8 +1752,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `asset` function with signature `asset()` and selector `0x38d52e0f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1772,8 +1764,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `backstop` function with signature `backstop()` and selector `0x7dea1817`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1784,8 +1776,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1796,8 +1788,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `balanceOfMatured` function with signature `balanceOfMatured(address)` and selector `0x3489b7a4`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1808,8 +1800,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `convertToAssets` function with signature `convertToAssets(uint256)` and selector `0x07a2d13a`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1820,8 +1812,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `convertToPTokens` function with signature `convertToPTokens(uint16,uint256)` and selector `0x81c1a18c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1832,8 +1824,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `convertToProtection` function with signature `convertToProtection(uint16,uint256)` and selector `0x1437feaa`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1844,8 +1836,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `convertToShares` function with signature `convertToShares(uint256)` and selector `0xc6e6f592`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1856,8 +1848,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `cumulativeMinted` function with signature `cumulativeMinted(address,uint256)` and selector `0xf6eab327`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1868,8 +1860,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `decimals` function with signature `decimals()` and selector `0x313ce567`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1880,8 +1872,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `effectiveActiveProtection` function with signature `effectiveActiveProtection(uint16)` and selector `0x17766c81`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1892,8 +1884,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `getMints` function with signature `getMints(address)` and selector `0x74ce5671`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1904,8 +1896,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1916,8 +1908,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `markets` function with signature `markets(uint256)` and selector `0xb1283e77`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1939,8 +1931,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `mints` function with signature `mints(address,uint256)` and selector `0x0bedd3a7`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1954,8 +1946,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `name` function with signature `name()` and selector `0x06fdde03`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1966,8 +1958,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `nonces` function with signature `nonces(address)` and selector `0x7ecebe00`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1978,8 +1970,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `ptokenFactory` function with signature `ptokenFactory()` and selector `0x764d6892`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1990,8 +1982,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `setConfig` function with signature `setConfig()` and selector `0x8b673e7a`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2005,8 +1997,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `setState` function with signature `setState()` and selector `0x1203402f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2017,8 +2009,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `symbol` function with signature `symbol()` and selector `0x95d89b41`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2029,8 +2021,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `totalCollateralAvailable` function with signature `totalCollateralAvailable()` and selector `0xaf04be85`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2041,8 +2033,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `totalSupply` function with signature `totalSupply()` and selector `0x18160ddd`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2053,8 +2045,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2065,8 +2057,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2077,8 +2069,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `triggerLookups` function with signature `triggerLookups(address)` and selector `0x58cfaac7`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2092,8 +2084,8 @@ pub mod set_inspector {
     ///Container type for all return fields from the `utilization` function with signature `utilization(uint16)` and selector `0xb18043a2`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

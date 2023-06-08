@@ -13,7 +13,7 @@ pub mod migrations {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"lastCompletedMigration\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"completed\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setCompleted\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"upgrade\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static MIGRATIONS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static MIGRATIONS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -949,14 +949,14 @@ pub mod migrations {
     pub static MIGRATIONS_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct Migrations<M>(::ethers::contract::Contract<M>);
+    pub struct Migrations<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for Migrations<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for Migrations<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -979,7 +979,7 @@ pub mod migrations {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     MIGRATIONS_ABI.clone(),
                     client,
@@ -1013,22 +1013,22 @@ pub mod migrations {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 MIGRATIONS_ABI.clone(),
                 MIGRATIONS_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `lastCompletedMigration` (0xfbdbad3c) function
         pub fn last_completed_migration(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([251, 219, 173, 60], ())
                 .expect("method not found (this should never happen)")
@@ -1036,7 +1036,7 @@ pub mod migrations {
         ///Calls the contract's `owner` (0x8da5cb5b) function
         pub fn owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -1048,7 +1048,7 @@ pub mod migrations {
         pub fn set_completed(
             &self,
             completed: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([253, 172, 213, 118], completed)
                 .expect("method not found (this should never happen)")
@@ -1057,23 +1057,23 @@ pub mod migrations {
         pub fn upgrade(
             &self,
             new_address: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([9, 0, 240, 16], new_address)
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for Migrations<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Container type for all input parameters for the `lastCompletedMigration` function with signature `lastCompletedMigration()` and selector `0xfbdbad3c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1085,8 +1085,8 @@ pub mod migrations {
     ///Container type for all input parameters for the `owner` function with signature `owner()` and selector `0x8da5cb5b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1098,8 +1098,8 @@ pub mod migrations {
     ///Container type for all input parameters for the `setCompleted` function with signature `setCompleted(uint256)` and selector `0xfdacd576`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1113,8 +1113,8 @@ pub mod migrations {
     ///Container type for all input parameters for the `upgrade` function with signature `upgrade(address)` and selector `0x0900f010`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -1126,7 +1126,7 @@ pub mod migrations {
         pub new_address: ::ethers::core::types::Address,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum MigrationsCalls {
         LastCompletedMigration(LastCompletedMigrationCall),
         Owner(OwnerCall),
@@ -1208,8 +1208,8 @@ pub mod migrations {
     ///Container type for all return fields from the `lastCompletedMigration` function with signature `lastCompletedMigration()` and selector `0xfbdbad3c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1220,8 +1220,8 @@ pub mod migrations {
     ///Container type for all return fields from the `owner` function with signature `owner()` and selector `0x8da5cb5b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

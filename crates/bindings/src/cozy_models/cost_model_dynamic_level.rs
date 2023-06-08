@@ -13,9 +13,9 @@ pub mod cost_model_dynamic_level {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"uLow_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"uHigh_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorAtZeroUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorAtFullUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"costFactorInOptimalZone_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"optimalZoneRate_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidReferencePoint\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidTime\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidUtilization\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetAlreadyRegistered\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"costFactorInOptimalZone\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"lastUpdateTime\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"UpdatedDynamicLevelModelParameters\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"a\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"b\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"_min\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"fromUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"toUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtFullUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtZeroUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorInOptimalZone\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"lastUpdateTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"optimalZoneRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"fromUtilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"toUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"registerSet\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"setAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uHigh\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uLow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"uOpt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newUtilization_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"update\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COSTMODELDYNAMICLEVEL_ABI: ::ethers::contract::Lazy<
+    pub static COSTMODELDYNAMICLEVEL_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -8282,14 +8282,14 @@ pub mod cost_model_dynamic_level {
     pub static COSTMODELDYNAMICLEVEL_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct CostModelDynamicLevel<M>(::ethers::contract::Contract<M>);
+    pub struct CostModelDynamicLevel<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelDynamicLevel<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for CostModelDynamicLevel<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -8314,7 +8314,7 @@ pub mod cost_model_dynamic_level {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     COSTMODELDYNAMICLEVEL_ABI.clone(),
                     client,
@@ -8348,16 +8348,16 @@ pub mod cost_model_dynamic_level {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 COSTMODELDYNAMICLEVEL_ABI.clone(),
                 COSTMODELDYNAMICLEVEL_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `_min` (0xac023b75) function
@@ -8365,7 +8365,7 @@ pub mod cost_model_dynamic_level {
             &self,
             a: ::ethers::core::types::U256,
             b: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([172, 2, 59, 117], (a, b))
                 .expect("method not found (this should never happen)")
@@ -8375,7 +8375,7 @@ pub mod cost_model_dynamic_level {
             &self,
             from_utilization: ::ethers::core::types::U256,
             to_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([215, 200, 86, 179], (from_utilization, to_utilization))
                 .expect("method not found (this should never happen)")
@@ -8383,7 +8383,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `costFactorAtFullUtilization` (0xcfd0fac9) function
         pub fn cost_factor_at_full_utilization(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([207, 208, 250, 201], ())
                 .expect("method not found (this should never happen)")
@@ -8391,7 +8391,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `costFactorAtZeroUtilization` (0xb92a620f) function
         pub fn cost_factor_at_zero_utilization(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([185, 42, 98, 15], ())
                 .expect("method not found (this should never happen)")
@@ -8399,7 +8399,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `costFactorInOptimalZone` (0x75df2826) function
         pub fn cost_factor_in_optimal_zone(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([117, 223, 40, 38], ())
                 .expect("method not found (this should never happen)")
@@ -8407,7 +8407,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `lastUpdateTime` (0xc8f33c91) function
         pub fn last_update_time(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([200, 243, 60, 145], ())
                 .expect("method not found (this should never happen)")
@@ -8415,7 +8415,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `optimalZoneRate` (0x003dfe60) function
         pub fn optimal_zone_rate(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([0, 61, 254, 96], ())
                 .expect("method not found (this should never happen)")
@@ -8425,13 +8425,13 @@ pub mod cost_model_dynamic_level {
             &self,
             from_utilization: ::ethers::core::types::U256,
             to_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([224, 53, 203, 202], (from_utilization, to_utilization))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `registerSet` (0x3b1b6520) function
-        pub fn register_set(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn register_set(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([59, 27, 101, 32], ())
                 .expect("method not found (this should never happen)")
@@ -8439,7 +8439,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `setAddress` (0xe6569275) function
         pub fn set_address(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -8450,7 +8450,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `uHigh` (0xbcc6f012) function
         pub fn u_high(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([188, 198, 240, 18], ())
                 .expect("method not found (this should never happen)")
@@ -8458,7 +8458,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `uLow` (0x04ab36c9) function
         pub fn u_low(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([4, 171, 54, 201], ())
                 .expect("method not found (this should never happen)")
@@ -8466,7 +8466,7 @@ pub mod cost_model_dynamic_level {
         ///Calls the contract's `uOpt` (0x80a3af36) function
         pub fn u_opt(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([128, 163, 175, 54], ())
                 .expect("method not found (this should never happen)")
@@ -8476,7 +8476,7 @@ pub mod cost_model_dynamic_level {
             &self,
             utilization: ::ethers::core::types::U256,
             new_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([47, 181, 101, 232], (utilization, new_utilization))
                 .expect("method not found (this should never happen)")
@@ -8484,7 +8484,7 @@ pub mod cost_model_dynamic_level {
         ///Gets the contract's `UpdatedDynamicLevelModelParameters` event
         pub fn updated_dynamic_level_model_parameters_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             UpdatedDynamicLevelModelParametersFilter,
@@ -8494,7 +8494,7 @@ pub mod cost_model_dynamic_level {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             UpdatedDynamicLevelModelParametersFilter,
@@ -8502,17 +8502,17 @@ pub mod cost_model_dynamic_level {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for CostModelDynamicLevel<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidConfiguration` with signature `InvalidConfiguration()` and selector `0xc52a9bd3`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8524,8 +8524,8 @@ pub mod cost_model_dynamic_level {
     ///Custom Error type `InvalidReferencePoint` with signature `InvalidReferencePoint()` and selector `0x030b4011`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8537,8 +8537,8 @@ pub mod cost_model_dynamic_level {
     ///Custom Error type `InvalidTime` with signature `InvalidTime()` and selector `0x6f7eac26`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8550,8 +8550,8 @@ pub mod cost_model_dynamic_level {
     ///Custom Error type `InvalidUtilization` with signature `InvalidUtilization()` and selector `0x25062e25`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8563,8 +8563,8 @@ pub mod cost_model_dynamic_level {
     ///Custom Error type `SetAlreadyRegistered` with signature `SetAlreadyRegistered()` and selector `0x8869be2c`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8576,8 +8576,8 @@ pub mod cost_model_dynamic_level {
     ///Custom Error type `Unauthorized` with signature `Unauthorized()` and selector `0x82b42900`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8587,7 +8587,7 @@ pub mod cost_model_dynamic_level {
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CostModelDynamicLevelErrors {
         InvalidConfiguration(InvalidConfiguration),
         InvalidReferencePoint(InvalidReferencePoint),
@@ -8668,30 +8668,30 @@ pub mod cost_model_dynamic_level {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for CostModelDynamicLevelErrors {
+    impl ::ethers_contract::ContractRevert for CostModelDynamicLevelErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidReferencePoint as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidTime as ::ethers::contract::EthError>::selector() => true,
+                    == <InvalidTime as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidUtilization as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <SetAlreadyRegistered as ::ethers::contract::EthError>::selector() => {
+                    == <SetAlreadyRegistered as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -8754,8 +8754,8 @@ pub mod cost_model_dynamic_level {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8773,8 +8773,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `_min` function with signature `_min(uint256,uint256)` and selector `0xac023b75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8789,8 +8789,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `costFactor` function with signature `costFactor(uint256,uint256)` and selector `0xd7c856b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8805,8 +8805,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8821,8 +8821,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8837,8 +8837,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `costFactorInOptimalZone` function with signature `costFactorInOptimalZone()` and selector `0x75df2826`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8850,8 +8850,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `lastUpdateTime` function with signature `lastUpdateTime()` and selector `0xc8f33c91`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8863,8 +8863,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `optimalZoneRate` function with signature `optimalZoneRate()` and selector `0x003dfe60`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8876,8 +8876,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8892,8 +8892,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `registerSet` function with signature `registerSet()` and selector `0x3b1b6520`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8905,8 +8905,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `setAddress` function with signature `setAddress()` and selector `0xe6569275`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8918,8 +8918,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `uHigh` function with signature `uHigh()` and selector `0xbcc6f012`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8931,8 +8931,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `uLow` function with signature `uLow()` and selector `0x04ab36c9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8944,8 +8944,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `uOpt` function with signature `uOpt()` and selector `0x80a3af36`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8957,8 +8957,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all input parameters for the `update` function with signature `update(uint256,uint256)` and selector `0x2fb565e8`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8971,7 +8971,7 @@ pub mod cost_model_dynamic_level {
         pub new_utilization: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CostModelDynamicLevelCalls {
         Min(MinCall),
         CostFactor(CostFactorCall),
@@ -9198,8 +9198,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `_min` function with signature `_min(uint256,uint256)` and selector `0xac023b75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9210,8 +9210,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `costFactor` function with signature `costFactor(uint256,uint256)` and selector `0xd7c856b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9222,8 +9222,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9234,8 +9234,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9246,8 +9246,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `costFactorInOptimalZone` function with signature `costFactorInOptimalZone()` and selector `0x75df2826`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9258,8 +9258,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `lastUpdateTime` function with signature `lastUpdateTime()` and selector `0xc8f33c91`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9270,8 +9270,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `optimalZoneRate` function with signature `optimalZoneRate()` and selector `0x003dfe60`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9282,8 +9282,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9294,8 +9294,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `setAddress` function with signature `setAddress()` and selector `0xe6569275`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9306,8 +9306,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `uHigh` function with signature `uHigh()` and selector `0xbcc6f012`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9318,8 +9318,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `uLow` function with signature `uLow()` and selector `0x04ab36c9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9330,8 +9330,8 @@ pub mod cost_model_dynamic_level {
     ///Container type for all return fields from the `uOpt` function with signature `uOpt()` and selector `0x80a3af36`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

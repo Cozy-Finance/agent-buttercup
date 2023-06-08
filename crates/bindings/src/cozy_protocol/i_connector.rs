@@ -13,16 +13,16 @@ pub mod i_connector {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"baseAsset\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToBaseAssetsNeeded\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"convertToWrappedAssets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unwrapWrappedAsset\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapBaseAsset\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICONNECTOR_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static ICONNECTOR_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct IConnector<M>(::ethers::contract::Contract<M>);
+    pub struct IConnector<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IConnector<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IConnector<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +45,7 @@ pub mod i_connector {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     ICONNECTOR_ABI.clone(),
                     client,
@@ -56,7 +56,7 @@ pub mod i_connector {
         pub fn balance_of(
             &self,
             account: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([112, 160, 130, 49], account)
                 .expect("method not found (this should never happen)")
@@ -64,7 +64,7 @@ pub mod i_connector {
         ///Calls the contract's `baseAsset` (0xcdf456e1) function
         pub fn base_asset(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -76,7 +76,7 @@ pub mod i_connector {
         pub fn convert_to_base_assets_needed(
             &self,
             assets: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([54, 108, 203, 34], assets)
                 .expect("method not found (this should never happen)")
@@ -85,7 +85,7 @@ pub mod i_connector {
         pub fn convert_to_wrapped_assets(
             &self,
             assets: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([71, 82, 89, 144], assets)
                 .expect("method not found (this should never happen)")
@@ -95,7 +95,7 @@ pub mod i_connector {
             &self,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([79, 48, 227, 11], (recipient, amount))
                 .expect("method not found (this should never happen)")
@@ -105,23 +105,23 @@ pub mod i_connector {
             &self,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([109, 195, 65, 74], (recipient, amount))
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IConnector<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Container type for all input parameters for the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -135,8 +135,8 @@ pub mod i_connector {
     ///Container type for all input parameters for the `baseAsset` function with signature `baseAsset()` and selector `0xcdf456e1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -148,8 +148,8 @@ pub mod i_connector {
     ///Container type for all input parameters for the `convertToBaseAssetsNeeded` function with signature `convertToBaseAssetsNeeded(uint256)` and selector `0x366ccb22`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -166,8 +166,8 @@ pub mod i_connector {
     ///Container type for all input parameters for the `convertToWrappedAssets` function with signature `convertToWrappedAssets(uint256)` and selector `0x47525990`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -181,8 +181,8 @@ pub mod i_connector {
     ///Container type for all input parameters for the `unwrapWrappedAsset` function with signature `unwrapWrappedAsset(address,uint256)` and selector `0x4f30e30b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -197,8 +197,8 @@ pub mod i_connector {
     ///Container type for all input parameters for the `wrapBaseAsset` function with signature `wrapBaseAsset(address,uint256)` and selector `0x6dc3414a`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -211,7 +211,7 @@ pub mod i_connector {
         pub amount: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IConnectorCalls {
         BalanceOf(BalanceOfCall),
         BaseAsset(BaseAssetCall),
@@ -333,8 +333,8 @@ pub mod i_connector {
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -345,8 +345,8 @@ pub mod i_connector {
     ///Container type for all return fields from the `baseAsset` function with signature `baseAsset()` and selector `0xcdf456e1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -357,8 +357,8 @@ pub mod i_connector {
     ///Container type for all return fields from the `convertToBaseAssetsNeeded` function with signature `convertToBaseAssetsNeeded(uint256)` and selector `0x366ccb22`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -369,8 +369,8 @@ pub mod i_connector {
     ///Container type for all return fields from the `convertToWrappedAssets` function with signature `convertToWrappedAssets(uint256)` and selector `0x47525990`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

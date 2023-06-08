@@ -13,20 +13,20 @@ pub mod i_state_change_events {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"enum MarketState\",\"name\":\"updatedTo_\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"MarketStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum SetState\",\"name\":\"updatedTo_\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"SetStateUpdated\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static ISTATECHANGEEVENTS_ABI: ::ethers::contract::Lazy<
+    pub static ISTATECHANGEEVENTS_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
-    pub struct IStateChangeEvents<M>(::ethers::contract::Contract<M>);
+    pub struct IStateChangeEvents<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IStateChangeEvents<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IStateChangeEvents<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -49,7 +49,7 @@ pub mod i_state_change_events {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     ISTATECHANGEEVENTS_ABI.clone(),
                     client,
@@ -59,7 +59,7 @@ pub mod i_state_change_events {
         ///Gets the contract's `MarketStateUpdated` event
         pub fn market_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             MarketStateUpdatedFilter,
@@ -69,7 +69,7 @@ pub mod i_state_change_events {
         ///Gets the contract's `SetStateUpdated` event
         pub fn set_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             SetStateUpdatedFilter,
@@ -79,7 +79,7 @@ pub mod i_state_change_events {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             IStateChangeEventsEvents,
@@ -87,16 +87,16 @@ pub mod i_state_change_events {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IStateChangeEvents<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -117,8 +117,8 @@ pub mod i_state_change_events {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -131,12 +131,12 @@ pub mod i_state_change_events {
         pub updated_to: u8,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IStateChangeEventsEvents {
         MarketStateUpdatedFilter(MarketStateUpdatedFilter),
         SetStateUpdatedFilter(SetStateUpdatedFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IStateChangeEventsEvents {
+    impl ::ethers_contract::EthLogDecode for IStateChangeEventsEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {

@@ -13,7 +13,7 @@ pub mod p_token_factory {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"ptokenLogic_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"ptoken_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint8\",\"name\":\"decimals_\",\"type\":\"uint8\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"PTokenDeployed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"computeAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"decimals_\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployPToken\",\"outputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"ptoken_\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ptokenLogic\",\"outputs\":[{\"internalType\":\"contract IPToken\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"salt\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static PTOKENFACTORY_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static PTOKENFACTORY_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -2077,14 +2077,14 @@ pub mod p_token_factory {
     pub static PTOKENFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct PTokenFactory<M>(::ethers::contract::Contract<M>);
+    pub struct PTokenFactory<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for PTokenFactory<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for PTokenFactory<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -2107,7 +2107,7 @@ pub mod p_token_factory {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     PTOKENFACTORY_ABI.clone(),
                     client,
@@ -2141,16 +2141,16 @@ pub mod p_token_factory {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 PTOKENFACTORY_ABI.clone(),
                 PTOKENFACTORY_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `computeAddress` (0xeb078df9) function
@@ -2158,7 +2158,7 @@ pub mod p_token_factory {
             &self,
             set: ::ethers::core::types::Address,
             trigger: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -2171,7 +2171,7 @@ pub mod p_token_factory {
             &self,
             decimals: u8,
             trigger: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -2182,7 +2182,7 @@ pub mod p_token_factory {
         ///Calls the contract's `ptokenLogic` (0xfb2abf59) function
         pub fn ptoken_logic(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -2195,7 +2195,7 @@ pub mod p_token_factory {
             &self,
             set: ::ethers::core::types::Address,
             trigger: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([170, 144, 20, 82], (set, trigger))
                 .expect("method not found (this should never happen)")
@@ -2203,7 +2203,7 @@ pub mod p_token_factory {
         ///Gets the contract's `PTokenDeployed` event
         pub fn p_token_deployed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             PtokenDeployedFilter,
@@ -2213,7 +2213,7 @@ pub mod p_token_factory {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             PtokenDeployedFilter,
@@ -2221,17 +2221,17 @@ pub mod p_token_factory {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for PTokenFactory<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidAddress` with signature `InvalidAddress()` and selector `0xe6c4247b`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2242,8 +2242,8 @@ pub mod p_token_factory {
     pub struct InvalidAddress;
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2265,8 +2265,8 @@ pub mod p_token_factory {
     ///Container type for all input parameters for the `computeAddress` function with signature `computeAddress(address,address)` and selector `0xeb078df9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2281,8 +2281,8 @@ pub mod p_token_factory {
     ///Container type for all input parameters for the `deployPToken` function with signature `deployPToken(uint8,address)` and selector `0x330b9319`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2297,8 +2297,8 @@ pub mod p_token_factory {
     ///Container type for all input parameters for the `ptokenLogic` function with signature `ptokenLogic()` and selector `0xfb2abf59`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2310,8 +2310,8 @@ pub mod p_token_factory {
     ///Container type for all input parameters for the `salt` function with signature `salt(address,address)` and selector `0xaa901452`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2324,7 +2324,7 @@ pub mod p_token_factory {
         pub trigger: ::ethers::core::types::Address,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum PTokenFactoryCalls {
         ComputeAddress(ComputeAddressCall),
         DeployPToken(DeployPTokenCall),
@@ -2404,8 +2404,8 @@ pub mod p_token_factory {
     ///Container type for all return fields from the `computeAddress` function with signature `computeAddress(address,address)` and selector `0xeb078df9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2416,8 +2416,8 @@ pub mod p_token_factory {
     ///Container type for all return fields from the `deployPToken` function with signature `deployPToken(uint8,address)` and selector `0x330b9319`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2430,8 +2430,8 @@ pub mod p_token_factory {
     ///Container type for all return fields from the `ptokenLogic` function with signature `ptokenLogic()` and selector `0xfb2abf59`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2442,8 +2442,8 @@ pub mod p_token_factory {
     ///Container type for all return fields from the `salt` function with signature `salt(address,address)` and selector `0xaa901452`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

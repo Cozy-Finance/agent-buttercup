@@ -98,6 +98,8 @@ pub mod metadata {
     pub static IWSTETH_PATH: &str = "src/interfaces/IWstETH.sol";
     pub static PTOKEN_NAME: &str = "PToken";
     pub static PTOKEN_PATH: &str = "src/PToken.sol";
+    pub static MANAGER_NAME: &str = "Manager";
+    pub static MANAGER_PATH: &str = "src/Manager.sol";
     pub static COZYROUTER_NAME: &str = "CozyRouter";
     pub static COZYROUTER_PATH: &str = "src/CozyRouter.sol";
     pub static IASSETDEPOSITERERRORS_NAME: &str = "IAssetDepositerErrors";
@@ -129,8 +131,12 @@ pub mod metadata {
     pub static ILFT_PATH: &str = "src/interfaces/ILFT.sol";
     pub static REDEMPTIONLIB_NAME: &str = "RedemptionLib";
     pub static REDEMPTIONLIB_PATH: &str = "src/lib/RedemptionLib.sol";
+    pub static BACKSTOP_NAME: &str = "Backstop";
+    pub static BACKSTOP_PATH: &str = "src/Backstop.sol";
     pub static IMANAGEREVENTS_NAME: &str = "IManagerEvents";
     pub static IMANAGEREVENTS_PATH: &str = "src/interfaces/IManagerEvents.sol";
+    pub static CONFIGURATOR_NAME: &str = "Configurator";
+    pub static CONFIGURATOR_PATH: &str = "src/lib/Configurator.sol";
     pub static SETFACTORY_NAME: &str = "SetFactory";
     pub static SETFACTORY_PATH: &str = "src/SetFactory.sol";
     pub static COZYMATH_NAME: &str = "CozyMath";

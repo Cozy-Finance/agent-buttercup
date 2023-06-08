@@ -13,16 +13,16 @@ pub mod finder_interface {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"interfaceName\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"implementationAddress\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"changeImplementationAddress\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"interfaceName\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getImplementationAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static FINDERINTERFACE_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static FINDERINTERFACE_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct FinderInterface<M>(::ethers::contract::Contract<M>);
+    pub struct FinderInterface<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for FinderInterface<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for FinderInterface<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +45,7 @@ pub mod finder_interface {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     FINDERINTERFACE_ABI.clone(),
                     client,
@@ -57,7 +57,7 @@ pub mod finder_interface {
             &self,
             interface_name: [u8; 32],
             implementation_address: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [49, 249, 102, 94],
@@ -69,7 +69,7 @@ pub mod finder_interface {
         pub fn get_implementation_address(
             &self,
             interface_name: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -78,17 +78,17 @@ pub mod finder_interface {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for FinderInterface<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Container type for all input parameters for the `changeImplementationAddress` function with signature `changeImplementationAddress(bytes32,address)` and selector `0x31f9665e`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -106,8 +106,8 @@ pub mod finder_interface {
     ///Container type for all input parameters for the `getImplementationAddress` function with signature `getImplementationAddress(bytes32)` and selector `0xaafd5e40`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -122,7 +122,7 @@ pub mod finder_interface {
         pub interface_name: [u8; 32],
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum FinderInterfaceCalls {
         ChangeImplementationAddress(ChangeImplementationAddressCall),
         GetImplementationAddress(GetImplementationAddressCall),
@@ -185,8 +185,8 @@ pub mod finder_interface {
     ///Container type for all return fields from the `getImplementationAddress` function with signature `getImplementationAddress(bytes32)` and selector `0xaafd5e40`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

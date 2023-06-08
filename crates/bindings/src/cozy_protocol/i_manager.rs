@@ -14,16 +14,16 @@ pub mod i_manager {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint128\",\"name\":\"reserveAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"CozyFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"DelaysUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"depositCap_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DepositCapUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"amount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowedMarketsPerSet\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"configUpdateGracePeriod\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"depositFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getDepositCap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"minDepositDuration\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"pause\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"pauser\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"purchaseFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"redemptionDelay\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"redemptionDelay_\",\"type\":\"uint32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"saleFees\",\"outputs\":[{\"internalType\":\"struct ProtocolFees\",\"name\":\"protocolFees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"reserveFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"backstopFee\",\"type\":\"uint16\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"sets_\",\"type\":\"address[]\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unpause\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IMANAGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static IMANAGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct IManager<M>(::ethers::contract::Contract<M>);
+    pub struct IManager<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IManager<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IManager<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -46,7 +46,7 @@ pub mod i_manager {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     IMANAGER_ABI.clone(),
                     client,
@@ -56,7 +56,7 @@ pub mod i_manager {
         ///Calls the contract's `allowedMarketsPerSet` (0x9aeae457) function
         pub fn allowed_markets_per_set(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([154, 234, 228, 87], ())
                 .expect("method not found (this should never happen)")
@@ -64,7 +64,7 @@ pub mod i_manager {
         ///Calls the contract's `configUpdateDelay` (0xc5f755f0) function
         pub fn config_update_delay(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([197, 247, 85, 240], ())
                 .expect("method not found (this should never happen)")
@@ -72,7 +72,7 @@ pub mod i_manager {
         ///Calls the contract's `configUpdateGracePeriod` (0x31cd4c9c) function
         pub fn config_update_grace_period(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([49, 205, 76, 156], ())
                 .expect("method not found (this should never happen)")
@@ -80,7 +80,7 @@ pub mod i_manager {
         ///Calls the contract's `depositFees` (0x26741e7d) function
         pub fn deposit_fees(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([38, 116, 30, 125], ())
                 .expect("method not found (this should never happen)")
@@ -89,7 +89,7 @@ pub mod i_manager {
         pub fn get_deposit_cap(
             &self,
             asset: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([46, 193, 55, 168], asset)
                 .expect("method not found (this should never happen)")
@@ -98,7 +98,7 @@ pub mod i_manager {
         pub fn is_set(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([116, 235, 227, 236], set)
                 .expect("method not found (this should never happen)")
@@ -106,7 +106,7 @@ pub mod i_manager {
         ///Calls the contract's `minDepositDuration` (0x03814568) function
         pub fn min_deposit_duration(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([3, 129, 69, 104], ())
                 .expect("method not found (this should never happen)")
@@ -114,7 +114,7 @@ pub mod i_manager {
         ///Calls the contract's `owner` (0x8da5cb5b) function
         pub fn owner(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -126,7 +126,7 @@ pub mod i_manager {
         pub fn pause(
             &self,
             sets: ::std::vec::Vec<::ethers::core::types::Address>,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([151, 85, 198, 167], sets)
                 .expect("method not found (this should never happen)")
@@ -134,7 +134,7 @@ pub mod i_manager {
         ///Calls the contract's `pauser` (0x9fd0506d) function
         pub fn pauser(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -145,7 +145,7 @@ pub mod i_manager {
         ///Calls the contract's `purchaseDelay` (0xb2eafefa) function
         pub fn purchase_delay(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([178, 234, 254, 250], ())
                 .expect("method not found (this should never happen)")
@@ -153,7 +153,7 @@ pub mod i_manager {
         ///Calls the contract's `purchaseFees` (0xb996d0a1) function
         pub fn purchase_fees(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([185, 150, 208, 161], ())
                 .expect("method not found (this should never happen)")
@@ -161,7 +161,7 @@ pub mod i_manager {
         ///Calls the contract's `redemptionDelay` (0x9b31c3a8) function
         pub fn redemption_delay(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u32> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u32> {
             self.0
                 .method_hash([155, 49, 195, 168], ())
                 .expect("method not found (this should never happen)")
@@ -169,7 +169,7 @@ pub mod i_manager {
         ///Calls the contract's `saleFees` (0x9c2d7d41) function
         pub fn sale_fees(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ProtocolFees> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ProtocolFees> {
             self.0
                 .method_hash([156, 45, 125, 65], ())
                 .expect("method not found (this should never happen)")
@@ -178,7 +178,7 @@ pub mod i_manager {
         pub fn unpause(
             &self,
             sets: ::std::vec::Vec<::ethers::core::types::Address>,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([3, 130, 20, 82], sets)
                 .expect("method not found (this should never happen)")
@@ -186,7 +186,7 @@ pub mod i_manager {
         ///Gets the contract's `CozyFeesClaimed` event
         pub fn cozy_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             CozyFeesClaimedFilter,
@@ -196,7 +196,7 @@ pub mod i_manager {
         ///Gets the contract's `DelaysUpdated` event
         pub fn delays_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             DelaysUpdatedFilter,
@@ -206,7 +206,7 @@ pub mod i_manager {
         ///Gets the contract's `DepositCapUpdated` event
         pub fn deposit_cap_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             DepositCapUpdatedFilter,
@@ -216,7 +216,7 @@ pub mod i_manager {
         ///Gets the contract's `FeesUpdated` event
         pub fn fees_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FeesUpdatedFilter,
@@ -226,7 +226,7 @@ pub mod i_manager {
         ///Gets the contract's `SetFeesClaimed` event
         pub fn set_fees_claimed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             SetFeesClaimedFilter,
@@ -236,24 +236,20 @@ pub mod i_manager {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            IManagerEvents,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, IManagerEvents> {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IManager<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -272,8 +268,8 @@ pub mod i_manager {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -289,8 +285,8 @@ pub mod i_manager {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -305,8 +301,8 @@ pub mod i_manager {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -322,8 +318,8 @@ pub mod i_manager {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -338,7 +334,7 @@ pub mod i_manager {
         pub amount: u128,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IManagerEvents {
         CozyFeesClaimedFilter(CozyFeesClaimedFilter),
         DelaysUpdatedFilter(DelaysUpdatedFilter),
@@ -346,7 +342,7 @@ pub mod i_manager {
         FeesUpdatedFilter(FeesUpdatedFilter),
         SetFeesClaimedFilter(SetFeesClaimedFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IManagerEvents {
+    impl ::ethers_contract::EthLogDecode for IManagerEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -415,8 +411,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `allowedMarketsPerSet` function with signature `allowedMarketsPerSet()` and selector `0x9aeae457`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -428,8 +424,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `configUpdateDelay` function with signature `configUpdateDelay()` and selector `0xc5f755f0`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -441,8 +437,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `configUpdateGracePeriod` function with signature `configUpdateGracePeriod()` and selector `0x31cd4c9c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -454,8 +450,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `depositFees` function with signature `depositFees()` and selector `0x26741e7d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -467,8 +463,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `getDepositCap` function with signature `getDepositCap(address)` and selector `0x2ec137a8`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -482,8 +478,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `isSet` function with signature `isSet(address)` and selector `0x74ebe3ec`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -497,8 +493,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `minDepositDuration` function with signature `minDepositDuration()` and selector `0x03814568`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -510,8 +506,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `owner` function with signature `owner()` and selector `0x8da5cb5b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -523,8 +519,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `pause` function with signature `pause(address[])` and selector `0x9755c6a7`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -538,8 +534,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `pauser` function with signature `pauser()` and selector `0x9fd0506d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -551,8 +547,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `purchaseDelay` function with signature `purchaseDelay()` and selector `0xb2eafefa`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -564,8 +560,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `purchaseFees` function with signature `purchaseFees()` and selector `0xb996d0a1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -577,8 +573,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `redemptionDelay` function with signature `redemptionDelay()` and selector `0x9b31c3a8`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -590,8 +586,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `saleFees` function with signature `saleFees()` and selector `0x9c2d7d41`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -603,8 +599,8 @@ pub mod i_manager {
     ///Container type for all input parameters for the `unpause` function with signature `unpause(address[])` and selector `0x03821452`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -616,7 +612,7 @@ pub mod i_manager {
         pub sets: ::std::vec::Vec<::ethers::core::types::Address>,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IManagerCalls {
         AllowedMarketsPerSet(AllowedMarketsPerSetCall),
         ConfigUpdateDelay(ConfigUpdateDelayCall),
@@ -856,8 +852,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `allowedMarketsPerSet` function with signature `allowedMarketsPerSet()` and selector `0x9aeae457`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -868,8 +864,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `configUpdateDelay` function with signature `configUpdateDelay()` and selector `0xc5f755f0`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -880,8 +876,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `configUpdateGracePeriod` function with signature `configUpdateGracePeriod()` and selector `0x31cd4c9c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -892,8 +888,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `depositFees` function with signature `depositFees()` and selector `0x26741e7d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -906,8 +902,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `getDepositCap` function with signature `getDepositCap(address)` and selector `0x2ec137a8`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -918,8 +914,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `isSet` function with signature `isSet(address)` and selector `0x74ebe3ec`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -930,8 +926,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `minDepositDuration` function with signature `minDepositDuration()` and selector `0x03814568`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -942,8 +938,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `owner` function with signature `owner()` and selector `0x8da5cb5b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -954,8 +950,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `pauser` function with signature `pauser()` and selector `0x9fd0506d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -966,8 +962,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `purchaseDelay` function with signature `purchaseDelay()` and selector `0xb2eafefa`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -978,8 +974,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `purchaseFees` function with signature `purchaseFees()` and selector `0xb996d0a1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -992,8 +988,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `redemptionDelay` function with signature `redemptionDelay()` and selector `0x9b31c3a8`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1006,8 +1002,8 @@ pub mod i_manager {
     ///Container type for all return fields from the `saleFees` function with signature `saleFees()` and selector `0x9c2d7d41`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1016,20 +1012,5 @@ pub mod i_manager {
     )]
     pub struct SaleFeesReturn {
         pub protocol_fees: ProtocolFees,
-    }
-    ///`ProtocolFees(uint16,uint16)`
-    #[derive(
-        Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
-        Default,
-        Debug,
-        PartialEq,
-        Eq,
-        Hash
-    )]
-    pub struct ProtocolFees {
-        pub reserve_fee: u16,
-        pub backstop_fee: u16,
     }
 }

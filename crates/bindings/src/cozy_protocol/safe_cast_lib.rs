@@ -13,7 +13,7 @@ pub mod safe_cast_lib {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static SAFECASTLIB_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static SAFECASTLIB_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -92,14 +92,14 @@ pub mod safe_cast_lib {
     pub static SAFECASTLIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct SafeCastLib<M>(::ethers::contract::Contract<M>);
+    pub struct SafeCastLib<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for SafeCastLib<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for SafeCastLib<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -122,7 +122,7 @@ pub mod safe_cast_lib {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     SAFECASTLIB_ABI.clone(),
                     client,
@@ -156,30 +156,30 @@ pub mod safe_cast_lib {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 SAFECASTLIB_ABI.clone(),
                 SAFECASTLIB_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for SafeCastLib<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `SafeCastFailed` with signature `SafeCastFailed()` and selector `0x45eef127`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,

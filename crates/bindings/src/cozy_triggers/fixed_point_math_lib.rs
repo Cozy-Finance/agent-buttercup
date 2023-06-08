@@ -13,9 +13,9 @@ pub mod fixed_point_math_lib {
     #[rustfmt::skip]
     const __ABI: &str = "[]";
     ///The parsed JSON ABI of the contract.
-    pub static FIXEDPOINTMATHLIB_ABI: ::ethers::contract::Lazy<
+    pub static FIXEDPOINTMATHLIB_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -260,14 +260,14 @@ pub mod fixed_point_math_lib {
     pub static FIXEDPOINTMATHLIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct FixedPointMathLib<M>(::ethers::contract::Contract<M>);
+    pub struct FixedPointMathLib<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for FixedPointMathLib<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for FixedPointMathLib<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -290,7 +290,7 @@ pub mod fixed_point_math_lib {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     FIXEDPOINTMATHLIB_ABI.clone(),
                     client,
@@ -324,22 +324,22 @@ pub mod fixed_point_math_lib {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 FIXEDPOINTMATHLIB_ABI.clone(),
                 FIXEDPOINTMATHLIB_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for FixedPointMathLib<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }

@@ -1,7 +1,7 @@
 use ethers::abi::Contract as EthersContract;
 use lazy_static::lazy_static;
 
-use crate::simulator::cozy::EthersBytes;
+use crate::cozy::EthersBytes;
 use bindings::{
     backstop::*,
     chainlink_trigger_factory::*,

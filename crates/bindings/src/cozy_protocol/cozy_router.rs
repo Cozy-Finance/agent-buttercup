@@ -14,7 +14,7 @@ pub mod cozy_router {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"manager_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IWeth\",\"name\":\"weth_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IStETH\",\"name\":\"stEth_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IWstETH\",\"name\":\"wstEth_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"returnData\",\"type\":\"bytes\",\"components\":[]}],\"type\":\"error\",\"name\":\"CallFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InsufficientBalance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SlippageExceeded\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"TransferFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes[]\",\"name\":\"calls_\",\"type\":\"bytes[]\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"aggregate\",\"outputs\":[{\"internalType\":\"bytes[]\",\"name\":\"returnData_\",\"type\":\"bytes[]\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minRefund_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"cancel\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"claim\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"id_\",\"type\":\"uint64\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"completeRedeem\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint64\",\"name\":\"id_\",\"type\":\"uint64\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"completeWithdraw\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"depositWithoutTransfer\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"maxWithdrawalRequest\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawableAssets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redeemableShares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"payout\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protectionClaimed_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"value_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"deadline_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"v_\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"r_\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"s_\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"permitRouter\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"previewCancellation\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"struct SaleFeesAssets\",\"name\":\"saleFeesAssets_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint128\",\"name\":\"reserveFeeAssets\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"backstopFeeAssets\",\"type\":\"uint128\",\"components\":[]},{\"internalType\":\"uint128\",\"name\":\"supplierFeeAssets\",\"type\":\"uint128\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"pullToken\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"purchase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"assetsNeeded_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"purchaseWithoutTransfer\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minAssetsReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minRefund_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"sell\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"refund_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"stEth\",\"outputs\":[{\"internalType\":\"contract IStETH\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amountMin_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"sweepToken\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"transferTokens\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"unwrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWrappedAssetViaConnector\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"unwrapWrappedAssetViaConnectorForWithdraw\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"weth\",\"outputs\":[{\"internalType\":\"contract IWeth\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxSharesBurned_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minSharesReceived_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapBaseAssetViaConnectorAndDeposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IConnector\",\"name\":\"connector_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapBaseAssetViaConnectorAndPurchase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"ptokens_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"wrapStEth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapStEthForPurchase\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWeth\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract Set\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"protection_\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"maxCost_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"wrapWethForPurchase\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"wstEth\",\"outputs\":[{\"internalType\":\"contract IWstETH\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"receive\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COZYROUTER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static COZYROUTER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -20397,14 +20397,14 @@ pub mod cozy_router {
     pub static COZYROUTER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct CozyRouter<M>(::ethers::contract::Contract<M>);
+    pub struct CozyRouter<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for CozyRouter<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for CozyRouter<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -20427,7 +20427,7 @@ pub mod cozy_router {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     COZYROUTER_ABI.clone(),
                     client,
@@ -20461,23 +20461,23 @@ pub mod cozy_router {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 COZYROUTER_ABI.clone(),
                 COZYROUTER_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `aggregate` (0x01b069c8) function
         pub fn aggregate(
             &self,
             calls: ::std::vec::Vec<::ethers::core::types::Bytes>,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::std::vec::Vec<::ethers::core::types::Bytes>,
         > {
@@ -20493,7 +20493,7 @@ pub mod cozy_router {
             protection: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_refund: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256),
         > {
@@ -20511,7 +20511,7 @@ pub mod cozy_router {
             market_id: u16,
             ptokens: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([255, 141, 17, 29], (set, market_id, ptokens, receiver))
                 .expect("method not found (this should never happen)")
@@ -20521,7 +20521,7 @@ pub mod cozy_router {
             &self,
             set: ::ethers::core::types::Address,
             id: u64,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([167, 229, 32, 37], (set, id))
                 .expect("method not found (this should never happen)")
@@ -20531,7 +20531,7 @@ pub mod cozy_router {
             &self,
             set: ::ethers::core::types::Address,
             id: u64,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([243, 39, 179, 19], (set, id))
                 .expect("method not found (this should never happen)")
@@ -20543,7 +20543,7 @@ pub mod cozy_router {
             assets: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_shares_received: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [144, 210, 80, 116],
@@ -20558,7 +20558,7 @@ pub mod cozy_router {
             assets: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_shares_received: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [67, 123, 229, 12],
@@ -20569,7 +20569,7 @@ pub mod cozy_router {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -20582,7 +20582,7 @@ pub mod cozy_router {
             &self,
             set: ::ethers::core::types::Address,
             owner: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256),
         > {
@@ -20597,7 +20597,7 @@ pub mod cozy_router {
             market_id: u16,
             protection: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256),
         > {
@@ -20614,7 +20614,7 @@ pub mod cozy_router {
             v: u8,
             r: [u8; 32],
             s: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([56, 78, 198, 62], (token, value, deadline, v, r, s))
                 .expect("method not found (this should never happen)")
@@ -20625,7 +20625,7 @@ pub mod cozy_router {
             set: ::ethers::core::types::Address,
             market_id: u16,
             protection: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256, SaleFeesAssets),
         > {
@@ -20639,7 +20639,7 @@ pub mod cozy_router {
             token: ::ethers::core::types::Address,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([46, 20, 69, 121], (token, recipient, amount))
                 .expect("method not found (this should never happen)")
@@ -20652,7 +20652,7 @@ pub mod cozy_router {
             protection: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             max_cost: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256),
         > {
@@ -20670,7 +20670,7 @@ pub mod cozy_router {
             market_id: u16,
             protection: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([105, 48, 14, 127], (set, market_id, protection, receiver))
                 .expect("method not found (this should never happen)")
@@ -20682,7 +20682,7 @@ pub mod cozy_router {
             shares: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_assets_received: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [243, 240, 148, 161],
@@ -20698,7 +20698,7 @@ pub mod cozy_router {
             ptokens: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_refund: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (::ethers::core::types::U256, ::ethers::core::types::U256),
         > {
@@ -20712,7 +20712,7 @@ pub mod cozy_router {
         ///Calls the contract's `stEth` (0x99940ece) function
         pub fn st_eth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -20726,7 +20726,7 @@ pub mod cozy_router {
             token: ::ethers::core::types::Address,
             recipient: ::ethers::core::types::Address,
             amount_min: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([100, 175, 249, 236], (token, recipient, amount_min))
                 .expect("method not found (this should never happen)")
@@ -20737,7 +20737,7 @@ pub mod cozy_router {
             token: ::ethers::core::types::Address,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([166, 75, 110, 95], (token, recipient, amount))
                 .expect("method not found (this should never happen)")
@@ -20746,7 +20746,7 @@ pub mod cozy_router {
         pub fn unwrap_st_eth(
             &self,
             recipient: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([197, 151, 58, 7], recipient)
                 .expect("method not found (this should never happen)")
@@ -20756,7 +20756,7 @@ pub mod cozy_router {
             &self,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([82, 27, 99, 144], (recipient, amount))
                 .expect("method not found (this should never happen)")
@@ -20765,7 +20765,7 @@ pub mod cozy_router {
         pub fn unwrap_weth(
             &self,
             recipient: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([119, 135, 99, 61], recipient)
                 .expect("method not found (this should never happen)")
@@ -20776,7 +20776,7 @@ pub mod cozy_router {
             connector: ::ethers::core::types::Address,
             assets: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([74, 75, 197, 188], (connector, assets, receiver))
                 .expect("method not found (this should never happen)")
@@ -20786,7 +20786,7 @@ pub mod cozy_router {
             &self,
             connector: ::ethers::core::types::Address,
             receiver: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([148, 80, 203, 236], (connector, receiver))
                 .expect("method not found (this should never happen)")
@@ -20794,7 +20794,7 @@ pub mod cozy_router {
         ///Calls the contract's `weth` (0x3fc8cef3) function
         pub fn weth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -20809,7 +20809,7 @@ pub mod cozy_router {
             assets: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             max_shares_burned: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [75, 32, 132, 227],
@@ -20825,7 +20825,7 @@ pub mod cozy_router {
             assets: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             min_shares_received: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [225, 88, 156, 189],
@@ -20842,7 +20842,7 @@ pub mod cozy_router {
             protection: ::ethers::core::types::U256,
             receiver: ::ethers::core::types::Address,
             max_cost: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [119, 242, 11, 211],
@@ -20854,7 +20854,7 @@ pub mod cozy_router {
         pub fn wrap_st_eth(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([51, 190, 49, 172], set)
                 .expect("method not found (this should never happen)")
@@ -20864,7 +20864,7 @@ pub mod cozy_router {
             &self,
             set: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([134, 14, 64, 128], (set, amount))
                 .expect("method not found (this should never happen)")
@@ -20876,7 +20876,7 @@ pub mod cozy_router {
             market_id: u16,
             protection: ::ethers::core::types::U256,
             max_cost: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([212, 187, 69, 98], (set, market_id, protection, max_cost))
                 .expect("method not found (this should never happen)")
@@ -20886,7 +20886,7 @@ pub mod cozy_router {
             &self,
             set: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([60, 109, 39, 203], (set, amount))
                 .expect("method not found (this should never happen)")
@@ -20895,7 +20895,7 @@ pub mod cozy_router {
         pub fn wrap_weth(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([158, 135, 166, 57], set)
                 .expect("method not found (this should never happen)")
@@ -20907,7 +20907,7 @@ pub mod cozy_router {
             market_id: u16,
             protection: ::ethers::core::types::U256,
             max_cost: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([158, 219, 75, 181], (set, market_id, protection, max_cost))
                 .expect("method not found (this should never happen)")
@@ -20915,7 +20915,7 @@ pub mod cozy_router {
         ///Calls the contract's `wstEth` (0x91815a98) function
         pub fn wst_eth(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -20924,17 +20924,17 @@ pub mod cozy_router {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for CozyRouter<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `CallFailed` with signature `CallFailed(uint256,bytes)` and selector `0x5c0dee5d`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -20949,8 +20949,8 @@ pub mod cozy_router {
     ///Custom Error type `InsufficientBalance` with signature `InsufficientBalance()` and selector `0xf4d678b8`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -20962,8 +20962,8 @@ pub mod cozy_router {
     ///Custom Error type `InvalidAddress` with signature `InvalidAddress()` and selector `0xe6c4247b`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -20975,8 +20975,8 @@ pub mod cozy_router {
     ///Custom Error type `SlippageExceeded` with signature `SlippageExceeded()` and selector `0x8199f5f3`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -20988,8 +20988,8 @@ pub mod cozy_router {
     ///Custom Error type `TransferFailed` with signature `TransferFailed()` and selector `0x90b8ec18`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21001,8 +21001,8 @@ pub mod cozy_router {
     ///Custom Error type `Unauthorized` with signature `Unauthorized()` and selector `0x82b42900`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21012,7 +21012,7 @@ pub mod cozy_router {
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CozyRouterErrors {
         CallFailed(CallFailed),
         InsufficientBalance(InsufficientBalance),
@@ -21087,30 +21087,30 @@ pub mod cozy_router {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for CozyRouterErrors {
+    impl ::ethers_contract::ContractRevert for CozyRouterErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <CallFailed as ::ethers::contract::EthError>::selector() => true,
+                    == <CallFailed as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <InsufficientBalance as ::ethers::contract::EthError>::selector() => {
+                    == <InsufficientBalance as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidAddress as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidAddress as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <SlippageExceeded as ::ethers::contract::EthError>::selector() => {
+                    == <SlippageExceeded as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <TransferFailed as ::ethers::contract::EthError>::selector() => {
+                    == <TransferFailed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -21168,8 +21168,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `aggregate` function with signature `aggregate(bytes[])` and selector `0x01b069c8`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21183,8 +21183,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `cancel` function with signature `cancel(address,uint16,uint256,address,uint256)` and selector `0x45b27849`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21202,8 +21202,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `claim` function with signature `claim(address,uint16,uint256,address)` and selector `0xff8d111d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21220,8 +21220,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `completeRedeem` function with signature `completeRedeem(address,uint64)` and selector `0xa7e52025`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21236,8 +21236,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `completeWithdraw` function with signature `completeWithdraw(address,uint64)` and selector `0xf327b313`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21252,8 +21252,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `deposit` function with signature `deposit(address,uint256,address,uint256)` and selector `0x90d25074`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21270,8 +21270,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `depositWithoutTransfer` function with signature `depositWithoutTransfer(address,uint256,address,uint256)` and selector `0x437be50c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21291,8 +21291,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21304,8 +21304,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `maxWithdrawalRequest` function with signature `maxWithdrawalRequest(address,address)` and selector `0x1f6927a5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21323,8 +21323,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `payout` function with signature `payout(address,uint16,uint256,address)` and selector `0x3628c730`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21341,8 +21341,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `permitRouter` function with signature `permitRouter(address,uint256,uint256,uint8,bytes32,bytes32)` and selector `0x384ec63e`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21364,8 +21364,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `previewCancellation` function with signature `previewCancellation(address,uint16,uint256)` and selector `0x184272a9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21384,8 +21384,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `pullToken` function with signature `pullToken(address,address,uint256)` and selector `0x2e144579`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21401,8 +21401,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `purchase` function with signature `purchase(address,uint16,uint256,address,uint256)` and selector `0x42766bd5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21423,8 +21423,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `purchaseWithoutTransfer` function with signature `purchaseWithoutTransfer(address,uint16,uint256,address)` and selector `0x69300e7f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21444,8 +21444,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `redeem` function with signature `redeem(address,uint256,address,uint256)` and selector `0xf3f094a1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21462,8 +21462,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `sell` function with signature `sell(address,uint16,uint256,address,uint256)` and selector `0x7ab27f54`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21481,8 +21481,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `stEth` function with signature `stEth()` and selector `0x99940ece`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21494,8 +21494,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `sweepToken` function with signature `sweepToken(address,address,uint256)` and selector `0x64aff9ec`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21511,8 +21511,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `transferTokens` function with signature `transferTokens(address,address,uint256)` and selector `0xa64b6e5f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21528,8 +21528,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `unwrapStEth` function with signature `unwrapStEth(address)` and selector `0xc5973a07`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21543,8 +21543,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `unwrapWeth` function with signature `unwrapWeth(address,uint256)` and selector `0x521b6390`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21559,8 +21559,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `unwrapWeth` function with signature `unwrapWeth(address)` and selector `0x7787633d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21574,8 +21574,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `unwrapWrappedAssetViaConnector` function with signature `unwrapWrappedAssetViaConnector(address,uint256,address)` and selector `0x4a4bc5bc`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21594,8 +21594,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `unwrapWrappedAssetViaConnectorForWithdraw` function with signature `unwrapWrappedAssetViaConnectorForWithdraw(address,address)` and selector `0x9450cbec`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21613,8 +21613,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `weth` function with signature `weth()` and selector `0x3fc8cef3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21626,8 +21626,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `withdraw` function with signature `withdraw(address,uint256,address,uint256)` and selector `0x4b2084e3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21644,8 +21644,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapBaseAssetViaConnectorAndDeposit` function with signature `wrapBaseAssetViaConnectorAndDeposit(address,address,uint256,address,uint256)` and selector `0xe1589cbd`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21666,8 +21666,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapBaseAssetViaConnectorAndPurchase` function with signature `wrapBaseAssetViaConnectorAndPurchase(address,address,uint16,uint256,address,uint256)` and selector `0x77f20bd3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21689,8 +21689,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapStEth` function with signature `wrapStEth(address)` and selector `0x33be31ac`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21704,8 +21704,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapStEth` function with signature `wrapStEth(address,uint256)` and selector `0x860e4080`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21720,8 +21720,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapStEthForPurchase` function with signature `wrapStEthForPurchase(address,uint16,uint256,uint256)` and selector `0xd4bb4562`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21741,8 +21741,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapWeth` function with signature `wrapWeth(address,uint256)` and selector `0x3c6d27cb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21757,8 +21757,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapWeth` function with signature `wrapWeth(address)` and selector `0x9e87a639`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21772,8 +21772,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wrapWethForPurchase` function with signature `wrapWethForPurchase(address,uint16,uint256,uint256)` and selector `0x9edb4bb5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21793,8 +21793,8 @@ pub mod cozy_router {
     ///Container type for all input parameters for the `wstEth` function with signature `wstEth()` and selector `0x91815a98`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -21804,7 +21804,7 @@ pub mod cozy_router {
     #[ethcall(name = "wstEth", abi = "wstEth()")]
     pub struct WstEthCall;
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CozyRouterCalls {
         Aggregate(AggregateCall),
         Cancel(CancelCall),
@@ -22373,8 +22373,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `aggregate` function with signature `aggregate(bytes[])` and selector `0x01b069c8`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22387,8 +22387,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `cancel` function with signature `cancel(address,uint16,uint256,address,uint256)` and selector `0x45b27849`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22402,8 +22402,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `claim` function with signature `claim(address,uint16,uint256,address)` and selector `0xff8d111d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22416,8 +22416,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `deposit` function with signature `deposit(address,uint256,address,uint256)` and selector `0x90d25074`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22430,8 +22430,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `depositWithoutTransfer` function with signature `depositWithoutTransfer(address,uint256,address,uint256)` and selector `0x437be50c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22444,8 +22444,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22456,8 +22456,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `maxWithdrawalRequest` function with signature `maxWithdrawalRequest(address,address)` and selector `0x1f6927a5`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22471,8 +22471,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `payout` function with signature `payout(address,uint16,uint256,address)` and selector `0x3628c730`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22486,8 +22486,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `previewCancellation` function with signature `previewCancellation(address,uint16,uint256)` and selector `0x184272a9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22502,8 +22502,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `purchase` function with signature `purchase(address,uint16,uint256,address,uint256)` and selector `0x42766bd5`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22517,8 +22517,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `purchaseWithoutTransfer` function with signature `purchaseWithoutTransfer(address,uint16,uint256,address)` and selector `0x69300e7f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22531,8 +22531,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `redeem` function with signature `redeem(address,uint256,address,uint256)` and selector `0xf3f094a1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22545,8 +22545,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `sell` function with signature `sell(address,uint16,uint256,address,uint256)` and selector `0x7ab27f54`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22560,8 +22560,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `stEth` function with signature `stEth()` and selector `0x99940ece`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22572,8 +22572,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `sweepToken` function with signature `sweepToken(address,address,uint256)` and selector `0x64aff9ec`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22586,8 +22586,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `weth` function with signature `weth()` and selector `0x3fc8cef3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22598,8 +22598,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `withdraw` function with signature `withdraw(address,uint256,address,uint256)` and selector `0x4b2084e3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22612,8 +22612,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `wrapBaseAssetViaConnectorAndDeposit` function with signature `wrapBaseAssetViaConnectorAndDeposit(address,address,uint256,address,uint256)` and selector `0xe1589cbd`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22626,8 +22626,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `wrapBaseAssetViaConnectorAndPurchase` function with signature `wrapBaseAssetViaConnectorAndPurchase(address,address,uint16,uint256,address,uint256)` and selector `0x77f20bd3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -22640,8 +22640,8 @@ pub mod cozy_router {
     ///Container type for all return fields from the `wstEth` function with signature `wstEth()` and selector `0x91815a98`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

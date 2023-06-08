@@ -13,16 +13,16 @@ pub mod i_st_eth {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"sharesAmount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getPooledEthByShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ethAmount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSharesByPooledEth\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"getTotalPooledEther\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"getTotalShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"referral_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"submit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ISTETH_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static ISTETH_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct IStETH<M>(::ethers::contract::Contract<M>);
+    pub struct IStETH<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IStETH<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IStETH<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +45,7 @@ pub mod i_st_eth {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     ISTETH_ABI.clone(),
                     client,
@@ -57,7 +57,7 @@ pub mod i_st_eth {
             &self,
             spender: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([9, 94, 167, 179], (spender, amount))
                 .expect("method not found (this should never happen)")
@@ -66,7 +66,7 @@ pub mod i_st_eth {
         pub fn balance_of(
             &self,
             account: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([112, 160, 130, 49], account)
                 .expect("method not found (this should never happen)")
@@ -75,7 +75,7 @@ pub mod i_st_eth {
         pub fn get_pooled_eth_by_shares(
             &self,
             shares_amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([122, 40, 251, 136], shares_amount)
                 .expect("method not found (this should never happen)")
@@ -84,7 +84,7 @@ pub mod i_st_eth {
         pub fn get_shares_by_pooled_eth(
             &self,
             eth_amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([25, 32, 132, 81], eth_amount)
                 .expect("method not found (this should never happen)")
@@ -92,7 +92,7 @@ pub mod i_st_eth {
         ///Calls the contract's `getTotalPooledEther` (0x37cfdaca) function
         pub fn get_total_pooled_ether(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([55, 207, 218, 202], ())
                 .expect("method not found (this should never happen)")
@@ -100,7 +100,7 @@ pub mod i_st_eth {
         ///Calls the contract's `getTotalShares` (0xd5002f2e) function
         pub fn get_total_shares(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([213, 0, 47, 46], ())
                 .expect("method not found (this should never happen)")
@@ -109,7 +109,7 @@ pub mod i_st_eth {
         pub fn submit(
             &self,
             referral: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([161, 144, 62, 171], referral)
                 .expect("method not found (this should never happen)")
@@ -119,7 +119,7 @@ pub mod i_st_eth {
             &self,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([169, 5, 156, 187], (recipient, amount))
                 .expect("method not found (this should never happen)")
@@ -130,23 +130,23 @@ pub mod i_st_eth {
             sender: ::ethers::core::types::Address,
             recipient: ::ethers::core::types::Address,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([35, 184, 114, 221], (sender, recipient, amount))
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IStETH<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Container type for all input parameters for the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -161,8 +161,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -176,8 +176,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `getPooledEthByShares` function with signature `getPooledEthByShares(uint256)` and selector `0x7a28fb88`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -191,8 +191,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `getSharesByPooledEth` function with signature `getSharesByPooledEth(uint256)` and selector `0x19208451`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -206,8 +206,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `getTotalPooledEther` function with signature `getTotalPooledEther()` and selector `0x37cfdaca`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -219,8 +219,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `getTotalShares` function with signature `getTotalShares()` and selector `0xd5002f2e`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -232,8 +232,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `submit` function with signature `submit(address)` and selector `0xa1903eab`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -247,8 +247,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -263,8 +263,8 @@ pub mod i_st_eth {
     ///Container type for all input parameters for the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -278,7 +278,7 @@ pub mod i_st_eth {
         pub amount: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IStETHCalls {
         Approve(ApproveCall),
         BalanceOf(BalanceOfCall),
@@ -438,8 +438,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -450,8 +450,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -462,8 +462,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `getPooledEthByShares` function with signature `getPooledEthByShares(uint256)` and selector `0x7a28fb88`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -474,8 +474,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `getSharesByPooledEth` function with signature `getSharesByPooledEth(uint256)` and selector `0x19208451`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -486,8 +486,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `getTotalPooledEther` function with signature `getTotalPooledEther()` and selector `0x37cfdaca`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -498,8 +498,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `getTotalShares` function with signature `getTotalShares()` and selector `0xd5002f2e`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -510,8 +510,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `submit` function with signature `submit(address)` and selector `0xa1903eab`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -522,8 +522,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -534,8 +534,8 @@ pub mod i_st_eth {
     ///Container type for all return fields from the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

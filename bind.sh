@@ -2,6 +2,11 @@
 
 cargo build -p binder
 
+if [ -d "contracts" ];
+then
+    rm -r "contracts"
+fi
+
 forge clean
 
 echo "Installing cozy contracts ... "

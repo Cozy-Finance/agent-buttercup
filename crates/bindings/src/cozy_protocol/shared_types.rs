@@ -1,8 +1,23 @@
+///`BackstopApproval(address,bool)`
+#[derive(
+    Clone,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
+    Default,
+    Debug,
+    PartialEq,
+    Eq,
+    Hash
+)]
+pub struct BackstopApproval {
+    pub set: ::ethers::core::types::Address,
+    pub status: bool,
+}
 ///`Delays(uint256,uint256,uint256,uint256,uint256)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -19,8 +34,8 @@ pub struct Delays {
 ///`DepositFeesAssets(uint128,uint128,uint128)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -35,8 +50,8 @@ pub struct DepositFeesAssets {
 ///`Fees(uint16,uint16,uint16,uint16,uint16,uint16)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -54,8 +69,8 @@ pub struct Fees {
 ///`MarketConfig(address,address,address,uint16,uint16,uint16)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -73,8 +88,8 @@ pub struct MarketConfig {
 ///`MarketConfigStorage(address,address,uint16,uint16,uint16)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -91,8 +106,8 @@ pub struct MarketConfigStorage {
 ///`MintData(uint216,uint40)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -103,11 +118,26 @@ pub struct MintData {
     pub amount: ::ethers::core::types::U256,
     pub time: u64,
 }
+///`ProtocolFees(uint16,uint16)`
+#[derive(
+    Clone,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
+    Default,
+    Debug,
+    PartialEq,
+    Eq,
+    Hash
+)]
+pub struct ProtocolFees {
+    pub reserve_fee: u16,
+    pub backstop_fee: u16,
+}
 ///`PurchaseFeesAssets(uint128,uint128,uint128,uint128,uint128)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -124,8 +154,8 @@ pub struct PurchaseFeesAssets {
 ///`RedemptionPreview(uint40,uint216,uint128,address,address)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -142,8 +172,8 @@ pub struct RedemptionPreview {
 ///`SaleFeesAssets(uint128,uint128,uint128)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,
@@ -158,8 +188,8 @@ pub struct SaleFeesAssets {
 ///`SetConfig(uint32,uint16)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,

@@ -6,30 +6,24 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# execution
-revm = "3.3.0"
-bytes = "1.4.0"
-ethers-solc = { git = "https://github.com/gakonst/ethers-rs" }
+bytes.workspace = true
+eyre.workspace = true
+thiserror.workspace = true
+rand.workspace = true
+crossbeam-channel.workspace = true
+serde.workspace = true
+hex.workspace = true
+csv.workspace = true
+serde_json.workspace = true
 
-# Error handling
-eyre = "0.6"
-thiserror = "1"
-
-# events
-crossbeam-channel = "0.5.8"
+ethers.workspace = true
+ethers-solc.workspace = true
+revm.workspace = true
 
 # price_simulation
-rand = "0.8.5"
 rand_chacha = "0.3.1"
 rand_distr = "0.4.3"
 plotly = "0.8.3"
-csv = "1.2.1"
 
 # void_middleware
 async-trait = "0.1.68"
-serde = {version = "1.0.163", features= ["derive"]}
-serde_json = "1.0.96"
-
-# added for tests
-ethers = "2.0.4"
-hex = { version = "0.4.3", default-features = false }

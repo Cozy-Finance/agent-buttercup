@@ -10,19 +10,20 @@ pub use i_backstop::*;
     non_camel_case_types,
 )]
 pub mod i_backstop {
+    pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bool\",\"name\":\"status_\",\"type\":\"bool\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"BackstopApprovalStatusUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Claim\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"claim\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isApproved\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"struct BackstopApproval[]\",\"name\":\"approvals_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateApprovals\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IBACKSTOP_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static IBACKSTOP_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct IBackstop<M>(::ethers::contract::Contract<M>);
+    pub struct IBackstop<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IBackstop<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IBackstop<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +46,7 @@ pub mod i_backstop {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     IBACKSTOP_ABI.clone(),
                     client,
@@ -56,7 +57,7 @@ pub mod i_backstop {
         pub fn claim(
             &self,
             amount: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([55, 150, 7, 245], amount)
                 .expect("method not found (this should never happen)")
@@ -65,7 +66,7 @@ pub mod i_backstop {
         pub fn is_approved(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([103, 52, 72, 221], set)
                 .expect("method not found (this should never happen)")
@@ -74,7 +75,7 @@ pub mod i_backstop {
         pub fn update_approvals(
             &self,
             approvals: ::std::vec::Vec<BackstopApproval>,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([205, 223, 219, 218], approvals)
                 .expect("method not found (this should never happen)")
@@ -82,7 +83,7 @@ pub mod i_backstop {
         ///Gets the contract's `BackstopApprovalStatusUpdated` event
         pub fn backstop_approval_status_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             BackstopApprovalStatusUpdatedFilter,
@@ -92,13 +93,13 @@ pub mod i_backstop {
         ///Gets the contract's `Claim` event
         pub fn claim_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, ClaimFilter> {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, ClaimFilter> {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             IBackstopEvents,
@@ -106,16 +107,16 @@ pub mod i_backstop {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IBackstop<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -133,8 +134,8 @@ pub mod i_backstop {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -150,12 +151,12 @@ pub mod i_backstop {
         pub amount: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IBackstopEvents {
         BackstopApprovalStatusUpdatedFilter(BackstopApprovalStatusUpdatedFilter),
         ClaimFilter(ClaimFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IBackstopEvents {
+    impl ::ethers_contract::EthLogDecode for IBackstopEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -191,8 +192,8 @@ pub mod i_backstop {
     ///Container type for all input parameters for the `claim` function with signature `claim(uint256)` and selector `0x379607f5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -206,8 +207,8 @@ pub mod i_backstop {
     ///Container type for all input parameters for the `isApproved` function with signature `isApproved(address)` and selector `0x673448dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -221,8 +222,8 @@ pub mod i_backstop {
     ///Container type for all input parameters for the `updateApprovals` function with signature `updateApprovals((address,bool)[])` and selector `0xcddfdbda`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -234,7 +235,7 @@ pub mod i_backstop {
         pub approvals: ::std::vec::Vec<BackstopApproval>,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IBackstopCalls {
         Claim(ClaimCall),
         IsApproved(IsApprovedCall),
@@ -300,8 +301,8 @@ pub mod i_backstop {
     ///Container type for all return fields from the `isApproved` function with signature `isApproved(address)` and selector `0x673448dd`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -309,19 +310,4 @@ pub mod i_backstop {
         Hash
     )]
     pub struct IsApprovedReturn(pub bool);
-    ///`BackstopApproval(address,bool)`
-    #[derive(
-        Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
-        Default,
-        Debug,
-        PartialEq,
-        Eq,
-        Hash
-    )]
-    pub struct BackstopApproval {
-        pub set: ::ethers::core::types::Address,
-        pub status: bool,
-    }
 }

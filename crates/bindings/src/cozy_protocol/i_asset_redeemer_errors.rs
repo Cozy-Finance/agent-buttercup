@@ -13,20 +13,20 @@ pub mod i_asset_redeemer_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"DelayNotElapsed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RedemptionNotFound\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"maxRedeemableShares_\",\"type\":\"uint256\",\"components\":[]}],\"type\":\"error\",\"name\":\"RedemptionRequestExceedsMax\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IASSETREDEEMERERRORS_ABI: ::ethers::contract::Lazy<
+    pub static IASSETREDEEMERERRORS_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
-    pub struct IAssetRedeemerErrors<M>(::ethers::contract::Contract<M>);
+    pub struct IAssetRedeemerErrors<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IAssetRedeemerErrors<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IAssetRedeemerErrors<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -51,7 +51,7 @@ pub mod i_asset_redeemer_errors {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     IASSETREDEEMERERRORS_ABI.clone(),
                     client,
@@ -59,17 +59,17 @@ pub mod i_asset_redeemer_errors {
             )
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IAssetRedeemerErrors<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `DelayNotElapsed` with signature `DelayNotElapsed()` and selector `0x27836e1f`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -81,8 +81,8 @@ pub mod i_asset_redeemer_errors {
     ///Custom Error type `RedemptionNotFound` with signature `RedemptionNotFound()` and selector `0x986a1905`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -94,8 +94,8 @@ pub mod i_asset_redeemer_errors {
     ///Custom Error type `RedemptionRequestExceedsMax` with signature `RedemptionRequestExceedsMax(uint256)` and selector `0x59818bce`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -110,7 +110,7 @@ pub mod i_asset_redeemer_errors {
         pub max_redeemable_shares: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IAssetRedeemerErrorsErrors {
         DelayNotElapsed(DelayNotElapsed),
         RedemptionNotFound(RedemptionNotFound),
@@ -163,20 +163,20 @@ pub mod i_asset_redeemer_errors {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for IAssetRedeemerErrorsErrors {
+    impl ::ethers_contract::ContractRevert for IAssetRedeemerErrorsErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <DelayNotElapsed as ::ethers::contract::EthError>::selector() => {
+                    == <DelayNotElapsed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <RedemptionNotFound as ::ethers::contract::EthError>::selector() => {
+                    == <RedemptionNotFound as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <RedemptionRequestExceedsMax as ::ethers::contract::EthError>::selector() => {
+                    == <RedemptionRequestExceedsMax as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ => false,

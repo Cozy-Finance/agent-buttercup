@@ -14,20 +14,20 @@ pub mod i_configurator_events {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"struct SetConfig\",\"name\":\"setConfig_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"struct MarketConfig[]\",\"name\":\"marketConfigs_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"ConfigUpdatesFinalized\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct SetConfig\",\"name\":\"setConfig_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint32\",\"name\":\"leverageFactor\",\"type\":\"uint32\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"struct MarketConfig[]\",\"name\":\"marketConfigs_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ITrigger\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ICostModel\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IDripDecayModel\",\"name\":\"dripDecayModel\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"weight\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFee\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFee\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"updateTime_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"updateDeadline_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"ConfigUpdatesQueued\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"marketId_\",\"type\":\"uint16\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"ptokenAddress_\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"MarketCreated\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICONFIGURATOREVENTS_ABI: ::ethers::contract::Lazy<
+    pub static ICONFIGURATOREVENTS_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
-    pub struct IConfiguratorEvents<M>(::ethers::contract::Contract<M>);
+    pub struct IConfiguratorEvents<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IConfiguratorEvents<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IConfiguratorEvents<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -52,7 +52,7 @@ pub mod i_configurator_events {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     ICONFIGURATOREVENTS_ABI.clone(),
                     client,
@@ -62,7 +62,7 @@ pub mod i_configurator_events {
         ///Gets the contract's `ConfigUpdatesFinalized` event
         pub fn config_updates_finalized_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             ConfigUpdatesFinalizedFilter,
@@ -72,7 +72,7 @@ pub mod i_configurator_events {
         ///Gets the contract's `ConfigUpdatesQueued` event
         pub fn config_updates_queued_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             ConfigUpdatesQueuedFilter,
@@ -82,7 +82,7 @@ pub mod i_configurator_events {
         ///Gets the contract's `MarketCreated` event
         pub fn market_created_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             MarketCreatedFilter,
@@ -92,7 +92,7 @@ pub mod i_configurator_events {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             IConfiguratorEventsEvents,
@@ -100,16 +100,16 @@ pub mod i_configurator_events {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IConfiguratorEvents<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -126,8 +126,8 @@ pub mod i_configurator_events {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -146,8 +146,8 @@ pub mod i_configurator_events {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -161,13 +161,13 @@ pub mod i_configurator_events {
         pub ptoken_address: ::ethers::core::types::Address,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IConfiguratorEventsEvents {
         ConfigUpdatesFinalizedFilter(ConfigUpdatesFinalizedFilter),
         ConfigUpdatesQueuedFilter(ConfigUpdatesQueuedFilter),
         MarketCreatedFilter(MarketCreatedFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IConfiguratorEventsEvents {
+    impl ::ethers_contract::EthLogDecode for IConfiguratorEventsEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {

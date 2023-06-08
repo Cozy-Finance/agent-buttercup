@@ -13,20 +13,20 @@ pub mod optimistic_oracle_v2_interface {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DisputePrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"expirationTimestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"currency\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"ProposePrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"address\",\"name\":\"currency\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"RequestPrice\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[],\"indexed\":false},{\"internalType\":\"int256\",\"name\":\"price\",\"type\":\"int256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"payout\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Settle\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"ancillaryBytesLimit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"defaultLiveness\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"disputePrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"disputePriceFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"finder\",\"outputs\":[{\"internalType\":\"contract FinderInterface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getCurrentTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getRequest\",\"outputs\":[{\"internalType\":\"struct OptimisticOracleV2Interface.Request\",\"name\":\"\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"struct OptimisticOracleV2Interface.RequestSettings\",\"name\":\"requestSettings\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"bool\",\"name\":\"eventBased\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"refundOnDispute\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"resolvedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[]}]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getState\",\"outputs\":[{\"internalType\":\"enum OptimisticOracleV2Interface.State\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"hasPrice\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"proposePrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"proposePriceFor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"requestPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"requests\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IERC20\",\"name\":\"currency\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"settled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"struct OptimisticOracleV2Interface.RequestSettings\",\"name\":\"requestSettings\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"bool\",\"name\":\"eventBased\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"refundOnDispute\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}]},{\"internalType\":\"int256\",\"name\":\"proposedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"resolvedPrice\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"expirationTime\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"finalFee\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setBond\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalBond\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceProposed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceDisputed\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"callbackOnPriceSettled\",\"type\":\"bool\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setCallbacks\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"customLiveness\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setCustomLiveness\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setEventBased\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"setRefundOnDispute\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"settle\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"payout\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"settleAndGetPrice\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"requester\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"stampAncillaryData\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static OPTIMISTICORACLEV2INTERFACE_ABI: ::ethers::contract::Lazy<
+    pub static OPTIMISTICORACLEV2INTERFACE_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
-    pub struct OptimisticOracleV2Interface<M>(::ethers::contract::Contract<M>);
+    pub struct OptimisticOracleV2Interface<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for OptimisticOracleV2Interface<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for OptimisticOracleV2Interface<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -51,7 +51,7 @@ pub mod optimistic_oracle_v2_interface {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     OPTIMISTICORACLEV2INTERFACE_ABI.clone(),
                     client,
@@ -61,7 +61,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Calls the contract's `ancillaryBytesLimit` (0xc371dda7) function
         pub fn ancillary_bytes_limit(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([195, 113, 221, 167], ())
                 .expect("method not found (this should never happen)")
@@ -69,7 +69,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Calls the contract's `defaultLiveness` (0xfe4e1983) function
         pub fn default_liveness(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([254, 78, 25, 131], ())
                 .expect("method not found (this should never happen)")
@@ -81,7 +81,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [251, 167, 241, 227],
@@ -97,7 +97,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [118, 199, 130, 63],
@@ -108,7 +108,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Calls the contract's `finder` (0xb9a3c84c) function
         pub fn finder(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -119,7 +119,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Calls the contract's `getCurrentTime` (0x29cb924d) function
         pub fn get_current_time(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([41, 203, 146, 77], ())
                 .expect("method not found (this should never happen)")
@@ -131,7 +131,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, Request> {
+        ) -> ::ethers_contract::builders::ContractCall<M, Request> {
             self.0
                 .method_hash(
                     [169, 144, 79, 155],
@@ -146,7 +146,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash(
                     [186, 75, 147, 12],
@@ -161,7 +161,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash(
                     [188, 88, 204, 170],
@@ -177,7 +177,7 @@ pub mod optimistic_oracle_v2_interface {
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
             proposed_price: ::ethers::core::types::I256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [184, 180, 249, 8],
@@ -194,7 +194,7 @@ pub mod optimistic_oracle_v2_interface {
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
             proposed_price: ::ethers::core::types::I256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [124, 130, 40, 143],
@@ -217,7 +217,7 @@ pub mod optimistic_oracle_v2_interface {
             ancillary_data: ::ethers::core::types::Bytes,
             currency: ::ethers::core::types::Address,
             reward: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [17, 223, 146, 241],
@@ -229,7 +229,7 @@ pub mod optimistic_oracle_v2_interface {
         pub fn requests(
             &self,
             p0: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             (
                 ::ethers::core::types::Address,
@@ -255,7 +255,7 @@ pub mod optimistic_oracle_v2_interface {
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
             bond: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [173, 90, 117, 90],
@@ -272,7 +272,7 @@ pub mod optimistic_oracle_v2_interface {
             callback_on_price_proposed: bool,
             callback_on_price_disputed: bool,
             callback_on_price_settled: bool,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [243, 39, 176, 117],
@@ -294,7 +294,7 @@ pub mod optimistic_oracle_v2_interface {
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
             custom_liveness: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [71, 60, 69, 254],
@@ -308,7 +308,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([18, 6, 152, 175], (identifier, timestamp, ancillary_data))
                 .expect("method not found (this should never happen)")
@@ -319,7 +319,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [145, 245, 141, 203],
@@ -334,7 +334,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash(
                     [94, 154, 121, 169],
@@ -348,7 +348,7 @@ pub mod optimistic_oracle_v2_interface {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::I256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::I256> {
             self.0
                 .method_hash([83, 181, 146, 57], (identifier, timestamp, ancillary_data))
                 .expect("method not found (this should never happen)")
@@ -358,10 +358,7 @@ pub mod optimistic_oracle_v2_interface {
             &self,
             ancillary_data: ::ethers::core::types::Bytes,
             requester: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Bytes,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Bytes> {
             self.0
                 .method_hash([175, 93, 47, 57], (ancillary_data, requester))
                 .expect("method not found (this should never happen)")
@@ -369,7 +366,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Gets the contract's `DisputePrice` event
         pub fn dispute_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             DisputePriceFilter,
@@ -379,7 +376,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Gets the contract's `ProposePrice` event
         pub fn propose_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             ProposePriceFilter,
@@ -389,7 +386,7 @@ pub mod optimistic_oracle_v2_interface {
         ///Gets the contract's `RequestPrice` event
         pub fn request_price_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             RequestPriceFilter,
@@ -399,13 +396,13 @@ pub mod optimistic_oracle_v2_interface {
         ///Gets the contract's `Settle` event
         pub fn settle_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, SettleFilter> {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, SettleFilter> {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             OptimisticOracleV2InterfaceEvents,
@@ -413,16 +410,16 @@ pub mod optimistic_oracle_v2_interface {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for OptimisticOracleV2Interface<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -447,8 +444,8 @@ pub mod optimistic_oracle_v2_interface {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -473,8 +470,8 @@ pub mod optimistic_oracle_v2_interface {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -497,8 +494,8 @@ pub mod optimistic_oracle_v2_interface {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -523,14 +520,14 @@ pub mod optimistic_oracle_v2_interface {
         pub payout: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum OptimisticOracleV2InterfaceEvents {
         DisputePriceFilter(DisputePriceFilter),
         ProposePriceFilter(ProposePriceFilter),
         RequestPriceFilter(RequestPriceFilter),
         SettleFilter(SettleFilter),
     }
-    impl ::ethers::contract::EthLogDecode for OptimisticOracleV2InterfaceEvents {
+    impl ::ethers_contract::EthLogDecode for OptimisticOracleV2InterfaceEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -597,8 +594,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `ancillaryBytesLimit` function with signature `ancillaryBytesLimit()` and selector `0xc371dda7`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -610,8 +607,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `defaultLiveness` function with signature `defaultLiveness()` and selector `0xfe4e1983`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -623,8 +620,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `disputePrice` function with signature `disputePrice(address,bytes32,uint256,bytes)` and selector `0xfba7f1e3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -644,8 +641,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `disputePriceFor` function with signature `disputePriceFor(address,address,bytes32,uint256,bytes)` and selector `0x76c7823f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -666,8 +663,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `finder` function with signature `finder()` and selector `0xb9a3c84c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -679,8 +676,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `getCurrentTime` function with signature `getCurrentTime()` and selector `0x29cb924d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -692,8 +689,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `getRequest` function with signature `getRequest(address,bytes32,uint256,bytes)` and selector `0xa9904f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -710,8 +707,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `getState` function with signature `getState(address,bytes32,uint256,bytes)` and selector `0xba4b930c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -728,8 +725,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `hasPrice` function with signature `hasPrice(address,bytes32,uint256,bytes)` and selector `0xbc58ccaa`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -746,8 +743,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `proposePrice` function with signature `proposePrice(address,bytes32,uint256,bytes,int256)` and selector `0xb8b4f908`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -768,8 +765,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `proposePriceFor` function with signature `proposePriceFor(address,address,bytes32,uint256,bytes,int256)` and selector `0x7c82288f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -791,8 +788,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `requestPrice` function with signature `requestPrice(bytes32,uint256,bytes,address,uint256)` and selector `0x11df92f1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -813,8 +810,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `requests` function with signature `requests(bytes32)` and selector `0x9d866985`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -826,8 +823,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `setBond` function with signature `setBond(bytes32,uint256,bytes,uint256)` and selector `0xad5a755a`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -844,8 +841,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `setCallbacks` function with signature `setCallbacks(bytes32,uint256,bytes,bool,bool,bool)` and selector `0xf327b075`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -867,8 +864,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `setCustomLiveness` function with signature `setCustomLiveness(bytes32,uint256,bytes,uint256)` and selector `0x473c45fe`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -888,8 +885,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `setEventBased` function with signature `setEventBased(bytes32,uint256,bytes)` and selector `0x120698af`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -905,8 +902,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `setRefundOnDispute` function with signature `setRefundOnDispute(bytes32,uint256,bytes)` and selector `0x91f58dcb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -925,8 +922,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `settle` function with signature `settle(address,bytes32,uint256,bytes)` and selector `0x5e9a79a9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -943,8 +940,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `settleAndGetPrice` function with signature `settleAndGetPrice(bytes32,uint256,bytes)` and selector `0x53b59239`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -963,8 +960,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all input parameters for the `stampAncillaryData` function with signature `stampAncillaryData(bytes,address)` and selector `0xaf5d2f39`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -977,7 +974,7 @@ pub mod optimistic_oracle_v2_interface {
         pub requester: ::ethers::core::types::Address,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum OptimisticOracleV2InterfaceCalls {
         AncillaryBytesLimit(AncillaryBytesLimitCall),
         DefaultLiveness(DefaultLivenessCall),
@@ -1315,8 +1312,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `ancillaryBytesLimit` function with signature `ancillaryBytesLimit()` and selector `0xc371dda7`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1327,8 +1324,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `defaultLiveness` function with signature `defaultLiveness()` and selector `0xfe4e1983`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1339,8 +1336,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `disputePrice` function with signature `disputePrice(address,bytes32,uint256,bytes)` and selector `0xfba7f1e3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1353,8 +1350,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `disputePriceFor` function with signature `disputePriceFor(address,address,bytes32,uint256,bytes)` and selector `0x76c7823f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1367,8 +1364,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `finder` function with signature `finder()` and selector `0xb9a3c84c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1379,8 +1376,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `getCurrentTime` function with signature `getCurrentTime()` and selector `0x29cb924d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1391,8 +1388,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `getRequest` function with signature `getRequest(address,bytes32,uint256,bytes)` and selector `0xa9904f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1403,8 +1400,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `getState` function with signature `getState(address,bytes32,uint256,bytes)` and selector `0xba4b930c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1415,8 +1412,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `hasPrice` function with signature `hasPrice(address,bytes32,uint256,bytes)` and selector `0xbc58ccaa`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1427,8 +1424,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `proposePrice` function with signature `proposePrice(address,bytes32,uint256,bytes,int256)` and selector `0xb8b4f908`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1441,8 +1438,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `proposePriceFor` function with signature `proposePriceFor(address,address,bytes32,uint256,bytes,int256)` and selector `0x7c82288f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1455,8 +1452,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `requestPrice` function with signature `requestPrice(bytes32,uint256,bytes,address,uint256)` and selector `0x11df92f1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1469,8 +1466,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `requests` function with signature `requests(bytes32)` and selector `0x9d866985`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1492,8 +1489,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `setBond` function with signature `setBond(bytes32,uint256,bytes,uint256)` and selector `0xad5a755a`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1506,8 +1503,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `settle` function with signature `settle(address,bytes32,uint256,bytes)` and selector `0x5e9a79a9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1520,8 +1517,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `settleAndGetPrice` function with signature `settleAndGetPrice(bytes32,uint256,bytes)` and selector `0x53b59239`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1532,8 +1529,8 @@ pub mod optimistic_oracle_v2_interface {
     ///Container type for all return fields from the `stampAncillaryData` function with signature `stampAncillaryData(bytes,address)` and selector `0xaf5d2f39`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1544,8 +1541,8 @@ pub mod optimistic_oracle_v2_interface {
     ///`Request(address,address,address,bool,(bool,bool,bool,bool,bool,uint256,uint256),int256,int256,uint256,uint256,uint256)`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1567,8 +1564,8 @@ pub mod optimistic_oracle_v2_interface {
     ///`RequestSettings(bool,bool,bool,bool,bool,uint256,uint256)`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

@@ -14,9 +14,9 @@ pub mod chainlink_trigger_factory {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"_manager\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidOraclePair\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"trigger\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"bytes32\",\"name\":\"triggerConfigId\",\"type\":\"bytes32\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"truthOracle\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"trackingOracle\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"priceTolerance\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"category\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\",\"components\":[],\"indexed\":false},{\"internalType\":\"string\",\"name\":\"logoURI\",\"type\":\"string\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"TriggerDeployed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"_price\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"_decimals\",\"type\":\"uint8\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"computeFixedPriceAggregatorAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_truthOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_triggerCount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"computeTriggerAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"_address\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"_price\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"_decimals\",\"type\":\"uint8\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployFixedPriceAggregator\",\"outputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_truthOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"struct TriggerMetadata\",\"name\":\"_metadata\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"category\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"logoURI\",\"type\":\"string\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployTrigger\",\"outputs\":[{\"internalType\":\"contract IChainlinkTrigger\",\"name\":\"_trigger\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"_price\",\"type\":\"int256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"_decimals\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_frequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"struct TriggerMetadata\",\"name\":\"_metadata\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"category\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\",\"components\":[]},{\"internalType\":\"string\",\"name\":\"logoURI\",\"type\":\"string\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployTrigger\",\"outputs\":[{\"internalType\":\"contract IChainlinkTrigger\",\"name\":\"_trigger\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_truthOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"findAvailableTrigger\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_truthOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerConfigId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"triggerCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static CHAINLINKTRIGGERFACTORY_ABI: ::ethers::contract::Lazy<
+    pub static CHAINLINKTRIGGERFACTORY_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -24066,14 +24066,14 @@ pub mod chainlink_trigger_factory {
     pub static CHAINLINKTRIGGERFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct ChainlinkTriggerFactory<M>(::ethers::contract::Contract<M>);
+    pub struct ChainlinkTriggerFactory<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for ChainlinkTriggerFactory<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for ChainlinkTriggerFactory<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -24098,7 +24098,7 @@ pub mod chainlink_trigger_factory {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     CHAINLINKTRIGGERFACTORY_ABI.clone(),
                     client,
@@ -24132,16 +24132,16 @@ pub mod chainlink_trigger_factory {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 CHAINLINKTRIGGERFACTORY_ABI.clone(),
                 CHAINLINKTRIGGERFACTORY_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `computeFixedPriceAggregatorAddress` (0xdba733f1) function
@@ -24149,7 +24149,7 @@ pub mod chainlink_trigger_factory {
             &self,
             price: ::ethers::core::types::I256,
             decimals: u8,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24166,7 +24166,7 @@ pub mod chainlink_trigger_factory {
             truth_frequency_tolerance: ::ethers::core::types::U256,
             tracking_frequency_tolerance: ::ethers::core::types::U256,
             trigger_count: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24189,7 +24189,7 @@ pub mod chainlink_trigger_factory {
             &self,
             price: ::ethers::core::types::I256,
             decimals: u8,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24206,7 +24206,7 @@ pub mod chainlink_trigger_factory {
             truth_frequency_tolerance: ::ethers::core::types::U256,
             tracking_frequency_tolerance: ::ethers::core::types::U256,
             metadata: TriggerMetadata,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24233,7 +24233,7 @@ pub mod chainlink_trigger_factory {
             price_tolerance: ::ethers::core::types::U256,
             frequency_tolerance: ::ethers::core::types::U256,
             metadata: TriggerMetadata,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24259,7 +24259,7 @@ pub mod chainlink_trigger_factory {
             price_tolerance: ::ethers::core::types::U256,
             truth_frequency_tolerance: ::ethers::core::types::U256,
             tracking_frequency_tolerance: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24279,7 +24279,7 @@ pub mod chainlink_trigger_factory {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -24295,7 +24295,7 @@ pub mod chainlink_trigger_factory {
             price_tolerance: ::ethers::core::types::U256,
             truth_frequency_tolerance: ::ethers::core::types::U256,
             tracking_frequency_tolerance: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash(
                     [233, 237, 65, 245],
@@ -24313,7 +24313,7 @@ pub mod chainlink_trigger_factory {
         pub fn trigger_count(
             &self,
             p0: [u8; 32],
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([51, 174, 102, 98], p0)
                 .expect("method not found (this should never happen)")
@@ -24321,7 +24321,7 @@ pub mod chainlink_trigger_factory {
         ///Gets the contract's `TriggerDeployed` event
         pub fn trigger_deployed_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             TriggerDeployedFilter,
@@ -24331,7 +24331,7 @@ pub mod chainlink_trigger_factory {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             TriggerDeployedFilter,
@@ -24339,17 +24339,17 @@ pub mod chainlink_trigger_factory {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for ChainlinkTriggerFactory<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidOraclePair` with signature `InvalidOraclePair()` and selector `0x17ade15b`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24360,8 +24360,8 @@ pub mod chainlink_trigger_factory {
     pub struct InvalidOraclePair;
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24391,8 +24391,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `computeFixedPriceAggregatorAddress` function with signature `computeFixedPriceAggregatorAddress(int256,uint8)` and selector `0xdba733f1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24410,8 +24410,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `computeTriggerAddress` function with signature `computeTriggerAddress(address,address,uint256,uint256,uint256,uint256)` and selector `0x83fd82f3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24433,8 +24433,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `deployFixedPriceAggregator` function with signature `deployFixedPriceAggregator(int256,uint8)` and selector `0xa33520f2`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24452,8 +24452,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `deployTrigger` function with signature `deployTrigger(address,address,uint256,uint256,uint256,(string,string,string,string))` and selector `0x3c4ed745`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24475,8 +24475,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `deployTrigger` function with signature `deployTrigger(int256,uint8,address,uint256,uint256,(string,string,string,string))` and selector `0x5d81c77c`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24498,8 +24498,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `findAvailableTrigger` function with signature `findAvailableTrigger(address,address,uint256,uint256,uint256)` and selector `0x5d2f86bc`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24520,8 +24520,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24533,8 +24533,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `triggerConfigId` function with signature `triggerConfigId(address,address,uint256,uint256,uint256)` and selector `0xe9ed41f5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24555,8 +24555,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all input parameters for the `triggerCount` function with signature `triggerCount(bytes32)` and selector `0x33ae6662`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -24566,7 +24566,7 @@ pub mod chainlink_trigger_factory {
     #[ethcall(name = "triggerCount", abi = "triggerCount(bytes32)")]
     pub struct TriggerCountCall(pub [u8; 32]);
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum ChainlinkTriggerFactoryCalls {
         ComputeFixedPriceAggregatorAddress(ComputeFixedPriceAggregatorAddressCall),
         ComputeTriggerAddress(ComputeTriggerAddressCall),
@@ -24752,8 +24752,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `computeFixedPriceAggregatorAddress` function with signature `computeFixedPriceAggregatorAddress(int256,uint8)` and selector `0xdba733f1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24766,8 +24766,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `computeTriggerAddress` function with signature `computeTriggerAddress(address,address,uint256,uint256,uint256,uint256)` and selector `0x83fd82f3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24780,8 +24780,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `deployFixedPriceAggregator` function with signature `deployFixedPriceAggregator(int256,uint8)` and selector `0xa33520f2`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24792,8 +24792,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `deployTrigger` function with signature `deployTrigger(address,address,uint256,uint256,uint256,(string,string,string,string))` and selector `0x3c4ed745`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24806,8 +24806,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `deployTrigger` function with signature `deployTrigger(int256,uint8,address,uint256,uint256,(string,string,string,string))` and selector `0x5d81c77c`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24820,8 +24820,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `findAvailableTrigger` function with signature `findAvailableTrigger(address,address,uint256,uint256,uint256)` and selector `0x5d2f86bc`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24832,8 +24832,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24844,8 +24844,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `triggerConfigId` function with signature `triggerConfigId(address,address,uint256,uint256,uint256)` and selector `0xe9ed41f5`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -24856,8 +24856,8 @@ pub mod chainlink_trigger_factory {
     ///Container type for all return fields from the `triggerCount` function with signature `triggerCount(bytes32)` and selector `0x33ae6662`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
