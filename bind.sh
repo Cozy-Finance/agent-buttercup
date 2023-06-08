@@ -19,7 +19,7 @@ echo "Removing some artifacts ... "
 rm -r "contracts/cozy-protocol-v2/out/structs"
 
 echo "Building rust bindings ... "
-./target/debug/binder --abis "contracts/cozy-triggers-v2-simulation/out" --bindings "lib/bindings" --mod-name "cozy_triggers" --overwrite
-./target/debug/binder --abis "contracts/cozy-models-v2-simulation/out" --bindings "lib/bindings" --mod-name "cozy_models" --overwrite
-./target/debug/binder --abis "contracts/cozy-protocol-v2/out" --bindings "lib/bindings" --mod-name "cozy_protocol" --overwrite
-./target/debug/binder --abis "contracts/canonical-weth/out" --bindings "lib/bindings" --mod-name "weth" --overwrite
+cargo run --bin binder -- --abis "contracts/cozy-triggers-v2-simulation/out" --bindings "crates/bindings" --mod-name "cozy_triggers" --overwrite
+cargo run --bin binder -- --abis "contracts/cozy-models-v2-simulation/out" --bindings "crates/bindings" --mod-name "cozy_models" --overwrite
+cargo run --bin binder -- --abis "contracts/cozy-protocol-v2/out" --bindings "crates/bindings" --mod-name "cozy_protocol" --overwrite
+cargo run --bin binder -- --abis "contracts/canonical-weth/out" --bindings "crates/bindings" --mod-name "weth" --overwrite

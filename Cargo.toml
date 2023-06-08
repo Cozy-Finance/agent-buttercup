@@ -1,25 +1,18 @@
-[workspace]
-members = [
-    "lib/bindings",
-    "lib/simulate",
-    "lib/onchain",
-    "binder"
-]
-
-[package]
-name = "arbiter"
+[workspace.package]
 version = "0.2.0"
 edition = "2021"
 
-[dependencies]
-# Local
-simulate = {path = "lib/simulate"}
-onchain = {path = "lib/onchain"}
-bindings = {path = "lib/bindings"}
-binder = {path = "binder"}
+[workspace]
+members = [
+    "crates/*",
+]
 
-# Primitive
-visualize = { git = "https://github.com/primitivefinance/visualization-rs.git"}
+[workspace.dependencies]
+binder = { path = "./crates/binder" }
+bindings = { path = "./crates/bindings" }
+onchain = { path = "./crates/onchain" }
+simulate = { path = "./crates/simulate" }
+simulations = { path = "./crates/simulations" }
 
 # Error handling
 thiserror = "1.0.40"
@@ -48,9 +41,6 @@ ruint = "1.8.0"
 # Simulation
 crossbeam-channel = "0.5.8"
 polars = "0.29.0"
-
-[dev-dependencies]
-assert_cmd = "2.0.11"
 
 # Release profile
 [profile.release]
