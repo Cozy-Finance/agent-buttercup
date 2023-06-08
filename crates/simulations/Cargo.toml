@@ -4,6 +4,16 @@ version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-bindings.workspace = true
 onchain.workspace = true
 simulate.workspace = true
+bindings.workspace = true
+
+ethers.workspace = true
+ethers-contract.workspace = true
+revm.workspace = true
+
+thiserror.workspace = true
+eyre.workspace = true
+rand.workspace = true
+
+lazy_static = "1.4.0"

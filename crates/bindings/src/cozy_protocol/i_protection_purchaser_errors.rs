@@ -13,20 +13,20 @@ pub mod i_protection_purchaser_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidPurchase\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IPROTECTIONPURCHASERERRORS_ABI: ::ethers::contract::Lazy<
+    pub static IPROTECTIONPURCHASERERRORS_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
-    pub struct IProtectionPurchaserErrors<M>(::ethers::contract::Contract<M>);
+    pub struct IProtectionPurchaserErrors<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IProtectionPurchaserErrors<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IProtectionPurchaserErrors<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -51,7 +51,7 @@ pub mod i_protection_purchaser_errors {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     IPROTECTIONPURCHASERERRORS_ABI.clone(),
                     client,
@@ -59,17 +59,17 @@ pub mod i_protection_purchaser_errors {
             )
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IProtectionPurchaserErrors<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidPurchase` with signature `InvalidPurchase()` and selector `0x53d13992`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,

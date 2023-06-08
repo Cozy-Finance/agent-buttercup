@@ -5,5 +5,5 @@ use std::error::Error;
 pub mod cozy;
 
 pub fn main() -> Result<(), Box<dyn Error>> {
-    cozy::run()
+    crate::cozy::run()
 }

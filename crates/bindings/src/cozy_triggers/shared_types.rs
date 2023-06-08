@@ -1,8 +1,8 @@
 ///`TriggerMetadata(string,string,string,string)`
 #[derive(
     Clone,
-    ::ethers::contract::EthAbiType,
-    ::ethers::contract::EthAbiCodec,
+    ::ethers_contract::EthAbiType,
+    ::ethers_contract::EthAbiCodec,
     Default,
     Debug,
     PartialEq,

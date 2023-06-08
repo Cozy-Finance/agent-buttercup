@@ -13,7 +13,7 @@ pub mod supply_side_lib {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidDeposit\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"reserveFees\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopFees\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"setOwnerFees\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesAccrued\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static SUPPLYSIDELIB_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static SUPPLYSIDELIB_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -8711,14 +8711,14 @@ pub mod supply_side_lib {
     pub static SUPPLYSIDELIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct SupplySideLib<M>(::ethers::contract::Contract<M>);
+    pub struct SupplySideLib<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for SupplySideLib<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for SupplySideLib<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -8741,7 +8741,7 @@ pub mod supply_side_lib {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     SUPPLYSIDELIB_ABI.clone(),
                     client,
@@ -8775,22 +8775,22 @@ pub mod supply_side_lib {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 SUPPLYSIDELIB_ABI.clone(),
                 SUPPLYSIDELIB_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Gets the contract's `FeesAccrued` event
         pub fn fees_accrued_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FeesAccruedFilter,
@@ -8800,7 +8800,7 @@ pub mod supply_side_lib {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FeesAccruedFilter,
@@ -8808,17 +8808,17 @@ pub mod supply_side_lib {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for SupplySideLib<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidDeposit` with signature `InvalidDeposit()` and selector `0xb2e532de`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8830,8 +8830,8 @@ pub mod supply_side_lib {
     ///Custom Error type `InvalidState` with signature `InvalidState()` and selector `0xbaf3f0f7`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8843,8 +8843,8 @@ pub mod supply_side_lib {
     ///Custom Error type `RoundsToZero` with signature `RoundsToZero()` and selector `0xc440e0aa`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8856,8 +8856,8 @@ pub mod supply_side_lib {
     ///Custom Error type `SafeCastFailed` with signature `SafeCastFailed()` and selector `0x45eef127`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8867,7 +8867,7 @@ pub mod supply_side_lib {
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum SupplySideLibErrors {
         InvalidDeposit(InvalidDeposit),
         InvalidState(InvalidState),
@@ -8926,20 +8926,20 @@ pub mod supply_side_lib {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for SupplySideLibErrors {
+    impl ::ethers_contract::ContractRevert for SupplySideLibErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidDeposit as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidDeposit as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
+                    == <InvalidState as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                    == <RoundsToZero as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <SafeCastFailed as ::ethers::contract::EthError>::selector() => {
+                    == <SafeCastFailed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -8984,8 +8984,8 @@ pub mod supply_side_lib {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,

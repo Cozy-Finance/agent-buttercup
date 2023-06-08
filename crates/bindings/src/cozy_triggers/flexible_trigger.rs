@@ -13,7 +13,7 @@ pub mod flexible_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"_manager\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_boss\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address[]\",\"name\":\"_freezers\",\"type\":\"address[]\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"_isAutoTrigger\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_maxFreezeDuration\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetLimitReached\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unacknowledged\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"freezer\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"FreezerAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"acknowledge\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"_set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"boss\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"freeze\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"freezeTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"freezers\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isAutoTrigger\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"maxFreezeDuration\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"publicTrigger\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"resume\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"trigger\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static FLEXIBLETRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static FLEXIBLETRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
@@ -8542,14 +8542,14 @@ pub mod flexible_trigger {
     pub static FLEXIBLETRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct FlexibleTrigger<M>(::ethers::contract::Contract<M>);
+    pub struct FlexibleTrigger<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for FlexibleTrigger<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for FlexibleTrigger<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -8572,7 +8572,7 @@ pub mod flexible_trigger {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     FLEXIBLETRIGGER_ABI.clone(),
                     client,
@@ -8606,28 +8606,28 @@ pub mod flexible_trigger {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 FLEXIBLETRIGGER_ABI.clone(),
                 FLEXIBLETRIGGER_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `MAX_SET_LENGTH` (0x59537144) function
         pub fn max_set_length(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([89, 83, 113, 68], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledge` (0x49233d5d) function
-        pub fn acknowledge(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn acknowledge(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([73, 35, 61, 93], ())
                 .expect("method not found (this should never happen)")
@@ -8635,7 +8635,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `acknowledged` (0x086c298d) function
         pub fn acknowledged(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -8644,7 +8644,7 @@ pub mod flexible_trigger {
         pub fn add_set(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([213, 128, 222, 212], set)
                 .expect("method not found (this should never happen)")
@@ -8652,7 +8652,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `boss` (0xc772af39) function
         pub fn boss(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -8661,7 +8661,7 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `freeze` (0x62a5af3b) function
-        pub fn freeze(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn freeze(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([98, 165, 175, 59], ())
                 .expect("method not found (this should never happen)")
@@ -8669,7 +8669,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `freezeTime` (0xfd7e1bee) function
         pub fn freeze_time(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([253, 126, 27, 238], ())
                 .expect("method not found (this should never happen)")
@@ -8678,7 +8678,7 @@ pub mod flexible_trigger {
         pub fn freezers(
             &self,
             p0: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([31, 129, 99, 82], p0)
                 .expect("method not found (this should never happen)")
@@ -8686,7 +8686,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `getSets` (0x2cf7c531) function
         pub fn get_sets(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::std::vec::Vec<::ethers::core::types::Address>,
         > {
@@ -8697,7 +8697,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `getSetsLength` (0xe86376c5) function
         pub fn get_sets_length(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([232, 99, 118, 197], ())
                 .expect("method not found (this should never happen)")
@@ -8705,7 +8705,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `isAutoTrigger` (0xa2ce3d49) function
         pub fn is_auto_trigger(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([162, 206, 61, 73], ())
                 .expect("method not found (this should never happen)")
@@ -8713,7 +8713,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -8724,7 +8724,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `maxFreezeDuration` (0xc2b758e1) function
         pub fn max_freeze_duration(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([194, 183, 88, 225], ())
                 .expect("method not found (this should never happen)")
@@ -8732,13 +8732,13 @@ pub mod flexible_trigger {
         ///Calls the contract's `publicTrigger` (0x4f9ca8c5) function
         pub fn public_trigger(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([79, 156, 168, 197], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `resume` (0x046f7da2) function
-        pub fn resume(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn resume(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([4, 111, 125, 162], ())
                 .expect("method not found (this should never happen)")
@@ -8746,7 +8746,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
         pub fn run_programmatic_check(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -8755,7 +8755,7 @@ pub mod flexible_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -8764,13 +8764,13 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `state` (0xc19d93fb) function
-        pub fn state(&self) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        pub fn state(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([193, 157, 147, 251], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `trigger` (0x7fec8d38) function
-        pub fn trigger(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn trigger(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([127, 236, 141, 56], ())
                 .expect("method not found (this should never happen)")
@@ -8778,7 +8778,7 @@ pub mod flexible_trigger {
         ///Gets the contract's `FreezerAdded` event
         pub fn freezer_added_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FreezerAddedFilter,
@@ -8788,17 +8788,13 @@ pub mod flexible_trigger {
         ///Gets the contract's `SetAdded` event
         pub fn set_added_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetAddedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, SetAddedFilter> {
             self.0.event()
         }
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             TriggerStateUpdatedFilter,
@@ -8808,7 +8804,7 @@ pub mod flexible_trigger {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             FlexibleTriggerEvents,
@@ -8816,17 +8812,17 @@ pub mod flexible_trigger {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for FlexibleTrigger<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidStateTransition` with signature `InvalidStateTransition()` and selector `0x8f9a780c`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8838,8 +8834,8 @@ pub mod flexible_trigger {
     ///Custom Error type `SetLimitReached` with signature `SetLimitReached()` and selector `0x86bfb2c8`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8851,8 +8847,8 @@ pub mod flexible_trigger {
     ///Custom Error type `Unacknowledged` with signature `Unacknowledged()` and selector `0x48c068cd`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8864,8 +8860,8 @@ pub mod flexible_trigger {
     ///Custom Error type `Unauthorized` with signature `Unauthorized()` and selector `0x82b42900`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -8875,7 +8871,7 @@ pub mod flexible_trigger {
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum FlexibleTriggerErrors {
         InvalidStateTransition(InvalidStateTransition),
         SetLimitReached(SetLimitReached),
@@ -8936,24 +8932,24 @@ pub mod flexible_trigger {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for FlexibleTriggerErrors {
+    impl ::ethers_contract::ContractRevert for FlexibleTriggerErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <SetLimitReached as ::ethers::contract::EthError>::selector() => {
+                    == <SetLimitReached as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <Unacknowledged as ::ethers::contract::EthError>::selector() => {
+                    == <Unacknowledged as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <Unauthorized as ::ethers::contract::EthError>::selector() => true,
+                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -8998,8 +8994,8 @@ pub mod flexible_trigger {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9012,8 +9008,8 @@ pub mod flexible_trigger {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9026,8 +9022,8 @@ pub mod flexible_trigger {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9040,13 +9036,13 @@ pub mod flexible_trigger {
         pub state: u8,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum FlexibleTriggerEvents {
         FreezerAddedFilter(FreezerAddedFilter),
         SetAddedFilter(SetAddedFilter),
         TriggerStateUpdatedFilter(TriggerStateUpdatedFilter),
     }
-    impl ::ethers::contract::EthLogDecode for FlexibleTriggerEvents {
+    impl ::ethers_contract::EthLogDecode for FlexibleTriggerEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -9093,8 +9089,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `MAX_SET_LENGTH` function with signature `MAX_SET_LENGTH()` and selector `0x59537144`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9106,8 +9102,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `acknowledge` function with signature `acknowledge()` and selector `0x49233d5d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9119,8 +9115,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9132,8 +9128,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9147,8 +9143,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `boss` function with signature `boss()` and selector `0xc772af39`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9160,8 +9156,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `freeze` function with signature `freeze()` and selector `0x62a5af3b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9173,8 +9169,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `freezeTime` function with signature `freezeTime()` and selector `0xfd7e1bee`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9186,8 +9182,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `freezers` function with signature `freezers(address)` and selector `0x1f816352`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9199,8 +9195,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9212,8 +9208,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9225,8 +9221,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `isAutoTrigger` function with signature `isAutoTrigger()` and selector `0xa2ce3d49`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9238,8 +9234,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9251,8 +9247,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `maxFreezeDuration` function with signature `maxFreezeDuration()` and selector `0xc2b758e1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9264,8 +9260,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `publicTrigger` function with signature `publicTrigger()` and selector `0x4f9ca8c5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9277,8 +9273,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `resume` function with signature `resume()` and selector `0x046f7da2`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9290,8 +9286,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9303,8 +9299,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9316,8 +9312,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `state` function with signature `state()` and selector `0xc19d93fb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9329,8 +9325,8 @@ pub mod flexible_trigger {
     ///Container type for all input parameters for the `trigger` function with signature `trigger()` and selector `0x7fec8d38`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -9340,7 +9336,7 @@ pub mod flexible_trigger {
     #[ethcall(name = "trigger", abi = "trigger()")]
     pub struct TriggerCall;
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum FlexibleTriggerCalls {
         MaxSetLength(MaxSetLengthCall),
         Acknowledge(AcknowledgeCall),
@@ -9620,8 +9616,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `MAX_SET_LENGTH` function with signature `MAX_SET_LENGTH()` and selector `0x59537144`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9632,8 +9628,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9644,8 +9640,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9656,8 +9652,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `boss` function with signature `boss()` and selector `0xc772af39`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9668,8 +9664,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `freezeTime` function with signature `freezeTime()` and selector `0xfd7e1bee`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9680,8 +9676,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `freezers` function with signature `freezers(address)` and selector `0x1f816352`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9692,8 +9688,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9704,8 +9700,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9716,8 +9712,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `isAutoTrigger` function with signature `isAutoTrigger()` and selector `0xa2ce3d49`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9728,8 +9724,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9740,8 +9736,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `maxFreezeDuration` function with signature `maxFreezeDuration()` and selector `0xc2b758e1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9752,8 +9748,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9764,8 +9760,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -9776,8 +9772,8 @@ pub mod flexible_trigger {
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

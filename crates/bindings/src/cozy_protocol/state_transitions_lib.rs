@@ -13,9 +13,9 @@ pub mod state_transitions_lib {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"from_\",\"type\":\"MarketState\",\"components\":[]},{\"internalType\":\"enum MarketState\",\"name\":\"to_\",\"type\":\"MarketState\",\"components\":[]}],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"isValidMarketTransition\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"enum CallerRole\",\"name\":\"role_\",\"type\":\"CallerRole\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"isAnyMarketFrozen_\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"enum SetState\",\"name\":\"to_\",\"type\":\"SetState\",\"components\":[]},{\"internalType\":\"enum SetState\",\"name\":\"from_\",\"type\":\"SetState\",\"components\":[]}],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"isValidSetStateTransition\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static STATETRANSITIONSLIB_ABI: ::ethers::contract::Lazy<
+    pub static STATETRANSITIONSLIB_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -2177,14 +2177,14 @@ pub mod state_transitions_lib {
     pub static STATETRANSITIONSLIB_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct StateTransitionsLib<M>(::ethers::contract::Contract<M>);
+    pub struct StateTransitionsLib<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for StateTransitionsLib<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for StateTransitionsLib<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -2209,7 +2209,7 @@ pub mod state_transitions_lib {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     STATETRANSITIONSLIB_ABI.clone(),
                     client,
@@ -2243,16 +2243,16 @@ pub mod state_transitions_lib {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 STATETRANSITIONSLIB_ABI.clone(),
                 STATETRANSITIONSLIB_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `isValidMarketTransition` (0xfa27da7f) function
@@ -2260,7 +2260,7 @@ pub mod state_transitions_lib {
             &self,
             from: u8,
             to: u8,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([250, 39, 218, 127], (from, to))
                 .expect("method not found (this should never happen)")
@@ -2272,23 +2272,23 @@ pub mod state_transitions_lib {
             is_any_market_frozen: bool,
             to: u8,
             from: u8,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([224, 4, 186, 255], (role, is_any_market_frozen, to, from))
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for StateTransitionsLib<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Container type for all input parameters for the `isValidMarketTransition` function with signature `isValidMarketTransition(uint8,uint8)` and selector `0xfa27da7f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2306,8 +2306,8 @@ pub mod state_transitions_lib {
     ///Container type for all input parameters for the `isValidSetStateTransition` function with signature `isValidSetStateTransition(uint8,bool,uint8,uint8)` and selector `0xe004baff`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -2325,7 +2325,7 @@ pub mod state_transitions_lib {
         pub from: u8,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum StateTransitionsLibCalls {
         IsValidMarketTransition(IsValidMarketTransitionCall),
         IsValidSetStateTransition(IsValidSetStateTransitionCall),
@@ -2389,8 +2389,8 @@ pub mod state_transitions_lib {
     ///Container type for all return fields from the `isValidMarketTransition` function with signature `isValidMarketTransition(uint8,uint8)` and selector `0xfa27da7f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -2401,8 +2401,8 @@ pub mod state_transitions_lib {
     ///Container type for all return fields from the `isValidSetStateTransition` function with signature `isValidSetStateTransition(uint8,bool,uint8,uint8)` and selector `0xe004baff`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

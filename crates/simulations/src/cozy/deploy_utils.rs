@@ -1,4 +1,4 @@
-use crate::simulator::cozy::{
+use crate::cozy::{
     bindings_wrapper::*,
     {EthersAddress, EthersBytes, EvmAddress},
 };

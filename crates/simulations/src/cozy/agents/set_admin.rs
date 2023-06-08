@@ -22,11 +22,11 @@ use simulate::{
 };
 use thiserror::Error;
 
-use crate::simulator::cozy::sim_types::*;
-use crate::simulator::cozy::sim_types::{
+use crate::cozy::sim_types::*;
+use crate::cozy::sim_types::{
     CozySimCostModel, CozySimDripDecayModel, MarketParamsConfig,
 };
-use crate::simulator::cozy::{
+use crate::cozy::{
     bindings_wrapper::*,
     sim_types::CozySimTrigger,
     {EthersAddress, EthersBytes, EvmAddress},

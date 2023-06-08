@@ -14,12 +14,12 @@ use simulate::{
 };
 use thiserror::Error;
 
-use crate::simulator::cozy::deploy_utils;
-use crate::simulator::cozy::{
+use crate::cozy::deploy_utils;
+use crate::cozy::{
     bindings_wrapper::*,
     {EthersAddress, EthersBytes, EvmAddress},
 };
-use crate::simulator::cozy::agents::errors::CozyAgentError;
+use crate::cozy::agents::errors::CozyAgentError;
 
 #[derive(Debug, Clone)]
 pub struct ProtocolDeployerParams {

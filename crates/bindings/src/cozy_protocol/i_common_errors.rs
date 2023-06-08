@@ -13,16 +13,16 @@ pub mod i_common_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidState\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RoundsToZero\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICOMMONERRORS_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static ICOMMONERRORS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct ICommonErrors<M>(::ethers::contract::Contract<M>);
+    pub struct ICommonErrors<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for ICommonErrors<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for ICommonErrors<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +45,7 @@ pub mod i_common_errors {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     ICOMMONERRORS_ABI.clone(),
                     client,
@@ -53,17 +53,17 @@ pub mod i_common_errors {
             )
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for ICommonErrors<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidState` with signature `InvalidState()` and selector `0xbaf3f0f7`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -75,8 +75,8 @@ pub mod i_common_errors {
     ///Custom Error type `InvalidStateTransition` with signature `InvalidStateTransition()` and selector `0x8f9a780c`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -88,8 +88,8 @@ pub mod i_common_errors {
     ///Custom Error type `RoundsToZero` with signature `RoundsToZero()` and selector `0xc440e0aa`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -99,7 +99,7 @@ pub mod i_common_errors {
     #[etherror(name = "RoundsToZero", abi = "RoundsToZero()")]
     pub struct RoundsToZero;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum ICommonErrorsErrors {
         InvalidState(InvalidState),
         InvalidStateTransition(InvalidStateTransition),
@@ -152,18 +152,18 @@ pub mod i_common_errors {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for ICommonErrorsErrors {
+    impl ::ethers_contract::ContractRevert for ICommonErrorsErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidState as ::ethers::contract::EthError>::selector() => true,
+                    == <InvalidState as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidStateTransition as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <RoundsToZero as ::ethers::contract::EthError>::selector() => true,
+                    == <RoundsToZero as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }

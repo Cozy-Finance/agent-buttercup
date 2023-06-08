@@ -13,9 +13,9 @@ pub mod drip_decay_model_constant_factory {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"costModel\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"ratePerSecond\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DeployedDripDecayModelConstant\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_ratePerSecond\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deployModel\",\"outputs\":[{\"internalType\":\"contract DripDecayModelConstant\",\"name\":\"_model\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_ratePerSecond\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getModel\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isDeployed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static DRIPDECAYMODELCONSTANTFACTORY_ABI: ::ethers::contract::Lazy<
+    pub static DRIPDECAYMODELCONSTANTFACTORY_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -2907,14 +2907,14 @@ pub mod drip_decay_model_constant_factory {
     pub static DRIPDECAYMODELCONSTANTFACTORY_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct DripDecayModelConstantFactory<M>(::ethers::contract::Contract<M>);
+    pub struct DripDecayModelConstantFactory<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for DripDecayModelConstantFactory<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for DripDecayModelConstantFactory<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -2939,7 +2939,7 @@ pub mod drip_decay_model_constant_factory {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     DRIPDECAYMODELCONSTANTFACTORY_ABI.clone(),
                     client,
@@ -2973,23 +2973,23 @@ pub mod drip_decay_model_constant_factory {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 DRIPDECAYMODELCONSTANTFACTORY_ABI.clone(),
                 DRIPDECAYMODELCONSTANTFACTORY_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `deployModel` (0x4424966f) function
         pub fn deploy_model(
             &self,
             rate_per_second: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -3001,7 +3001,7 @@ pub mod drip_decay_model_constant_factory {
         pub fn get_model(
             &self,
             rate_per_second: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -3013,7 +3013,7 @@ pub mod drip_decay_model_constant_factory {
         pub fn is_deployed(
             &self,
             p0: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([144, 24, 75, 2], p0)
                 .expect("method not found (this should never happen)")
@@ -3021,7 +3021,7 @@ pub mod drip_decay_model_constant_factory {
         ///Gets the contract's `DeployedDripDecayModelConstant` event
         pub fn deployed_drip_decay_model_constant_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             DeployedDripDecayModelConstantFilter,
@@ -3031,7 +3031,7 @@ pub mod drip_decay_model_constant_factory {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             DeployedDripDecayModelConstantFilter,
@@ -3039,16 +3039,16 @@ pub mod drip_decay_model_constant_factory {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for DripDecayModelConstantFactory<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -3067,8 +3067,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all input parameters for the `deployModel` function with signature `deployModel(uint256)` and selector `0x4424966f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -3082,8 +3082,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all input parameters for the `getModel` function with signature `getModel(uint256)` and selector `0x6d361694`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -3097,8 +3097,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all input parameters for the `isDeployed` function with signature `isDeployed(address)` and selector `0x90184b02`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -3108,7 +3108,7 @@ pub mod drip_decay_model_constant_factory {
     #[ethcall(name = "isDeployed", abi = "isDeployed(address)")]
     pub struct IsDeployedCall(pub ::ethers::core::types::Address);
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum DripDecayModelConstantFactoryCalls {
         DeployModel(DeployModelCall),
         GetModel(GetModelCall),
@@ -3176,8 +3176,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all return fields from the `deployModel` function with signature `deployModel(uint256)` and selector `0x4424966f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -3190,8 +3190,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all return fields from the `getModel` function with signature `getModel(uint256)` and selector `0x6d361694`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -3202,8 +3202,8 @@ pub mod drip_decay_model_constant_factory {
     ///Container type for all return fields from the `isDeployed` function with signature `isDeployed(address)` and selector `0x90184b02`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

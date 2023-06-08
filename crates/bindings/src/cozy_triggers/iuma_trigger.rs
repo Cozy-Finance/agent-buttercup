@@ -13,16 +13,16 @@ pub mod iuma_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"bondAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getOracle\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"oracleFinder\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceProposed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"_answer\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceSettled\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"proposalDisputeWindow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"query\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"queryIdentifier\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"requestTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"rewardToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"shouldTrigger\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IUMATRIGGER_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(||
+    pub static IUMATRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
     ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
-    pub struct IUMATrigger<M>(::ethers::contract::Contract<M>);
+    pub struct IUMATrigger<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IUMATrigger<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for IUMATrigger<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -45,7 +45,7 @@ pub mod iuma_trigger {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     IUMATRIGGER_ABI.clone(),
                     client,
@@ -55,7 +55,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `MAX_SET_LENGTH` (0x59537144) function
         pub fn max_set_length(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([89, 83, 113, 68], ())
                 .expect("method not found (this should never happen)")
@@ -63,7 +63,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `acknowledged` (0x086c298d) function
         pub fn acknowledged(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -72,7 +72,7 @@ pub mod iuma_trigger {
         pub fn add_set(
             &self,
             set: ::ethers::core::types::Address,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([213, 128, 222, 212], set)
                 .expect("method not found (this should never happen)")
@@ -80,7 +80,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `bondAmount` (0x80f323a7) function
         pub fn bond_amount(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([128, 243, 35, 167], ())
                 .expect("method not found (this should never happen)")
@@ -88,7 +88,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `getOracle` (0x833b1fce) function
         pub fn get_oracle(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -99,7 +99,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `getSets` (0x2cf7c531) function
         pub fn get_sets(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::std::vec::Vec<::ethers::core::types::Address>,
         > {
@@ -110,7 +110,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `getSetsLength` (0xe86376c5) function
         pub fn get_sets_length(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([232, 99, 118, 197], ())
                 .expect("method not found (this should never happen)")
@@ -118,7 +118,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -129,7 +129,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `oracleFinder` (0x9ceb3ea2) function
         pub fn oracle_finder(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -143,7 +143,7 @@ pub mod iuma_trigger {
             identifier: [u8; 32],
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [156, 47, 209, 223],
@@ -158,7 +158,7 @@ pub mod iuma_trigger {
             timestamp: ::ethers::core::types::U256,
             ancillary_data: ::ethers::core::types::Bytes,
             answer: ::ethers::core::types::I256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash(
                     [4, 204, 31, 213],
@@ -169,7 +169,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `proposalDisputeWindow` (0xb365441b) function
         pub fn proposal_dispute_window(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([179, 101, 68, 27], ())
                 .expect("method not found (this should never happen)")
@@ -177,7 +177,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `query` (0x2c46b205) function
         pub fn query(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::std::string::String> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([44, 70, 178, 5], ())
                 .expect("method not found (this should never happen)")
@@ -185,7 +185,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `queryIdentifier` (0x51119862) function
         pub fn query_identifier(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, [u8; 32]> {
+        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([81, 17, 152, 98], ())
                 .expect("method not found (this should never happen)")
@@ -193,7 +193,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `requestTimestamp` (0x3e66a647) function
         pub fn request_timestamp(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([62, 102, 166, 71], ())
                 .expect("method not found (this should never happen)")
@@ -201,7 +201,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `rewardToken` (0xf7c618c1) function
         pub fn reward_token(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -212,7 +212,7 @@ pub mod iuma_trigger {
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
         pub fn run_programmatic_check(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -221,7 +221,7 @@ pub mod iuma_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<
+        ) -> ::ethers_contract::builders::ContractCall<
             M,
             ::ethers::core::types::Address,
         > {
@@ -232,13 +232,13 @@ pub mod iuma_trigger {
         ///Calls the contract's `shouldTrigger` (0x4f4ab8b0) function
         pub fn should_trigger(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, bool> {
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([79, 74, 184, 176], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `state` (0xc19d93fb) function
-        pub fn state(&self) -> ::ethers::contract::builders::ContractCall<M, u8> {
+        pub fn state(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([193, 157, 147, 251], ())
                 .expect("method not found (this should never happen)")
@@ -246,17 +246,13 @@ pub mod iuma_trigger {
         ///Gets the contract's `SetAdded` event
         pub fn set_added_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetAddedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, SetAddedFilter> {
             self.0.event()
         }
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             TriggerStateUpdatedFilter,
@@ -266,7 +262,7 @@ pub mod iuma_trigger {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<
+        ) -> ::ethers_contract::builders::Event<
             ::std::sync::Arc<M>,
             M,
             IUMATriggerEvents,
@@ -274,16 +270,16 @@ pub mod iuma_trigger {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for IUMATrigger<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -296,8 +292,8 @@ pub mod iuma_trigger {
     }
     #[derive(
         Clone,
-        ::ethers::contract::EthEvent,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthEvent,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -310,12 +306,12 @@ pub mod iuma_trigger {
         pub state: u8,
     }
     ///Container type for all of the contract's events
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IUMATriggerEvents {
         SetAddedFilter(SetAddedFilter),
         TriggerStateUpdatedFilter(TriggerStateUpdatedFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IUMATriggerEvents {
+    impl ::ethers_contract::EthLogDecode for IUMATriggerEvents {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
@@ -351,8 +347,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `MAX_SET_LENGTH` function with signature `MAX_SET_LENGTH()` and selector `0x59537144`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -364,8 +360,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -377,8 +373,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -392,8 +388,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `bondAmount` function with signature `bondAmount()` and selector `0x80f323a7`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -405,8 +401,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `getOracle` function with signature `getOracle()` and selector `0x833b1fce`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -418,8 +414,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -431,8 +427,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -444,8 +440,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -457,8 +453,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `oracleFinder` function with signature `oracleFinder()` and selector `0x9ceb3ea2`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -470,8 +466,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `priceProposed` function with signature `priceProposed(bytes32,uint256,bytes)` and selector `0x9c2fd1df`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -487,8 +483,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `priceSettled` function with signature `priceSettled(bytes32,uint256,bytes,int256)` and selector `0x04cc1fd5`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -505,8 +501,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `proposalDisputeWindow` function with signature `proposalDisputeWindow()` and selector `0xb365441b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -518,8 +514,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `query` function with signature `query()` and selector `0x2c46b205`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -531,8 +527,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `queryIdentifier` function with signature `queryIdentifier()` and selector `0x51119862`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -544,8 +540,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `requestTimestamp` function with signature `requestTimestamp()` and selector `0x3e66a647`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -557,8 +553,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `rewardToken` function with signature `rewardToken()` and selector `0xf7c618c1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -570,8 +566,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -583,8 +579,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -596,8 +592,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `shouldTrigger` function with signature `shouldTrigger()` and selector `0x4f4ab8b0`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -609,8 +605,8 @@ pub mod iuma_trigger {
     ///Container type for all input parameters for the `state` function with signature `state()` and selector `0xc19d93fb`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -620,7 +616,7 @@ pub mod iuma_trigger {
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum IUMATriggerCalls {
         MaxSetLength(MaxSetLengthCall),
         Acknowledged(AcknowledgedCall),
@@ -924,8 +920,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `MAX_SET_LENGTH` function with signature `MAX_SET_LENGTH()` and selector `0x59537144`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -936,8 +932,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -948,8 +944,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `bondAmount` function with signature `bondAmount()` and selector `0x80f323a7`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -960,8 +956,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `getOracle` function with signature `getOracle()` and selector `0x833b1fce`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -972,8 +968,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -984,8 +980,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -996,8 +992,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1008,8 +1004,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `oracleFinder` function with signature `oracleFinder()` and selector `0x9ceb3ea2`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1020,8 +1016,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `proposalDisputeWindow` function with signature `proposalDisputeWindow()` and selector `0xb365441b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1032,8 +1028,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `query` function with signature `query()` and selector `0x2c46b205`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1044,8 +1040,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `queryIdentifier` function with signature `queryIdentifier()` and selector `0x51119862`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1056,8 +1052,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `requestTimestamp` function with signature `requestTimestamp()` and selector `0x3e66a647`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1068,8 +1064,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `rewardToken` function with signature `rewardToken()` and selector `0xf7c618c1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1080,8 +1076,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1092,8 +1088,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1104,8 +1100,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `shouldTrigger` function with signature `shouldTrigger()` and selector `0x4f4ab8b0`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -1116,8 +1112,8 @@ pub mod iuma_trigger {
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

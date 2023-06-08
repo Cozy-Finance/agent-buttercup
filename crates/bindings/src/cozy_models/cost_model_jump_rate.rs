@@ -13,9 +13,9 @@ pub mod cost_model_jump_rate {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_kink\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtZeroUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtKinkUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_costFactorAtFullUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidConfiguration\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidReferencePoint\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidUtilization\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtFullUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtKinkUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactorAtZeroUtilization\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"kink\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"registerSet\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_fromUtilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_toUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"update\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static COSTMODELJUMPRATE_ABI: ::ethers::contract::Lazy<
+    pub static COSTMODELJUMPRATE_ABI: ::ethers_contract::Lazy<
         ::ethers::core::abi::Abi,
-    > = ::ethers::contract::Lazy::new(|| {
+    > = ::ethers_contract::Lazy::new(|| {
         ::ethers::core::utils::__serde_json::from_str(__ABI)
             .expect("ABI is always valid")
     });
@@ -5712,14 +5712,14 @@ pub mod cost_model_jump_rate {
     pub static COSTMODELJUMPRATE_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
         __DEPLOYED_BYTECODE,
     );
-    pub struct CostModelJumpRate<M>(::ethers::contract::Contract<M>);
+    pub struct CostModelJumpRate<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for CostModelJumpRate<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
     impl<M> ::core::ops::Deref for CostModelJumpRate<M> {
-        type Target = ::ethers::contract::Contract<M>;
+        type Target = ::ethers_contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
@@ -5742,7 +5742,7 @@ pub mod cost_model_jump_rate {
             client: ::std::sync::Arc<M>,
         ) -> Self {
             Self(
-                ::ethers::contract::Contract::new(
+                ::ethers_contract::Contract::new(
                     address.into(),
                     COSTMODELJUMPRATE_ABI.clone(),
                     client,
@@ -5776,16 +5776,16 @@ pub mod cost_model_jump_rate {
             client: ::std::sync::Arc<M>,
             constructor_args: T,
         ) -> ::core::result::Result<
-            ::ethers::contract::builders::ContractDeployer<M, Self>,
-            ::ethers::contract::ContractError<M>,
+            ::ethers_contract::builders::ContractDeployer<M, Self>,
+            ::ethers_contract::ContractError<M>,
         > {
-            let factory = ::ethers::contract::ContractFactory::new(
+            let factory = ::ethers_contract::ContractFactory::new(
                 COSTMODELJUMPRATE_ABI.clone(),
                 COSTMODELJUMPRATE_BYTECODE.clone().into(),
                 client,
             );
             let deployer = factory.deploy(constructor_args)?;
-            let deployer = ::ethers::contract::ContractDeployer::new(deployer);
+            let deployer = ::ethers_contract::ContractDeployer::new(deployer);
             Ok(deployer)
         }
         ///Calls the contract's `costFactor` (0xd7c856b3) function
@@ -5793,7 +5793,7 @@ pub mod cost_model_jump_rate {
             &self,
             from_utilization: ::ethers::core::types::U256,
             to_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([215, 200, 86, 179], (from_utilization, to_utilization))
                 .expect("method not found (this should never happen)")
@@ -5801,7 +5801,7 @@ pub mod cost_model_jump_rate {
         ///Calls the contract's `costFactorAtFullUtilization` (0xcfd0fac9) function
         pub fn cost_factor_at_full_utilization(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([207, 208, 250, 201], ())
                 .expect("method not found (this should never happen)")
@@ -5809,7 +5809,7 @@ pub mod cost_model_jump_rate {
         ///Calls the contract's `costFactorAtKinkUtilization` (0xa2614e9f) function
         pub fn cost_factor_at_kink_utilization(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([162, 97, 78, 159], ())
                 .expect("method not found (this should never happen)")
@@ -5817,7 +5817,7 @@ pub mod cost_model_jump_rate {
         ///Calls the contract's `costFactorAtZeroUtilization` (0xb92a620f) function
         pub fn cost_factor_at_zero_utilization(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([185, 42, 98, 15], ())
                 .expect("method not found (this should never happen)")
@@ -5825,7 +5825,7 @@ pub mod cost_model_jump_rate {
         ///Calls the contract's `kink` (0xfd2da339) function
         pub fn kink(
             &self,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([253, 45, 163, 57], ())
                 .expect("method not found (this should never happen)")
@@ -5835,13 +5835,13 @@ pub mod cost_model_jump_rate {
             &self,
             from_utilization: ::ethers::core::types::U256,
             to_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ::ethers::core::types::U256> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::U256> {
             self.0
                 .method_hash([224, 53, 203, 202], (from_utilization, to_utilization))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `registerSet` (0x3b1b6520) function
-        pub fn register_set(&self) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        pub fn register_set(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([59, 27, 101, 32], ())
                 .expect("method not found (this should never happen)")
@@ -5851,23 +5851,23 @@ pub mod cost_model_jump_rate {
             &self,
             from_utilization: ::ethers::core::types::U256,
             to_utilization: ::ethers::core::types::U256,
-        ) -> ::ethers::contract::builders::ContractCall<M, ()> {
+        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([47, 181, 101, 232], (from_utilization, to_utilization))
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
     for CostModelJumpRate<M> {
-        fn from(contract: ::ethers::contract::Contract<M>) -> Self {
+        fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
     }
     ///Custom Error type `InvalidConfiguration` with signature `InvalidConfiguration()` and selector `0xc52a9bd3`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -5879,8 +5879,8 @@ pub mod cost_model_jump_rate {
     ///Custom Error type `InvalidReferencePoint` with signature `InvalidReferencePoint()` and selector `0x030b4011`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -5892,8 +5892,8 @@ pub mod cost_model_jump_rate {
     ///Custom Error type `InvalidUtilization` with signature `InvalidUtilization()` and selector `0x25062e25`
     #[derive(
         Clone,
-        ::ethers::contract::EthError,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthError,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -5903,7 +5903,7 @@ pub mod cost_model_jump_rate {
     #[etherror(name = "InvalidUtilization", abi = "InvalidUtilization()")]
     pub struct InvalidUtilization;
     ///Container type for all of the contract's custom errors
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CostModelJumpRateErrors {
         InvalidConfiguration(InvalidConfiguration),
         InvalidReferencePoint(InvalidReferencePoint),
@@ -5958,20 +5958,20 @@ pub mod cost_model_jump_rate {
             }
         }
     }
-    impl ::ethers::contract::ContractRevert for CostModelJumpRateErrors {
+    impl ::ethers_contract::ContractRevert for CostModelJumpRateErrors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidConfiguration as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidConfiguration as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidReferencePoint as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidReferencePoint as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <InvalidUtilization as ::ethers::contract::EthError>::selector() => {
+                    == <InvalidUtilization as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -6017,8 +6017,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `costFactor` function with signature `costFactor(uint256,uint256)` and selector `0xd7c856b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6033,8 +6033,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6049,8 +6049,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `costFactorAtKinkUtilization` function with signature `costFactorAtKinkUtilization()` and selector `0xa2614e9f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6065,8 +6065,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6081,8 +6081,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `kink` function with signature `kink()` and selector `0xfd2da339`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6094,8 +6094,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6110,8 +6110,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `registerSet` function with signature `registerSet()` and selector `0x3b1b6520`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6123,8 +6123,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all input parameters for the `update` function with signature `update(uint256,uint256)` and selector `0x2fb565e8`
     #[derive(
         Clone,
-        ::ethers::contract::EthCall,
-        ::ethers::contract::EthDisplay,
+        ::ethers_contract::EthCall,
+        ::ethers_contract::EthDisplay,
         Default,
         Debug,
         PartialEq,
@@ -6137,7 +6137,7 @@ pub mod cost_model_jump_rate {
         pub to_utilization: ::ethers::core::types::U256,
     }
     ///Container type for all of the contract's call
-    #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
+    #[derive(Clone, ::ethers_contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
     pub enum CostModelJumpRateCalls {
         CostFactor(CostFactorCall),
         CostFactorAtFullUtilization(CostFactorAtFullUtilizationCall),
@@ -6286,8 +6286,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `costFactor` function with signature `costFactor(uint256,uint256)` and selector `0xd7c856b3`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -6298,8 +6298,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `costFactorAtFullUtilization` function with signature `costFactorAtFullUtilization()` and selector `0xcfd0fac9`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -6310,8 +6310,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `costFactorAtKinkUtilization` function with signature `costFactorAtKinkUtilization()` and selector `0xa2614e9f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -6322,8 +6322,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `costFactorAtZeroUtilization` function with signature `costFactorAtZeroUtilization()` and selector `0xb92a620f`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -6334,8 +6334,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `kink` function with signature `kink()` and selector `0xfd2da339`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,
@@ -6346,8 +6346,8 @@ pub mod cost_model_jump_rate {
     ///Container type for all return fields from the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
     #[derive(
         Clone,
-        ::ethers::contract::EthAbiType,
-        ::ethers::contract::EthAbiCodec,
+        ::ethers_contract::EthAbiType,
+        ::ethers_contract::EthAbiCodec,
         Default,
         Debug,
         PartialEq,

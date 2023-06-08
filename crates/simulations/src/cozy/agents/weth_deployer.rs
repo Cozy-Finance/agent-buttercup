@@ -5,7 +5,7 @@ use simulate::{
     sim_env_data::SimEnvData,
 };
 
-use crate::simulator::cozy::{
+use crate::cozy::{
     bindings_wrapper::*,
     EvmAddress,
     deploy_utils
