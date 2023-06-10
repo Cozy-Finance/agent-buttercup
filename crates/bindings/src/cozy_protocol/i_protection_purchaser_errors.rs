@@ -7,18 +7,16 @@ pub use i_protection_purchaser_errors::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_protection_purchaser_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidPurchase\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IPROTECTIONPURCHASERERRORS_ABI: ::ethers_contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers_contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static IPROTECTIONPURCHASERERRORS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IProtectionPurchaserErrors<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IProtectionPurchaserErrors<M> {
         fn clone(&self) -> Self {
@@ -50,17 +48,16 @@ pub mod i_protection_purchaser_errors {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    IPROTECTIONPURCHASERERRORS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                IPROTECTIONPURCHASERERRORS_ABI.clone(),
+                client,
+            ))
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for IProtectionPurchaserErrors<M> {
+        for IProtectionPurchaserErrors<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -74,7 +71,7 @@ pub mod i_protection_purchaser_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidPurchase", abi = "InvalidPurchase()")]
     pub struct InvalidPurchase;

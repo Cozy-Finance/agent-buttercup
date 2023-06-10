@@ -10,7 +10,7 @@ pub struct BlockTimeEnv {
     pub timestamp: U256,
 }
 
-pub trait BlockTimePolicy {
+pub trait BlockTimePolicy: Sync + Send {
     /// Returns the current blocktime env.
     fn current_block_time_env(&self) -> BlockTimeEnv;
 

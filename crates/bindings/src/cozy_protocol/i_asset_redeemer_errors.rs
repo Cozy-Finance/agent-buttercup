@@ -7,18 +7,16 @@ pub use i_asset_redeemer_errors::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_asset_redeemer_errors {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[],\"type\":\"error\",\"name\":\"DelayNotElapsed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"RedemptionNotFound\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"maxRedeemableShares_\",\"type\":\"uint256\",\"components\":[]}],\"type\":\"error\",\"name\":\"RedemptionRequestExceedsMax\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static IASSETREDEEMERERRORS_ABI: ::ethers_contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers_contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static IASSETREDEEMERERRORS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IAssetRedeemerErrors<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IAssetRedeemerErrors<M> {
         fn clone(&self) -> Self {
@@ -50,17 +48,16 @@ pub mod i_asset_redeemer_errors {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    IASSETREDEEMERERRORS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                IASSETREDEEMERERRORS_ABI.clone(),
+                client,
+            ))
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for IAssetRedeemerErrors<M> {
+        for IAssetRedeemerErrors<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -74,7 +71,7 @@ pub mod i_asset_redeemer_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "DelayNotElapsed", abi = "DelayNotElapsed()")]
     pub struct DelayNotElapsed;
@@ -87,7 +84,7 @@ pub mod i_asset_redeemer_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "RedemptionNotFound", abi = "RedemptionNotFound()")]
     pub struct RedemptionNotFound;
@@ -100,7 +97,7 @@ pub mod i_asset_redeemer_errors {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(
         name = "RedemptionRequestExceedsMax",
@@ -124,24 +121,22 @@ pub mod i_asset_redeemer_errors {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <DelayNotElapsed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DelayNotElapsed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::DelayNotElapsed(decoded));
             }
-            if let Ok(decoded)
-                = <RedemptionNotFound as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <RedemptionNotFound as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RedemptionNotFound(decoded));
             }
-            if let Ok(decoded)
-                = <RedemptionRequestExceedsMax as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RedemptionRequestExceedsMax as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RedemptionRequestExceedsMax(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -150,9 +145,7 @@ pub mod i_asset_redeemer_errors {
     impl ::ethers::core::abi::AbiEncode for IAssetRedeemerErrorsErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::DelayNotElapsed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::DelayNotElapsed(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RedemptionNotFound(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -167,16 +160,17 @@ pub mod i_asset_redeemer_errors {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
-                _ if selector
-                    == <DelayNotElapsed as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <DelayNotElapsed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ if selector
-                    == <RedemptionNotFound as ::ethers_contract::EthError>::selector() => {
+                    == <RedemptionNotFound as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <RedemptionRequestExceedsMax as ::ethers_contract::EthError>::selector() => {
+                    == <RedemptionRequestExceedsMax as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ => false,
@@ -187,12 +181,8 @@ pub mod i_asset_redeemer_errors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::DelayNotElapsed(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RedemptionNotFound(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::RedemptionRequestExceedsMax(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::RedemptionNotFound(element) => ::core::fmt::Display::fmt(element, f),
+                Self::RedemptionRequestExceedsMax(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RevertString(s) => ::core::fmt::Display::fmt(s, f),
             }
         }
@@ -212,8 +202,7 @@ pub mod i_asset_redeemer_errors {
             Self::RedemptionNotFound(value)
         }
     }
-    impl ::core::convert::From<RedemptionRequestExceedsMax>
-    for IAssetRedeemerErrorsErrors {
+    impl ::core::convert::From<RedemptionRequestExceedsMax> for IAssetRedeemerErrorsErrors {
         fn from(value: RedemptionRequestExceedsMax) -> Self {
             Self::RedemptionRequestExceedsMax(value)
         }

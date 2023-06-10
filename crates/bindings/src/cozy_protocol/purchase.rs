@@ -7,14 +7,16 @@ pub use purchase::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod purchase {
     #[rustfmt::skip]
     const __ABI: &str = "[]";
     ///The parsed JSON ABI of the contract.
-    pub static PURCHASE_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static PURCHASE_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct Purchase<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for Purchase<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod purchase {
     }
     impl<M> ::core::fmt::Debug for Purchase<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(Purchase)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(Purchase))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> Purchase<M> {
@@ -44,17 +48,14 @@ pub mod purchase {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    PURCHASE_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                PURCHASE_ABI.clone(),
+                client,
+            ))
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for Purchase<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for Purchase<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }

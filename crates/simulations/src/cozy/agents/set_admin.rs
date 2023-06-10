@@ -16,21 +16,18 @@ use simulate::{
         sim_contract::{IsDeployed, SimContract},
         utils,
     },
-    environment::sim_env::SimEnv,
-    sim_env_data::SimEnvData,
     utils::unpack_execution,
 };
 use thiserror::Error;
 
 use crate::cozy::sim_types::*;
-use crate::cozy::sim_types::{
-    CozySimCostModel, CozySimDripDecayModel, MarketParamsConfig,
-};
+use crate::cozy::sim_types::{CozySimCostModel, CozySimDripDecayModel, MarketParamsConfig};
 use crate::cozy::{
     bindings_wrapper::*,
+    deploy_utils,
     sim_types::CozySimTrigger,
     {EthersAddress, EthersBytes, EvmAddress},
-    deploy_utils
+    world_state::CozyWorldStateUpdate
 };
 
 #[derive(Debug, Error)]
@@ -66,7 +63,7 @@ impl SetAdmin {
     }
 }
 
-impl Agent for SetAdmin {
+impl Agent<CozyWorldStateUpdate> for SetAdmin {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }
@@ -79,7 +76,7 @@ impl Agent for SetAdmin {
         Option::Some(self.name.clone())
     }
 
-    fn activation_step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {
+    fn activation_step(&mut self, state: &SimState) {
         // Deploy all triggers.
         let trigger_addrs = self
             .set_admin_params
@@ -155,14 +152,13 @@ impl Agent for SetAdmin {
         );
     }
 
-    fn step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {}
+    fn step(&mut self, sim_env: &mut SimState) {}
 }
 
 impl SetAdmin {
     fn deploy_cost_model_jump_rate(
         &self,
-        sim_env: &mut SimEnv,
-        sim_data: &mut SimEnvData,
+        sim_state: &SimState,
         args: DeployCostModelJumpRateParams,
     ) -> Result<EthersAddress> {
         let factory = sim_data
@@ -175,7 +171,10 @@ impl SetAdmin {
             factory.encode_function("deployModel", args)?,
         ))?;
         let result = DeployCostModelJumpRateReturn::decode(result)?;
-        println!("Cost model (jump rate) deployed at address {}.", result.model);
+        println!(
+            "Cost model (jump rate) deployed at address {}.",
+            result.model
+        );
 
         Ok(result.model)
     }
@@ -196,7 +195,10 @@ impl SetAdmin {
             factory.encode_function("deployModel", args)?,
         ))?;
         let result = DeployCostModelDynamicLevelReturn::decode(result)?;
-        println!("Cost model (dynamic level) deployed at address {}.", result.model);
+        println!(
+            "Cost model (dynamic level) deployed at address {}.",
+            result.model
+        );
 
         Ok(result.model)
     }
@@ -217,7 +219,10 @@ impl SetAdmin {
             factory.encode_function("deployModel", args)?,
         ))?;
         let result = DeployDripDecayModelConstantReturn::decode(result)?;
-        println!("Drip decay model (constant) deployed at address {}.", result.model);
+        println!(
+            "Drip decay model (constant) deployed at address {}.",
+            result.model
+        );
 
         Ok(result.model)
     }
@@ -227,15 +232,23 @@ impl SetAdmin {
         sim_env: &mut SimEnv,
         sim_data: &mut SimEnvData,
     ) -> Result<EthersAddress> {
-        let manager_addr = sim_data.contract_registry.get(MANAGER.name).unwrap().address;
+        let manager_addr = sim_data
+            .contract_registry
+            .get(MANAGER.name)
+            .unwrap()
+            .address;
         deploy_utils::deploy_linked_contract_with_args(
             self,
             sim_env,
             sim_data,
             &DUMMYTRIGGER,
-            (manager_addr,)
+            (manager_addr,),
         )?;
-        let result = sim_data.contract_registry.get(DUMMYTRIGGER.name).unwrap().address;
+        let result = sim_data
+            .contract_registry
+            .get(DUMMYTRIGGER.name)
+            .unwrap()
+            .address;
         println!("Dummy trigger deployed at address {}.", result);
 
         Ok(result)

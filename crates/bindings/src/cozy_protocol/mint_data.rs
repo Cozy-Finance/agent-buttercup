@@ -7,14 +7,16 @@ pub use mint_data::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod mint_data {
     #[rustfmt::skip]
     const __ABI: &str = "[]";
     ///The parsed JSON ABI of the contract.
-    pub static MINTDATA_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static MINTDATA_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct MintData<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for MintData<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod mint_data {
     }
     impl<M> ::core::fmt::Debug for MintData<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(MintData)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(MintData))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> MintData<M> {
@@ -44,17 +48,14 @@ pub mod mint_data {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    MINTDATA_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                MINTDATA_ABI.clone(),
+                client,
+            ))
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for MintData<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for MintData<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }

@@ -7,18 +7,16 @@ pub use i_asset_depositer_events::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_asset_depositer_events {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"assets_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint256\",\"name\":\"shares_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Deposit\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static IASSETDEPOSITEREVENTS_ABI: ::ethers_contract::Lazy<
-        ::ethers::core::abi::Abi,
-    > = ::ethers_contract::Lazy::new(|| {
-        ::ethers::core::utils::__serde_json::from_str(__ABI)
-            .expect("ABI is always valid")
-    });
+    pub static IASSETDEPOSITEREVENTS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IAssetDepositerEvents<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IAssetDepositerEvents<M> {
         fn clone(&self) -> Self {
@@ -50,13 +48,11 @@ pub mod i_asset_depositer_events {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    IASSETDEPOSITEREVENTS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                IASSETDEPOSITEREVENTS_ABI.clone(),
+                client,
+            ))
         }
         ///Gets the contract's `Deposit` event
         pub fn deposit_filter(
@@ -68,11 +64,13 @@ pub mod i_asset_depositer_events {
         pub fn events(
             &self,
         ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, DepositFilter> {
-            self.0.event_with_filter(::core::default::Default::default())
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for IAssetDepositerEvents<M> {
+        for IAssetDepositerEvents<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -85,7 +83,7 @@ pub mod i_asset_depositer_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Deposit", abi = "Deposit(address,address,uint256,uint256)")]
     pub struct DepositFilter {

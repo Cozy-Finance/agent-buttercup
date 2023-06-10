@@ -7,14 +7,16 @@ pub use i_st_eth::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_st_eth {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"sharesAmount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getPooledEthByShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ethAmount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSharesByPooledEth\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"getTotalPooledEther\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"getTotalShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"referral_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"payable\",\"type\":\"function\",\"name\":\"submit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ISTETH_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static ISTETH_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IStETH<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IStETH<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_st_eth {
     }
     impl<M> ::core::fmt::Debug for IStETH<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IStETH)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IStETH))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IStETH<M> {
@@ -44,13 +48,11 @@ pub mod i_st_eth {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    ISTETH_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                ISTETH_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `approve` (0x095ea7b3) function
         pub fn approve(
@@ -136,8 +138,7 @@ pub mod i_st_eth {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for IStETH<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for IStETH<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -151,7 +152,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
@@ -167,7 +168,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall {
@@ -182,7 +183,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getPooledEthByShares", abi = "getPooledEthByShares(uint256)")]
     pub struct GetPooledEthBySharesCall {
@@ -197,7 +198,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSharesByPooledEth", abi = "getSharesByPooledEth(uint256)")]
     pub struct GetSharesByPooledEthCall {
@@ -212,7 +213,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getTotalPooledEther", abi = "getTotalPooledEther()")]
     pub struct GetTotalPooledEtherCall;
@@ -225,7 +226,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getTotalShares", abi = "getTotalShares()")]
     pub struct GetTotalSharesCall;
@@ -238,7 +239,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "submit", abi = "submit(address)")]
     pub struct SubmitCall {
@@ -253,7 +254,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
@@ -269,7 +270,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -295,46 +296,40 @@ pub mod i_st_eth {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Approve(decoded));
             }
-            if let Ok(decoded)
-                = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BalanceOf(decoded));
             }
-            if let Ok(decoded)
-                = <GetPooledEthBySharesCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <GetPooledEthBySharesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetPooledEthByShares(decoded));
             }
-            if let Ok(decoded)
-                = <GetSharesByPooledEthCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <GetSharesByPooledEthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetSharesByPooledEth(decoded));
             }
-            if let Ok(decoded)
-                = <GetTotalPooledEtherCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <GetTotalPooledEtherCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetTotalPooledEther(decoded));
             }
-            if let Ok(decoded)
-                = <GetTotalSharesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <GetTotalSharesCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetTotalShares(decoded));
             }
-            if let Ok(decoded)
-                = <SubmitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SubmitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Submit(decoded));
             }
-            if let Ok(decoded)
-                = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Transfer(decoded));
             }
-            if let Ok(decoded)
-                = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TransferFrom(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -344,9 +339,7 @@ pub mod i_st_eth {
         fn encode(self) -> Vec<u8> {
             match self {
                 Self::Approve(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::BalanceOf(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::BalanceOf(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::GetPooledEthByShares(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
@@ -356,16 +349,10 @@ pub mod i_st_eth {
                 Self::GetTotalPooledEther(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::GetTotalShares(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetTotalShares(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Submit(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Transfer(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferFrom(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Transfer(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferFrom(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -374,15 +361,9 @@ pub mod i_st_eth {
             match self {
                 Self::Approve(element) => ::core::fmt::Display::fmt(element, f),
                 Self::BalanceOf(element) => ::core::fmt::Display::fmt(element, f),
-                Self::GetPooledEthByShares(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::GetSharesByPooledEth(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::GetTotalPooledEther(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::GetPooledEthByShares(element) => ::core::fmt::Display::fmt(element, f),
+                Self::GetSharesByPooledEth(element) => ::core::fmt::Display::fmt(element, f),
+                Self::GetTotalPooledEther(element) => ::core::fmt::Display::fmt(element, f),
                 Self::GetTotalShares(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Submit(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Transfer(element) => ::core::fmt::Display::fmt(element, f),
@@ -444,7 +425,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ApproveReturn(pub bool);
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
@@ -456,7 +437,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getPooledEthByShares` function with signature `getPooledEthByShares(uint256)` and selector `0x7a28fb88`
@@ -468,7 +449,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetPooledEthBySharesReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getSharesByPooledEth` function with signature `getSharesByPooledEth(uint256)` and selector `0x19208451`
@@ -480,7 +461,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSharesByPooledEthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getTotalPooledEther` function with signature `getTotalPooledEther()` and selector `0x37cfdaca`
@@ -492,7 +473,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetTotalPooledEtherReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getTotalShares` function with signature `getTotalShares()` and selector `0xd5002f2e`
@@ -504,7 +485,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetTotalSharesReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `submit` function with signature `submit(address)` and selector `0xa1903eab`
@@ -516,7 +497,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SubmitReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
@@ -528,7 +509,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferReturn(pub bool);
     ///Container type for all return fields from the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
@@ -540,7 +521,7 @@ pub mod i_st_eth {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferFromReturn(pub bool);
 }

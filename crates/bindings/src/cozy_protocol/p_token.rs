@@ -7,15 +7,17 @@ pub use p_token::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod p_token {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"manager_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Initialized\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InsufficientBalance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SafeCastFailed\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"UnpackableString\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Approval\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Transfer\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"DOMAIN_SEPARATOR\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addInactivePeriod\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"balanceOfMatured\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance_\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"owner_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint216\",\"name\":\"amount_\",\"type\":\"uint216\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"burn\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"cumulativeMinted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getMints\",\"outputs\":[{\"internalType\":\"struct MintData[]\",\"name\":\"\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"inactivityData\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"inactiveTransitionTime\",\"type\":\"uint64\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract ITrigger\",\"name\":\"trigger_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"decimals_\",\"type\":\"uint8\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"initialize\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint216\",\"name\":\"amount_\",\"type\":\"uint216\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"mint\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"mints\",\"outputs\":[{\"internalType\":\"uint216\",\"name\":\"amount\",\"type\":\"uint216\",\"components\":[]},{\"internalType\":\"uint40\",\"name\":\"time\",\"type\":\"uint40\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"nonces\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"permit\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"set\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"trigger\",\"outputs\":[{\"internalType\":\"contract ITrigger\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"timestamp_\",\"type\":\"uint64\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateInactiveTransitionTime\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static PTOKEN_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static PTOKEN_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -6051,9 +6053,8 @@ pub mod p_token {
         10,
     ];
     ///The bytecode of the contract.
-    pub static PTOKEN_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static PTOKEN_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -11911,9 +11912,8 @@ pub mod p_token {
         10,
     ];
     ///The deployed bytecode of the contract.
-    pub static PTOKEN_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static PTOKEN_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct PToken<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for PToken<M> {
         fn clone(&self) -> Self {
@@ -11933,7 +11933,9 @@ pub mod p_token {
     }
     impl<M> ::core::fmt::Debug for PToken<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(PToken)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(PToken))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> PToken<M> {
@@ -11943,13 +11945,11 @@ pub mod p_token {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    PTOKEN_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                PTOKEN_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -11991,17 +11991,13 @@ pub mod p_token {
             Ok(deployer)
         }
         ///Calls the contract's `DOMAIN_SEPARATOR` (0x3644e515) function
-        pub fn domain_separator(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
+        pub fn domain_separator(&self) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([54, 68, 229, 21], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `addInactivePeriod` (0x0d84c97a) function
-        pub fn add_inactive_period(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
+        pub fn add_inactive_period(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([13, 132, 201, 122], ())
                 .expect("method not found (this should never happen)")
@@ -12081,9 +12077,7 @@ pub mod p_token {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `inactivityData` (0xf356a4b7) function
-        pub fn inactivity_data(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, u64> {
+        pub fn inactivity_data(&self) -> ::ethers_contract::builders::ContractCall<M, u64> {
             self.0
                 .method_hash([243, 86, 164, 183], ())
                 .expect("method not found (this should never happen)")
@@ -12102,10 +12096,7 @@ pub mod p_token {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -12125,18 +12116,14 @@ pub mod p_token {
             &self,
             p0: ::ethers::core::types::Address,
             p1: ::ethers::core::types::U256,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            (::ethers::core::types::U256, u64),
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, (::ethers::core::types::U256, u64)>
+        {
             self.0
                 .method_hash([11, 237, 211, 167], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `name` (0x06fdde03) function
-        pub fn name(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
+        pub fn name(&self) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([6, 253, 222, 3], ())
                 .expect("method not found (this should never happen)")
@@ -12171,10 +12158,7 @@ pub mod p_token {
         ///Calls the contract's `set` (0xb8e010de) function
         pub fn set(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([184, 224, 16, 222], ())
                 .expect("method not found (this should never happen)")
@@ -12219,10 +12203,7 @@ pub mod p_token {
         ///Calls the contract's `trigger` (0x7fec8d38) function
         pub fn trigger(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([127, 236, 141, 56], ())
                 .expect("method not found (this should never happen)")
@@ -12252,11 +12233,11 @@ pub mod p_token {
         pub fn events(
             &self,
         ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, PTokenEvents> {
-            self.0.event_with_filter(::core::default::Default::default())
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for PToken<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for PToken<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -12270,7 +12251,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Initialized", abi = "Initialized()")]
     pub struct Initialized;
@@ -12283,7 +12264,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InsufficientBalance", abi = "InsufficientBalance()")]
     pub struct InsufficientBalance;
@@ -12296,7 +12277,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidAddress", abi = "InvalidAddress()")]
     pub struct InvalidAddress;
@@ -12309,7 +12290,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SafeCastFailed", abi = "SafeCastFailed()")]
     pub struct SafeCastFailed;
@@ -12322,7 +12303,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -12335,7 +12316,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "UnpackableString", abi = "UnpackableString()")]
     pub struct UnpackableString;
@@ -12357,34 +12338,30 @@ pub mod p_token {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <Initialized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Initialized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Initialized(decoded));
             }
-            if let Ok(decoded)
-                = <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InsufficientBalance as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InsufficientBalance(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidAddress(decoded));
             }
-            if let Ok(decoded)
-                = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SafeCastFailed as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SafeCastFailed(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
-            if let Ok(decoded)
-                = <UnpackableString as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UnpackableString as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UnpackableString(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -12393,24 +12370,14 @@ pub mod p_token {
     impl ::ethers::core::abi::AbiEncode for PTokenErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::Initialized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::Initialized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InsufficientBalance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidAddress(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SafeCastFailed(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UnpackableString(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidAddress(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SafeCastFailed(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UnpackableString(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -12419,24 +12386,20 @@ pub mod p_token {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
+                _ if selector == <Initialized as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <Initialized as ::ethers_contract::EthError>::selector() => true,
-                _ if selector
-                    == <InsufficientBalance as ::ethers_contract::EthError>::selector() => {
+                    == <InsufficientBalance as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <InvalidAddress as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <InvalidAddress as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <SafeCastFailed as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <SafeCastFailed as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
-                _ if selector
-                    == <UnpackableString as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
+                _ if selector == <UnpackableString as ::ethers_contract::EthError>::selector() => {
                     true
                 }
                 _ => false,
@@ -12447,9 +12410,7 @@ pub mod p_token {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::Initialized(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InsufficientBalance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InsufficientBalance(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidAddress(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SafeCastFailed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
@@ -12501,7 +12462,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Approval", abi = "Approval(address,address,uint256)")]
     pub struct ApprovalFilter {
@@ -12519,7 +12480,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Transfer", abi = "Transfer(address,address,uint256)")]
     pub struct TransferFilter {
@@ -12575,7 +12536,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "DOMAIN_SEPARATOR", abi = "DOMAIN_SEPARATOR()")]
     pub struct DomainSeparatorCall;
@@ -12588,7 +12549,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "addInactivePeriod", abi = "addInactivePeriod()")]
     pub struct AddInactivePeriodCall;
@@ -12601,7 +12562,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "allowance", abi = "allowance(address,address)")]
     pub struct AllowanceCall(
@@ -12617,7 +12578,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "approve", abi = "approve(address,uint256)")]
     pub struct ApproveCall {
@@ -12633,7 +12594,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOf", abi = "balanceOf(address)")]
     pub struct BalanceOfCall(pub ::ethers::core::types::Address);
@@ -12646,7 +12607,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "balanceOfMatured", abi = "balanceOfMatured(address)")]
     pub struct BalanceOfMaturedCall {
@@ -12661,7 +12622,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "burn", abi = "burn(address,address,uint216)")]
     pub struct BurnCall {
@@ -12678,7 +12639,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "cumulativeMinted", abi = "cumulativeMinted(address,uint256)")]
     pub struct CumulativeMintedCall(
@@ -12694,7 +12655,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "decimals", abi = "decimals()")]
     pub struct DecimalsCall;
@@ -12707,7 +12668,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getMints", abi = "getMints(address)")]
     pub struct GetMintsCall {
@@ -12722,7 +12683,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "inactivityData", abi = "inactivityData()")]
     pub struct InactivityDataCall;
@@ -12735,7 +12696,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "initialize", abi = "initialize(address,address,uint8)")]
     pub struct InitializeCall {
@@ -12752,7 +12713,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -12765,7 +12726,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "mint", abi = "mint(address,uint216)")]
     pub struct MintCall {
@@ -12781,7 +12742,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "mints", abi = "mints(address,uint256)")]
     pub struct MintsCall(
@@ -12797,7 +12758,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "name", abi = "name()")]
     pub struct NameCall;
@@ -12810,7 +12771,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "nonces", abi = "nonces(address)")]
     pub struct NoncesCall(pub ::ethers::core::types::Address);
@@ -12823,7 +12784,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "permit",
@@ -12847,7 +12808,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "set", abi = "set()")]
     pub struct SetCall;
@@ -12860,7 +12821,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "symbol", abi = "symbol()")]
     pub struct SymbolCall;
@@ -12873,7 +12834,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "totalSupply", abi = "totalSupply()")]
     pub struct TotalSupplyCall;
@@ -12886,7 +12847,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transfer", abi = "transfer(address,uint256)")]
     pub struct TransferCall {
@@ -12902,7 +12863,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "transferFrom", abi = "transferFrom(address,address,uint256)")]
     pub struct TransferFromCall {
@@ -12919,7 +12880,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "trigger", abi = "trigger()")]
     pub struct TriggerCall;
@@ -12932,7 +12893,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(
         name = "updateInactiveTransitionTime",
@@ -12975,112 +12936,92 @@ pub mod p_token {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <DomainSeparatorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <DomainSeparatorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::DomainSeparator(decoded));
             }
-            if let Ok(decoded)
-                = <AddInactivePeriodCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <AddInactivePeriodCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::AddInactivePeriod(decoded));
             }
-            if let Ok(decoded)
-                = <AllowanceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AllowanceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Allowance(decoded));
             }
-            if let Ok(decoded)
-                = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ApproveCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Approve(decoded));
             }
-            if let Ok(decoded)
-                = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BalanceOfCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BalanceOf(decoded));
             }
-            if let Ok(decoded)
-                = <BalanceOfMaturedCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <BalanceOfMaturedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::BalanceOfMatured(decoded));
             }
-            if let Ok(decoded)
-                = <BurnCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BurnCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Burn(decoded));
             }
-            if let Ok(decoded)
-                = <CumulativeMintedCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <CumulativeMintedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::CumulativeMinted(decoded));
             }
-            if let Ok(decoded)
-                = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DecimalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Decimals(decoded));
             }
-            if let Ok(decoded)
-                = <GetMintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetMintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetMints(decoded));
             }
-            if let Ok(decoded)
-                = <InactivityDataCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <InactivityDataCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InactivityData(decoded));
             }
-            if let Ok(decoded)
-                = <InitializeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InitializeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Initialize(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <MintCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MintCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Mint(decoded));
             }
-            if let Ok(decoded)
-                = <MintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MintsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Mints(decoded));
             }
-            if let Ok(decoded)
-                = <NameCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <NameCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Name(decoded));
             }
-            if let Ok(decoded)
-                = <NoncesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <NoncesCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Nonces(decoded));
             }
-            if let Ok(decoded)
-                = <PermitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PermitCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Permit(decoded));
             }
-            if let Ok(decoded)
-                = <SetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Set(decoded));
             }
-            if let Ok(decoded)
-                = <SymbolCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SymbolCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Symbol(decoded));
             }
-            if let Ok(decoded)
-                = <TotalSupplyCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TotalSupplyCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::TotalSupply(decoded));
             }
-            if let Ok(decoded)
-                = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Transfer(decoded));
             }
-            if let Ok(decoded)
-                = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TransferFromCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TransferFrom(decoded));
             }
-            if let Ok(decoded)
-                = <TriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Trigger(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateInactiveTransitionTimeCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <UpdateInactiveTransitionTimeCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdateInactiveTransitionTime(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -13089,38 +13030,18 @@ pub mod p_token {
     impl ::ethers::core::abi::AbiEncode for PTokenCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::DomainSeparator(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::AddInactivePeriod(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Allowance(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::DomainSeparator(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::AddInactivePeriod(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Allowance(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Approve(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::BalanceOf(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::BalanceOfMatured(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::BalanceOf(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BalanceOfMatured(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Burn(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::CumulativeMinted(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Decimals(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::GetMints(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::InactivityData(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Initialize(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CumulativeMinted(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Decimals(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::GetMints(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::InactivityData(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Initialize(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Mint(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Mints(element) => ::ethers::core::abi::AbiEncode::encode(element),
@@ -13129,15 +13050,9 @@ pub mod p_token {
                 Self::Permit(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Set(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Symbol(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::TotalSupply(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Transfer(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::TransferFrom(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::TotalSupply(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Transfer(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::TransferFrom(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Trigger(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::UpdateInactiveTransitionTime(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
@@ -13312,7 +13227,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DomainSeparatorReturn(pub [u8; 32]);
     ///Container type for all return fields from the `allowance` function with signature `allowance(address,address)` and selector `0xdd62ed3e`
@@ -13324,7 +13239,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AllowanceReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `approve` function with signature `approve(address,uint256)` and selector `0x095ea7b3`
@@ -13336,7 +13251,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ApproveReturn(pub bool);
     ///Container type for all return fields from the `balanceOf` function with signature `balanceOf(address)` and selector `0x70a08231`
@@ -13348,7 +13263,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `balanceOfMatured` function with signature `balanceOfMatured(address)` and selector `0x3489b7a4`
@@ -13360,7 +13275,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BalanceOfMaturedReturn {
         pub balance: ::ethers::core::types::U256,
@@ -13374,7 +13289,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CumulativeMintedReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `decimals` function with signature `decimals()` and selector `0x313ce567`
@@ -13386,7 +13301,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct DecimalsReturn(pub u8);
     ///Container type for all return fields from the `getMints` function with signature `getMints(address)` and selector `0x74ce5671`
@@ -13398,7 +13313,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetMintsReturn(pub ::std::vec::Vec<MintData>);
     ///Container type for all return fields from the `inactivityData` function with signature `inactivityData()` and selector `0xf356a4b7`
@@ -13410,7 +13325,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct InactivityDataReturn {
         pub inactive_transition_time: u64,
@@ -13424,7 +13339,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `mints` function with signature `mints(address,uint256)` and selector `0x0bedd3a7`
@@ -13436,7 +13351,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MintsReturn {
         pub amount: ::ethers::core::types::U256,
@@ -13451,7 +13366,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct NameReturn(pub ::std::string::String);
     ///Container type for all return fields from the `nonces` function with signature `nonces(address)` and selector `0x7ecebe00`
@@ -13463,7 +13378,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct NoncesReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `set` function with signature `set()` and selector `0xb8e010de`
@@ -13475,7 +13390,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `symbol` function with signature `symbol()` and selector `0x95d89b41`
@@ -13487,7 +13402,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SymbolReturn(pub ::std::string::String);
     ///Container type for all return fields from the `totalSupply` function with signature `totalSupply()` and selector `0x18160ddd`
@@ -13499,7 +13414,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TotalSupplyReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `transfer` function with signature `transfer(address,uint256)` and selector `0xa9059cbb`
@@ -13511,7 +13426,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferReturn(pub bool);
     ///Container type for all return fields from the `transferFrom` function with signature `transferFrom(address,address,uint256)` and selector `0x23b872dd`
@@ -13523,7 +13438,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TransferFromReturn(pub bool);
     ///Container type for all return fields from the `trigger` function with signature `trigger()` and selector `0x7fec8d38`
@@ -13535,7 +13450,7 @@ pub mod p_token {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TriggerReturn(pub ::ethers::core::types::Address);
 }
