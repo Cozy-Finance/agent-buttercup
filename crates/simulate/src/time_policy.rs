@@ -1,29 +1,28 @@
-#![warn(unsafe_code)]
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 
 use revm::primitives::U256;
 use thiserror::Error;
 
 #[derive(Debug, Copy, Clone)]
-pub struct BlockTimeEnv {
+pub struct TimeEnv {
     pub number: U256,
     pub timestamp: U256,
 }
 
-pub trait BlockTimePolicy: Sync + Send {
+pub trait TimePolicy: Sync + Send {
     /// Returns the current blocktime env.
-    fn current_block_time_env(&self) -> BlockTimeEnv;
+    fn current_time_env(&self) -> TimeEnv;
 
     /// Takes 1 step in the policy and returns the new blocktime env.
-    fn step(&mut self) -> BlockTimeEnv;
+    fn step(&mut self) -> TimeEnv;
 
     /// Returns `true` if the policy is active and `false` if finished.
     fn is_active(&self) -> bool;
 }
 
 #[derive(Debug, Copy, Clone)]
-pub struct FixedBlockTimePolicy {
-    current_block_time_env: BlockTimeEnv,
+pub struct FixedTimePolicy {
+    current_time_env: TimeEnv,
     /// Each new block moves the timestamp forward by `time_per_block`
     time_per_block: u64,
     /// Each step moves the block number forward by `blocks_per_step`
@@ -39,12 +38,12 @@ pub struct FixedBlockTimePolicy {
 }
 
 #[derive(Error, Debug)]
-pub enum FixedBlockTimePolicyError {
+pub enum FixedTimePolicyError {
     #[error("Both blocks_to_generate and time_to_generate cannot be None.")]
     UnspecifiedEndTime,
 }
 
-impl FixedBlockTimePolicy {
+impl FixedTimePolicy {
     pub fn new(
         start_block_number: U256,
         start_block_timestamp: U256,
@@ -52,12 +51,12 @@ impl FixedBlockTimePolicy {
         blocks_per_step: u64,
         blocks_to_generate: Option<u64>,
         time_to_generate: Option<u64>,
-    ) -> Result<Self, FixedBlockTimePolicyError> {
+    ) -> Result<Self, FixedTimePolicyError> {
         if blocks_to_generate.is_none() & time_to_generate.is_none() {
-            return Err(FixedBlockTimePolicyError::UnspecifiedEndTime);
+            return Err(FixedTimePolicyError::UnspecifiedEndTime);
         }
-        Ok(FixedBlockTimePolicy {
-            current_block_time_env: BlockTimeEnv {
+        Ok(FixedTimePolicy {
+            current_time_env: TimeEnv {
                 number: start_block_number,
                 timestamp: start_block_timestamp,
             },
@@ -71,22 +70,22 @@ impl FixedBlockTimePolicy {
     }
 }
 
-impl BlockTimePolicy for FixedBlockTimePolicy {
-    fn current_block_time_env(&self) -> BlockTimeEnv {
-        self.current_block_time_env
+impl TimePolicy for FixedTimePolicy {
+    fn current_time_env(&self) -> TimeEnv {
+        self.current_time_env
     }
 
-    fn step(&mut self) -> BlockTimeEnv {
+    fn step(&mut self) -> TimeEnv {
         if self.is_active() {
             let time_delta = self.time_per_block * self.blocks_per_step;
             self.generated_blocks += self.blocks_per_step;
             self.generated_time += time_delta;
-            self.current_block_time_env = BlockTimeEnv {
-                number: self.current_block_time_env.number + U256::from(self.blocks_per_step),
-                timestamp: self.current_block_time_env.timestamp + U256::from(time_delta),
+            self.current_time_env = TimeEnv {
+                number: self.current_time_env.number + U256::from(self.blocks_per_step),
+                timestamp: self.current_time_env.timestamp + U256::from(time_delta),
             };
         }
-        self.current_block_time_env
+        self.current_time_env
     }
 
     fn is_active(&self) -> bool {

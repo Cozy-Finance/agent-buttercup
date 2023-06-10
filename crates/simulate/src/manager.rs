@@ -1,21 +1,22 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-use crossbeam_channel::{unbounded, Receiver, Sender};
-use crossbeam_utils::thread;
+use std::thread;
 
+use crate::stepper::*;
+use crossbeam_channel::unbounded;
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::{AccountInfo, U256 as EvmU256};
 use thiserror::Error;
 
 use crate::{
-    agent::{Agent, AgentId},
+    agent::agent::{Agent, AgentId},
     state::{
         update::{SimUpdate, Update},
         SimState,
     },
-    time_policy::BlockTimePolicy,
+    time_policy::TimePolicy,
     EvmAddress,
 };
 
@@ -33,13 +34,13 @@ pub enum ManagerError {
 /// * `rng` - Randomness generator.
 pub struct SimManager<U: Update + 'static> {
     pub state: SimState<U>,
-    pub time_policy: Box<dyn BlockTimePolicy>,
+    pub time_policy: Box<dyn TimePolicy>,
     pub agents: Vec<Box<dyn Agent<U>>>,
     pub rng: StdRng,
 }
 
 impl<U: Update> SimManager<U> {
-    pub fn new(state: SimState<U>, time_policy: Box<dyn BlockTimePolicy>, rng_seed: u64) -> Self {
+    pub fn new(state: SimState<U>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
         Self {
             state,
             time_policy,
@@ -52,29 +53,38 @@ impl<U: Update> SimManager<U> {
     pub fn run_sim(&mut self) {
         // Initiate block time policy.
         self.state
-            .update_block_time_env(self.time_policy.current_block_time_env());
+            .update_time_env(self.time_policy.current_time_env());
+
+        // Initiate stepper.
+        let mut sim_stepper: SimStepper<U> = SimStepper::new();
+        let sim_stepper_read_handle_factory = sim_stepper.factory();
 
         while self.time_policy.is_active() {
-            let (update_sender, update_receiver) = unbounded::<SimUpdate<U>>();
+            let (tx, rx) = unbounded::<SimUpdate<U>>();
 
-            // Spawn agents to read state immutablely and queue updates.
+            // Concurrently:
+            //      1) Spawn agents to access immutable state via a read handle and queue updates.
+            //      2) Append queued updates via the write handle.
             thread::scope(|s| {
                 for agent in &mut self.agents {
-                    s.spawn(|_| agent.step(&self.state, &update_sender));
+                    let tx_clone = tx.clone();
+                    s.spawn(|| agent.step(&sim_stepper_read_handle_factory.sim_state(), tx_clone));
                 }
-            })
-            .unwrap();
+                s.spawn(||
+                    for update in rx.iter() {
+                        sim_stepper.append(update);
+                    }    
+                );
+                drop(tx);
+            });
 
-            // Execute queued updates.
-            drop(update_sender);
-            for update in update_receiver.iter().collect::<Vec<_>>() {
-                self.state.execute(update);
-            }
+            // Publish new state.
+            sim_stepper.publish();
 
             // Update time policy.
             self.time_policy.step();
             self.state
-                .update_block_time_env(self.time_policy.current_block_time_env());
+                .update_time_env(self.time_policy.current_time_env());
         }
     }
 
@@ -85,19 +95,18 @@ impl<U: Update> SimManager<U> {
         // Generates an address for the agent.
         let new_agent_address = EvmAddress::random_using(&mut self.rng);
         self.state
-            .add_account_info(new_agent_address, AccountInfo::default())?;
+            .insert_account_info(new_agent_address, AccountInfo::default())?;
 
         // Register address with agent.
         new_agent.register_address(&new_agent_address);
 
         // Runs the agent's activation step and queue updates.
-        let (update_sender, update_receiver) = unbounded::<SimUpdate<U>>();
-        new_agent.activation_step(&self.state, &update_sender);
+        let (tx, rx) = unbounded::<SimUpdate<U>>();
+        new_agent.activation_step(&self.state, tx);
 
         // Execute queued updates.
-        drop(update_sender);
-        for update in update_receiver.iter().collect::<Vec<_>>() {
-            self.state.execute(update);
+        for update in rx.iter() {
+            self.state.execute(&update);
         }
 
         // Adds agent to local data.

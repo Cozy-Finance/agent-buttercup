@@ -6,9 +6,10 @@ use crate::cozy::{
 use ethers::abi::{Contract as EthersContract, Tokenize};
 use eyre::Result;
 use revm::primitives::TxEnv;
-use simulate::agent::Agent;
+use simulate::agent::agent::Agent;
 use simulate::contract::sim_contract::SimContract;
 use simulate::contract::utils as contract_utils;
+use simulate::utils::build_deploy_contract_txenv;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -36,8 +37,29 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
     let contract = SimContract::new(abi, bytecode);
     let bytecode = contract.encode_constructor(args)?;
 
-    Ok(contract_utils::build_deploy_contract_tx(
-        &agent.address(),
+    Ok(build_deploy_contract_txenv(
+        agent.address(),
+        bytecode,
+        None,
+        None,
+    ))
+}
+
+pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
+    agent: &mut dyn Agent<CozyWorldStateUpdate>,
+    contract_bindings: &BindingsWrapper,
+    args: T,
+) -> Result<TxEnv> {
+    let abi = (*contract_bindings).abi.clone();
+    let bytecode = (*contract_bindings)
+        .bytecode
+        .ok_or(DeploymentError::MissingLinkedBytecode)?
+        .clone();
+    let contract = SimContract::new(abi, bytecode);
+    let bytecode = contract.encode_constructor(args)?;
+
+    Ok(build_deploy_contract_txenv(
+        agent.address(),
         bytecode,
         None,
         None,

@@ -4,7 +4,7 @@ use bindings::cozy_protocol::shared_types::{Delays, Fees};
 use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::U256 as EvmU256;
-use simulate::{manager::SimManager, state::SimState, time_policy::FixedBlockTimePolicy};
+use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
 
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
@@ -19,20 +19,20 @@ pub use bindings::{
 };
 
 pub mod agents;
-pub mod bindings_utils;
 pub mod bindings_wrapper;
 pub mod sim_types;
+pub mod utils;
 pub mod world_state;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
     let world_state = CozyWorldState::new();
     let sim_state = SimState::new(Some(Box::new(world_state)));
-    let time_policy = Box::new(FixedBlockTimePolicy::new(
+    let time_policy = Box::new(FixedTimePolicy::new(
         EvmU256::from(0),
         EvmU256::from(1),
         12_u64,
         10_u64,
-        Some(500_u64),
+        Some(500_000_u64),
         None,
     )?);
     let mut sim_manager = SimManager::new(sim_state, time_policy, 99_u64);

@@ -4,9 +4,12 @@ use std::{
     fmt::{Display, Formatter, Result as FmtResult},
 };
 
+use crate::{EthersAddress, EvmAddress, EvmBytes};
 use bytes::Bytes;
-use ethers::prelude::{Address, U256};
-use revm::primitives::{ExecutionResult, Output, B160};
+use ethers::prelude::{Address, U256 as EthersU256};
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, U256 as EvmU256};
+
+use crate::agent::agent::AgentTxGasSettings;
 
 #[derive(Debug)]
 /// Error type for the simulation manager.
@@ -44,8 +47,8 @@ pub fn recast_address(address: B160) -> Address {
 /// * `x` - Float to convert. (f64)
 /// # Returns
 /// * `U256` - Converted U256 number.
-pub fn float_to_wad(x: f64) -> U256 {
-    U256::from((x * 1e18) as u128)
+pub fn float_to_wad(x: f64) -> EthersU256 {
+    EthersU256::from((x * 1e18) as u128)
 }
 
 /// Converts a float to a WAD fixed point prepared U256 number.
@@ -53,7 +56,7 @@ pub fn float_to_wad(x: f64) -> U256 {
 /// * `x` - WAD to convert. (U256)
 /// # Returns
 /// * `f64` - Converted f64 number.
-pub fn wad_to_float(x: U256) -> f64 {
+pub fn wad_to_float(x: EthersU256) -> f64 {
     x.as_u128() as f64 / 1e18
 }
 
@@ -82,5 +85,55 @@ pub fn unpack_execution(execution_result: ExecutionResult) -> Result<Bytes, Unpa
             ),
             output: Some(output),
         }),
+    }
+}
+
+pub fn is_execution_success(execution_result: ExecutionResult) -> bool {
+    match execution_result {
+        ExecutionResult::Success { .. } => true,
+        _ => false,
+    }
+}
+
+pub fn build_deploy_contract_txenv(
+    caller_address: EvmAddress,
+    bytecode: EvmBytes,
+    value: Option<EvmU256>,
+    gas_settings: Option<AgentTxGasSettings>,
+) -> TxEnv {
+    let tx_gas_settings = gas_settings.unwrap_or_default();
+    TxEnv {
+        caller: caller_address,
+        gas_limit: tx_gas_settings.gas_limit,
+        gas_price: tx_gas_settings.gas_price,
+        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        transact_to: TransactTo::create(),
+        value: value.unwrap_or(EvmU256::ZERO),
+        data: bytecode,
+        chain_id: None,
+        nonce: None,
+        access_list: Vec::new(),
+    }
+}
+
+pub fn build_call_contract_txenv(
+    caller_address: EvmAddress,
+    receiver_address: EvmAddress,
+    call_data: EvmBytes,
+    value: Option<EvmU256>,
+    gas_settings: Option<AgentTxGasSettings>,
+) -> TxEnv {
+    let tx_gas_settings = gas_settings.unwrap_or_default();
+    TxEnv {
+        caller: caller_address,
+        gas_limit: tx_gas_settings.gas_limit,
+        gas_price: tx_gas_settings.gas_price,
+        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        transact_to: TransactTo::Call(receiver_address.into()),
+        value: value.unwrap_or(EvmU256::ZERO),
+        data: call_data,
+        chain_id: None,
+        nonce: None,
+        access_list: Vec::new(),
     }
 }
