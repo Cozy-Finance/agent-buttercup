@@ -23,12 +23,14 @@ pub struct SimStepper<U: Update> {
 }
 
 impl<U: Update> SimStepper<U> {
-    pub fn new() -> Self {
+    pub fn new_from_default() -> Self {
+        // Initializes SimState<U> to its default.
         let (write, read) = left_right::new::<SimState<U>, SimUpdate<U>>();
         SimStepper { read, write }
     }
 
-    pub fn new_from_empty(sim_state: SimState<U>) -> Self {
+    pub fn new_from_current_state(sim_state: SimState<U>) -> Self {
+        // Clones SimState<U>.
         let (write, read) = left_right::new_from_empty::<SimState<U>, SimUpdate<U>>(sim_state);
         SimStepper { read, write }
     }

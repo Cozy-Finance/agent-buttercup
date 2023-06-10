@@ -70,12 +70,11 @@ impl<U: Update> SimState<U> {
 
     pub fn get_account_info(&self, address: Address) -> Result<AccountInfo> {
         let raw_db = self.evm.db.as_ref().ok_or(SimStateError::EvmDbError)?;
-        let raw_db = RefDBWrapper::new(&raw_db);
-        Ok(raw_db
-            .db
+        let db = RefDBWrapper::new(&raw_db).db;
+        Ok(db
             .basic(address)
             .map_err(|_| SimStateError::EvmDbError)?
-            .unwrap())
+            .ok_or(SimStateError::EvmDbError)?)
     }
 
     /// Execute a transaction in the execution environment.

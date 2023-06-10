@@ -43,7 +43,7 @@ pub struct SimManager<U: Update + 'static> {
 
 impl<U: Update> SimManager<U> {
     pub fn new(state: SimState<U>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
-        let stepper: SimStepper<U> = SimStepper::new_from_empty(state);
+        let stepper: SimStepper<U> = SimStepper::new_from_current_state(state);
         let stepper_read_factory = stepper.factory();
         Self {
             time_policy,
@@ -61,7 +61,6 @@ impl<U: Update> SimManager<U> {
             .update_time_env(self.time_policy.current_time_env());
 
         while self.time_policy.is_active() {
-            println!("{:?}", self.time_policy.current_time_env());
             let (sender, receiver) = unbounded::<SimUpdate<U>>();
 
             // Concurrently:
