@@ -70,17 +70,19 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
         state: &SimState<CozyWorldStateUpdate>,
         sender: Sender<SimUpdate<CozyWorldStateUpdate>>,
     ) {
+        // Deploy external libraries.
+        self.deploy_libraries(state, &sender);
     }
 }
 
 impl ProtocolDeployer {
     fn deploy_libraries(
         &mut self,
-        _state: &SimState<CozyWorldStateUpdate>,
+        state: &SimState<CozyWorldStateUpdate>,
         sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
     ) -> Result<()> {
         let mut evm_txs = vec![];
-
+        //println!("{:}", current_nonce);
         evm_txs.push(build_deploy_contract_tx(self, &CONFIGURATORLIB, ())?);
         evm_txs.push(build_deploy_contract_tx(self, &DELAYLIB, ())?);
         evm_txs.push(build_deploy_contract_tx(self, &DEMANDSIDELIB, ())?);
@@ -102,7 +104,7 @@ impl ProtocolDeployer {
         sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
-        let current_nonce = state.get_account_info(self.address())?.nonce;
+        let current_nonce = 3;
         let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
         let set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
         // current_nonce + 2 is initialization of the Set logic.
