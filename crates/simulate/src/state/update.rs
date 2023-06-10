@@ -4,7 +4,7 @@ use revm::primitives::TxEnv;
 
 pub trait Update: Send + Sync + Clone + Debug {}
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SimUpdate<U: Update> {
     Evm(TxEnv),
     World(Box<U>),

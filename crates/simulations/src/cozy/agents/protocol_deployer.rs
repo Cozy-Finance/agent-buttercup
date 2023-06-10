@@ -5,7 +5,7 @@ use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
-    agent::Agent,
+    agent::agent::Agent,
     contract::{
         sim_contract::{IsDeployed, SimContract},
         utils,
@@ -15,7 +15,7 @@ use simulate::{
 use thiserror::Error;
 
 use crate::cozy::agents::errors::CozyAgentError;
-use crate::cozy::bindings_utils;
+use crate::cozy::utils::build_deploy_contract_tx;
 use crate::cozy::{
     bindings_wrapper::*,
     world_state::CozyWorldStateUpdate,
@@ -55,12 +55,12 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
     fn activation_step(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
+        sender: Sender<SimUpdate<CozyWorldStateUpdate>>,
     ) {
         // Deploy external libraries.
-        self.deploy_libraries(state, sender);
+        self.deploy_libraries(state, &sender);
         // Deploy core protocol.
-        // self.deploy_core_protocol(state);
+        self.deploy_core_protocol(state, &sender);
         // Deploy periphery.
         // self.deploy_periphery(state);
     }
@@ -68,7 +68,7 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
     fn step(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
+        sender: Sender<SimUpdate<CozyWorldStateUpdate>>,
     ) {
     }
 }
@@ -81,45 +81,39 @@ impl ProtocolDeployer {
     ) -> Result<()> {
         let mut evm_txs = vec![];
 
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &CONFIGURATORLIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &DELAYLIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &DEMANDSIDELIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &CONFIGURATORLIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &REDEMPTIONLIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &STATETRANSITIONSLIB,
-            (),
-        )?);
-        evm_txs.push(bindings_utils::build_deploy_contract_tx(
-            self,
-            &SUPPLYSIDELIB,
-            (),
-        )?);
+        evm_txs.push(build_deploy_contract_tx(self, &CONFIGURATORLIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &DELAYLIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &DEMANDSIDELIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &CONFIGURATORLIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &REDEMPTIONLIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &STATETRANSITIONSLIB, ())?);
+        evm_txs.push(build_deploy_contract_tx(self, &SUPPLYSIDELIB, ())?);
 
         for tx in evm_txs {
             sender.send(SimUpdate::Evm(tx))?;
         }
+
+        Ok(())
+    }
+
+    fn deploy_core_protocol(
+        &mut self,
+        state: &SimState<CozyWorldStateUpdate>,
+        sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
+    ) -> Result<()> {
+        // Pre-compute Cozy protocol addresses
+        let current_nonce = state.get_account_info(self.address())?.nonce;
+        let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
+        let set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
+        // current_nonce + 2 is initialization of the Set logic.
+        let set_factory_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 3));
+        let ptoken_logic_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 4));
+        // current_nonce + 5 is initialization of the PToken logic.
+        let ptoken_factory_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 6));
+        let backstop_addr = EthersAddress::from(create_address(self.address(), current_nonce + 7));
 
         Ok(())
     }
