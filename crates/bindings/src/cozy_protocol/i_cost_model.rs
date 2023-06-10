@@ -7,14 +7,16 @@ pub use i_cost_model::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_cost_model {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"costFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"refundFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"registerSet\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"utilization\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"newUtilization\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"update\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static ICOSTMODEL_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static ICOSTMODEL_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct ICostModel<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for ICostModel<M> {
         fn clone(&self) -> Self {
@@ -34,7 +36,9 @@ pub mod i_cost_model {
     }
     impl<M> ::core::fmt::Debug for ICostModel<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ICostModel)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(ICostModel))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ICostModel<M> {
@@ -44,13 +48,11 @@ pub mod i_cost_model {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    ICOSTMODEL_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                ICOSTMODEL_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `costFactor` (0xd7c856b3) function
         pub fn cost_factor(
@@ -89,8 +91,7 @@ pub mod i_cost_model {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for ICostModel<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for ICostModel<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -104,7 +105,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "costFactor", abi = "costFactor(uint256,uint256)")]
     pub struct CostFactorCall {
@@ -120,7 +121,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "refundFactor", abi = "refundFactor(uint256,uint256)")]
     pub struct RefundFactorCall {
@@ -136,7 +137,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "registerSet", abi = "registerSet()")]
     pub struct RegisterSetCall;
@@ -149,7 +150,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "update", abi = "update(uint256,uint256)")]
     pub struct UpdateCall {
@@ -169,20 +170,17 @@ pub mod i_cost_model {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CostFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::CostFactor(decoded));
             }
-            if let Ok(decoded)
-                = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RefundFactorCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RefundFactor(decoded));
             }
-            if let Ok(decoded)
-                = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RegisterSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RegisterSet(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <UpdateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Update(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -191,15 +189,9 @@ pub mod i_cost_model {
     impl ::ethers::core::abi::AbiEncode for ICostModelCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::CostFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RefundFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::RegisterSet(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::CostFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RefundFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::RegisterSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Update(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -243,7 +235,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct CostFactorReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `refundFactor` function with signature `refundFactor(uint256,uint256)` and selector `0xe035cbca`
@@ -255,7 +247,7 @@ pub mod i_cost_model {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RefundFactorReturn(pub ::ethers::core::types::U256);
 }

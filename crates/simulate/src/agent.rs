@@ -3,10 +3,16 @@ use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256};
 use thiserror::Error;
 
 use crate::{
-    contract::sim_contract::{IsDeployed, NotDeployed, SimContract},
+    contract::sim_contract::{IsDeployed, SimContract},
     environment::sim_env::SimEnv,
-    sim_env_data::SimEnvData,
     EvmAddress, EvmBytes,
+};
+
+use crossbeam_channel::Sender;
+
+use crate::state::{
+    update::{SimUpdate, Update},
+    SimState,
 };
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
@@ -39,21 +45,18 @@ pub enum AgentError {
 }
 
 /// Basic traits that every `Agent` must implement in order to properly interact with an EVM and simulation.
-pub trait Agent {
+pub trait Agent<U: Update>: Sync + Send {
     /// Returns the address of the agent.
     fn address(&self) -> EvmAddress;
 
     /// Allows manager to register address with the agent.
     fn register_address(&mut self, address: &EvmAddress);
 
-    /// Returns the address of the agent.
-    fn name(&self) -> Option<String>;
-
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn activation_step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData);
+    fn activation_step(&mut self, state: &SimState<U>, sender: &Sender<SimUpdate<U>>);
 
     /// Executes the agents actions against the simulation environment.
-    fn step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData);
+    fn step(&mut self, state: &SimState<U>, sender: &Sender<SimUpdate<U>>);
 
     /// Used to allow agents to make a generic call a specific smart contract.
     fn call_contract(
@@ -140,60 +143,6 @@ pub trait Agent {
             transact_to: TransactTo::Call(receiver_address.into()),
             value: value.unwrap_or(U256::ZERO),
             data: call_data,
-            chain_id: None,
-            nonce: None,
-            access_list: Vec::new(),
-        }
-    }
-
-    /// Deploy a contract to the current simulation environment and return a new [`SimulationContract<IsDeployed>`].
-    /// Does not consume the current [`SimulationContract<NotDeployed>`] so that more copies can be deployed later.
-    /// # Arguments
-    /// * `simulation_environment` - The [`SimulationEnvironment`] to deploy the contract to.
-    /// * `deployer` - The [`AgentType`] that will deploy the contract.
-    /// * `constructor_arguments` - The constructor arguments for the contract.
-    /// # Returns
-    /// * `SimulationContract<IsDeployed>` - The deployed contract.
-    fn deploy_contract(
-        &self,
-        sim_env: &mut SimEnv,
-        contract: &SimContract<NotDeployed>,
-        call_data: EvmBytes,
-    ) -> Result<SimContract<IsDeployed>, AgentError> {
-        let tx = self.build_deploy_tx(call_data, None, None);
-        let execution_result = sim_env.execute(tx);
-
-        let address = match execution_result {
-            ExecutionResult::Success { output, .. } => match output {
-                Output::Create(_, address) => address,
-                _ => return Err(AgentError::ContractDeploymentFailure),
-            },
-            _ => return Err(AgentError::ContractDeploymentFailure),
-        };
-
-        Ok(SimContract {
-            bytecode: (),
-            address: address.unwrap().into(),
-            base_contract: contract.base_contract.clone(),
-        })
-    }
-
-    /// A constructor to build a `TxEnv` for a contract deployment.
-    fn build_deploy_tx(
-        &self,
-        bytecode: EvmBytes,
-        value: Option<U256>,
-        gas_settings: Option<AgentTxGasSettings>,
-    ) -> TxEnv {
-        let tx_gas_settings = gas_settings.unwrap_or_default();
-        TxEnv {
-            caller: self.address(),
-            gas_limit: tx_gas_settings.gas_limit,
-            gas_price: tx_gas_settings.gas_price,
-            gas_priority_fee: tx_gas_settings.gas_priority_fee,
-            transact_to: TransactTo::create(),
-            value: value.unwrap_or(U256::ZERO),
-            data: bytecode,
             chain_id: None,
             nonce: None,
             access_list: Vec::new(),

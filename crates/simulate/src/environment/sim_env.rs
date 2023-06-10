@@ -10,7 +10,7 @@ use revm::{
 };
 use thiserror::Error;
 
-use crate::block_time_policy::BlockTimeEnv;
+use crate::time_policy::BlockTimeEnv;
 
 pub enum SimEnvError {
     DbError,

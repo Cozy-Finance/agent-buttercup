@@ -16,4 +16,6 @@ thiserror.workspace = true
 eyre.workspace = true
 rand.workspace = true
 
+crossbeam-channel.workspace = true
+
 lazy_static = "1.4.0"

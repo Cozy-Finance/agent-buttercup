@@ -7,15 +7,17 @@ pub use i_manager_events::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod i_manager_events {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint128\",\"name\":\"reserveAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"backstopAmount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"CozyFeesClaimed\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Delays\",\"name\":\"delays_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint256\",\"name\":\"configUpdateDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"configUpdateGracePeriod\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"minDepositDuration\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"redemptionDelay\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"purchaseDelay\",\"type\":\"uint256\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"DelaysUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"depositCap_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"DepositCapUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"struct Fees\",\"name\":\"fees_\",\"type\":\"tuple\",\"components\":[{\"internalType\":\"uint16\",\"name\":\"depositFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"depositFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"purchaseFeeBackstop\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeReserves\",\"type\":\"uint16\",\"components\":[]},{\"internalType\":\"uint16\",\"name\":\"saleFeeBackstop\",\"type\":\"uint16\",\"components\":[]}],\"indexed\":false}],\"type\":\"event\",\"name\":\"FeesUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"address\",\"name\":\"receiver_\",\"type\":\"address\",\"components\":[],\"indexed\":false},{\"internalType\":\"uint128\",\"name\":\"amount_\",\"type\":\"uint128\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetFeesClaimed\",\"outputs\":[],\"anonymous\":false}]";
     ///The parsed JSON ABI of the contract.
-    pub static IMANAGEREVENTS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static IMANAGEREVENTS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct IManagerEvents<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IManagerEvents<M> {
         fn clone(&self) -> Self {
@@ -35,7 +37,9 @@ pub mod i_manager_events {
     }
     impl<M> ::core::fmt::Debug for IManagerEvents<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IManagerEvents)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(IManagerEvents))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> IManagerEvents<M> {
@@ -45,77 +49,58 @@ pub mod i_manager_events {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    IMANAGEREVENTS_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                IMANAGEREVENTS_ABI.clone(),
+                client,
+            ))
         }
         ///Gets the contract's `CozyFeesClaimed` event
         pub fn cozy_fees_claimed_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            CozyFeesClaimedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, CozyFeesClaimedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DelaysUpdated` event
         pub fn delays_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DelaysUpdatedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, DelaysUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `DepositCapUpdated` event
         pub fn deposit_cap_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            DepositCapUpdatedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, DepositCapUpdatedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `FeesUpdated` event
         pub fn fees_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FeesUpdatedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, FeesUpdatedFilter> {
             self.0.event()
         }
         ///Gets the contract's `SetFeesClaimed` event
         pub fn set_fees_claimed_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            SetFeesClaimedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, SetFeesClaimedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            IManagerEventsEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, IManagerEventsEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for IManagerEvents<M> {
+        for IManagerEvents<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -128,7 +113,7 @@ pub mod i_manager_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "CozyFeesClaimed",
@@ -148,7 +133,7 @@ pub mod i_manager_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "DelaysUpdated",
@@ -165,7 +150,7 @@ pub mod i_manager_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "DepositCapUpdated", abi = "DepositCapUpdated(address,uint256)")]
     pub struct DepositCapUpdatedFilter {
@@ -181,7 +166,7 @@ pub mod i_manager_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "FeesUpdated",
@@ -198,9 +183,12 @@ pub mod i_manager_events {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethevent(name = "SetFeesClaimed", abi = "SetFeesClaimed(address,address,uint128)")]
+    #[ethevent(
+        name = "SetFeesClaimed",
+        abi = "SetFeesClaimed(address,address,uint128)"
+    )]
     pub struct SetFeesClaimedFilter {
         #[ethevent(indexed)]
         pub set: ::ethers::core::types::Address,
@@ -241,19 +229,11 @@ pub mod i_manager_events {
     impl ::core::fmt::Display for IManagerEventsEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::CozyFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DelaysUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::DepositCapUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::CozyFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DelaysUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::DepositCapUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::FeesUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::SetFeesClaimedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::SetFeesClaimedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }

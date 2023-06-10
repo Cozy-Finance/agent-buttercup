@@ -7,15 +7,17 @@ pub use backstop::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod backstop {
     pub use super::super::shared_types::*;
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"manager_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract IWeth\",\"name\":\"weth_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidAddress\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"bool\",\"name\":\"status_\",\"type\":\"bool\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"BackstopApprovalStatusUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"contract IERC20\",\"name\":\"asset_\",\"type\":\"address\",\"components\":[],\"indexed\":true},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"Claim\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"claim\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"deposit\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isApproved\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"token_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"rescueFunds\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"rescueFunds\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"struct BackstopApproval[]\",\"name\":\"approvals_\",\"type\":\"tuple[]\",\"components\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\",\"components\":[]}]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateApprovals\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"weth\",\"outputs\":[{\"internalType\":\"contract IWeth\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"receive\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static BACKSTOP_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static BACKSTOP_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -2091,9 +2093,8 @@ pub mod backstop {
         10,
     ];
     ///The bytecode of the contract.
-    pub static BACKSTOP_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static BACKSTOP_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -3933,9 +3934,8 @@ pub mod backstop {
         10,
     ];
     ///The deployed bytecode of the contract.
-    pub static BACKSTOP_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static BACKSTOP_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct Backstop<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for Backstop<M> {
         fn clone(&self) -> Self {
@@ -3955,7 +3955,9 @@ pub mod backstop {
     }
     impl<M> ::core::fmt::Debug for Backstop<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(Backstop)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(Backstop))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> Backstop<M> {
@@ -3965,13 +3967,11 @@ pub mod backstop {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    BACKSTOP_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                BACKSTOP_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -4039,10 +4039,7 @@ pub mod backstop {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -4079,10 +4076,7 @@ pub mod backstop {
         ///Calls the contract's `weth` (0x3fc8cef3) function
         pub fn weth(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([63, 200, 206, 243], ())
                 .expect("method not found (this should never happen)")
@@ -4107,11 +4101,11 @@ pub mod backstop {
         pub fn events(
             &self,
         ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, BackstopEvents> {
-            self.0.event_with_filter(::core::default::Default::default())
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for Backstop<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for Backstop<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -4125,7 +4119,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidAddress", abi = "InvalidAddress()")]
     pub struct InvalidAddress;
@@ -4138,7 +4132,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -4156,18 +4150,15 @@ pub mod backstop {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidAddress as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidAddress(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -4176,12 +4167,8 @@ pub mod backstop {
     impl ::ethers::core::abi::AbiEncode for BackstopErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidAddress(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidAddress(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -4190,12 +4177,10 @@ pub mod backstop {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
-                _ if selector
-                    == <InvalidAddress as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <InvalidAddress as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -4232,7 +4217,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(
         name = "BackstopApprovalStatusUpdated",
@@ -4251,7 +4236,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "Claim", abi = "Claim(address,address,uint256)")]
     pub struct ClaimFilter {
@@ -4309,7 +4294,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "claim", abi = "claim(uint256)")]
     pub struct ClaimCall {
@@ -4324,7 +4309,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "deposit", abi = "deposit()")]
     pub struct DepositCall;
@@ -4337,7 +4322,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "isApproved", abi = "isApproved(address)")]
     pub struct IsApprovedCall(pub ::ethers::core::types::Address);
@@ -4350,7 +4335,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -4363,7 +4348,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "rescueFunds", abi = "rescueFunds(address,address,uint256)")]
     pub struct RescueFundsWithTokenCall {
@@ -4380,7 +4365,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "rescueFunds", abi = "rescueFunds(address)")]
     pub struct RescueFundsCall {
@@ -4395,7 +4380,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "updateApprovals", abi = "updateApprovals((address,bool)[])")]
     pub struct UpdateApprovalsCall {
@@ -4410,7 +4395,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "weth", abi = "weth()")]
     pub struct WethCall;
@@ -4431,38 +4416,32 @@ pub mod backstop {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ClaimCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Claim(decoded));
             }
-            if let Ok(decoded)
-                = <DepositCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DepositCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Deposit(decoded));
             }
-            if let Ok(decoded)
-                = <IsApprovedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <IsApprovedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::IsApproved(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <RescueFundsWithTokenCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RescueFundsWithTokenCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RescueFundsWithToken(decoded));
             }
-            if let Ok(decoded)
-                = <RescueFundsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RescueFundsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RescueFunds(decoded));
             }
-            if let Ok(decoded)
-                = <UpdateApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <UpdateApprovalsCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::UpdateApprovals(decoded));
             }
-            if let Ok(decoded)
-                = <WethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WethCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Weth(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -4473,19 +4452,13 @@ pub mod backstop {
             match self {
                 Self::Claim(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Deposit(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::IsApproved(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::IsApproved(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RescueFundsWithToken(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::RescueFunds(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::UpdateApprovals(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::RescueFunds(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::UpdateApprovals(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Weth(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -4497,9 +4470,7 @@ pub mod backstop {
                 Self::Deposit(element) => ::core::fmt::Display::fmt(element, f),
                 Self::IsApproved(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Manager(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RescueFundsWithToken(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::RescueFundsWithToken(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RescueFunds(element) => ::core::fmt::Display::fmt(element, f),
                 Self::UpdateApprovals(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Weth(element) => ::core::fmt::Display::fmt(element, f),
@@ -4555,7 +4526,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct IsApprovedReturn(pub bool);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -4567,7 +4538,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `weth` function with signature `weth()` and selector `0x3fc8cef3`
@@ -4579,7 +4550,7 @@ pub mod backstop {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct WethReturn(pub ::ethers::core::types::Address);
 }

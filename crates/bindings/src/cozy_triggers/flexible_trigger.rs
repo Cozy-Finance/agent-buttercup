@@ -7,14 +7,16 @@ pub use flexible_trigger::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod flexible_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"_manager\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address\",\"name\":\"_boss\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"address[]\",\"name\":\"_freezers\",\"type\":\"address[]\",\"components\":[]},{\"internalType\":\"bool\",\"name\":\"_isAutoTrigger\",\"type\":\"bool\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_maxFreezeDuration\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetLimitReached\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unacknowledged\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"freezer\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"FreezerAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"acknowledge\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"_set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"boss\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"freeze\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"freezeTime\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"freezers\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isAutoTrigger\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"maxFreezeDuration\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"publicTrigger\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"resume\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"trigger\",\"outputs\":[]}]";
     ///The parsed JSON ABI of the contract.
-    pub static FLEXIBLETRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static FLEXIBLETRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         96,
@@ -4678,9 +4680,8 @@ pub mod flexible_trigger {
         51,
     ];
     ///The bytecode of the contract.
-    pub static FLEXIBLETRIGGER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static FLEXIBLETRIGGER_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -8539,9 +8540,8 @@ pub mod flexible_trigger {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static FLEXIBLETRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static FLEXIBLETRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct FlexibleTrigger<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for FlexibleTrigger<M> {
         fn clone(&self) -> Self {
@@ -8561,7 +8561,9 @@ pub mod flexible_trigger {
     }
     impl<M> ::core::fmt::Debug for FlexibleTrigger<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(FlexibleTrigger)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(FlexibleTrigger))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> FlexibleTrigger<M> {
@@ -8571,13 +8573,11 @@ pub mod flexible_trigger {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    FLEXIBLETRIGGER_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                FLEXIBLETRIGGER_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -8633,9 +8633,7 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledged` (0x086c298d) function
-        pub fn acknowledged(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
+        pub fn acknowledged(&self) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -8652,10 +8650,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `boss` (0xc772af39) function
         pub fn boss(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([199, 114, 175, 57], ())
                 .expect("method not found (this should never happen)")
@@ -8703,9 +8698,7 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `isAutoTrigger` (0xa2ce3d49) function
-        pub fn is_auto_trigger(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
+        pub fn is_auto_trigger(&self) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([162, 206, 61, 73], ())
                 .expect("method not found (this should never happen)")
@@ -8713,10 +8706,7 @@ pub mod flexible_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -8730,9 +8720,7 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `publicTrigger` (0x4f9ca8c5) function
-        pub fn public_trigger(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ()> {
+        pub fn public_trigger(&self) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([79, 156, 168, 197], ())
                 .expect("method not found (this should never happen)")
@@ -8744,9 +8732,7 @@ pub mod flexible_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
-        pub fn run_programmatic_check(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
+        pub fn run_programmatic_check(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -8755,10 +8741,7 @@ pub mod flexible_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([91, 34, 127, 155], p0)
                 .expect("method not found (this should never happen)")
@@ -8778,11 +8761,8 @@ pub mod flexible_trigger {
         ///Gets the contract's `FreezerAdded` event
         pub fn freezer_added_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FreezerAddedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, FreezerAddedFilter>
+        {
             self.0.event()
         }
         ///Gets the contract's `SetAdded` event
@@ -8794,26 +8774,22 @@ pub mod flexible_trigger {
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TriggerStateUpdatedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, TriggerStateUpdatedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            FlexibleTriggerEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, FlexibleTriggerEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for FlexibleTrigger<M> {
+        for FlexibleTrigger<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -8827,7 +8803,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -8840,7 +8816,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SetLimitReached", abi = "SetLimitReached()")]
     pub struct SetLimitReached;
@@ -8853,7 +8829,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unacknowledged", abi = "Unacknowledged()")]
     pub struct Unacknowledged;
@@ -8866,7 +8842,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -8886,28 +8862,23 @@ pub mod flexible_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetLimitReached(decoded));
             }
-            if let Ok(decoded)
-                = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unacknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -8919,15 +8890,9 @@ pub mod flexible_trigger {
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::SetLimitReached(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unacknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::SetLimitReached(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unacknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -8937,19 +8902,17 @@ pub mod flexible_trigger {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
                 _ if selector
-                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <SetLimitReached as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <SetLimitReached as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unacknowledged as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <Unacknowledged as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -8957,9 +8920,7 @@ pub mod flexible_trigger {
     impl ::core::fmt::Display for FlexibleTriggerErrors {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetLimitReached(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unacknowledged(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Unauthorized(element) => ::core::fmt::Display::fmt(element, f),
@@ -9000,7 +8961,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "FreezerAdded", abi = "FreezerAdded(address)")]
     pub struct FreezerAddedFilter {
@@ -9014,7 +8975,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "SetAdded", abi = "SetAdded(address)")]
     pub struct SetAddedFilter {
@@ -9028,7 +8989,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "TriggerStateUpdated", abi = "TriggerStateUpdated(uint8)")]
     pub struct TriggerStateUpdatedFilter {
@@ -9061,13 +9022,9 @@ pub mod flexible_trigger {
     impl ::core::fmt::Display for FlexibleTriggerEvents {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
-                Self::FreezerAddedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::FreezerAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TriggerStateUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TriggerStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
@@ -9095,7 +9052,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "MAX_SET_LENGTH", abi = "MAX_SET_LENGTH()")]
     pub struct MaxSetLengthCall;
@@ -9108,7 +9065,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "acknowledge", abi = "acknowledge()")]
     pub struct AcknowledgeCall;
@@ -9121,7 +9078,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "acknowledged", abi = "acknowledged()")]
     pub struct AcknowledgedCall;
@@ -9134,7 +9091,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "addSet", abi = "addSet(address)")]
     pub struct AddSetCall {
@@ -9149,7 +9106,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "boss", abi = "boss()")]
     pub struct BossCall;
@@ -9162,7 +9119,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "freeze", abi = "freeze()")]
     pub struct FreezeCall;
@@ -9175,7 +9132,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "freezeTime", abi = "freezeTime()")]
     pub struct FreezeTimeCall;
@@ -9188,7 +9145,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "freezers", abi = "freezers(address)")]
     pub struct FreezersCall(pub ::ethers::core::types::Address);
@@ -9201,7 +9158,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSets", abi = "getSets()")]
     pub struct GetSetsCall;
@@ -9214,7 +9171,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSetsLength", abi = "getSetsLength()")]
     pub struct GetSetsLengthCall;
@@ -9227,7 +9184,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "isAutoTrigger", abi = "isAutoTrigger()")]
     pub struct IsAutoTriggerCall;
@@ -9240,7 +9197,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -9253,7 +9210,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "maxFreezeDuration", abi = "maxFreezeDuration()")]
     pub struct MaxFreezeDurationCall;
@@ -9266,7 +9223,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "publicTrigger", abi = "publicTrigger()")]
     pub struct PublicTriggerCall;
@@ -9279,7 +9236,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "resume", abi = "resume()")]
     pub struct ResumeCall;
@@ -9292,7 +9249,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "runProgrammaticCheck", abi = "runProgrammaticCheck()")]
     pub struct RunProgrammaticCheckCall;
@@ -9305,7 +9262,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "sets", abi = "sets(uint256)")]
     pub struct SetsCall(pub ::ethers::core::types::U256);
@@ -9318,7 +9275,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
@@ -9331,7 +9288,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "trigger", abi = "trigger()")]
     pub struct TriggerCall;
@@ -9363,84 +9320,70 @@ pub mod flexible_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MaxSetLength(decoded));
             }
-            if let Ok(decoded)
-                = <AcknowledgeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AcknowledgeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Acknowledge(decoded));
             }
-            if let Ok(decoded)
-                = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::Acknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::AddSet(decoded));
             }
-            if let Ok(decoded)
-                = <BossCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <BossCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Boss(decoded));
             }
-            if let Ok(decoded)
-                = <FreezeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FreezeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Freeze(decoded));
             }
-            if let Ok(decoded)
-                = <FreezeTimeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FreezeTimeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::FreezeTime(decoded));
             }
-            if let Ok(decoded)
-                = <FreezersCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FreezersCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Freezers(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSets(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetSetsLength(decoded));
             }
-            if let Ok(decoded)
-                = <IsAutoTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <IsAutoTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::IsAutoTrigger(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <MaxFreezeDurationCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <MaxFreezeDurationCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MaxFreezeDuration(decoded));
             }
-            if let Ok(decoded)
-                = <PublicTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PublicTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PublicTrigger(decoded));
             }
-            if let Ok(decoded)
-                = <ResumeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ResumeCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Resume(decoded));
             }
-            if let Ok(decoded)
-                = <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RunProgrammaticCheck(decoded));
             }
-            if let Ok(decoded)
-                = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sets(decoded));
             }
-            if let Ok(decoded)
-                = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::State(decoded));
             }
-            if let Ok(decoded)
-                = <TriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Trigger(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -9449,38 +9392,20 @@ pub mod flexible_trigger {
     impl ::ethers::core::abi::AbiEncode for FlexibleTriggerCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::MaxSetLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Acknowledge(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Acknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::MaxSetLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Acknowledge(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Acknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::AddSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Boss(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Freeze(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::FreezeTime(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Freezers(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::FreezeTime(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Freezers(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::GetSets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetSetsLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::IsAutoTrigger(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetSetsLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::IsAutoTrigger(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::MaxFreezeDuration(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PublicTrigger(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::MaxFreezeDuration(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PublicTrigger(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Resume(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RunProgrammaticCheck(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
@@ -9509,9 +9434,7 @@ pub mod flexible_trigger {
                 Self::MaxFreezeDuration(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PublicTrigger(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Resume(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RunProgrammaticCheck(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::RunProgrammaticCheck(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Sets(element) => ::core::fmt::Display::fmt(element, f),
                 Self::State(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Trigger(element) => ::core::fmt::Display::fmt(element, f),
@@ -9622,7 +9545,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxSetLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
@@ -9634,7 +9557,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AcknowledgedReturn(pub bool);
     ///Container type for all return fields from the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
@@ -9646,7 +9569,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AddSetReturn(pub bool);
     ///Container type for all return fields from the `boss` function with signature `boss()` and selector `0xc772af39`
@@ -9658,7 +9581,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct BossReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `freezeTime` function with signature `freezeTime()` and selector `0xfd7e1bee`
@@ -9670,7 +9593,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct FreezeTimeReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `freezers` function with signature `freezers(address)` and selector `0x1f816352`
@@ -9682,7 +9605,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct FreezersReturn(pub bool);
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
@@ -9694,7 +9617,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsReturn(pub ::std::vec::Vec<::ethers::core::types::Address>);
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
@@ -9706,7 +9629,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `isAutoTrigger` function with signature `isAutoTrigger()` and selector `0xa2ce3d49`
@@ -9718,7 +9641,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct IsAutoTriggerReturn(pub bool);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -9730,7 +9653,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `maxFreezeDuration` function with signature `maxFreezeDuration()` and selector `0xc2b758e1`
@@ -9742,7 +9665,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxFreezeDurationReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
@@ -9754,7 +9677,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RunProgrammaticCheckReturn(pub u8);
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
@@ -9766,7 +9689,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetsReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
@@ -9778,7 +9701,7 @@ pub mod flexible_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct StateReturn(pub u8);
 }

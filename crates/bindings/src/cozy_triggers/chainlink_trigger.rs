@@ -7,14 +7,16 @@ pub use chainlink_trigger::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod chainlink_trigger {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract IManager\",\"name\":\"_manager\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_truthOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"_trackingOracle\",\"type\":\"address\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_priceTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_truthFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_trackingFrequencyTolerance\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidPrice\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidPriceTolerance\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidStateTransition\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"InvalidTimestamp\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"SetLimitReached\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"StaleOraclePrice\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unacknowledged\",\"outputs\":[]},{\"inputs\":[],\"type\":\"error\",\"name\":\"Unauthorized\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"_set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"contract ISet[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract IManager\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"oracleToScale\",\"outputs\":[{\"internalType\":\"enum ChainlinkTrigger.OracleToScale\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"priceTolerance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"scaleFactor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"contract ISet\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"trackingFrequencyTolerance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"trackingOracle\",\"outputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"truthFrequencyTolerance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"truthOracle\",\"outputs\":[{\"internalType\":\"contract AggregatorV3Interface\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]}]";
     ///The parsed JSON ABI of the contract.
-    pub static CHAINLINKTRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(||
-    ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static CHAINLINKTRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
+        ::ethers_contract::Lazy::new(|| {
+            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     #[rustfmt::skip]
     const __BYTECODE: &[u8] = &[
         97,
@@ -6728,9 +6730,8 @@ pub mod chainlink_trigger {
         51,
     ];
     ///The bytecode of the contract.
-    pub static CHAINLINKTRIGGER_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __BYTECODE,
-    );
+    pub static CHAINLINKTRIGGER_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__BYTECODE);
     #[rustfmt::skip]
     const __DEPLOYED_BYTECODE: &[u8] = &[
         96,
@@ -10654,9 +10655,8 @@ pub mod chainlink_trigger {
         51,
     ];
     ///The deployed bytecode of the contract.
-    pub static CHAINLINKTRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes = ::ethers::core::types::Bytes::from_static(
-        __DEPLOYED_BYTECODE,
-    );
+    pub static CHAINLINKTRIGGER_DEPLOYED_BYTECODE: ::ethers::core::types::Bytes =
+        ::ethers::core::types::Bytes::from_static(__DEPLOYED_BYTECODE);
     pub struct ChainlinkTrigger<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for ChainlinkTrigger<M> {
         fn clone(&self) -> Self {
@@ -10676,7 +10676,9 @@ pub mod chainlink_trigger {
     }
     impl<M> ::core::fmt::Debug for ChainlinkTrigger<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ChainlinkTrigger)).field(&self.address()).finish()
+            f.debug_tuple(stringify!(ChainlinkTrigger))
+                .field(&self.address())
+                .finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ChainlinkTrigger<M> {
@@ -10686,13 +10688,11 @@ pub mod chainlink_trigger {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::ethers_contract::Contract::new(
-                    address.into(),
-                    CHAINLINKTRIGGER_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::ethers_contract::Contract::new(
+                address.into(),
+                CHAINLINKTRIGGER_ABI.clone(),
+                client,
+            ))
         }
         /// Constructs the general purpose `Deployer` instance based on the provided constructor arguments and sends it.
         /// Returns a new instance of a deployer that returns an instance of this contract after sending the transaction
@@ -10742,9 +10742,7 @@ pub mod chainlink_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledged` (0x086c298d) function
-        pub fn acknowledged(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
+        pub fn acknowledged(&self) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -10780,18 +10778,13 @@ pub mod chainlink_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `oracleToScale` (0x8c9cc03c) function
-        pub fn oracle_to_scale(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
+        pub fn oracle_to_scale(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([140, 156, 192, 60], ())
                 .expect("method not found (this should never happen)")
@@ -10805,9 +10798,7 @@ pub mod chainlink_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
-        pub fn run_programmatic_check(
-            &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
+        pub fn run_programmatic_check(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -10824,10 +10815,7 @@ pub mod chainlink_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([91, 34, 127, 155], p0)
                 .expect("method not found (this should never happen)")
@@ -10849,10 +10837,7 @@ pub mod chainlink_trigger {
         ///Calls the contract's `trackingOracle` (0xaec9c3dd) function
         pub fn tracking_oracle(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([174, 201, 195, 221], ())
                 .expect("method not found (this should never happen)")
@@ -10868,10 +10853,7 @@ pub mod chainlink_trigger {
         ///Calls the contract's `truthOracle` (0x815fe927) function
         pub fn truth_oracle(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<
-            M,
-            ::ethers::core::types::Address,
-        > {
+        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
             self.0
                 .method_hash([129, 95, 233, 39], ())
                 .expect("method not found (this should never happen)")
@@ -10885,26 +10867,22 @@ pub mod chainlink_trigger {
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            TriggerStateUpdatedFilter,
-        > {
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, TriggerStateUpdatedFilter>
+        {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers_contract::builders::Event<
-            ::std::sync::Arc<M>,
-            M,
-            ChainlinkTriggerEvents,
-        > {
-            self.0.event_with_filter(::core::default::Default::default())
+        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, ChainlinkTriggerEvents>
+        {
+            self.0
+                .event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
-    for ChainlinkTrigger<M> {
+        for ChainlinkTrigger<M>
+    {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -10918,7 +10896,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidPrice", abi = "InvalidPrice()")]
     pub struct InvalidPrice;
@@ -10931,7 +10909,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidPriceTolerance", abi = "InvalidPriceTolerance()")]
     pub struct InvalidPriceTolerance;
@@ -10944,7 +10922,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidStateTransition", abi = "InvalidStateTransition()")]
     pub struct InvalidStateTransition;
@@ -10957,7 +10935,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "InvalidTimestamp", abi = "InvalidTimestamp()")]
     pub struct InvalidTimestamp;
@@ -10970,7 +10948,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "SetLimitReached", abi = "SetLimitReached()")]
     pub struct SetLimitReached;
@@ -10983,7 +10961,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "StaleOraclePrice", abi = "StaleOraclePrice()")]
     pub struct StaleOraclePrice;
@@ -10996,7 +10974,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unacknowledged", abi = "Unacknowledged()")]
     pub struct Unacknowledged;
@@ -11009,7 +10987,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[etherror(name = "Unauthorized", abi = "Unauthorized()")]
     pub struct Unauthorized;
@@ -11033,46 +11011,39 @@ pub mod chainlink_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <::std::string::String as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RevertString(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidPrice as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidPrice as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::InvalidPrice(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidPriceTolerance as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidPriceTolerance as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidPriceTolerance(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <InvalidStateTransition as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidStateTransition(decoded));
             }
-            if let Ok(decoded)
-                = <InvalidTimestamp as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <InvalidTimestamp as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::InvalidTimestamp(decoded));
             }
-            if let Ok(decoded)
-                = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetLimitReached as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::SetLimitReached(decoded));
             }
-            if let Ok(decoded)
-                = <StaleOraclePrice as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StaleOraclePrice as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::StaleOraclePrice(decoded));
             }
-            if let Ok(decoded)
-                = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unacknowledged as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unacknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Unauthorized as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Unauthorized(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -11081,30 +11052,18 @@ pub mod chainlink_trigger {
     impl ::ethers::core::abi::AbiEncode for ChainlinkTriggerErrors {
         fn encode(self) -> ::std::vec::Vec<u8> {
             match self {
-                Self::InvalidPrice(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidPrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::InvalidPriceTolerance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::InvalidStateTransition(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::InvalidTimestamp(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::SetLimitReached(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::StaleOraclePrice(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unacknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Unauthorized(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::InvalidTimestamp(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::SetLimitReached(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::StaleOraclePrice(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unacknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Unauthorized(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RevertString(s) => ::ethers::core::abi::AbiEncode::encode(s),
             }
         }
@@ -11113,34 +11072,30 @@ pub mod chainlink_trigger {
         fn valid_selector(selector: [u8; 4]) -> bool {
             match selector {
                 [0x08, 0xc3, 0x79, 0xa0] => true,
+                _ if selector == <InvalidPrice as ::ethers_contract::EthError>::selector() => true,
                 _ if selector
-                    == <InvalidPrice as ::ethers_contract::EthError>::selector() => true,
-                _ if selector
-                    == <InvalidPriceTolerance as ::ethers_contract::EthError>::selector() => {
+                    == <InvalidPriceTolerance as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
                 _ if selector
-                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() => {
+                    == <InvalidStateTransition as ::ethers_contract::EthError>::selector() =>
+                {
                     true
                 }
-                _ if selector
-                    == <InvalidTimestamp as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <InvalidTimestamp as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <SetLimitReached as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <SetLimitReached as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <StaleOraclePrice as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <StaleOraclePrice as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unacknowledged as ::ethers_contract::EthError>::selector() => {
+                _ if selector == <Unacknowledged as ::ethers_contract::EthError>::selector() => {
                     true
                 }
-                _ if selector
-                    == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
+                _ if selector == <Unauthorized as ::ethers_contract::EthError>::selector() => true,
                 _ => false,
             }
         }
@@ -11149,12 +11104,8 @@ pub mod chainlink_trigger {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::InvalidPrice(element) => ::core::fmt::Display::fmt(element, f),
-                Self::InvalidPriceTolerance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
-                Self::InvalidStateTransition(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::InvalidPriceTolerance(element) => ::core::fmt::Display::fmt(element, f),
+                Self::InvalidStateTransition(element) => ::core::fmt::Display::fmt(element, f),
                 Self::InvalidTimestamp(element) => ::core::fmt::Display::fmt(element, f),
                 Self::SetLimitReached(element) => ::core::fmt::Display::fmt(element, f),
                 Self::StaleOraclePrice(element) => ::core::fmt::Display::fmt(element, f),
@@ -11217,7 +11168,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "SetAdded", abi = "SetAdded(address)")]
     pub struct SetAddedFilter {
@@ -11231,7 +11182,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethevent(name = "TriggerStateUpdated", abi = "TriggerStateUpdated(uint8)")]
     pub struct TriggerStateUpdatedFilter {
@@ -11261,9 +11212,7 @@ pub mod chainlink_trigger {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::SetAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TriggerStateUpdatedFilter(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TriggerStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
     }
@@ -11286,7 +11235,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "MAX_SET_LENGTH", abi = "MAX_SET_LENGTH()")]
     pub struct MaxSetLengthCall;
@@ -11299,7 +11248,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "acknowledged", abi = "acknowledged()")]
     pub struct AcknowledgedCall;
@@ -11312,7 +11261,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "addSet", abi = "addSet(address)")]
     pub struct AddSetCall {
@@ -11327,7 +11276,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSets", abi = "getSets()")]
     pub struct GetSetsCall;
@@ -11340,7 +11289,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "getSetsLength", abi = "getSetsLength()")]
     pub struct GetSetsLengthCall;
@@ -11353,7 +11302,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -11366,7 +11315,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "oracleToScale", abi = "oracleToScale()")]
     pub struct OracleToScaleCall;
@@ -11379,7 +11328,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "priceTolerance", abi = "priceTolerance()")]
     pub struct PriceToleranceCall;
@@ -11392,7 +11341,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "runProgrammaticCheck", abi = "runProgrammaticCheck()")]
     pub struct RunProgrammaticCheckCall;
@@ -11405,7 +11354,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "scaleFactor", abi = "scaleFactor()")]
     pub struct ScaleFactorCall;
@@ -11418,7 +11367,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "sets", abi = "sets(uint256)")]
     pub struct SetsCall(pub ::ethers::core::types::U256);
@@ -11431,7 +11380,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
@@ -11444,9 +11393,12 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
-    #[ethcall(name = "trackingFrequencyTolerance", abi = "trackingFrequencyTolerance()")]
+    #[ethcall(
+        name = "trackingFrequencyTolerance",
+        abi = "trackingFrequencyTolerance()"
+    )]
     pub struct TrackingFrequencyToleranceCall;
     ///Container type for all input parameters for the `trackingOracle` function with signature `trackingOracle()` and selector `0xaec9c3dd`
     #[derive(
@@ -11457,7 +11409,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "trackingOracle", abi = "trackingOracle()")]
     pub struct TrackingOracleCall;
@@ -11470,7 +11422,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "truthFrequencyTolerance", abi = "truthFrequencyTolerance()")]
     pub struct TruthFrequencyToleranceCall;
@@ -11483,7 +11435,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "truthOracle", abi = "truthOracle()")]
     pub struct TruthOracleCall;
@@ -11512,74 +11464,66 @@ pub mod chainlink_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::MaxSetLength(decoded));
             }
-            if let Ok(decoded)
-                = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::Acknowledged(decoded));
             }
-            if let Ok(decoded)
-                = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::AddSet(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSets(decoded));
             }
-            if let Ok(decoded)
-                = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::GetSetsLength(decoded));
             }
-            if let Ok(decoded)
-                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded)
-                = <OracleToScaleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <OracleToScaleCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::OracleToScale(decoded));
             }
-            if let Ok(decoded)
-                = <PriceToleranceCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <PriceToleranceCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::PriceTolerance(decoded));
             }
-            if let Ok(decoded)
-                = <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::RunProgrammaticCheck(decoded));
             }
-            if let Ok(decoded)
-                = <ScaleFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ScaleFactorCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::ScaleFactor(decoded));
             }
-            if let Ok(decoded)
-                = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sets(decoded));
             }
-            if let Ok(decoded)
-                = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::State(decoded));
             }
-            if let Ok(decoded)
-                = <TrackingFrequencyToleranceCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <TrackingFrequencyToleranceCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TrackingFrequencyTolerance(decoded));
             }
-            if let Ok(decoded)
-                = <TrackingOracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) =
+                <TrackingOracleCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TrackingOracle(decoded));
             }
-            if let Ok(decoded)
-                = <TruthFrequencyToleranceCall as ::ethers::core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) =
+                <TruthFrequencyToleranceCall as ::ethers::core::abi::AbiDecode>::decode(data)
+            {
                 return Ok(Self::TruthFrequencyTolerance(decoded));
             }
-            if let Ok(decoded)
-                = <TruthOracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TruthOracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::TruthOracle(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -11588,44 +11532,28 @@ pub mod chainlink_trigger {
     impl ::ethers::core::abi::AbiEncode for ChainlinkTriggerCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::MaxSetLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::Acknowledged(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::MaxSetLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::Acknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::AddSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::GetSets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetSetsLength(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::GetSetsLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::OracleToScale(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
-                Self::PriceTolerance(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::OracleToScale(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::PriceTolerance(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::RunProgrammaticCheck(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::ScaleFactor(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::ScaleFactor(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::Sets(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::State(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::TrackingFrequencyTolerance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::TrackingOracle(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::TrackingOracle(element) => ::ethers::core::abi::AbiEncode::encode(element),
                 Self::TruthFrequencyTolerance(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
-                Self::TruthOracle(element) => {
-                    ::ethers::core::abi::AbiEncode::encode(element)
-                }
+                Self::TruthOracle(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
     }
@@ -11640,19 +11568,13 @@ pub mod chainlink_trigger {
                 Self::Manager(element) => ::core::fmt::Display::fmt(element, f),
                 Self::OracleToScale(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PriceTolerance(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RunProgrammaticCheck(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::RunProgrammaticCheck(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ScaleFactor(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Sets(element) => ::core::fmt::Display::fmt(element, f),
                 Self::State(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TrackingFrequencyTolerance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TrackingFrequencyTolerance(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TrackingOracle(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TruthFrequencyTolerance(element) => {
-                    ::core::fmt::Display::fmt(element, f)
-                }
+                Self::TruthFrequencyTolerance(element) => ::core::fmt::Display::fmt(element, f),
                 Self::TruthOracle(element) => ::core::fmt::Display::fmt(element, f),
             }
         }
@@ -11717,8 +11639,7 @@ pub mod chainlink_trigger {
             Self::State(value)
         }
     }
-    impl ::core::convert::From<TrackingFrequencyToleranceCall>
-    for ChainlinkTriggerCalls {
+    impl ::core::convert::From<TrackingFrequencyToleranceCall> for ChainlinkTriggerCalls {
         fn from(value: TrackingFrequencyToleranceCall) -> Self {
             Self::TrackingFrequencyTolerance(value)
         }
@@ -11747,7 +11668,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct MaxSetLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
@@ -11759,7 +11680,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AcknowledgedReturn(pub bool);
     ///Container type for all return fields from the `addSet` function with signature `addSet(address)` and selector `0xd580ded4`
@@ -11771,7 +11692,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct AddSetReturn(pub bool);
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
@@ -11783,7 +11704,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsReturn(pub ::std::vec::Vec<::ethers::core::types::Address>);
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
@@ -11795,7 +11716,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct GetSetsLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -11807,7 +11728,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `oracleToScale` function with signature `oracleToScale()` and selector `0x8c9cc03c`
@@ -11819,7 +11740,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct OracleToScaleReturn(pub u8);
     ///Container type for all return fields from the `priceTolerance` function with signature `priceTolerance()` and selector `0x59011cd1`
@@ -11831,7 +11752,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct PriceToleranceReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
@@ -11843,7 +11764,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct RunProgrammaticCheckReturn(pub u8);
     ///Container type for all return fields from the `scaleFactor` function with signature `scaleFactor()` and selector `0x683dd191`
@@ -11855,7 +11776,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct ScaleFactorReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
@@ -11867,7 +11788,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct SetsReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
@@ -11879,7 +11800,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct StateReturn(pub u8);
     ///Container type for all return fields from the `trackingFrequencyTolerance` function with signature `trackingFrequencyTolerance()` and selector `0xe5661e00`
@@ -11891,7 +11812,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TrackingFrequencyToleranceReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `trackingOracle` function with signature `trackingOracle()` and selector `0xaec9c3dd`
@@ -11903,7 +11824,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TrackingOracleReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `truthFrequencyTolerance` function with signature `truthFrequencyTolerance()` and selector `0xa16cb474`
@@ -11915,7 +11836,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TruthFrequencyToleranceReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `truthOracle` function with signature `truthOracle()` and selector `0x815fe927`
@@ -11927,7 +11848,7 @@ pub mod chainlink_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     pub struct TruthOracleReturn(pub ::ethers::core::types::Address);
 }
