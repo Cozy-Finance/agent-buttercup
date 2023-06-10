@@ -4,6 +4,8 @@ use crate::state::{
     update::{SimUpdate, Update},
     SimState,
 };
+use crate::time_policy::TimeEnv;
+use revm::primitives::{AccountInfo, Address};
 
 impl<U: Update> Absorb<SimUpdate<U>> for SimState<U> {
     fn absorb_first(&mut self, operation: &mut SimUpdate<U>, _: &Self) {
@@ -26,11 +28,17 @@ impl<U: Update> SimStepper<U> {
         SimStepper { read, write }
     }
 
+    pub fn new_from_empty(sim_state: SimState<U>) -> Self {
+        let (write, read) = left_right::new_from_empty::<SimState<U>, SimUpdate<U>>(sim_state);
+        SimStepper { read, write }
+    }
+
     pub fn sim_state(&self) -> SimState<U> {
-        self.read
-            .enter()
-            .map(|guard| guard.clone())
-            .unwrap()
+        self.read.enter().map(|guard| guard.clone()).unwrap()
+    }
+
+    fn sim_state_writer(&self) -> SimState<U> {
+        self.write.enter().map(|guard| guard.clone()).unwrap()
     }
 
     pub fn append(&mut self, operation: SimUpdate<U>) {
@@ -44,6 +52,17 @@ impl<U: Update> SimStepper<U> {
     pub fn factory(&self) -> SimStepperReadHandleFactory<U> {
         let factory = self.read.factory();
         SimStepperReadHandleFactory { factory }
+    }
+
+    pub fn update_time_env(&mut self, time_env: TimeEnv) {
+        self.sim_state_writer().update_time_env(time_env);
+        self.write.publish();
+    }
+
+    pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
+        self.sim_state_writer()
+            .insert_account_info(address, account_info);
+        self.write.publish();
     }
 }
 

@@ -32,7 +32,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EvmU256::from(1),
         12_u64,
         10_u64,
-        Some(500_000_u64),
+        Some(500_u64),
         None,
     )?);
     let mut sim_manager = SimManager::new(sim_state, time_policy, 99_u64);

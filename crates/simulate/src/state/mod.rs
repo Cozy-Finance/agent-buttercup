@@ -1,6 +1,8 @@
+use std::cell::Ref;
+
 use eyre::Result;
 use revm::{
-    db::{CacheDB, DatabaseRef, EmptyDB},
+    db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
     primitives::{AccountInfo, Address, ExecutionResult, TxEnv},
     Database, EVM,
 };
@@ -67,14 +69,13 @@ impl<U: Update> SimState<U> {
     }
 
     pub fn get_account_info(&self, address: Address) -> Result<AccountInfo> {
-        Ok(self
-            .evm
+        let raw_db = self.evm.db.as_ref().ok_or(SimStateError::EvmDbError)?;
+        let raw_db = RefDBWrapper::new(&raw_db);
+        Ok(raw_db
             .db
-            .as_ref()
-            .ok_or(SimStateError::EvmDbError)?
-            .db
-            .basic(address)?
-            .ok_or(SimStateError::EvmDbError)?)
+            .basic(address)
+            .map_err(|_| SimStateError::EvmDbError)?
+            .unwrap())
     }
 
     /// Execute a transaction in the execution environment.
