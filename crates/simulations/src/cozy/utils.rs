@@ -6,7 +6,7 @@ use crate::cozy::{
 use ethers::abi::{Contract as EthersContract, Tokenize};
 use eyre::Result;
 use revm::primitives::TxEnv;
-use simulate::agent::agent::Agent;
+use simulate::agent::Agent;
 use simulate::contract::sim_contract::SimContract;
 use simulate::contract::utils as contract_utils;
 use simulate::utils::build_deploy_contract_txenv;

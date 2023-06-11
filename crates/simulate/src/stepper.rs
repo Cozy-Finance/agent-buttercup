@@ -1,5 +1,6 @@
 use left_right::{Absorb, ReadHandle, ReadHandleFactory, WriteHandle};
 
+use crate::agent::agent_channel::{AgentSimUpdate, AgentUpdateResults};
 use crate::state::{
     update::{SimUpdate, Update},
     SimState,
@@ -7,8 +8,8 @@ use crate::state::{
 use crate::time_policy::TimeEnv;
 use revm::primitives::{AccountInfo, Address};
 
-impl<U: Update> Absorb<SimUpdate<U>> for SimState<U> {
-    fn absorb_first(&mut self, operation: &mut SimUpdate<U>, _: &Self) {
+impl<U: Update> Absorb<AgentSimUpdate<U>> for SimState<U> {
+    fn absorb_first(&mut self, operation: &mut AgentSimUpdate<U>, _: &Self) {
         self.execute(operation);
     }
 
@@ -19,19 +20,19 @@ impl<U: Update> Absorb<SimUpdate<U>> for SimState<U> {
 
 pub struct SimStepper<U: Update> {
     pub read: ReadHandle<SimState<U>>,
-    pub write: WriteHandle<SimState<U>, SimUpdate<U>>,
+    pub write: WriteHandle<SimState<U>, AgentSimUpdate<U>>,
 }
 
 impl<U: Update> SimStepper<U> {
     pub fn new_from_default() -> Self {
         // Initializes SimState<U> to its default.
-        let (write, read) = left_right::new::<SimState<U>, SimUpdate<U>>();
+        let (write, read) = left_right::new::<SimState<U>, AgentSimUpdate<U>>();
         SimStepper { read, write }
     }
 
     pub fn new_from_current_state(sim_state: SimState<U>) -> Self {
         // Clones SimState<U>.
-        let (write, read) = left_right::new_from_empty::<SimState<U>, SimUpdate<U>>(sim_state);
+        let (write, read) = left_right::new_from_empty::<SimState<U>, AgentSimUpdate<U>>(sim_state);
         SimStepper { read, write }
     }
 
@@ -43,7 +44,7 @@ impl<U: Update> SimStepper<U> {
         self.write.enter().map(|guard| guard.clone()).unwrap()
     }
 
-    pub fn append(&mut self, operation: SimUpdate<U>) {
+    pub fn append(&mut self, operation: AgentSimUpdate<U>) {
         self.write.append(operation);
     }
 
