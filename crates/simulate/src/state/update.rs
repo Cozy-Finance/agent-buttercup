@@ -2,19 +2,20 @@ use std::fmt::Debug;
 
 use revm::primitives::{ExecutionResult, TxEnv};
 
-pub trait Update: Send + Sync + Clone + Debug {}
+pub trait UpdateData: Send + Sync + Clone + Debug {}
 
 #[derive(Debug, Clone)]
-pub enum SimUpdate<U: Update> {
+pub enum SimUpdate<U: UpdateData> {
     Evm(TxEnv),
-    World(Box<U>),
-    Bundle(TxEnv, Box<U>),
-    MultiBundle(Vec<TxEnv>, Vec<Box<U>>),
+    World(U),
+    Bundle(TxEnv, U),
+    MultiBundle(Vec<TxEnv>, Vec<U>),
 }
 
 #[derive(Debug, Clone)]
-pub enum SimUpdateResult {
+pub enum SimUpdateResult<U: UpdateData> {
     Evm(ExecutionResult),
-    Bundle(bool),
-    MultiBundle(bool),
+    World(Option<U>),
+    Bundle(bool, ExecutionResult, Option<U>),
+    MultiBundle(bool, Vec<ExecutionResult>, Vec<Option<U>>),
 }

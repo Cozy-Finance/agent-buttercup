@@ -5,7 +5,6 @@ use ethers_contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, Sel
 use eyre::Result;
 use multi_metadata::{MultiMetadataAbigen, RawAbiData};
 
-
 mod multi_metadata;
 mod utils;
 

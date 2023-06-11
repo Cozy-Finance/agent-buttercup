@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use simulate::state::{update::Update, world_state::WorldState};
+use simulate::state::{update::UpdateData, world::World};
 
 use crate::cozy::EvmAddress;
 
@@ -10,19 +10,19 @@ pub struct CozyWorldState {
 }
 
 #[derive(Debug, Clone)]
-pub enum CozyWorldStateUpdate {
+pub enum CozyUpdate {
     AddToContractRegistry(String, EvmAddress),
 }
 
-impl Update for CozyWorldStateUpdate {}
+impl UpdateData for CozyUpdate {}
 
-impl WorldState for CozyWorldState {
-    type WorldStateUpdate = CozyWorldStateUpdate;
-    fn execute(&mut self, update: &Self::WorldStateUpdate) {
+impl World for CozyWorldState {
+    type WorldUpdateData = CozyUpdate;
+    fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
-            CozyWorldStateUpdate::AddToContractRegistry(name, address) => {
-                self.contract_registry
-                    .insert(name.to_string(), *address);
+            CozyUpdate::AddToContractRegistry(name, address) => {
+                self.contract_registry.insert(name.to_string(), *address);
+                return Some(CozyUpdate::AddToContractRegistry("t".to_string(), *address));
             }
         }
     }

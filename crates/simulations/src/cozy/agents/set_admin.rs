@@ -27,7 +27,7 @@ use crate::cozy::{
     deploy_utils,
     sim_types::CozySimTrigger,
     {EthersAddress, EthersBytes, EvmAddress},
-    world_state::CozyWorldStateUpdate
+    world_state::CozyUpdate
 };
 
 #[derive(Debug, Error)]
@@ -63,7 +63,7 @@ impl SetAdmin {
     }
 }
 
-impl Agent<CozyWorldStateUpdate> for SetAdmin {
+impl Agent<CozyUpdate> for SetAdmin {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }

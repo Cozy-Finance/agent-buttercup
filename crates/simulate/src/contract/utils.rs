@@ -10,11 +10,7 @@ pub fn build_linked_bytecode(
     let mut bytecode = BytecodeObject::Unlinked(unlinked_bytecode_str.to_string());
     bytecode.link_all(links);
     match bytecode.resolve() {
-        Some(b) => {
-            Ok(b.0.clone())
-        }
-        None => {
-            Err(eyre!("Could not link bytecode."))
-        }
+        Some(b) => Ok(b.0.clone()),
+        None => Err(eyre!("Could not link bytecode.")),
     }
 }

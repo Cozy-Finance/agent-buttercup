@@ -2,15 +2,12 @@ use left_right::{Absorb, ReadHandle, ReadHandleFactory, WriteHandle};
 use revm::primitives::{AccountInfo, Address};
 
 use crate::{
-    agent::agent_channel::{AgentSimUpdate},
-    state::{
-        update::{Update},
-        SimState,
-    },
+    agent::agent_channel::AgentSimUpdate,
+    state::{update::UpdateData, SimState},
     time_policy::TimeEnv,
 };
 
-impl<U: Update> Absorb<AgentSimUpdate<U>> for SimState<U> {
+impl<U: UpdateData> Absorb<AgentSimUpdate<U>> for SimState<U> {
     fn absorb_first(&mut self, operation: &mut AgentSimUpdate<U>, _: &Self) {
         self.execute(operation);
     }
@@ -20,12 +17,12 @@ impl<U: Update> Absorb<AgentSimUpdate<U>> for SimState<U> {
     }
 }
 
-pub struct SimStepper<U: Update> {
+pub struct SimStepper<U: UpdateData> {
     pub read: ReadHandle<SimState<U>>,
     pub write: WriteHandle<SimState<U>, AgentSimUpdate<U>>,
 }
 
-impl<U: Update> SimStepper<U> {
+impl<U: UpdateData> SimStepper<U> {
     pub fn new_from_default() -> Self {
         // Initializes SimState<U> to its default.
         let (write, read) = left_right::new::<SimState<U>, AgentSimUpdate<U>>();
@@ -76,11 +73,11 @@ impl<U: Update> SimStepper<U> {
     }
 }
 
-pub struct SimStepperReadHandleFactory<U: Update> {
+pub struct SimStepperReadHandleFactory<U: UpdateData> {
     factory: ReadHandleFactory<SimState<U>>,
 }
 
-impl<U: Update> SimStepperReadHandleFactory<U> {
+impl<U: UpdateData> SimStepperReadHandleFactory<U> {
     pub fn sim_state(&self) -> SimState<U> {
         self.factory
             .handle()
