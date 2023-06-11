@@ -15,7 +15,7 @@ use simulate::{
         utils,
     },
     environment::sim_env::SimEnv,
-    world_state::CozyWorldStateUpdate
+    world_state::CozyUpdate
 };
 use thiserror::Error;
 
@@ -66,7 +66,7 @@ impl PassiveBuyer {
     }
 }
 
-impl Agent<CozyWorldStateUpdate> for PassiveBuyer {
+impl Agent<CozyUpdate> for PassiveBuyer {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }

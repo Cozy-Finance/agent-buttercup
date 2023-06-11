@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use eyre::Result;
+use eyre::{Result, *};
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
     primitives::{AccountInfo, Address, ExecutionResult, TxEnv},
@@ -11,8 +11,8 @@ use thiserror::Error;
 use crate::{
     agent::agent_channel::{AgentSimUpdate, AgentUpdateResults},
     state::{
-        update::{SimUpdate, SimUpdateResult, Update},
-        world_state::WorldState,
+        update::{SimUpdate, SimUpdateResult, UpdateData},
+        world::World,
     },
     time_policy::TimeEnv,
     utils::*,
@@ -20,7 +20,7 @@ use crate::{
 };
 
 pub mod update;
-pub mod world_state;
+pub mod world;
 
 #[derive(Error, Debug)]
 pub enum SimStateError {
@@ -29,13 +29,13 @@ pub enum SimStateError {
 }
 
 #[derive(Clone)]
-pub struct SimState<U: Update> {
+pub struct SimState<U: UpdateData> {
     pub evm: EVM<CacheDB<EmptyDB>>,
-    pub world: Option<Box<dyn WorldState<WorldStateUpdate = U>>>,
-    pub update_results: HashMap<EvmAddress, HashMap<u64, SimUpdateResult>>,
+    pub world: Option<Box<dyn World<WorldUpdateData = U>>>,
+    pub update_results: HashMap<EvmAddress, HashMap<u64, SimUpdateResult<U>>>,
 }
 
-impl<U: Update> Default for SimState<U> {
+impl<U: UpdateData> Default for SimState<U> {
     fn default() -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
@@ -48,8 +48,8 @@ impl<U: Update> Default for SimState<U> {
     }
 }
 
-impl<U: Update> SimState<U> {
-    pub fn new(world: Option<Box<dyn WorldState<WorldStateUpdate = U>>>) -> Self {
+impl<U: UpdateData> SimState<U> {
+    pub fn new(world: Option<Box<dyn World<WorldUpdateData = U>>>) -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
         evm.env.cfg.limit_contract_code_size = Some(0x100000000000); // This is a large contract size limit, beware!
@@ -92,7 +92,7 @@ impl<U: Update> SimState<U> {
             .ok_or(SimStateError::EvmDbError)?)
     }
 
-    pub fn get_results(&self, address: &EvmAddress) -> AgentUpdateResults {
+    pub fn get_results(&self, address: &EvmAddress) -> AgentUpdateResults<U> {
         AgentUpdateResults::new(self.update_results.get(address))
     }
 
@@ -105,12 +105,12 @@ impl<U: Update> SimState<U> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn execute_raw_evm_tx(&mut self, tx: &TxEnv) -> Result<ExecutionResult> {
+    pub fn execute_raw_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
-        Ok(self
-            .evm
-            .transact_commit()
-            .map_err(|_| SimStateError::EvmDbError)?)
+        match self.evm.transact_commit() {
+            Ok(result) => result,
+            Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
+        }
     }
 
     /// Execute a transaction in the execution environment without writing to DB.
@@ -118,18 +118,18 @@ impl<U: Update> SimState<U> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn simulate_raw_evm_tx(&mut self, tx: &TxEnv) -> Result<ExecutionResult> {
+    pub fn simulate_raw_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
-        Ok(self
-            .evm
-            .transact()
-            .map_err(|_| SimStateError::EvmDbError)?
-            .result)
+        match self.evm.transact() {
+            Ok(result_and_state) => result_and_state.result,
+            Err(e) => panic!("Raw evm tx simulation failed: {:?}.", e),
+        }
     }
 
-    pub fn execute_raw_world_update(&mut self, update: &U) {
-        if let Some(ref mut world) = self.world {
-            world.execute(update);
+    pub fn execute_raw_world_update(&mut self, update: &U) -> Option<U> {
+        match self.world {
+            Some(ref mut world) => world.execute(update),
+            _ => None,
         }
     }
 
@@ -137,7 +137,7 @@ impl<U: Update> SimState<U> {
         &mut self,
         tag: u64,
         address: EvmAddress,
-        result: SimUpdateResult,
+        result: SimUpdateResult<U>,
     ) {
         if let Some(agent_update_results) = self.update_results.get_mut(&address) {
             agent_update_results.insert(tag, result);
@@ -147,10 +147,10 @@ impl<U: Update> SimState<U> {
         }
     }
 
-    pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) -> Result<()> {
+    pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {
         match &agent_update.update {
             SimUpdate::Evm(tx) => {
-                let result = self.execute_raw_evm_tx(tx)?;
+                let result = self.execute_raw_evm_tx(tx);
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
@@ -160,53 +160,69 @@ impl<U: Update> SimState<U> {
                 }
             }
             SimUpdate::World(update) => {
-                self.execute_raw_world_update(update);
-            }
-            SimUpdate::Bundle(tx, update) => {
-                let bundle_success = is_execution_success(self.simulate_raw_evm_tx(tx)?);
-                if bundle_success {
-                    self.execute_raw_evm_tx(tx)?;
-                    self.execute_raw_world_update(update);
-                }
+                let result = self.execute_raw_world_update(update);
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
                         agent_update.address,
-                        SimUpdateResult::Bundle(bundle_success),
+                        SimUpdateResult::World(result),
                     );
                 }
             }
-
-            SimUpdate::MultiBundle(txs, updates) => {
-                let mut bundle_success = true;
-                for tx in txs {
-                    if let Ok(tx) = self.simulate_raw_evm_tx(tx) {
-                        if !is_execution_success(tx) {
-                            bundle_success = false;
-                        }
-                    } else {
-                        bundle_success = false;
-                    }
-                }
+            SimUpdate::Bundle(tx, update) => {
+                let sim_evm_result = self.simulate_raw_evm_tx(tx);
+                let bundle_success = is_execution_success(&sim_evm_result);
                 if bundle_success {
-                    txs.iter()
-                        .map(|tx| self.execute_raw_evm_tx(tx))
-                        .collect::<Result<Vec<_>>>()?;
-                    updates
-                        .iter()
-                        .map(|update| self.execute_raw_world_update(update))
-                        .for_each(drop);
-                }
-                if let Some(tag) = agent_update.tag {
+                    let evm_result = self.execute_raw_evm_tx(tx);
+                    let world_result = self.execute_raw_world_update(update);
+                    if let Some(tag) = agent_update.tag {
+                        self.insert_into_update_results(
+                            tag,
+                            agent_update.address,
+                            SimUpdateResult::Bundle(true, evm_result, world_result),
+                        );
+                    }
+                } else if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
                         agent_update.address,
-                        SimUpdateResult::MultiBundle(bundle_success),
+                        SimUpdateResult::Bundle(false, sim_evm_result, None),
+                    );
+                }
+            }
+            SimUpdate::MultiBundle(txs, updates) => {
+                let sim_evm_results = txs
+                    .iter()
+                    .map(|t| self.simulate_raw_evm_tx(t))
+                    .collect::<Vec<_>>();
+                let bundle_success = sim_evm_results
+                    .iter()
+                    .map(|result| is_execution_success(result))
+                    .all(|x| x);
+                if bundle_success {
+                    let evm_results = txs
+                        .iter()
+                        .map(|tx| self.execute_raw_evm_tx(tx))
+                        .collect::<Vec<_>>();
+                    let world_results = updates
+                        .iter()
+                        .map(|update| self.execute_raw_world_update(update))
+                        .collect::<Vec<_>>();
+                    if let Some(tag) = agent_update.tag {
+                        self.insert_into_update_results(
+                            tag,
+                            agent_update.address,
+                            SimUpdateResult::MultiBundle(true, evm_results, world_results),
+                        );
+                    }
+                } else if let Some(tag) = agent_update.tag {
+                    self.insert_into_update_results(
+                        tag,
+                        agent_update.address,
+                        SimUpdateResult::MultiBundle(true, sim_evm_results, vec![]),
                     );
                 }
             }
         }
-
-        Ok(())
     }
 }

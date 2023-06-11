@@ -1,8 +1,5 @@
 use bindings::cozy_protocol::shared_types::{Delays, Fees};
-
-use ethers::{
-    types::U256 as EthersU256,
-};
+use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
@@ -10,10 +7,9 @@ use simulate::{
     state::{update::SimUpdate, SimState},
 };
 
-
 use crate::cozy::{
-    bindings_wrapper::*, utils::build_deploy_contract_tx,
-    world_state::CozyWorldStateUpdate, EthersAddress, EvmAddress,
+    bindings_wrapper::*, utils::build_deploy_contract_tx, world_state::CozyUpdate, EthersAddress,
+    EvmAddress,
 };
 
 #[derive(Debug, Clone)]
@@ -37,7 +33,7 @@ impl ProtocolDeployer {
     }
 }
 
-impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
+impl Agent<CozyUpdate> for ProtocolDeployer {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }
@@ -46,11 +42,7 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
         self.address = Some(*address);
     }
 
-    fn activation_step(
-        &mut self,
-        state: &SimState<CozyWorldStateUpdate>,
-        channel: AgentChannel<CozyWorldStateUpdate>,
-    ) {
+    fn activation_step(&mut self, state: &SimState<CozyUpdate>, channel: AgentChannel<CozyUpdate>) {
         // Deploy external libraries.
         self.deploy_libraries(state, &channel);
         // Deploy core protocol.
@@ -59,19 +51,15 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
         // self.deploy_periphery(state);
     }
 
-    fn step(
-        &mut self,
-        state: &SimState<CozyWorldStateUpdate>,
-        channel: AgentChannel<CozyWorldStateUpdate>,
-    ) {
+    fn step(&mut self, state: &SimState<CozyUpdate>, channel: AgentChannel<CozyUpdate>) {
         // Deploy external libraries.
         self.deploy_core_protocol(state, &channel);
     }
 
-    fn resolve_step(&mut self, state: &SimState<CozyWorldStateUpdate>) {
+    fn resolve_step(&mut self, state: &SimState<CozyUpdate>) {
         println!(
             "{:?}",
-            state.get_results(&self.address()).get_update("test 20")
+            state.get_results(&self.address()).get_update("test 3")
         );
     }
 }
@@ -79,8 +67,8 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
 impl ProtocolDeployer {
     fn deploy_libraries(
         &mut self,
-        _state: &SimState<CozyWorldStateUpdate>,
-        channel: &AgentChannel<CozyWorldStateUpdate>,
+        _state: &SimState<CozyUpdate>,
+        channel: &AgentChannel<CozyUpdate>,
     ) -> Result<()> {
         let mut evm_txs = vec![];
         evm_txs.push(build_deploy_contract_tx(self, &CONFIGURATORLIB, ())?);
@@ -98,10 +86,10 @@ impl ProtocolDeployer {
         }
 
         channel.send_with_tag(
-            SimUpdate::World(Box::new(CozyWorldStateUpdate::AddToContractRegistry(
+            SimUpdate::World(CozyUpdate::AddToContractRegistry(
                 "x".to_string(),
                 EvmAddress::from_low_u64_be(3),
-            ))),
+            )),
             "test",
         );
 
@@ -110,13 +98,23 @@ impl ProtocolDeployer {
 
     fn deploy_core_protocol(
         &mut self,
-        state: &SimState<CozyWorldStateUpdate>,
-        _channel: &AgentChannel<CozyWorldStateUpdate>,
+        state: &SimState<CozyUpdate>,
+        _channel: &AgentChannel<CozyUpdate>,
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
+
+        _channel.send_with_tag(
+            SimUpdate::World(CozyUpdate::AddToContractRegistry(
+                "x".to_string(),
+                EvmAddress::from_low_u64_be(3),
+            )),
+            "test",
+        );
+
         let current_nonce = state.get_account_info(self.address()).unwrap().nonce;
         let _manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
-        let _set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
+        let _set_logic_addr =
+            EthersAddress::from(create_address(self.address(), current_nonce + 1));
         // current_nonce + 2 is initialization of the Set logic.
         let _set_factory_addr =
             EthersAddress::from(create_address(self.address(), current_nonce + 3));

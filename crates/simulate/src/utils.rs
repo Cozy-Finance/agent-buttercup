@@ -87,7 +87,7 @@ pub fn unpack_execution(execution_result: ExecutionResult) -> Result<Bytes, Unpa
     }
 }
 
-pub fn is_execution_success(execution_result: ExecutionResult) -> bool {
+pub fn is_execution_success(execution_result: &ExecutionResult) -> bool {
     match execution_result {
         ExecutionResult::Success { .. } => true,
         _ => false,

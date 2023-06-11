@@ -1,16 +1,12 @@
-use ethers::abi::{Tokenize};
+use ethers::abi::Tokenize;
 use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
-    agent::Agent,
-    contract::{sim_contract::SimContract},
-    utils::build_deploy_contract_txenv,
+    agent::Agent, contract::sim_contract::SimContract, utils::build_deploy_contract_txenv,
 };
 use thiserror::Error;
 
-use crate::cozy::{
-    bindings_wrapper::*, world_state::CozyWorldStateUpdate,
-};
+use crate::cozy::{bindings_wrapper::*, world_state::CozyUpdate};
 
 #[derive(Error, Debug)]
 pub enum DeploymentError {
@@ -25,7 +21,7 @@ pub enum DeploymentError {
 }
 
 pub fn build_deploy_contract_tx<T: Tokenize>(
-    agent: &mut dyn Agent<CozyWorldStateUpdate>,
+    agent: &mut dyn Agent<CozyUpdate>,
     contract_bindings: &BindingsWrapper,
     args: T,
 ) -> Result<TxEnv> {
@@ -46,7 +42,7 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
 }
 
 pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
-    agent: &mut dyn Agent<CozyWorldStateUpdate>,
+    agent: &mut dyn Agent<CozyUpdate>,
     contract_bindings: &BindingsWrapper,
     args: T,
 ) -> Result<TxEnv> {

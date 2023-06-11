@@ -6,7 +6,7 @@ use std::{collections::HashMap, thread};
 use crossbeam_channel::unbounded;
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
-use revm::primitives::{AccountInfo};
+use revm::primitives::AccountInfo;
 use thiserror::Error;
 
 use crate::{
@@ -14,20 +14,11 @@ use crate::{
         agent_channel::{AgentChannel, AgentSimUpdate},
         Agent,
     },
-    state::{
-        update::{Update},
-        SimState,
-    },
+    state::{update::UpdateData, SimState},
     stepper::*,
     time_policy::TimePolicy,
     EvmAddress,
 };
-
-#[derive(Error, Debug)]
-pub enum ManagerError {
-    #[error("Unknown manager error.")]
-    UnknownError,
-}
 
 /// Manages simulations.
 /// # Fields
@@ -35,7 +26,7 @@ pub enum ManagerError {
 /// * `time_policy` - The time policy that the manager calls.
 /// * `agents` - The agents that are currently running in the simulation environment.
 /// * `rng` - Randomness generator.
-pub struct SimManager<U: Update + 'static> {
+pub struct SimManager<U: UpdateData + 'static> {
     pub time_policy: Box<dyn TimePolicy>,
     pub agents: HashMap<EvmAddress, Box<dyn Agent<U>>>,
     pub rng: StdRng,
@@ -44,7 +35,7 @@ pub struct SimManager<U: Update + 'static> {
     pub agent_id_iter: u64,
 }
 
-impl<U: Update> SimManager<U> {
+impl<U: UpdateData> SimManager<U> {
     pub fn new(state: SimState<U>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
         let stepper: SimStepper<U> = SimStepper::new_from_current_state(state);
         let stepper_read_factory = stepper.factory();

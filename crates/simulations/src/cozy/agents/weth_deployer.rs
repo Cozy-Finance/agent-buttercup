@@ -1,7 +1,7 @@
 use eyre::Result;
 use simulate::{agent::Agent, environment::sim_env::SimEnv, sim_env_data::SimEnvData};
 
-use crate::cozy::{bindings_wrapper::*, deploy_utils, EvmAddress, world_state::CozyWorldStateUpdate};
+use crate::cozy::{bindings_wrapper::*, deploy_utils, EvmAddress, world_state::CozyUpdate};
 
 pub struct WethDeployer {
     name: String,
@@ -17,7 +17,7 @@ impl WethDeployer {
     }
 }
 
-impl Agent<CozyWorldStateUpdate> for WethDeployer {
+impl Agent<CozyUpdate> for WethDeployer {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }

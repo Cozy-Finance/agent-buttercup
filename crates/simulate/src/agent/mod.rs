@@ -1,11 +1,7 @@
-use agent_channel::{AgentChannel};
-
+use agent_channel::AgentChannel;
 
 use crate::{
-    state::{
-        update::{Update},
-        SimState,
-    },
+    state::{update::UpdateData, SimState},
     EvmAddress,
 };
 
@@ -13,7 +9,7 @@ pub mod agent_channel;
 pub mod types;
 
 /// Basic traits that every `Agent` must implement in order to properly interact with an EVM and simulation.
-pub trait Agent<U: Update>: Sync + Send {
+pub trait Agent<U: UpdateData>: Sync + Send {
     /// Returns the address of the agent.
     fn address(&self) -> EvmAddress;
 
