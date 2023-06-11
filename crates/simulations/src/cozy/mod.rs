@@ -1,22 +1,19 @@
 use std::error::Error;
 
-use bindings::cozy_protocol::shared_types::{Delays, Fees};
-use ethers::types::U256 as EthersU256;
-use eyre::Result;
-use revm::primitives::U256 as EvmU256;
-use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
-
-pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
-pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
-
 use agents::protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams};
-use world_state::CozyWorldState;
-
+use bindings::cozy_protocol::shared_types::{Delays, Fees};
 pub use bindings::{
     cost_model_dynamic_level_factory::DeployModelCall as DeployCostModelDynamicLevelParams,
     cost_model_jump_rate_factory::DeployModelCall as DeployCostModelJumpRateParams,
     drip_decay_model_constant_factory::DeployModelCall as DeployDripDecayModelConstantParams,
 };
+use ethers::types::U256 as EthersU256;
+pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
+use eyre::Result;
+use revm::primitives::U256 as EvmU256;
+pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
+use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
+use world_state::CozyWorldState;
 
 pub mod agents;
 pub mod bindings_wrapper;
@@ -32,7 +29,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EvmU256::from(1),
         12_u64,
         10_u64,
-        Some(500_u64),
+        Some(500_000_u64),
         None,
     )?);
     let mut sim_manager = SimManager::new(sim_state, time_policy, 99_u64);

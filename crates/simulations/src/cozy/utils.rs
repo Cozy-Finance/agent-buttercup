@@ -1,16 +1,16 @@
-use crate::cozy::world_state::CozyWorldStateUpdate;
-use crate::cozy::{
-    bindings_wrapper::*,
-    {EthersAddress, EthersBytes, EvmAddress, EvmBytes},
-};
-use ethers::abi::{Contract as EthersContract, Tokenize};
+use ethers::abi::{Tokenize};
 use eyre::Result;
 use revm::primitives::TxEnv;
-use simulate::agent::Agent;
-use simulate::contract::sim_contract::SimContract;
-use simulate::contract::utils as contract_utils;
-use simulate::utils::build_deploy_contract_txenv;
+use simulate::{
+    agent::Agent,
+    contract::{sim_contract::SimContract},
+    utils::build_deploy_contract_txenv,
+};
 use thiserror::Error;
+
+use crate::cozy::{
+    bindings_wrapper::*, world_state::CozyWorldStateUpdate,
+};
 
 #[derive(Error, Debug)]
 pub enum DeploymentError {
@@ -29,8 +29,8 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
     contract_bindings: &BindingsWrapper,
     args: T,
 ) -> Result<TxEnv> {
-    let abi = (*contract_bindings).abi.clone();
-    let bytecode = (*contract_bindings)
+    let abi = contract_bindings.abi.clone();
+    let bytecode = contract_bindings
         .bytecode
         .ok_or(DeploymentError::MissingLinkedBytecode)?
         .clone();
@@ -50,8 +50,8 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
     contract_bindings: &BindingsWrapper,
     args: T,
 ) -> Result<TxEnv> {
-    let abi = (*contract_bindings).abi.clone();
-    let bytecode = (*contract_bindings)
+    let abi = contract_bindings.abi.clone();
+    let bytecode = contract_bindings
         .bytecode
         .ok_or(DeploymentError::MissingLinkedBytecode)?
         .clone();

@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
-use crate::cozy::EvmAddress;
 use simulate::state::{update::Update, world_state::WorldState};
+
+use crate::cozy::EvmAddress;
 
 #[derive(Debug, Clone)]
 pub struct CozyWorldState {
@@ -21,7 +22,7 @@ impl WorldState for CozyWorldState {
         match update {
             CozyWorldStateUpdate::AddToContractRegistry(name, address) => {
                 self.contract_registry
-                    .insert(name.to_string(), address.clone());
+                    .insert(name.to_string(), *address);
             }
         }
     }

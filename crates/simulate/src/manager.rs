@@ -1,23 +1,24 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-use std::collections::HashMap;
-use std::thread;
+use std::{collections::HashMap, thread};
 
-use crate::stepper::*;
 use crossbeam_channel::unbounded;
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
-use revm::primitives::{AccountInfo, U256 as EvmU256};
+use revm::primitives::{AccountInfo};
 use thiserror::Error;
 
 use crate::{
-    agent::agent_channel::{AgentChannel, AgentSimUpdate},
-    agent::Agent,
+    agent::{
+        agent_channel::{AgentChannel, AgentSimUpdate},
+        Agent,
+    },
     state::{
-        update::{SimUpdate, Update},
+        update::{Update},
         SimState,
     },
+    stepper::*,
     time_policy::TimePolicy,
     EvmAddress,
 };
@@ -72,7 +73,7 @@ impl<U: Update> SimManager<U> {
             thread::scope(|s| {
                 for (address, agent) in &mut self.agents {
                     let channel = AgentChannel {
-                        address: address.clone(),
+                        address: *address,
                         sender: sender.clone(),
                     };
                     s.spawn(|| agent.step(&self.stepper_read_factory.sim_state(), channel));
@@ -120,7 +121,7 @@ impl<U: Update> SimManager<U> {
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
         let channel = AgentChannel {
-            address: new_agent_address.clone(),
+            address: new_agent_address,
             sender: sender.clone(),
         };
         new_agent.activation_step(&self.stepper_read_factory.sim_state(), channel);

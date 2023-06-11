@@ -157,15 +157,15 @@ impl MultiMetadataAbigen {
     pub fn write_to_module(binding: TokenStream, mod_path: impl AsRef<Path>) -> Result<()> {
         let mod_path = mod_path.as_ref();
         let file = mod_path.join("metadata.rs");
-        let syntax_tree = syn::parse2::<syn::File>(binding.clone())?;
+        let syntax_tree = syn::parse2::<syn::File>(binding)?;
         let pretty_string = prettyplease::unparse(&syntax_tree);
-        fs::write(file, &pretty_string)?;
+        fs::write(file, pretty_string)?;
 
         // Include metadata module in project module.
         let mut file = fs::OpenOptions::new()
             .append(true)
             .open(mod_path.join("mod.rs"))?;
-        writeln!(file, r#"pub mod {};"#, "metadata")?;
+        writeln!(file, r#"pub mod metadata;"#)?;
 
         Ok(())
     }

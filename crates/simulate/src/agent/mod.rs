@@ -1,13 +1,13 @@
-use crate::EvmAddress;
+use agent_channel::{AgentChannel};
 
-use crossbeam_channel::Sender;
 
-use crate::state::{
-    update::{SimUpdate, Update},
-    SimState,
+use crate::{
+    state::{
+        update::{Update},
+        SimState,
+    },
+    EvmAddress,
 };
-use agent_channel::AgentChannel;
-use agent_channel::AgentUpdateResults;
 
 pub mod agent_channel;
 pub mod types;

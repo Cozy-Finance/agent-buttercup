@@ -8,13 +8,16 @@ use revm::{
 };
 use thiserror::Error;
 
-use crate::agent::agent_channel::AgentSimUpdate;
-use crate::agent::agent_channel::AgentUpdateResults;
-use crate::state::update::{SimUpdate, SimUpdateResult, Update};
-use crate::state::world_state::WorldState;
-use crate::time_policy::TimeEnv;
-use crate::utils::*;
-use crate::EvmAddress;
+use crate::{
+    agent::agent_channel::{AgentSimUpdate, AgentUpdateResults},
+    state::{
+        update::{SimUpdate, SimUpdateResult, Update},
+        world_state::WorldState,
+    },
+    time_policy::TimeEnv,
+    utils::*,
+    EvmAddress,
+};
 
 pub mod update;
 pub mod world_state;
@@ -151,7 +154,7 @@ impl<U: Update> SimState<U> {
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
-                        agent_update.address.clone(),
+                        agent_update.address,
                         SimUpdateResult::Evm(result),
                     );
                 }
@@ -168,7 +171,7 @@ impl<U: Update> SimState<U> {
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
-                        agent_update.address.clone(),
+                        agent_update.address,
                         SimUpdateResult::Bundle(bundle_success),
                     );
                 }
@@ -197,7 +200,7 @@ impl<U: Update> SimState<U> {
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
-                        agent_update.address.clone(),
+                        agent_update.address,
                         SimUpdateResult::MultiBundle(bundle_success),
                     );
                 }

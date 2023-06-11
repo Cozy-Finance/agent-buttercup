@@ -1,6 +1,7 @@
-use crate::state::update::Update;
 use dyn_clone::DynClone;
-use eyre::Result;
+
+
+use crate::state::update::Update;
 
 pub trait WorldState: DynClone + Sync + Send {
     type WorldStateUpdate: Update;

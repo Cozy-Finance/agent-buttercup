@@ -3,9 +3,8 @@ use std::{collections::HashMap, fs, io::Write, path::PathBuf};
 use clap::Parser;
 use ethers_contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, SelectContracts};
 use eyre::Result;
-use regex;
-
 use multi_metadata::{MultiMetadataAbigen, RawAbiData};
+
 
 mod multi_metadata;
 mod utils;
@@ -94,7 +93,7 @@ impl Binder {
             .collect::<Result<Vec<_>>>()?;
 
         // Apply filter to `multi_raw_abigen_data`.
-        multi_raw_abigen_data.retain(|data| self.get_filter().is_match(data.name.to_string()));
+        multi_raw_abigen_data.retain(|data| self.get_filter().is_match(&data.name));
 
         // Build `MultiAbigen` from abigens.
         let abigens = multi_raw_abigen_data
@@ -142,14 +141,14 @@ impl Binder {
             contract_bindings.len()
         );
 
-        contract_bindings.write_to_module(&self.module_root(), false)?;
+        contract_bindings.write_to_module(self.module_root(), false)?;
 
         let metadata_binding = multi_metadata_abigen.build()?;
         println!(
             "Generating metadata bindings for {} contracts.",
             multi_metadata_abigen.len()
         );
-        MultiMetadataAbigen::write_to_module(metadata_binding, &self.module_root())?;
+        MultiMetadataAbigen::write_to_module(metadata_binding, self.module_root())?;
 
         if write_exports {
             // Include project module in bindings module.

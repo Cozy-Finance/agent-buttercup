@@ -1,26 +1,19 @@
-use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
-use crossbeam_channel::{unbounded, Receiver, Sender};
-use ethers::abi::{Contract as EthersContract, Tokenize};
-use ethers::types::U256 as EthersU256;
+use bindings::cozy_protocol::shared_types::{Delays, Fees};
+
+use ethers::{
+    types::U256 as EthersU256,
+};
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
-    agent::agent_channel::AgentChannel,
-    agent::Agent,
-    contract::{
-        sim_contract::{IsDeployed, SimContract},
-        utils,
-    },
+    agent::{agent_channel::AgentChannel, Agent},
     state::{update::SimUpdate, SimState},
 };
-use thiserror::Error;
 
-use crate::cozy::agents::errors::CozyAgentError;
-use crate::cozy::utils::build_deploy_contract_tx;
+
 use crate::cozy::{
-    bindings_wrapper::*,
-    world_state::CozyWorldStateUpdate,
-    {EthersAddress, EthersBytes, EvmAddress},
+    bindings_wrapper::*, utils::build_deploy_contract_tx,
+    world_state::CozyWorldStateUpdate, EthersAddress, EvmAddress,
 };
 
 #[derive(Debug, Clone)]
@@ -118,21 +111,21 @@ impl ProtocolDeployer {
     fn deploy_core_protocol(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        channel: &AgentChannel<CozyWorldStateUpdate>,
+        _channel: &AgentChannel<CozyWorldStateUpdate>,
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
         let current_nonce = state.get_account_info(self.address()).unwrap().nonce;
-        let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
-        let set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
+        let _manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
+        let _set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
         // current_nonce + 2 is initialization of the Set logic.
-        let set_factory_addr =
+        let _set_factory_addr =
             EthersAddress::from(create_address(self.address(), current_nonce + 3));
-        let ptoken_logic_addr =
+        let _ptoken_logic_addr =
             EthersAddress::from(create_address(self.address(), current_nonce + 4));
         // current_nonce + 5 is initialization of the PToken logic.
-        let ptoken_factory_addr =
+        let _ptoken_factory_addr =
             EthersAddress::from(create_address(self.address(), current_nonce + 6));
-        let backstop_addr = EthersAddress::from(create_address(self.address(), current_nonce + 7));
+        let _backstop_addr = EthersAddress::from(create_address(self.address(), current_nonce + 7));
 
         Ok(())
     }

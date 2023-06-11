@@ -3,6 +3,7 @@
 
 pub mod agent;
 pub mod contract;
+pub mod errors;
 pub mod manager;
 pub mod state;
 pub mod stepper;
