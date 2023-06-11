@@ -76,9 +76,11 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
     }
 
     fn resolve_step(&mut self, state: &SimState<CozyWorldStateUpdate>) {
-        println!("{:?}", state.get_results(&self.address()).get_update("test 20"));
+        println!(
+            "{:?}",
+            state.get_results(&self.address()).get_update("test 20")
+        );
     }
-
 }
 
 impl ProtocolDeployer {

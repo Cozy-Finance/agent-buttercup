@@ -67,6 +67,11 @@ impl<U: Update> SimStepper<U> {
             .insert_account_info(address, account_info);
         self.write.publish();
     }
+
+    pub fn clear_all_results(&mut self) {
+        self.sim_state_writer().clear_all_results();
+        self.write.publish();
+    }
 }
 
 pub struct SimStepperReadHandleFactory<U: Update> {

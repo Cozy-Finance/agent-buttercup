@@ -43,7 +43,7 @@ pub struct AgentUpdateResults<'s> {
     updates: Option<&'s HashMap<u64, SimUpdateResult>>,
 }
 
-impl <'s> AgentUpdateResults<'s> {
+impl<'s> AgentUpdateResults<'s> {
     pub fn new(updates: Option<&'s HashMap<u64, SimUpdateResult>>) -> Self {
         AgentUpdateResults { updates }
     }
