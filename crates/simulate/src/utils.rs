@@ -9,7 +9,7 @@ use bytes::Bytes;
 use ethers::prelude::{Address, U256 as EthersU256};
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, U256 as EvmU256};
 
-use crate::agent::agent::AgentTxGasSettings;
+use crate::agent::types::AgentTxGas;
 
 #[derive(Debug)]
 /// Error type for the simulation manager.
@@ -99,7 +99,7 @@ pub fn build_deploy_contract_txenv(
     caller_address: EvmAddress,
     bytecode: EvmBytes,
     value: Option<EvmU256>,
-    gas_settings: Option<AgentTxGasSettings>,
+    gas_settings: Option<AgentTxGas>,
 ) -> TxEnv {
     let tx_gas_settings = gas_settings.unwrap_or_default();
     TxEnv {
@@ -121,7 +121,7 @@ pub fn build_call_contract_txenv(
     receiver_address: EvmAddress,
     call_data: EvmBytes,
     value: Option<EvmU256>,
-    gas_settings: Option<AgentTxGasSettings>,
+    gas_settings: Option<AgentTxGas>,
 ) -> TxEnv {
     let tx_gas_settings = gas_settings.unwrap_or_default();
     TxEnv {

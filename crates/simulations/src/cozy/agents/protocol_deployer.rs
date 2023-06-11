@@ -5,7 +5,8 @@ use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
-    agent::agent::Agent,
+    agent::agent_channel::AgentChannel,
+    agent::Agent,
     contract::{
         sim_contract::{IsDeployed, SimContract},
         utils,
@@ -55,10 +56,10 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
     fn activation_step(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        sender: Sender<SimUpdate<CozyWorldStateUpdate>>,
+        channel: AgentChannel<CozyWorldStateUpdate>,
     ) {
         // Deploy external libraries.
-        self.deploy_libraries(state, &sender);
+        self.deploy_libraries(state, &channel);
         // Deploy core protocol.
         //self.deploy_core_protocol(state, &sender);
         // Deploy periphery.
@@ -68,18 +69,23 @@ impl Agent<CozyWorldStateUpdate> for ProtocolDeployer {
     fn step(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        sender: Sender<SimUpdate<CozyWorldStateUpdate>>,
+        channel: AgentChannel<CozyWorldStateUpdate>,
     ) {
         // Deploy external libraries.
-        self.deploy_core_protocol(state, &sender);
+        self.deploy_core_protocol(state, &channel);
     }
+
+    fn resolve_step(&mut self, state: &SimState<CozyWorldStateUpdate>) {
+        println!("{:?}", state.get_results(&self.address()).get_update("test 20"));
+    }
+
 }
 
 impl ProtocolDeployer {
     fn deploy_libraries(
         &mut self,
         _state: &SimState<CozyWorldStateUpdate>,
-        sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
+        channel: &AgentChannel<CozyWorldStateUpdate>,
     ) -> Result<()> {
         let mut evm_txs = vec![];
         evm_txs.push(build_deploy_contract_tx(self, &CONFIGURATORLIB, ())?);
@@ -90,9 +96,19 @@ impl ProtocolDeployer {
         evm_txs.push(build_deploy_contract_tx(self, &STATETRANSITIONSLIB, ())?);
         evm_txs.push(build_deploy_contract_tx(self, &SUPPLYSIDELIB, ())?);
 
+        let mut num = 3;
         for tx in evm_txs {
-            sender.send(SimUpdate::Evm(tx))?;
+            channel.send_with_tag(SimUpdate::Evm(tx), &format!("test {}", num));
+            num += 1;
         }
+
+        channel.send_with_tag(
+            SimUpdate::World(Box::new(CozyWorldStateUpdate::AddToContractRegistry(
+                "x".to_string(),
+                EvmAddress::from_low_u64_be(3),
+            ))),
+            "test",
+        );
 
         Ok(())
     }
@@ -100,10 +116,9 @@ impl ProtocolDeployer {
     fn deploy_core_protocol(
         &mut self,
         state: &SimState<CozyWorldStateUpdate>,
-        sender: &Sender<SimUpdate<CozyWorldStateUpdate>>,
+        channel: &AgentChannel<CozyWorldStateUpdate>,
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
-        println!("{:?}", state.get_account_info(self.address()));
         let current_nonce = state.get_account_info(self.address()).unwrap().nonce;
         let manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
         let set_logic_addr = EthersAddress::from(create_address(self.address(), current_nonce + 1));
