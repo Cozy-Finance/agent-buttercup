@@ -1,5 +1,6 @@
-use eyre::{Context as _, Result};
 use std::path::{Path, PathBuf};
+
+use eyre::{Context as _, Result};
 
 /// Returns the canonical path string.
 pub fn get_canonical_path_string(path: impl AsRef<Path>) -> Result<String> {

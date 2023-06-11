@@ -1,12 +1,14 @@
 use left_right::{Absorb, ReadHandle, ReadHandleFactory, WriteHandle};
-
-use crate::agent::agent_channel::{AgentSimUpdate, AgentUpdateResults};
-use crate::state::{
-    update::{SimUpdate, Update},
-    SimState,
-};
-use crate::time_policy::TimeEnv;
 use revm::primitives::{AccountInfo, Address};
+
+use crate::{
+    agent::agent_channel::{AgentSimUpdate},
+    state::{
+        update::{Update},
+        SimState,
+    },
+    time_policy::TimeEnv,
+};
 
 impl<U: Update> Absorb<AgentSimUpdate<U>> for SimState<U> {
     fn absorb_first(&mut self, operation: &mut AgentSimUpdate<U>, _: &Self) {

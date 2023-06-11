@@ -1,7 +1,3 @@
-use ethers::abi::Contract as EthersContract;
-use lazy_static::lazy_static;
-
-use crate::cozy::EthersBytes;
 use bindings::{
     backstop::*,
     chainlink_trigger_factory::*,
@@ -27,6 +23,10 @@ use bindings::{
     uma_trigger_factory::*,
     weth::{metadata::*, weth9::*},
 };
+use ethers::abi::Contract as EthersContract;
+use lazy_static::lazy_static;
+
+use crate::cozy::EthersBytes;
 
 #[derive(Debug)]
 pub struct BindingsWrapper {

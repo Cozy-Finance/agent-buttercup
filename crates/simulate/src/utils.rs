@@ -4,12 +4,11 @@ use std::{
     fmt::{Display, Formatter, Result as FmtResult},
 };
 
-use crate::{EthersAddress, EvmAddress, EvmBytes};
 use bytes::Bytes;
 use ethers::prelude::{Address, U256 as EthersU256};
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, U256 as EvmU256};
 
-use crate::agent::types::AgentTxGas;
+use crate::{agent::types::AgentTxGas, EvmAddress, EvmBytes};
 
 #[derive(Debug)]
 /// Error type for the simulation manager.
@@ -129,7 +128,7 @@ pub fn build_call_contract_txenv(
         gas_limit: tx_gas_settings.gas_limit,
         gas_price: tx_gas_settings.gas_price,
         gas_priority_fee: tx_gas_settings.gas_priority_fee,
-        transact_to: TransactTo::Call(receiver_address.into()),
+        transact_to: TransactTo::Call(receiver_address),
         value: value.unwrap_or(EvmU256::ZERO),
         data: call_data,
         chain_id: None,
