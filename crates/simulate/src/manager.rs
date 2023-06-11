@@ -95,6 +95,9 @@ impl<U: Update> SimManager<U> {
                 }
             });
 
+            // Clear all results.
+            self.stepper.clear_all_results();
+
             // Update time policy.
             self.time_policy.step();
             self.stepper

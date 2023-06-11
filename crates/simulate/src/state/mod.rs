@@ -93,6 +93,10 @@ impl<U: Update> SimState<U> {
         AgentUpdateResults::new(self.update_results.get(address))
     }
 
+    pub fn clear_all_results(&mut self) {
+        self.update_results.clear()
+    }
+
     /// Execute a transaction in the execution environment.
     /// # Arguments
     /// * `tx` - The transaction environment that is used to execute the transaction.
