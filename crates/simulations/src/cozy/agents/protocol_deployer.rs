@@ -109,7 +109,7 @@ impl ProtocolDeployer {
             x.into(),
         );
 
-        let current_nonce = state.get_account_info(self.address()).unwrap().nonce;
+        let current_nonce = state.read_account_info(self.address()).nonce;
         let _manager_addr = EthersAddress::from(create_address(self.address(), current_nonce));
         let _set_logic_addr =
             EthersAddress::from(create_address(self.address(), current_nonce + 1));

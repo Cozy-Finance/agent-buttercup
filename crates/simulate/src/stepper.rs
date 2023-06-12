@@ -16,7 +16,6 @@ impl<U: UpdateData> Absorb<AgentSimUpdate<U>> for SimState<U> {
         *self = first.clone();
     }
 }
-
 pub struct SimStepper<U: UpdateData> {
     pub read: ReadHandle<SimState<U>>,
     pub write: WriteHandle<SimState<U>, AgentSimUpdate<U>>,

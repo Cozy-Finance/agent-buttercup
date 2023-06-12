@@ -61,6 +61,30 @@ impl<U: UpdateData> SimState<U> {
         }
     }
 
+    pub fn get_read_db(&self) -> &CacheDB<EmptyDB> {
+        self.evm.db.as_ref().expect("Db not initalized.")
+    }
+
+    pub fn read_account_info(&self, address: Address) -> AccountInfo {
+        self
+            .get_read_db()
+            .basic(address)
+            .expect("Db not initialized")
+            .expect("Account not found")
+    }
+
+    pub fn read_simulate_evm_tx(&self, tx: &TxEnv) -> ExecutionResult {
+        // This is probably inefficient and not the best way to do this.
+        // But agent's only have immutable ref to evm, but they need to update the evm.env.tx.
+        // And RefDbWrapper does not give you access to the transact().
+        let mut evm_cloned = self.evm.clone();
+        evm_cloned.env.tx = tx.clone();
+        match evm_cloned.transact_ref() {
+            Ok(result_and_state) => result_and_state.result,
+            Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
+        }    
+    }
+
     /// Update the time env.
     /// # Arguments
     /// * `time_env` - The time env.
@@ -74,34 +98,19 @@ impl<U: UpdateData> SimState<U> {
         &mut self,
         address: Address,
         account_info: AccountInfo,
-    ) -> Result<()> {
+    ) {
         self.evm
             .db()
-            .ok_or(SimStateError::EvmDbError)?
+            .expect("Db not initialized")
             .insert_account_info(address, account_info);
-
-        Ok(())
     }
-
-    pub fn get_account_info(&self, address: Address) -> Result<AccountInfo> {
-        let raw_db = self.evm.db.as_ref().ok_or(SimStateError::EvmDbError)?;
-        let db = RefDBWrapper::new(&raw_db).db;
-        Ok(db
-            .basic(address)
-            .map_err(|_| SimStateError::EvmDbError)?
-            .ok_or(SimStateError::EvmDbError)?)
-    }
-
-    pub fn clear_all_results(&mut self) {
-        self.update_results.clear()
-    }
-
+    
     /// Execute a transaction in the execution environment.
     /// # Arguments
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn execute_raw_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
+    pub fn execute_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
         match self.evm.transact_commit() {
             Ok(result) => result,
@@ -114,7 +123,7 @@ impl<U: UpdateData> SimState<U> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn simulate_raw_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
+    pub fn simulate_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
         match self.evm.transact() {
             Ok(result_and_state) => result_and_state.result,
@@ -122,7 +131,7 @@ impl<U: UpdateData> SimState<U> {
         }
     }
 
-    pub fn execute_raw_world_update(&mut self, update: &U) -> Option<U> {
+    pub fn execute_world_update(&mut self, update: &U) -> Option<U> {
         match self.world {
             Some(ref mut world) => world.execute(update),
             _ => None,
@@ -143,10 +152,14 @@ impl<U: UpdateData> SimState<U> {
         }
     }
 
+    pub fn clear_all_results(&mut self) {
+        self.update_results.clear()
+    }
+
     pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {
         match &agent_update.update {
             SimUpdate::Evm(tx) => {
-                let result = self.execute_raw_evm_tx(tx);
+                let result = self.execute_evm_tx(tx);
                 if let Some(tag) = &agent_update.tag {
                     self.insert_into_update_results(
                         tag.clone(),
@@ -156,7 +169,7 @@ impl<U: UpdateData> SimState<U> {
                 }
             }
             SimUpdate::World(update) => {
-                let result = self.execute_raw_world_update(&update);
+                let result = self.execute_world_update(&update);
                 if let Some(tag) = &agent_update.tag {
                     self.insert_into_update_results(
                         tag.clone(),
@@ -166,11 +179,11 @@ impl<U: UpdateData> SimState<U> {
                 }
             }
             SimUpdate::Bundle(tx, update) => {
-                let sim_evm_result = self.simulate_raw_evm_tx(&tx);
+                let sim_evm_result = self.simulate_evm_tx(&tx);
                 let bundle_success = is_execution_success(&sim_evm_result);
                 if bundle_success {
-                    let evm_result = self.execute_raw_evm_tx(&tx);
-                    let world_result = self.execute_raw_world_update(&update);
+                    let evm_result = self.execute_evm_tx(&tx);
+                    let world_result = self.execute_world_update(&update);
                     if let Some(tag) = &agent_update.tag {
                         self.insert_into_update_results(
                             tag.clone(),
@@ -189,7 +202,7 @@ impl<U: UpdateData> SimState<U> {
             SimUpdate::MultiBundle(txs, updates) => {
                 let sim_evm_results = txs
                     .iter()
-                    .map(|t| self.simulate_raw_evm_tx(t))
+                    .map(|t| self.simulate_evm_tx(t))
                     .collect::<Vec<_>>();
                 let bundle_success = sim_evm_results
                     .iter()
@@ -198,11 +211,11 @@ impl<U: UpdateData> SimState<U> {
                 if bundle_success {
                     let evm_results = txs
                         .iter()
-                        .map(|tx| self.execute_raw_evm_tx(tx))
+                        .map(|tx| self.execute_evm_tx(tx))
                         .collect::<Vec<_>>();
                     let world_results = updates
                         .iter()
-                        .map(|update| self.execute_raw_world_update(update))
+                        .map(|update| self.execute_world_update(update))
                         .collect::<Vec<_>>();
                     if let Some(tag) = &agent_update.tag {
                         self.insert_into_update_results(
