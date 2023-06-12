@@ -26,7 +26,7 @@ use crate::{
 /// * `time_policy` - The time policy that the manager calls.
 /// * `agents` - The agents that are currently running in the simulation environment.
 /// * `rng` - Randomness generator.
-pub struct SimManager<U: UpdateData + 'static> {
+pub struct SimManager<U: UpdateData> {
     pub time_policy: Box<dyn TimePolicy>,
     pub agents: HashMap<EvmAddress, Box<dyn Agent<U>>>,
     pub rng: StdRng,

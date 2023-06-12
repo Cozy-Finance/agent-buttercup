@@ -56,12 +56,7 @@ impl Agent<CozyUpdate> for ProtocolDeployer {
         self.deploy_core_protocol(state, &channel);
     }
 
-    fn resolve_step(&mut self, state: &SimState<CozyUpdate>) {
-        println!(
-            "{:?}",
-            state.get_results(&self.address()).get_update("test 3")
-        );
-    }
+    fn resolve_step(&mut self, state: &SimState<CozyUpdate>) {}
 }
 
 impl ProtocolDeployer {
@@ -81,7 +76,7 @@ impl ProtocolDeployer {
 
         let mut num = 3;
         for tx in evm_txs {
-            channel.send_with_tag(SimUpdate::Evm(tx), &format!("test {}", num));
+            channel.send_with_tag(SimUpdate::Evm(tx), format!("test {}", num).into());
             num += 1;
         }
 
@@ -90,7 +85,7 @@ impl ProtocolDeployer {
                 "x".to_string(),
                 EvmAddress::from_low_u64_be(3),
             )),
-            "test",
+            "test".into(),
         );
 
         Ok(())
@@ -102,13 +97,16 @@ impl ProtocolDeployer {
         _channel: &AgentChannel<CozyUpdate>,
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
+        let y = vec![3, 4, 5];
+        let x = format!("{}", y.len());
+        let z = &x;
 
         _channel.send_with_tag(
             SimUpdate::World(CozyUpdate::AddToContractRegistry(
                 "x".to_string(),
                 EvmAddress::from_low_u64_be(3),
             )),
-            "test",
+            x.into(),
         );
 
         let current_nonce = state.get_account_info(self.address()).unwrap().nonce;
