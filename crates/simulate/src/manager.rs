@@ -121,6 +121,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         }
         self.stepper.publish();
 
+        // Resolve activation step.
+        new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
+
         // Adds agent to local data.
         self.agents.insert(new_agent_address, new_agent);
 
