@@ -1,5 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
-use std::sync::Arc;
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use ethers_contract::multicall_contract;
 use simulate::{

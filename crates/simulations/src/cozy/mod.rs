@@ -16,13 +16,13 @@ use eyre::Result;
 use revm::primitives::U256 as EvmU256;
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
-use world_state::CozyWorld;
+use world::CozyWorld;
 
 pub mod agents;
 pub mod bindings_wrapper;
-pub mod sim_types;
+pub mod types;
 pub mod utils;
-pub mod world_state;
+pub mod world;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
     let world_state = CozyWorld::new();

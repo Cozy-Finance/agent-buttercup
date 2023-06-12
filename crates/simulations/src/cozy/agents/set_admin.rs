@@ -30,12 +30,6 @@ use crate::cozy::{
     world_state::CozyUpdate
 };
 
-#[derive(Debug, Error)]
-pub enum SetAdminError {
-    #[error("unregistered address")]
-    UnregisteredAddress,
-}
-
 #[derive(Debug, Clone)]
 pub struct SetAdminParams {
     pub asset: EthersAddress,
@@ -48,7 +42,6 @@ pub struct SetAdminParams {
 }
 
 pub struct SetAdmin {
-    name: String,
     set_admin_params: SetAdminParams,
     address: Option<EvmAddress>,
 }
@@ -56,7 +49,6 @@ pub struct SetAdmin {
 impl SetAdmin {
     pub fn new(name: String, set_admin_params: SetAdminParams) -> Self {
         Self {
-            name,
             set_admin_params,
             address: None,
         }

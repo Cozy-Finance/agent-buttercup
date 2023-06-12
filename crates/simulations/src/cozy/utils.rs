@@ -1,5 +1,4 @@
-use std::collections::HashMap;
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 use ethers::abi::Tokenize;
 use eyre::Result;
@@ -65,6 +64,6 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
 
     Ok((
         build_deploy_contract_txenv(agent_address, bytecode, None, None),
-        Arc::new(contract)
+        Arc::new(contract),
     ))
 }
