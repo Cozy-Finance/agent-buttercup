@@ -69,7 +69,7 @@ impl WethDeployer {
             weth_addr,
             weth_contract,
         )));
-        
+
         Ok(())
     }
 }

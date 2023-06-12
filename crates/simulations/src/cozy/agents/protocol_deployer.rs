@@ -1,7 +1,7 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
-use ethers::{types::U256 as EthersU256};
+use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
@@ -62,9 +62,7 @@ impl Agent<CozyUpdate, CozyWorld> for ProtocolDeployer {
             .expect("Error deploying protocol.");
     }
 
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {
-        println!("{:?}", _state.get_read_db().accounts);
-    }
+    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
     fn step(
         &mut self,
