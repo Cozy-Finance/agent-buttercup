@@ -19,6 +19,9 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
     /// Executes actions against the simulation as soon as the agent is activated.
     fn activation_step(&mut self, state: &SimState<U, W>, channel: AgentChannel<U>);
 
+    /// Executes actions against the simulation as soon as the agent is activated.
+    fn resolve_activation_step(&mut self, state: &SimState<U, W>);
+
     /// Executes the agents actions against the simulation environment.
     fn step(&mut self, state: &SimState<U, W>, channel: AgentChannel<U>);
 

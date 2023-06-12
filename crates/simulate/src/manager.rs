@@ -31,7 +31,6 @@ pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub rng: StdRng,
     pub stepper: SimStepper<U, W>,
     pub stepper_read_factory: SimStepperReadHandleFactory<U, W>,
-    pub agent_id_iter: u64,
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
@@ -44,7 +43,6 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             rng: StdRng::seed_from_u64(rng_seed),
             stepper,
             stepper_read_factory,
-            agent_id_iter: 0,
         }
     }
 
