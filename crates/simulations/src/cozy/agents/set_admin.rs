@@ -1,25 +1,18 @@
+use std::sync::Arc;
+
+use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     drip_decay_model_constant_factory, manager,
 };
-use bindings::{
-    cozy_protocol::shared_types::{MarketConfig, SetConfig},
-    manager::{CreateSetCall, CreateSetReturn},
-};
-use ethers::abi::AbiDecode;
 use eyre::Result;
 use revm::primitives::{create_address, TxEnv};
 use simulate::{
-    agent::{
-        agent_channel::{AgentChannel, AgentSimUpdate},
-        Agent,
-    },
-    contract::{sim_contract::SimContract, utils},
+    agent::{agent_channel::AgentChannel, Agent},
+    contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, build_deploy_contract_txenv, unpack_execution},
+    utils::build_call_contract_txenv,
 };
-use thiserror::Error;
-use std::sync::Arc;
 
 use crate::cozy::{
     agents::errors::CozyAgentError,
@@ -27,7 +20,7 @@ use crate::cozy::{
     types::{CozyMarketParamsConfig, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger},
     utils::build_deploy_contract_tx,
     world::{CozyUpdate, CozyWorld},
-    EthersAddress, EthersBytes, EvmAddress,
+    EthersAddress, EvmAddress,
 };
 
 #[derive(Debug, Clone)]
@@ -108,7 +101,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .clone()
             .into_iter()
             .map(|trigger| match trigger {
-                CozySimTrigger::DummyTrigger => self.build_deploy_dummy_trigger_tx(state, &mut nonce),
+                CozySimTrigger::DummyTrigger => {
+                    self.build_deploy_dummy_trigger_tx(state, &mut nonce)
+                }
             })
             .collect::<Result<Vec<_>>>()
             .expect("Error building trigger deploy txs");
@@ -120,12 +115,19 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .clone()
             .into_iter()
             .map(|model| match model {
-                CozySimCostModel::JumpRate(args) => {
-                    self.build_deploy_cost_model_jump_rate_tx(jump_rate_addr, jump_rate_contract, args, &mut nonce)
-                }
-                CozySimCostModel::DynamicLevel(args) => {
-                    self.build_deploy_cost_model_dynamic_level_tx(dynamic_level_addr, dynamic_level_contract, args, &mut nonce)
-                }
+                CozySimCostModel::JumpRate(args) => self.build_deploy_cost_model_jump_rate_tx(
+                    jump_rate_addr,
+                    jump_rate_contract,
+                    args,
+                    &mut nonce,
+                ),
+                CozySimCostModel::DynamicLevel(args) => self
+                    .build_deploy_cost_model_dynamic_level_tx(
+                        dynamic_level_addr,
+                        dynamic_level_contract,
+                        args,
+                        &mut nonce,
+                    ),
             })
             .collect::<Result<Vec<_>>>()
             .expect("Error building cost model deploy txs");
@@ -137,9 +139,12 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .clone()
             .into_iter()
             .map(|model| match model {
-                CozySimDripDecayModel::Constant(args) => {
-                    self.build_deploy_drip_decay_model_tx(drip_decay_addr, drip_decay_contract, args, &mut nonce)
-                }
+                CozySimDripDecayModel::Constant(args) => self.build_deploy_drip_decay_model_tx(
+                    drip_decay_addr,
+                    drip_decay_contract,
+                    args,
+                    &mut nonce,
+                ),
             })
             .collect::<Result<Vec<_>>>()
             .expect("Error building drip decay model deploy txs");
