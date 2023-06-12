@@ -7,14 +7,13 @@ use crossbeam_channel::unbounded;
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::AccountInfo;
-use thiserror::Error;
 
 use crate::{
     agent::{
         agent_channel::{AgentChannel, AgentSimUpdate},
         Agent,
     },
-    state::{update::UpdateData, SimState},
+    state::{update::UpdateData, world::World, SimState},
     stepper::*,
     time_policy::TimePolicy,
     EvmAddress,
@@ -26,18 +25,18 @@ use crate::{
 /// * `time_policy` - The time policy that the manager calls.
 /// * `agents` - The agents that are currently running in the simulation environment.
 /// * `rng` - Randomness generator.
-pub struct SimManager<U: UpdateData> {
+pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub time_policy: Box<dyn TimePolicy>,
-    pub agents: HashMap<EvmAddress, Box<dyn Agent<U>>>,
+    pub agents: HashMap<EvmAddress, Box<dyn Agent<U, W>>>,
     pub rng: StdRng,
-    pub stepper: SimStepper<U>,
-    pub stepper_read_factory: SimStepperReadHandleFactory<U>,
+    pub stepper: SimStepper<U, W>,
+    pub stepper_read_factory: SimStepperReadHandleFactory<U, W>,
     pub agent_id_iter: u64,
 }
 
-impl<U: UpdateData> SimManager<U> {
-    pub fn new(state: SimState<U>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
-        let stepper: SimStepper<U> = SimStepper::new_from_current_state(state);
+impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
+    pub fn new(state: SimState<U, W>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
+        let stepper: SimStepper<U, W> = SimStepper::new_from_current_state(state);
         let stepper_read_factory = stepper.factory();
         Self {
             time_policy,
@@ -100,7 +99,7 @@ impl<U: UpdateData> SimManager<U> {
     /// Adds and activates an agent to be put in the collection of agents under the manager's control.
     /// # Arguments
     /// * `new_agent` - The agent to be added to the collection of agents.
-    pub fn activate_agent(&mut self, mut new_agent: Box<dyn Agent<U> + Sync>) -> Result<()> {
+    pub fn activate_agent(&mut self, mut new_agent: Box<dyn Agent<U, W> + Sync>) -> Result<()> {
         // Generates an address for the agent.
         let new_agent_address = EvmAddress::random_using(&mut self.rng);
         self.stepper

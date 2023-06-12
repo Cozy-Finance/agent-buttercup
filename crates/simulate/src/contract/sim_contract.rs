@@ -8,7 +8,7 @@ use eyre::Result;
 use revm::primitives::B256;
 use thiserror::Error;
 
-use crate::{EthersAddress, EthersBytes, EvmBytes};
+use crate::{EthersBytes, EvmAddress, EvmBytes};
 
 #[derive(Error, Debug)]
 pub enum SimContractError {
@@ -23,56 +23,27 @@ pub enum SimContractError {
 }
 
 #[derive(Debug, Clone)]
-/// A struct to indicate a lock on contracts that are not deployed.
-pub struct NotDeployed;
-#[derive(Debug)]
-/// A struct to indicate an unlocked contract that is deployed.
-pub struct IsDeployed;
-
-/// Trait that is used to allow for different statuses of contract fields depending on whether a contract is deployed or not.
-pub trait DeploymentStatus {
-    /// The type of the address field.
-    type Address;
-    /// The type of the bytecode field used only before deployment.
-    type Bytecode;
-    /// The type of the constructor arguments field used only before deployment.
-    type ConstructorArguments;
-}
-
-impl DeploymentStatus for NotDeployed {
-    type Address = ();
-    type Bytecode = EvmBytes;
-    type ConstructorArguments = ();
-}
-
-impl DeploymentStatus for IsDeployed {
-    type Address = EthersAddress;
-    type Bytecode = ();
-    type ConstructorArguments = Vec<Token>;
-}
-
-#[derive(Debug, Clone)]
 /// A struct that wraps around the ethers `BaseContract` and adds some additional information relevant for revm and the simulation.
 /// # Fields
 /// * `address` - The address of the contract within the relevant [`SimulationEnvironment`].
 /// * `base_contract` - The ethers [`BaseContract`] that holds the ABI.
 /// * `bytecode` - The contract's deployed bytecode.
-pub struct SimContract<DeployedState: DeploymentStatus> {
+pub struct SimContract {
     /// The address of the contract within the relevant [`SimulationEnvironment`].
-    pub address: DeployedState::Address,
+    pub address: Option<EvmAddress>,
     /// The ethers [`BaseContract`] that holds the ABI.
     pub base_contract: EthersBaseContract,
     /// The contract's deployed bytecode.
-    pub bytecode: DeployedState::Bytecode,
+    pub bytecode: EvmBytes,
 }
 
-impl SimContract<NotDeployed> {
+impl SimContract {
     /// A constructor function for [`SimulationContract`] that takes a [`BaseContract`] and the deployment bytecode.
     pub fn new(contract: EthersContract, bytecode: EthersBytes) -> Self {
         Self {
             base_contract: EthersBaseContract::from(contract),
             bytecode: bytecode.0,
-            address: (),
+            address: None,
         }
     }
 
@@ -87,9 +58,7 @@ impl SimContract<NotDeployed> {
             None => Ok(self.bytecode.clone()),
         }
     }
-}
 
-impl SimContract<IsDeployed> {
     /// Encodes the arguments for a function call for the [`SimulationContract`].
     /// # Arguments
     /// * `function_name` - The name of the function to encode.

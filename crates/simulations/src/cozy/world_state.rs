@@ -5,7 +5,7 @@ use simulate::state::{update::UpdateData, world::World};
 use crate::cozy::EvmAddress;
 
 #[derive(Debug, Clone)]
-pub struct CozyWorldState {
+pub struct CozyWorld {
     pub contract_registry: HashMap<String, EvmAddress>,
 }
 
@@ -16,7 +16,7 @@ pub enum CozyUpdate {
 
 impl UpdateData for CozyUpdate {}
 
-impl World for CozyWorldState {
+impl World for CozyWorld {
     type WorldUpdateData = CozyUpdate;
     fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
@@ -28,9 +28,9 @@ impl World for CozyWorldState {
     }
 }
 
-impl CozyWorldState {
+impl CozyWorld {
     pub fn new() -> Self {
-        CozyWorldState {
+        CozyWorld {
             contract_registry: HashMap::new(),
         }
     }
