@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::Arc;
 
 use ethers::abi::Tokenize;
 use eyre::Result;
@@ -27,7 +28,7 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
     agent_address: EvmAddress,
     contract_bindings: &BindingsWrapper,
     args: T,
-) -> Result<TxEnv> {
+) -> Result<(TxEnv, Arc<SimContract>)> {
     let abi = contract_bindings.abi.clone();
     let bytecode = contract_bindings
         .bytecode
@@ -36,11 +37,9 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
     let contract = SimContract::new(abi, bytecode);
     let bytecode = contract.encode_constructor(args)?;
 
-    Ok(build_deploy_contract_txenv(
-        agent_address,
-        bytecode,
-        None,
-        None,
+    Ok((
+        build_deploy_contract_txenv(agent_address, bytecode, None, None),
+        Arc::new(contract),
     ))
 }
 
@@ -49,7 +48,7 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
     contract_bindings: &BindingsWrapper,
     libraries: &HashMap<EthersAddress, &BindingsWrapper>,
     args: T,
-) -> Result<TxEnv> {
+) -> Result<(TxEnv, Arc<SimContract>)> {
     let mut links: Vec<(&str, &str, EthersAddress)> = vec![];
     for (addr, lib_binding) in libraries.iter() {
         links.push((lib_binding.path, lib_binding.name, *addr));
@@ -64,10 +63,8 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
     let contract = SimContract::new(abi, EthersBytes(bytecode));
     let bytecode = contract.encode_constructor(args)?;
 
-    Ok(build_deploy_contract_txenv(
-        agent_address,
-        bytecode,
-        None,
-        None,
+    Ok((
+        build_deploy_contract_txenv(agent_address, bytecode, None, None),
+        Arc::new(contract)
     ))
 }
