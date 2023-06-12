@@ -1,23 +1,27 @@
 use eyre::Result;
-use simulate::{agent::Agent, environment::sim_env::SimEnv, sim_env_data::SimEnvData};
+use simulate::{
+    agent::{agent_channel::AgentChannel, Agent},
+    state::{update::SimUpdate, SimState},
+};
 
-use crate::cozy::{bindings_wrapper::*, deploy_utils, EvmAddress, world_state::CozyUpdate};
+use crate::cozy::{
+    bindings_wrapper::*,
+    utils::build_deploy_contract_tx,
+    world_state::{CozyUpdate, CozyWorld},
+    EvmAddress,
+};
 
 pub struct WethDeployer {
-    name: String,
     address: Option<EvmAddress>,
 }
 
 impl WethDeployer {
-    pub fn new(name: String) -> Self {
-        Self {
-            name,
-            address: None,
-        }
+    pub fn new() -> Self {
+        Self { address: None }
     }
 }
 
-impl Agent<CozyUpdate> for WethDeployer {
+impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
     fn address(&self) -> EvmAddress {
         self.address.unwrap()
     }
@@ -26,21 +30,33 @@ impl Agent<CozyUpdate> for WethDeployer {
         self.address = Some(*address);
     }
 
-    fn name(&self) -> Option<String> {
-        Option::Some(self.name.clone())
+    fn activation_step(
+        &mut self,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        channel: AgentChannel<CozyUpdate>,
+    ) {
+        self.deploy_weth(state, channel)
+            .expect("Error deploying weth.");
     }
 
-    fn activation_step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {
-        // Deploy external libraries.
-        self.deploy_weth(sim_env, sim_data);
+    fn step(
+        &mut self,
+        _state: &SimState<CozyUpdate, CozyWorld>,
+        _channel: AgentChannel<CozyUpdate>,
+    ) {
     }
 
-    fn step(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) {}
+    fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
 impl WethDeployer {
-    fn deploy_weth(&mut self, sim_env: &mut SimEnv, sim_data: &mut SimEnvData) -> Result<()> {
-        deploy_utils::deploy_linked_contract_with_args(self, sim_env, sim_data, &WETH, ())?;
+    fn deploy_weth(
+        &mut self,
+        _state: &SimState<CozyUpdate, CozyWorld>,
+        channel: AgentChannel<CozyUpdate>,
+    ) -> Result<()> {
+        let evm_tx = build_deploy_contract_tx(self.address(), &WETH, ())?;
+        channel.send(SimUpdate::Evm(evm_tx));
         Ok(())
     }
 }

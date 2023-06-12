@@ -5,7 +5,10 @@ use std::{
 };
 
 use bytes::Bytes;
-use ethers::prelude::{Address, U256 as EthersU256};
+use ethers::prelude::{
+    abi::{AbiError, Tokenize},
+    Address, BaseContract as EthersBaseContract, U256 as EthersU256,
+};
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, U256 as EvmU256};
 
 use crate::{agent::types::AgentTxGas, EvmAddress, EvmBytes};
@@ -134,5 +137,16 @@ pub fn build_call_contract_txenv(
         chain_id: None,
         nonce: None,
         access_list: Vec::new(),
+    }
+}
+
+pub fn encode_function(
+    abi: EthersBaseContract,
+    function_name: &str,
+    args: impl Tokenize,
+) -> Result<EvmBytes, AbiError> {
+    match abi.encode(function_name, args) {
+        Ok(encoded) => Ok(encoded.into_iter().collect()),
+        Err(e) => Err(e),
     }
 }

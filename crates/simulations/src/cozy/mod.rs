@@ -1,6 +1,9 @@
 use std::error::Error;
 
-use agents::protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams};
+use agents::{
+    protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams},
+    weth_deployer::WethDeployer,
+};
 use bindings::cozy_protocol::shared_types::{Delays, Fees};
 pub use bindings::{
     cost_model_dynamic_level_factory::DeployModelCall as DeployCostModelDynamicLevelParams,
@@ -13,7 +16,7 @@ use eyre::Result;
 use revm::primitives::U256 as EvmU256;
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
-use world_state::CozyWorldState;
+use world_state::CozyWorld;
 
 pub mod agents;
 pub mod bindings_wrapper;
@@ -22,8 +25,8 @@ pub mod utils;
 pub mod world_state;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
-    let world_state = CozyWorldState::new();
-    let sim_state = SimState::new(Some(Box::new(world_state)));
+    let world_state = CozyWorld::new();
+    let sim_state = SimState::new(Some(world_state));
     let time_policy = Box::new(FixedTimePolicy::new(
         EvmU256::from(0),
         EvmU256::from(1),
@@ -34,12 +37,11 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     )?);
     let mut sim_manager = SimManager::new(sim_state, time_policy, 99_u64);
 
-    /*
-        // Create and activate agents.
-        // Weth deployer.
-        let weth_deployer = Box::new(WethDeployer::new("Weth deployer".to_owned()));
-        sim_manager.activate_agent(weth_deployer);
-    */
+    // Create and activate agents.
+    // Weth deployer.
+    let weth_deployer = Box::new(WethDeployer::new());
+    sim_manager.activate_agent(weth_deployer);
+
     // Protocol deployer.
     let deploy_params = ProtocolDeployerParams {
         delays: Delays {

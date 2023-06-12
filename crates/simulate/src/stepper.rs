@@ -3,11 +3,11 @@ use revm::primitives::{AccountInfo, Address};
 
 use crate::{
     agent::agent_channel::AgentSimUpdate,
-    state::{update::UpdateData, SimState},
+    state::{update::UpdateData, world::World, SimState},
     time_policy::TimeEnv,
 };
 
-impl<U: UpdateData> Absorb<AgentSimUpdate<U>> for SimState<U> {
+impl<U: UpdateData, W: World<WorldUpdateData = U>> Absorb<AgentSimUpdate<U>> for SimState<U, W> {
     fn absorb_first(&mut self, operation: &mut AgentSimUpdate<U>, _: &Self) {
         self.execute(operation);
     }
@@ -16,29 +16,30 @@ impl<U: UpdateData> Absorb<AgentSimUpdate<U>> for SimState<U> {
         *self = first.clone();
     }
 }
-pub struct SimStepper<U: UpdateData> {
-    pub read: ReadHandle<SimState<U>>,
-    pub write: WriteHandle<SimState<U>, AgentSimUpdate<U>>,
+pub struct SimStepper<U: UpdateData, W: World<WorldUpdateData = U>> {
+    pub read: ReadHandle<SimState<U, W>>,
+    pub write: WriteHandle<SimState<U, W>, AgentSimUpdate<U>>,
 }
 
-impl<U: UpdateData> SimStepper<U> {
+impl<U: UpdateData, W: World<WorldUpdateData = U>> SimStepper<U, W> {
     pub fn new_from_default() -> Self {
         // Initializes SimState<U> to its default.
-        let (write, read) = left_right::new::<SimState<U>, AgentSimUpdate<U>>();
+        let (write, read) = left_right::new::<SimState<U, W>, AgentSimUpdate<U>>();
         SimStepper { read, write }
     }
 
-    pub fn new_from_current_state(sim_state: SimState<U>) -> Self {
+    pub fn new_from_current_state(sim_state: SimState<U, W>) -> Self {
         // Clones SimState<U>.
-        let (write, read) = left_right::new_from_empty::<SimState<U>, AgentSimUpdate<U>>(sim_state);
+        let (write, read) =
+            left_right::new_from_empty::<SimState<U, W>, AgentSimUpdate<U>>(sim_state);
         SimStepper { read, write }
     }
 
-    pub fn sim_state(&self) -> SimState<U> {
+    pub fn sim_state(&self) -> SimState<U, W> {
         self.read.enter().map(|guard| guard.clone()).unwrap()
     }
 
-    fn sim_state_writer(&self) -> SimState<U> {
+    pub fn sim_state_writer(&self) -> SimState<U, W> {
         self.write.enter().map(|guard| guard.clone()).unwrap()
     }
 
@@ -50,7 +51,7 @@ impl<U: UpdateData> SimStepper<U> {
         self.write.publish();
     }
 
-    pub fn factory(&self) -> SimStepperReadHandleFactory<U> {
+    pub fn factory(&self) -> SimStepperReadHandleFactory<U, W> {
         let factory = self.read.factory();
         SimStepperReadHandleFactory { factory }
     }
@@ -72,12 +73,12 @@ impl<U: UpdateData> SimStepper<U> {
     }
 }
 
-pub struct SimStepperReadHandleFactory<U: UpdateData> {
-    factory: ReadHandleFactory<SimState<U>>,
+pub struct SimStepperReadHandleFactory<U: UpdateData, W: World<WorldUpdateData = U>> {
+    factory: ReadHandleFactory<SimState<U, W>>,
 }
 
-impl<U: UpdateData> SimStepperReadHandleFactory<U> {
-    pub fn sim_state(&self) -> SimState<U> {
+impl<U: UpdateData, W: World<WorldUpdateData = U>> SimStepperReadHandleFactory<U, W> {
+    pub fn sim_state(&self) -> SimState<U, W> {
         self.factory
             .handle()
             .enter()

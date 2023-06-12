@@ -1,6 +1,6 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use eyre::{Result, *};
+use eyre::Result;
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
     primitives::{AccountInfo, Address, ExecutionResult, TxEnv},
@@ -29,13 +29,13 @@ pub enum SimStateError {
 }
 
 #[derive(Clone)]
-pub struct SimState<U: UpdateData> {
+pub struct SimState<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub evm: EVM<CacheDB<EmptyDB>>,
-    pub world: Option<Box<dyn World<WorldUpdateData = U>>>,
+    pub world: Option<W>,
     pub update_results: HashMap<EvmAddress, HashMap<Cow<'static, str>, SimUpdateResult<U>>>,
 }
 
-impl<U: UpdateData> Default for SimState<U> {
+impl<U: UpdateData, W: World<WorldUpdateData = U>> Default for SimState<U, W> {
     fn default() -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
@@ -48,8 +48,8 @@ impl<U: UpdateData> Default for SimState<U> {
     }
 }
 
-impl<U: UpdateData> SimState<U> {
-    pub fn new(world: Option<Box<dyn World<WorldUpdateData = U>>>) -> Self {
+impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
+    pub fn new(world: Option<W>) -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
         evm.env.cfg.limit_contract_code_size = Some(0x100000000000); // This is a large contract size limit, beware!
@@ -66,8 +66,7 @@ impl<U: UpdateData> SimState<U> {
     }
 
     pub fn read_account_info(&self, address: Address) -> AccountInfo {
-        self
-            .get_read_db()
+        self.get_read_db()
             .basic(address)
             .expect("Db not initialized")
             .expect("Account not found")
@@ -82,7 +81,7 @@ impl<U: UpdateData> SimState<U> {
         match evm_cloned.transact_ref() {
             Ok(result_and_state) => result_and_state.result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
-        }    
+        }
     }
 
     /// Update the time env.
@@ -94,17 +93,13 @@ impl<U: UpdateData> SimState<U> {
     }
 
     // Add an account to evm.
-    pub fn insert_account_info(
-        &mut self,
-        address: Address,
-        account_info: AccountInfo,
-    ) {
+    pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
         self.evm
             .db()
             .expect("Db not initialized")
             .insert_account_info(address, account_info);
     }
-    
+
     /// Execute a transaction in the execution environment.
     /// # Arguments
     /// * `tx` - The transaction environment that is used to execute the transaction.
