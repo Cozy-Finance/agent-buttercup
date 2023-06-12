@@ -1,13 +1,10 @@
-use std::{
-    collections::{hash_map::DefaultHasher, HashMap},
-    hash::{Hash, Hasher},
-};
+use std::borrow::Cow;
 
 use crossbeam_channel::Sender;
 
 use crate::{
     errors::ChannelError,
-    state::update::{SimUpdate, SimUpdateResult, UpdateData},
+    state::update::{SimUpdate, UpdateData},
     EvmAddress,
 };
 
@@ -15,7 +12,7 @@ use crate::{
 pub struct AgentSimUpdate<U: UpdateData> {
     pub update: SimUpdate<U>,
     pub address: EvmAddress,
-    pub tag: Option<u64>,
+    pub tag: Option<Cow<'static, str>>,
 }
 pub struct AgentChannel<U: UpdateData> {
     pub sender: Sender<AgentSimUpdate<U>>,
@@ -34,32 +31,14 @@ impl<U: UpdateData> AgentChannel<U> {
             .unwrap();
     }
 
-    pub fn send_with_tag(&self, update: SimUpdate<U>, tag: &str) {
-        let mut hasher = DefaultHasher::new();
-        tag.hash(&mut hasher);
+    pub fn send_with_tag(&self, update: SimUpdate<U>, tag: Cow<'static, str>) {
         self.sender
             .send(AgentSimUpdate {
                 update,
                 address: self.address,
-                tag: Some(hasher.finish()),
+                tag: Some(tag),
             })
             .map_err(ChannelError::SendError)
             .unwrap();
-    }
-}
-#[derive(Debug)]
-pub struct AgentUpdateResults<'s, U: UpdateData> {
-    updates: Option<&'s HashMap<u64, SimUpdateResult<U>>>,
-}
-
-impl<'s, U: UpdateData> AgentUpdateResults<'s, U> {
-    pub fn new(updates: Option<&'s HashMap<u64, SimUpdateResult<U>>>) -> Self {
-        AgentUpdateResults { updates }
-    }
-
-    pub fn get_update(&self, tag: &str) -> Option<&SimUpdateResult<U>> {
-        let mut hasher = DefaultHasher::new();
-        tag.hash(&mut hasher);
-        self.updates?.get(&hasher.finish())
     }
 }

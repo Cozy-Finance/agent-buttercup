@@ -22,7 +22,7 @@ impl World for CozyWorldState {
         match update {
             CozyUpdate::AddToContractRegistry(name, address) => {
                 self.contract_registry.insert(name.to_string(), *address);
-                return Some(CozyUpdate::AddToContractRegistry("t".to_string(), *address));
+                None
             }
         }
     }
