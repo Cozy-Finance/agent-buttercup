@@ -13,8 +13,8 @@ pub use bindings::{
 };
 use ethers::types::U256 as EthersU256;
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
-use rand::{rngs::StdRng, SeedableRng};
 use eyre::Result;
+use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::U256 as EvmU256;
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 use simulate::{
@@ -51,7 +51,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     // Weth deployer.
     let weth_deployer = Box::new(WethDeployer::new(
         Some("Weth Deployer".into()),
-        EvmAddress::random_using(&mut rng)
+        EvmAddress::random_using(&mut rng),
     ));
     sim_manager.activate_agent(weth_deployer);
 
@@ -77,7 +77,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let protocol_deployer = Box::new(ProtocolDeployer::new(
         Some("Weth Deployer".into()),
         EvmAddress::random_using(&mut rng),
-        deploy_params));
+        deploy_params,
+    ));
     sim_manager.activate_agent(protocol_deployer);
 
     // Set admin.
@@ -120,7 +121,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let set_admin = Box::new(SetAdmin::new(
         Some("Set Admin".into()),
         EvmAddress::random_using(&mut rng),
-        set_params));
+        set_params,
+    ));
     sim_manager.activate_agent(set_admin);
 
     sim_manager.run_sim();

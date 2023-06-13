@@ -11,7 +11,7 @@ use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution}
+    utils::{build_call_contract_txenv, unpack_execution},
 };
 
 use crate::cozy::{
@@ -199,9 +199,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         channel.send(SimUpdate::Evm(create_set_tx));
     }
 
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {
-        println!("{:?}", _state.get_read_db().accounts);
-    }
+    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
     fn step(
         &mut self,

@@ -1,5 +1,6 @@
 use agent_channel::AgentChannel;
 use revm::primitives::AccountInfo;
+
 use crate::{
     agent::types::AgentId,
     state::{update::UpdateData, world::World, SimState},
