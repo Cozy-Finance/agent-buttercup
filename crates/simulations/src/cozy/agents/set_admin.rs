@@ -11,7 +11,7 @@ use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
-    utils::build_call_contract_txenv,
+    utils::{build_call_contract_txenv, unpack_execution}
 };
 
 use crate::cozy::{
@@ -74,7 +74,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
             .unwrap()
-            .contract_registry
+            .protocol_contracts
             .get("CostModelJumpRateFactory")
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
@@ -84,7 +84,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
             .unwrap()
-            .contract_registry
+            .protocol_contracts
             .get("CostModelDynamicLevelFactory")
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
@@ -94,7 +94,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
             .unwrap()
-            .contract_registry
+            .protocol_contracts
             .get("DripDecayFactory")
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
@@ -183,7 +183,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
                 .unwrap_or(rand::random::<[u8; 32]>()),
         };
 
-        let (_, create_set_tx) = self
+        let create_set_tx = self
             .build_create_set_tx(state, create_set_args, &mut nonce)
             .expect("Error building create set tx.");
 
@@ -271,7 +271,7 @@ impl SetAdmin {
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)?
-            .contract_registry
+            .protocol_contracts
             .get("Manager")
             .ok_or(CozyAgentError::UnregisteredAddress)?;
         let args = (EthersAddress::from(*manager_addr),);
@@ -287,20 +287,19 @@ impl SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         args: manager::CreateSetCall,
         nonce: &mut u64,
-    ) -> Result<(EvmAddress, TxEnv)> {
+    ) -> Result<TxEnv> {
         let (manager_addr, manager_contract) = state
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)?
-            .contract_registry
+            .protocol_contracts
             .get("Manager")
             .ok_or(CozyAgentError::UnregisteredAddress)?;
         let call_data = manager_contract.encode_function("createSet", args)?;
         let tx =
             build_call_contract_txenv(self.address, (*manager_addr).into(), call_data, None, None);
-        let addr = create_address(self.address, *nonce);
+        let tx_result = unpack_execution(state.read_simulate_evm_tx(&tx));
         *nonce += 1;
-
-        Ok((addr, tx))
+        Ok(tx)
     }
 }

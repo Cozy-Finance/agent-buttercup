@@ -52,7 +52,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
             .unwrap()
-            .contract_registry
+            .protocol_contracts
             .get("CozyRouter")
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();

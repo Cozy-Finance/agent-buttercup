@@ -1,5 +1,5 @@
 use agent_channel::AgentChannel;
-
+use revm::primitives::AccountInfo;
 use crate::{
     agent::types::AgentId,
     state::{update::UpdateData, world::World, SimState},
@@ -17,6 +17,10 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
             address: EvmAddress::random(),
             name: None,
         }
+    }
+
+    fn account_info(&self) -> AccountInfo {
+        AccountInfo::default()
     }
 
     /// Executes actions against the simulation as soon as the agent is activated.
