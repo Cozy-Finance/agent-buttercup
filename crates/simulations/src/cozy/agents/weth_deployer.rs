@@ -64,7 +64,7 @@ impl WethDeployer {
         channel.send(SimUpdate::Evm(evm_tx));
 
         let weth_addr = create_address(self.address, 0);
-        channel.send(SimUpdate::World(CozyUpdate::AddToContractRegistry(
+        channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             "Weth".into(),
             weth_addr,
             weth_contract,

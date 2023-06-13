@@ -86,7 +86,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         .world
         .as_ref()
         .unwrap()
-        .contract_registry
+        .protocol_contracts
         .get("Weth")
         .unwrap();
     let salt: Option<[u8; 32]> = Some(rand::random());
