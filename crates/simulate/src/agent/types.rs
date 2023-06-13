@@ -1,4 +1,21 @@
-use revm::primitives::U256 as EvmU256;
+use std::{
+    borrow::Cow,
+    hash::{Hash, Hasher},
+};
+
+use revm::primitives::{Address as EvmAddress, U256 as EvmU256};
+
+#[derive(Debug, Eq, PartialEq, Clone)]
+pub struct AgentId {
+    pub address: EvmAddress,
+    pub name: Option<Cow<'static, str>>,
+}
+
+impl Hash for AgentId {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.address.hash(state);
+    }
+}
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone)]
 pub struct AgentTxGas {

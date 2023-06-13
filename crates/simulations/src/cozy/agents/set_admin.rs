@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{borrow::Cow, sync::Arc};
 
 use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
@@ -8,7 +8,7 @@ pub use bindings::{
 use eyre::Result;
 use revm::primitives::{create_address, TxEnv};
 use simulate::{
-    agent::{agent_channel::AgentChannel, Agent},
+    agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
     utils::build_call_contract_txenv,
@@ -35,26 +35,31 @@ pub struct SetAdminParams {
 }
 
 pub struct SetAdmin {
+    name: Option<Cow<'static, str>>,
+    address: EvmAddress,
     set_admin_params: SetAdminParams,
-    address: Option<EvmAddress>,
 }
 
 impl SetAdmin {
-    pub fn new(set_admin_params: SetAdminParams) -> Self {
+    pub fn new(
+        name: Option<Cow<'static, str>>,
+        address: EvmAddress,
+        set_admin_params: SetAdminParams,
+    ) -> Self {
         Self {
+            name,
+            address,
             set_admin_params,
-            address: None,
         }
     }
 }
 
 impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
-    fn address(&self) -> EvmAddress {
-        self.address.unwrap()
-    }
-
-    fn register_address(&mut self, address: &EvmAddress) {
-        self.address = Some(*address);
+    fn id(&self) -> AgentId {
+        AgentId {
+            name: self.name.clone(),
+            address: self.address,
+        }
     }
 
     fn activation_step(
@@ -167,8 +172,8 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .collect();
 
         let create_set_args = manager::CreateSetCall {
-            owner: self.address().into(),
-            pauser: self.address().into(),
+            owner: self.address.into(),
+            pauser: self.address.into(),
             asset: self.set_admin_params.asset,
             set_config: self.set_admin_params.set_config.clone(),
             market_configs,
@@ -217,14 +222,9 @@ impl SetAdmin {
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
         let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
-            self.address(),
-            (*factory_addr).into(),
-            call_data,
-            None,
-            None,
-        );
-        let addr = create_address(self.address(), *nonce);
+        let tx =
+            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let addr = create_address(self.address, *nonce);
         *nonce += 1;
 
         Ok((addr, tx))
@@ -238,14 +238,9 @@ impl SetAdmin {
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
         let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
-            self.address(),
-            (*factory_addr).into(),
-            call_data,
-            None,
-            None,
-        );
-        let addr = create_address(self.address(), *nonce);
+        let tx =
+            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let addr = create_address(self.address, *nonce);
         *nonce += 1;
 
         Ok((addr, tx))
@@ -259,14 +254,9 @@ impl SetAdmin {
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
         let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
-            self.address(),
-            (*factory_addr).into(),
-            call_data,
-            None,
-            None,
-        );
-        let addr = create_address(self.address(), *nonce);
+        let tx =
+            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let addr = create_address(self.address, *nonce);
         *nonce += 1;
 
         Ok((addr, tx))
@@ -285,8 +275,8 @@ impl SetAdmin {
             .get("Manager")
             .ok_or(CozyAgentError::UnregisteredAddress)?;
         let args = (EthersAddress::from(*manager_addr),);
-        let (tx, _) = build_deploy_contract_tx(self.address(), &DUMMYTRIGGER, args)?;
-        let addr = create_address(self.address(), *nonce);
+        let (tx, _) = build_deploy_contract_tx(self.address, &DUMMYTRIGGER, args)?;
+        let addr = create_address(self.address, *nonce);
         *nonce += 1;
 
         Ok((addr, tx))
@@ -306,14 +296,9 @@ impl SetAdmin {
             .get("Manager")
             .ok_or(CozyAgentError::UnregisteredAddress)?;
         let call_data = manager_contract.encode_function("createSet", args)?;
-        let tx = build_call_contract_txenv(
-            self.address(),
-            (*manager_addr).into(),
-            call_data,
-            None,
-            None,
-        );
-        let addr = create_address(self.address(), *nonce);
+        let tx =
+            build_call_contract_txenv(self.address, (*manager_addr).into(), call_data, None, None);
+        let addr = create_address(self.address, *nonce);
         *nonce += 1;
 
         Ok((addr, tx))
