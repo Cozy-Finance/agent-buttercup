@@ -16,3 +16,6 @@
 [submodule "contracts/canonical-weth"]
 	path = contracts/canonical-weth
 	url = https://github.com/gnosis/canonical-weth
+[submodule "contracts/cozy-simulation-contracts"]
+	path = contracts/cozy-simulation-contracts
+	url = https://github.com/Cozy-Finance/cozy-simulation-contracts

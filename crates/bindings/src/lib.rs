@@ -6,3 +6,5 @@ pub mod cozy_protocol;
 pub use cozy_protocol::*;
 pub mod weth;
 pub use weth::*;
+pub mod cozy_simulation;
+pub use cozy_simulation::*;
