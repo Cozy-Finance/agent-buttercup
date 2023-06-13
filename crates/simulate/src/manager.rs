@@ -5,14 +5,15 @@ use std::{collections::HashMap, thread};
 
 use crossbeam_channel::unbounded;
 use eyre::Result;
-use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::AccountInfo;
 
 use crate::{
     agent::{
         agent_channel::{AgentChannel, AgentSimUpdate},
+        types::AgentId,
         Agent,
     },
+    errors::*,
     state::{update::UpdateData, world::World, SimState},
     stepper::*,
     time_policy::TimePolicy,
@@ -27,24 +28,20 @@ use crate::{
 /// * `rng` - Randomness generator.
 pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub time_policy: Box<dyn TimePolicy>,
-    pub agents: HashMap<EvmAddress, Box<dyn Agent<U, W>>>,
-    pub rng: StdRng,
+    pub agents: HashMap<AgentId, Box<dyn Agent<U, W>>>,
     pub stepper: SimStepper<U, W>,
     pub stepper_read_factory: SimStepperReadHandleFactory<U, W>,
-    pub agent_id_iter: u64,
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
-    pub fn new(state: SimState<U, W>, time_policy: Box<dyn TimePolicy>, rng_seed: u64) -> Self {
+    pub fn new(state: SimState<U, W>, time_policy: Box<dyn TimePolicy>) -> Self {
         let stepper: SimStepper<U, W> = SimStepper::new_from_current_state(state);
         let stepper_read_factory = stepper.factory();
         Self {
             time_policy,
             agents: HashMap::new(),
-            rng: StdRng::seed_from_u64(rng_seed),
             stepper,
             stepper_read_factory,
-            agent_id_iter: 0,
         }
     }
 
@@ -61,9 +58,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             //      1) Spawn agents to access immutable state via a read handle and queue updates.
             //      2) Append queued updates via the write handle.
             thread::scope(|s| {
-                for (address, agent) in &mut self.agents {
+                for (agent_id, agent) in &mut self.agents {
                     let channel = AgentChannel {
-                        address: *address,
+                        address: (*agent_id).address,
                         sender: sender.clone(),
                     };
                     s.spawn(|| agent.step(&self.stepper_read_factory.sim_state(), channel));
@@ -99,19 +96,23 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
     /// Adds and activates an agent to be put in the collection of agents under the manager's control.
     /// # Arguments
     /// * `new_agent` - The agent to be added to the collection of agents.
-    pub fn activate_agent(&mut self, mut new_agent: Box<dyn Agent<U, W> + Sync>) -> Result<()> {
-        // Generates an address for the agent.
-        let new_agent_address = EvmAddress::random_using(&mut self.rng);
-        self.stepper
-            .insert_account_info(new_agent_address, AccountInfo::default());
+    pub fn activate_agent(
+        &mut self,
+        mut new_agent: Box<dyn Agent<U, W>>,
+    ) -> Result<(), ManagerError> {
+        // Register agent account info.
+        let id = new_agent.id();
+        if self.agents.contains_key(&id) {
+            return Err(ManagerError::AddressCollision(id.address));
+        }
 
-        // Register address with agent.
-        new_agent.register_address(&new_agent_address);
+        self.stepper
+            .insert_account_info(id.address, new_agent.account_info());
 
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
         let channel = AgentChannel {
-            address: new_agent_address,
+            address: id.address,
             sender: sender.clone(),
         };
         new_agent.activation_step(&self.stepper_read_factory.sim_state(), channel);
@@ -123,8 +124,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         }
         self.stepper.publish();
 
+        // Resolve activation step.
+        new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
+
         // Adds agent to local data.
-        self.agents.insert(new_agent_address, new_agent);
+        self.agents.insert(id, new_agent);
 
         Ok(())
     }

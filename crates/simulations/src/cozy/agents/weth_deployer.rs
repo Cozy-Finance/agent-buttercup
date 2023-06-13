@@ -1,33 +1,36 @@
+use std::borrow::Cow;
+
 use eyre::Result;
+use revm::primitives::create_address;
 use simulate::{
-    agent::{agent_channel::AgentChannel, Agent},
+    agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
 };
 
 use crate::cozy::{
     bindings_wrapper::*,
     utils::build_deploy_contract_tx,
-    world_state::{CozyUpdate, CozyWorld},
-    EvmAddress,
+    world::{CozyUpdate, CozyWorld},
+    EthersAddress, EvmAddress,
 };
 
 pub struct WethDeployer {
-    address: Option<EvmAddress>,
+    name: Option<Cow<'static, str>>,
+    address: EvmAddress,
 }
 
 impl WethDeployer {
-    pub fn new() -> Self {
-        Self { address: None }
+    pub fn new(name: Option<Cow<'static, str>>, address: EvmAddress) -> Self {
+        Self { name, address }
     }
 }
 
 impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
-    fn address(&self) -> EvmAddress {
-        self.address.unwrap()
-    }
-
-    fn register_address(&mut self, address: &EvmAddress) {
-        self.address = Some(*address);
+    fn id(&self) -> AgentId {
+        AgentId {
+            name: self.name.clone(),
+            address: self.address,
+        }
     }
 
     fn activation_step(
@@ -38,6 +41,8 @@ impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
         self.deploy_weth(state, channel)
             .expect("Error deploying weth.");
     }
+
+    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
     fn step(
         &mut self,
@@ -55,8 +60,16 @@ impl WethDeployer {
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let evm_tx = build_deploy_contract_tx(self.address(), &WETH, ())?;
+        let (evm_tx, weth_contract) = build_deploy_contract_tx(self.address, &WETH, ())?;
         channel.send(SimUpdate::Evm(evm_tx));
+
+        let weth_addr = create_address(self.address, 0);
+        channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
+            "Weth".into(),
+            weth_addr,
+            weth_contract,
+        )));
+
         Ok(())
     }
 }

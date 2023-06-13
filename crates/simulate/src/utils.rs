@@ -139,14 +139,3 @@ pub fn build_call_contract_txenv(
         access_list: Vec::new(),
     }
 }
-
-pub fn encode_function(
-    abi: EthersBaseContract,
-    function_name: &str,
-    args: impl Tokenize,
-) -> Result<EvmBytes, AbiError> {
-    match abi.encode(function_name, args) {
-        Ok(encoded) => Ok(encoded.into_iter().collect()),
-        Err(e) => Err(e),
-    }
-}

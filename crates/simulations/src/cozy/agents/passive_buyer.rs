@@ -1,165 +1,162 @@
-use bindings::{
-    cost_model_dynamic_level_factory, cost_model_jump_rate_factory, drip_decay_model_constant,
-    shared_types::{MarketConfig, SetConfig},
-    manager::CreateSetCall
-};
+use std::{borrow::Cow, sync::Arc};
 
-use ethers::abi::{Contract as EthersContract, Tokenize};
-use ethers::types::U256 as EthersU256;
+use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
-use revm::primitives::create_address;
+use revm::primitives::TxEnv;
 use simulate::{
-    agent::Agent,
-    contract::{
-        sim_contract::{IsDeployed, SimContract},
-        utils,
-    },
-    environment::sim_env::SimEnv,
-    world_state::CozyUpdate
+    agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::sim_contract::SimContract,
+    state::{update::SimUpdate, SimState},
+    utils::build_call_contract_txenv,
 };
-use thiserror::Error;
 
-use crate::simulator::cozy::{
-    bindings_wrapper::*,
-    {EthersAddress, EthersBytes, EvmAddress}, sim_types::CozySimTrigger,
-};
-use crate::simulator::cozy::sim_types::{
-    CozySimCostModel, 
-    CozySimDripDecayModel, 
-    MarketParamsConfig,
-};
-use crate::simulator::errors::CozyAgentErrors;
-
-use std::error::Error;
-
-use bindings::cozy_router;
-use crossbeam_channel::Receiver;
-use ethers::{
-    prelude::U256,
-    types::{Sign, I256},
-};
-use eyre::Result;
-use revm::primitives::{ruint::Uint, Address, B160};
-use simulate::{
-    agent::{
-        cozy_passive_buyer::CozyPassiveBuyer, simple_arbitrageur::SimpleArbitrageur, Agent,
-        AgentType, SimulationEventFilter,
-    },
-    environment::contract::{IsDeployed, SimulationContract},
-    manager::SimulationManager,
-    utils::unpack_execution,
+use crate::cozy::{
+    agents::errors::CozyAgentError,
+    world::{CozyUpdate, CozyWorld},
+    EthersAddress, EvmAddress,
 };
 
 pub struct PassiveBuyer {
-    name: String,
-    deploy_params: ProtocolDeployerParams,
-    address: Option<EvmAddress>,
+    name: Option<Cow<'static, str>>,
+    address: EvmAddress,
+    cozyrouter_address: Option<EvmAddress>,
+    cozyrouter_contract: Option<Arc<SimContract>>,
 }
 
 impl PassiveBuyer {
-    pub fn new(name: String, deploy_params: ProtocolDeployerParams) -> Self {
+    pub fn new(name: Option<Cow<'static, str>>, address: EvmAddress) -> Self {
         Self {
             name,
-            deploy_params,
-            address: None,
+            address,
+            cozyrouter_address: None,
+            cozyrouter_contract: None,
         }
     }
 }
 
-impl Agent<CozyUpdate> for PassiveBuyer {
-    fn address(&self) -> EvmAddress {
-        self.address.unwrap()
+impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
+    fn id(&self) -> AgentId {
+        AgentId {
+            name: self.name.clone(),
+            address: self.address,
+        }
     }
 
-    fn register_address(&mut self, address: &EvmAddress) {
-        self.address = Some(*address);
+    fn activation_step(
+        &mut self,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        _channel: AgentChannel<CozyUpdate>,
+    ) {
+        let (cozyrouter_addr, cozyrouter_contract) = state
+            .world
+            .as_ref()
+            .ok_or(CozyAgentError::MissingWorldState)
+            .unwrap()
+            .protocol_contracts
+            .get("CozyRouter")
+            .ok_or(CozyAgentError::UnregisteredAddress)
+            .unwrap();
+        self.cozyrouter_address = Some(*cozyrouter_addr);
+        self.cozyrouter_contract = Some(cozyrouter_contract.clone());
     }
 
-    fn name(&self) -> Option<String> {
-        Option::Some(self.name.clone())
+    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
+
+    fn step(
+        &mut self,
+        _state: &SimState<CozyUpdate, CozyWorld>,
+        _channel: AgentChannel<CozyUpdate>,
+    ) {
     }
 
-    fn activation_step(&mut self, sim_env: &mut SimEnv) {}
-
-    fn step(&mut self, sim_env: &mut SimEnv) {}
+    fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
 impl PassiveBuyer {
-    fn purchase_protection(&self, args: PurchaseCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("purchase", args)?,
-        );
+    fn build_purchase_tx(&self, args: cozy_router::PurchaseCall) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("purchase", args)?,
+            None,
+            None,
+        ))
     }
 
-    fn purchase_protection_without_transfer(&self, args: PurchaseWithoutTransferCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("purchaseWithoutTransfer", args)?,
-        );
+    fn purchase_protection_without_transfer(
+        &self,
+        args: cozy_router::PurchaseWithoutTransferCall,
+    ) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("purchaseWithoutTransfer", args)?,
+            None,
+            None,
+        ))
     }
 
-    fn cancel_protection(&self, args: CancelCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("cancel", args)?,
-        );
+    fn cancel_protection(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("cancel", args)?,
+            None,
+            None,
+        ))
     }
 
-    fn sell_protection(&self, args: SellCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("sell", args)?,
-        );
+    fn sell_protection(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("sell", args)?,
+            None,
+            None,
+        ))
     }
 
-    fn claim_ptokens(&self, args: ClaimCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("claim", args)?,
-        );
+    fn claim_ptokens(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("claim", args)?,
+            None,
+            None,
+        ))
     }
 
-    fn payout_protection(&self, args: PayoutCall) {
-        let router = sim_env
-            .data
-            .contract_registry
-            .get(COZYROUTER.name)
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        self.call_contract(
-            sim_env,
-            router,
-            router.encode_function("payout", args)?,
-        );
+    fn payout_protection(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
+        Ok(build_call_contract_txenv(
+            self.address,
+            self.cozyrouter_address
+                .ok_or(CozyAgentError::UnregisteredAddress)?,
+            self.cozyrouter_contract
+                .as_ref()
+                .ok_or(CozyAgentError::UnregisteredAddress)?
+                .encode_function("payout", args)?,
+            None,
+            None,
+        ))
     }
 }
