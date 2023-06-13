@@ -38,8 +38,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let world_state = CozyWorld::new();
     let sim_state = SimState::new(Some(world_state));
     let time_policy = Box::new(FixedTimePolicy::new(
-        EvmU256::from(0),
-        EvmU256::from(1),
+        EvmU256::from(10),
+        EvmU256::from(1200),
         12_u64,
         10_u64,
         Some(5000_u64),
@@ -72,10 +72,10 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             sale_fee_reserves: 0_u16,
             sale_fee_backstop: 0_u16,
         },
-        allowed_markets_per_set: EthersU256::from(10),
+        allowed_markets_per_set: EthersU256::from(1000),
     };
     let protocol_deployer = Box::new(ProtocolDeployer::new(
-        Some("Weth Deployer".into()),
+        Some("Protocol Deployer".into()),
         EvmAddress::random_using(&mut rng),
         deploy_params,
     ));

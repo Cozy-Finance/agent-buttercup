@@ -11,11 +11,13 @@ use crate::cozy::EvmAddress;
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
     pub protocol_contracts: HashMap<Cow<'static, str>, (EvmAddress, Arc<SimContract>)>,
+    pub sets: HashMap<Cow<'static, str>, EvmAddress>,
 }
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
     AddToProtocolContracts(Cow<'static, str>, EvmAddress, Arc<SimContract>),
+    AddToSets(Cow<'static, str>, EvmAddress),
 }
 
 impl UpdateData for CozyUpdate {}
@@ -29,6 +31,10 @@ impl World for CozyWorld {
                     .insert(name.clone(), (*address, contract.clone()));
                 None
             }
+            CozyUpdate::AddToSets(name, address) => {
+                self.sets.insert(name.clone(), *address);
+                None
+            }
         }
     }
 }
@@ -37,6 +43,7 @@ impl CozyWorld {
     pub fn new() -> Self {
         CozyWorld {
             protocol_contracts: HashMap::new(),
+            sets: HashMap::new(),
         }
     }
 }
