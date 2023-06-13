@@ -1,10 +1,10 @@
-use std::sync::Arc;
+use std::{borrow::Cow, sync::Arc};
 
 use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
-    agent::{agent_channel::AgentChannel, Agent},
+    agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
     utils::build_call_contract_txenv,
@@ -17,15 +17,17 @@ use crate::cozy::{
 };
 
 pub struct PassiveBuyer {
-    address: Option<EvmAddress>,
+    name: Option<Cow<'static, str>>,
+    address: EvmAddress,
     cozyrouter_address: Option<EvmAddress>,
     cozyrouter_contract: Option<Arc<SimContract>>,
 }
 
 impl PassiveBuyer {
-    pub fn new() -> Self {
+    pub fn new(name: Option<Cow<'static, str>>, address: EvmAddress) -> Self {
         Self {
-            address: None,
+            name,
+            address,
             cozyrouter_address: None,
             cozyrouter_contract: None,
         }
@@ -33,12 +35,11 @@ impl PassiveBuyer {
 }
 
 impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
-    fn address(&self) -> EvmAddress {
-        self.address.unwrap()
-    }
-
-    fn register_address(&mut self, address: &EvmAddress) {
-        self.address = Some(*address);
+    fn id(&self) -> AgentId {
+        AgentId {
+            name: self.name.clone(),
+            address: self.address,
+        }
     }
 
     fn activation_step(
@@ -74,7 +75,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 impl PassiveBuyer {
     fn build_purchase_tx(&self, args: cozy_router::PurchaseCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract
@@ -91,7 +92,7 @@ impl PassiveBuyer {
         args: cozy_router::PurchaseWithoutTransferCall,
     ) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract
@@ -105,7 +106,7 @@ impl PassiveBuyer {
 
     fn cancel_protection(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract
@@ -119,7 +120,7 @@ impl PassiveBuyer {
 
     fn sell_protection(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract
@@ -133,7 +134,7 @@ impl PassiveBuyer {
 
     fn claim_ptokens(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract
@@ -147,7 +148,7 @@ impl PassiveBuyer {
 
     fn payout_protection(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
-            self.address(),
+            self.address,
             self.cozyrouter_address
                 .ok_or(CozyAgentError::UnregisteredAddress)?,
             self.cozyrouter_contract

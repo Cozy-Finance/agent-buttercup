@@ -13,6 +13,7 @@ pub use bindings::{
 };
 use ethers::types::U256 as EthersU256;
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
+use rand::{rngs::StdRng, SeedableRng};
 use eyre::Result;
 use revm::primitives::U256 as EvmU256;
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
@@ -32,6 +33,8 @@ pub mod utils;
 pub mod world;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
+    let mut rng = StdRng::seed_from_u64(88_u64);
+
     let world_state = CozyWorld::new();
     let sim_state = SimState::new(Some(world_state));
     let time_policy = Box::new(FixedTimePolicy::new(
@@ -42,11 +45,14 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         Some(5000_u64),
         None,
     )?);
-    let mut sim_manager = SimManager::new(sim_state, time_policy, 99_u64);
+    let mut sim_manager = SimManager::new(sim_state, time_policy);
 
     // Create and activate agents.
     // Weth deployer.
-    let weth_deployer = Box::new(WethDeployer::new());
+    let weth_deployer = Box::new(WethDeployer::new(
+        Some("Weth Deployer".into()),
+        EvmAddress::random_using(&mut rng)
+    ));
     sim_manager.activate_agent(weth_deployer);
 
     // Protocol deployer.
@@ -68,7 +74,10 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         },
         allowed_markets_per_set: EthersU256::from(10),
     };
-    let protocol_deployer = Box::new(ProtocolDeployer::new(deploy_params));
+    let protocol_deployer = Box::new(ProtocolDeployer::new(
+        Some("Weth Deployer".into()),
+        EvmAddress::random_using(&mut rng),
+        deploy_params));
     sim_manager.activate_agent(protocol_deployer);
 
     // Set admin.
@@ -108,7 +117,10 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         }],
         salt,
     };
-    let set_admin = Box::new(SetAdmin::new(set_params));
+    let set_admin = Box::new(SetAdmin::new(
+        Some("Set Admin".into()),
+        EvmAddress::random_using(&mut rng),
+        set_params));
     sim_manager.activate_agent(set_admin);
 
     sim_manager.run_sim();
