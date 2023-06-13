@@ -1,7 +1,7 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-use std::{collections::HashMap, thread};
+use std::{collections::HashMap, str::FromStr, thread};
 
 use crossbeam_channel::unbounded;
 use eyre::Result;
@@ -128,7 +128,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
 
         // Adds agent to local data.
-        self.agents.insert(id, new_agent);
+        self.agents.insert(id.clone(), new_agent);
 
         Ok(())
     }
