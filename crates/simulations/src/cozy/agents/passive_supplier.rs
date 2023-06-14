@@ -16,7 +16,7 @@ use crate::cozy::{
     EthersAddress, EthersU256, EvmAddress,
 };
 
-pub struct PassiveBuyer {
+pub struct PassiveSupplier {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
     cozyrouter: Option<CozyContractData>,
@@ -24,7 +24,7 @@ pub struct PassiveBuyer {
     capital: EthersU256,
 }
 
-impl PassiveBuyer {
+impl PassiveSupplier {
     pub fn new(name: Option<Cow<'static, str>>, address: EvmAddress, capital: EthersU256) -> Self {
         Self {
             name,
@@ -36,7 +36,7 @@ impl PassiveBuyer {
     }
 }
 
-impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
+impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
     fn id(&self) -> AgentId {
         AgentId {
             name: self.name.clone(),
@@ -87,7 +87,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
     fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
-impl PassiveBuyer {
+impl PassiveSupplier {
     fn max_approve_router(&self) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,

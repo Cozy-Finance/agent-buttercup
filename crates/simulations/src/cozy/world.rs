@@ -9,8 +9,14 @@ use simulate::{
 use crate::cozy::EvmAddress;
 
 #[derive(Debug, Clone)]
+pub struct CozyContractData {
+    pub address: EvmAddress,
+    pub contract: Arc<SimContract>,
+}
+
+#[derive(Debug, Clone)]
 pub struct CozyWorld {
-    pub protocol_contracts: HashMap<Cow<'static, str>, (EvmAddress, Arc<SimContract>)>,
+    pub protocol_contracts: HashMap<Cow<'static, str>, CozyContractData>,
     pub sets: HashMap<Cow<'static, str>, EvmAddress>,
 }
 
@@ -27,8 +33,13 @@ impl World for CozyWorld {
     fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
             CozyUpdate::AddToProtocolContracts(name, address, contract) => {
-                self.protocol_contracts
-                    .insert(name.clone(), (*address, contract.clone()));
+                self.protocol_contracts.insert(
+                    name.clone(),
+                    CozyContractData {
+                        address: *address,
+                        contract: contract.clone(),
+                    },
+                );
                 None
             }
             CozyUpdate::AddToSets(name, address) => {

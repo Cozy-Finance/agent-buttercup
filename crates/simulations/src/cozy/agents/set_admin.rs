@@ -22,7 +22,7 @@ use crate::cozy::{
     bindings_wrapper::*,
     types::{CozyMarketParamsConfig, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger},
     utils::build_deploy_contract_tx,
-    world::{CozyUpdate, CozyWorld},
+    world::{CozyContractData, CozyUpdate, CozyWorld},
     EthersAddress, EvmAddress, EvmBytes,
 };
 
@@ -41,8 +41,7 @@ pub struct SetAdmin {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
     set_admin_params: SetAdminParams,
-    manager_address: Option<EvmAddress>,
-    manager_contract: Option<Arc<SimContract>>,
+    manager: Option<CozyContractData>,
     set_address: Option<EvmAddress>,
     set_registered: bool,
 }
@@ -57,8 +56,7 @@ impl SetAdmin {
             name,
             address,
             set_admin_params,
-            manager_address: None,
-            manager_contract: None,
+            manager: None,
             set_address: None,
             set_registered: false,
         }
@@ -80,19 +78,20 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
     ) {
         let mut nonce = 0 as u64;
 
-        let (manager_addr, manager_contract) = state
-            .world
-            .as_ref()
-            .ok_or(CozyAgentError::MissingWorldState)
-            .unwrap()
-            .protocol_contracts
-            .get("Manager")
-            .ok_or(CozyAgentError::UnregisteredAddress)
-            .unwrap();
-        self.manager_address = Some(*manager_addr);
-        self.manager_contract = Some(manager_contract.clone());
+        self.manager = Some(
+            state
+                .world
+                .as_ref()
+                .ok_or(CozyAgentError::MissingWorldState)
+                .unwrap()
+                .protocol_contracts
+                .get("Manager")
+                .ok_or(CozyAgentError::UnregisteredAddress)
+                .unwrap()
+                .clone(),
+        );
 
-        let (jump_rate_addr, jump_rate_contract) = state
+        let jump_rate = state
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
@@ -102,7 +101,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
 
-        let (dynamic_level_addr, dynamic_level_contract) = state
+        let dynamic_level = state
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
@@ -112,7 +111,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
 
-        let (drip_decay_addr, drip_decay_contract) = state
+        let drip_decay = state
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)
@@ -137,30 +136,24 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .expect("Error building trigger deploy txs");
 
         // Deploy all cost models.
-        let cost_models = self
-            .set_admin_params
-            .cost_models
-            .clone()
-            .into_iter()
-            .map(|model| match model {
-                CozySimCostModel::JumpRate(args) => self.build_deploy_cost_model_jump_rate_tx(
-                    state,
-                    jump_rate_addr,
-                    jump_rate_contract,
-                    args,
-                    &mut nonce,
-                ),
-                CozySimCostModel::DynamicLevel(args) => self
-                    .build_deploy_cost_model_dynamic_level_tx(
-                        state,
-                        dynamic_level_addr,
-                        dynamic_level_contract,
-                        args,
-                        &mut nonce,
-                    ),
-            })
-            .collect::<Result<Vec<_>>>()
-            .expect("Error building cost model deploy txs");
+        let cost_models =
+            self.set_admin_params
+                .cost_models
+                .clone()
+                .into_iter()
+                .map(|model| match model {
+                    CozySimCostModel::JumpRate(args) => self
+                        .build_deploy_cost_model_jump_rate_tx(state, jump_rate, args, &mut nonce),
+                    CozySimCostModel::DynamicLevel(args) => self
+                        .build_deploy_cost_model_dynamic_level_tx(
+                            state,
+                            dynamic_level,
+                            args,
+                            &mut nonce,
+                        ),
+                })
+                .collect::<Result<Vec<_>>>()
+                .expect("Error building cost model deploy txs");
 
         // Deploy all drip decay models.
         let drip_decay_models = self
@@ -169,13 +162,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .clone()
             .into_iter()
             .map(|model| match model {
-                CozySimDripDecayModel::Constant(args) => self.build_deploy_drip_decay_model_tx(
-                    state,
-                    drip_decay_addr,
-                    drip_decay_contract,
-                    args,
-                    &mut nonce,
-                ),
+                CozySimDripDecayModel::Constant(args) => {
+                    self.build_deploy_drip_decay_model_tx(state, drip_decay, args, &mut nonce)
+                }
             })
             .collect::<Result<Vec<_>>>()
             .expect("Error building drip decay model deploy txs");
@@ -236,9 +225,11 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         if let SimUpdateResult::Evm(evm_result) = results {
             let evm_result = unpack_execution(evm_result.clone()).expect("Set deployment failed.");
             let set_address: EthersAddress = self
-                .manager_contract
+                .manager
                 .as_ref()
                 .unwrap()
+                .contract
+                .as_ref()
                 .decode_output("createSet", evm_result)
                 .unwrap();
             self.set_address = Some(set_address.into());
@@ -266,17 +257,21 @@ impl SetAdmin {
     fn build_deploy_cost_model_jump_rate_tx(
         &mut self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        factory_addr: &EvmAddress,
-        factory_contract: &Arc<SimContract>,
+        factory: &CozyContractData,
         args: cost_model_jump_rate_factory::DeployModelCall,
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
-        let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx =
-            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let call_data = factory.contract.encode_function("deployModel", args)?;
+        let tx = build_call_contract_txenv(
+            self.address,
+            (*factory.address).into(),
+            call_data,
+            None,
+            None,
+        );
         let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
             .expect("Error simulating cost model deployment.");
-        let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
+        let addr: EthersAddress = factory.contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
 
         Ok((addr.into(), tx))
@@ -285,17 +280,21 @@ impl SetAdmin {
     fn build_deploy_cost_model_dynamic_level_tx(
         &mut self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        factory_addr: &EvmAddress,
-        factory_contract: &Arc<SimContract>,
+        factory: &CozyContractData,
         args: cost_model_dynamic_level_factory::DeployModelCall,
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
-        let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx =
-            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let call_data = factory.contract.encode_function("deployModel", args)?;
+        let tx = build_call_contract_txenv(
+            self.address,
+            (*factory.address).into(),
+            call_data,
+            None,
+            None,
+        );
         let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
             .expect("Error simulating cost model deployment.");
-        let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
+        let addr: EthersAddress = factory.contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
 
         Ok((addr.into(), tx))
@@ -304,17 +303,21 @@ impl SetAdmin {
     fn build_deploy_drip_decay_model_tx(
         &mut self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        factory_addr: &EvmAddress,
-        factory_contract: &Arc<SimContract>,
+        factory: &CozyContractData,
         args: drip_decay_model_constant_factory::DeployModelCall,
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
-        let call_data = factory_contract.encode_function("deployModel", args)?;
-        let tx =
-            build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
+        let call_data = factory.contract.encode_function("deployModel", args)?;
+        let tx = build_call_contract_txenv(
+            self.address,
+            (*factory.address).into(),
+            call_data,
+            None,
+            None,
+        );
         let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
             .expect("Error simulating drip decay model deployment.");
-        let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
+        let addr: EthersAddress = factory.contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
 
         Ok((addr.into(), tx))
@@ -325,7 +328,7 @@ impl SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
-        let args = (EthersAddress::from(self.manager_address.unwrap()),);
+        let args = (EthersAddress::from(self.manager.as_ref().unwrap().address),);
         let (tx, _) = build_deploy_contract_tx(self.address, &DUMMYTRIGGER, args)?;
         let addr = create_address(self.address, *nonce);
         *nonce += 1;
@@ -340,13 +343,15 @@ impl SetAdmin {
         nonce: &mut u64,
     ) -> Result<TxEnv> {
         let call_data = self
-            .manager_contract
+            .manager
             .as_ref()
             .unwrap()
+            .contract
+            .as_ref()
             .encode_function("createSet", args)?;
         let tx = build_call_contract_txenv(
             self.address,
-            self.manager_address.unwrap().into(),
+            self.manager.as_ref().unwrap().address.into(),
             call_data,
             None,
             None,
