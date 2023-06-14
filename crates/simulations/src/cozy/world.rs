@@ -11,13 +11,14 @@ use crate::cozy::EvmAddress;
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
     pub protocol_contracts: HashMap<Cow<'static, str>, Arc<CozyProtocolContract>>,
-    pub sets: HashMap<Cow<'static, str>, Arc<CozySet>>,
+    pub sets: HashMap<Cow<'static, str>, CozySet>,
 }
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
     AddToProtocolContracts(Cow<'static, str>, CozyProtocolContract),
     AddToSets(Cow<'static, str>, CozySet),
+    UpdateSetData(Cow<'static, str>, u128)
 }
 
 impl UpdateData for CozyUpdate {}
@@ -31,7 +32,11 @@ impl World for CozyWorld {
                     .insert(name.clone(), Arc::new(contract.clone()));
             }
             CozyUpdate::AddToSets(name, set) => {
-                self.sets.insert(name.clone(), Arc::new(set.clone()));
+                self.sets.insert(name.clone(), set.clone());
+            }
+            CozyUpdate::UpdateSetData(name, new_apy) => {
+                let set = self.sets.get_mut(name).unwrap();
+                set.update_apy(*new_apy);
             }
         }
         None
@@ -62,18 +67,18 @@ impl CozyProtocolContract {
 #[derive(Debug, Clone)]
 pub struct CozySet {
     pub address: EvmAddress,
-    pub current_apy: f64,
+    pub apy: u128,
 }
 
 impl CozySet {
     pub fn new(address: EvmAddress) -> Self {
         CozySet {
             address,
-            current_apy: 0.0,
+            apy: 0 as u128,
         }
     }
 
-    pub fn compute_current_apy() -> f64 {
-        0.0
+    pub fn update_apy(&mut self, new_apy: u128) {
+        self.apy = new_apy;
     }
 }
