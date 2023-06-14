@@ -66,6 +66,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
                 }
                 s.spawn(|| {
                     for update in receiver.iter() {
+                        println!("{:?}", update);
                         self.stepper.append(update);
                     }
                 });

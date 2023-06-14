@@ -12,7 +12,7 @@ use crate::cozy::{
     bindings_wrapper::*,
     types::CozyTokenDeployParams,
     utils::build_deploy_contract_tx,
-    world::{CozyUpdate, CozyWorld},
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EvmAddress,
 };
 
@@ -85,8 +85,7 @@ impl TokenDeployer {
         let dummy_token_addr = create_address(self.address, 0);
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             "DummyToken".into(),
-            dummy_token_addr,
-            dummy_token_contract,
+            CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
         )));
 
         Ok(())

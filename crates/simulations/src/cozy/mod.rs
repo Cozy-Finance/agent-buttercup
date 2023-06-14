@@ -25,7 +25,7 @@ use world::CozyWorld;
 
 use self::types::CozyTokenDeployParams;
 use crate::cozy::types::{
-    CozyMarketParamsConfig, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger,
+    CozyMarketParams, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger,
 };
 
 pub mod agents;
@@ -38,7 +38,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let mut rng = StdRng::seed_from_u64(88_u64);
 
     let world_state = CozyWorld::new();
-    let sim_state = SimState::new(Some(world_state));
+    let sim_state = SimState::new(world_state);
     let time_policy = Box::new(FixedTimePolicy::new(
         EvmU256::from(10),
         EvmU256::from(1200),
@@ -99,8 +99,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let state = sim_manager.stepper.sim_state();
     let weth_addr = state
         .world
-        .as_ref()
-        .unwrap()
         .protocol_contracts
         .get("Weth")
         .unwrap()
@@ -126,7 +124,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
                 rate_per_second: float_to_wad(0.8),
             },
         )],
-        market_params_configs: vec![CozyMarketParamsConfig {
+        market_params_configs: vec![CozyMarketParams {
             weight: 10000_u16,
             purchase_fee: 0_u16,
             sale_fee: 0_u16,
