@@ -67,3 +67,23 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
         Arc::new(contract),
     ))
 }
+
+pub struct Counter {
+    count: u64,
+}
+
+impl Counter {
+    pub fn new(start_value: u64) -> Counter {
+        Counter { count: start_value }
+    }
+
+    pub fn get_and_increment_count(&mut self) -> u64 {
+        let count: u64 = self.count;
+        self.count += 1;
+        count
+    }
+
+    pub fn increment(&mut self) {
+        self.count += 1;
+    }
+}
