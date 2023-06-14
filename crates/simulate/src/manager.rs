@@ -5,7 +5,6 @@ use std::{collections::HashMap, str::FromStr, thread};
 
 use crossbeam_channel::unbounded;
 use eyre::Result;
-use revm::primitives::AccountInfo;
 
 use crate::{
     agent::{

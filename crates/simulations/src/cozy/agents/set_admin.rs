@@ -10,7 +10,10 @@ use revm::primitives::{create_address, TxEnv};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::sim_contract::SimContract,
-    state::{update::SimUpdate, SimState},
+    state::{
+        update::{SimUpdate, SimUpdateResult},
+        SimState,
+    },
     utils::{build_call_contract_txenv, unpack_execution},
 };
 
@@ -36,8 +39,12 @@ pub struct SetAdminParams {
 
 pub struct SetAdmin {
     name: Option<Cow<'static, str>>,
-    pub address: EvmAddress,
+    address: EvmAddress,
     set_admin_params: SetAdminParams,
+    manager_address: Option<EvmAddress>,
+    manager_contract: Option<Arc<SimContract>>,
+    set_address: Option<EvmAddress>,
+    set_registered: bool,
 }
 
 impl SetAdmin {
@@ -50,6 +57,10 @@ impl SetAdmin {
             name,
             address,
             set_admin_params,
+            manager_address: None,
+            manager_contract: None,
+            set_address: None,
+            set_registered: false,
         }
     }
 }
@@ -68,6 +79,18 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         channel: AgentChannel<CozyUpdate>,
     ) {
         let mut nonce = 0 as u64;
+
+        let (manager_addr, manager_contract) = state
+            .world
+            .as_ref()
+            .ok_or(CozyAgentError::MissingWorldState)
+            .unwrap()
+            .protocol_contracts
+            .get("Manager")
+            .ok_or(CozyAgentError::UnregisteredAddress)
+            .unwrap();
+        self.manager_address = Some(*manager_addr);
+        self.manager_contract = Some(manager_contract.clone());
 
         let (jump_rate_addr, jump_rate_contract) = state
             .world
@@ -196,23 +219,44 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             channel.send(SimUpdate::Evm(tx));
         }
 
-        let (set_address, set_evm_tx) = self
+        let set_evm_tx = self
             .build_create_set_tx(state, create_set_args, &mut nonce)
             .expect("Error building create set tx.");
 
-        channel.send(SimUpdate::Bundle(
-            set_evm_tx,
-            CozyUpdate::AddToSets(format!("{:?}'s Set", self.name).into(), set_address),
-        ));
+        channel.send_with_tag(SimUpdate::Evm(set_evm_tx), "Set deployment".into());
     }
 
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
+    fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
+        let results = state
+            .update_results
+            .get(&self.address)
+            .expect("No set deployment results.")
+            .get("Set deployment")
+            .expect("No set deployment results.");
+        if let SimUpdateResult::Evm(evm_result) = results {
+            let evm_result = unpack_execution(evm_result.clone()).expect("Set deployment failed.");
+            let set_address: EthersAddress = self
+                .manager_contract
+                .as_ref()
+                .unwrap()
+                .decode_output("createSet", evm_result)
+                .unwrap();
+            self.set_address = Some(set_address.into());
+        }
+    }
 
     fn step(
         &mut self,
         _state: &SimState<CozyUpdate, CozyWorld>,
-        _channel: AgentChannel<CozyUpdate>,
+        channel: AgentChannel<CozyUpdate>,
     ) {
+        if !self.set_registered {
+            channel.send(SimUpdate::World(CozyUpdate::AddToSets(
+                format!("{:?}'s Set", self.name).into(),
+                self.address,
+            )));
+            self.set_registered = true;
+        }
     }
 
     fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
@@ -230,7 +274,7 @@ impl SetAdmin {
         let call_data = factory_contract.encode_function("deployModel", args)?;
         let tx =
             build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
-        let tx_result = unpack_execution(state.read_simulate_evm_tx(&tx))
+        let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
             .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
@@ -249,8 +293,8 @@ impl SetAdmin {
         let call_data = factory_contract.encode_function("deployModel", args)?;
         let tx =
             build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
-        let tx_result = unpack_execution(state.read_simulate_evm_tx(&tx))
-                .expect("Error simulating cost model deployment.");
+        let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
+            .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
 
@@ -268,8 +312,8 @@ impl SetAdmin {
         let call_data = factory_contract.encode_function("deployModel", args)?;
         let tx =
             build_call_contract_txenv(self.address, (*factory_addr).into(), call_data, None, None);
-        let tx_result = unpack_execution(state.read_simulate_evm_tx(&tx))
-                    .expect("Error simulating drip decay model deployment.");
+        let tx_result = unpack_execution(state.simulate_evm_tx_by_ref(&tx))
+            .expect("Error simulating drip decay model deployment.");
         let addr: EthersAddress = factory_contract.decode_output("deployModel", tx_result)?;
         *nonce += 1;
 
@@ -281,14 +325,7 @@ impl SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         nonce: &mut u64,
     ) -> Result<(EvmAddress, TxEnv)> {
-        let (manager_addr, _) = state
-            .world
-            .as_ref()
-            .ok_or(CozyAgentError::MissingWorldState)?
-            .protocol_contracts
-            .get("Manager")
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        let args = (EthersAddress::from(*manager_addr),);
+        let args = (EthersAddress::from(self.manager_address.unwrap()),);
         let (tx, _) = build_deploy_contract_tx(self.address, &DUMMYTRIGGER, args)?;
         let addr = create_address(self.address, *nonce);
         *nonce += 1;
@@ -301,19 +338,21 @@ impl SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         args: manager::CreateSetCall,
         nonce: &mut u64,
-    ) -> Result<(EvmAddress, TxEnv)> {
-        let (manager_addr, manager_contract) = state
-            .world
+    ) -> Result<TxEnv> {
+        let call_data = self
+            .manager_contract
             .as_ref()
-            .ok_or(CozyAgentError::MissingWorldState)?
-            .protocol_contracts
-            .get("Manager")
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
-        let call_data = manager_contract.encode_function("createSet", args)?;
-        let tx =
-            build_call_contract_txenv(self.address, (*manager_addr).into(), call_data, None, None);
+            .unwrap()
+            .encode_function("createSet", args)?;
+        let tx = build_call_contract_txenv(
+            self.address,
+            self.manager_address.unwrap().into(),
+            call_data,
+            None,
+            None,
+        );
 
         *nonce += 1;
-        Ok((EvmAddress::from(0).into(), tx))
+        Ok(tx)
     }
 }

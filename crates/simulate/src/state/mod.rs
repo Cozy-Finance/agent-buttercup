@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::HashMap, sync::RwLock};
 
 use eyre::Result;
 use revm::{
@@ -65,20 +65,22 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm.db.as_ref().expect("Db not initalized.")
     }
 
-    pub fn read_account_info(&self, address: Address) -> AccountInfo {
+    pub fn read_account_info_by_ref(&self, address: Address) -> AccountInfo {
         self.get_read_db()
             .basic(address)
             .expect("Db not initialized")
             .expect("Account not found")
     }
 
-    pub fn read_simulate_evm_tx(&self, tx: &TxEnv) -> ExecutionResult {
-        // This is probably inefficient and not the best way to do this.
-        // But agent's only have immutable ref to evm, but they need to update the evm.env.tx.
-        // And RefDbWrapper does not give you access to the transact().
-        let mut evm_cloned = self.evm.clone();
-        evm_cloned.env.tx = tx.clone();
-        match evm_cloned.transact_ref() {
+    pub fn simulate_evm_tx_by_ref(&self, tx: &TxEnv) -> ExecutionResult {
+        // Create a sim_evm with no db and cloned env (fairly cheap).
+        let mut sim_evm = EVM::with_env(self.evm.env.clone());
+        // Set sim_evm's db to a ref of the actual evm's db.
+        sim_evm.database(self.get_read_db());
+        // Update env to new tx.
+        sim_evm.env.tx = tx.clone();
+        // We can now use the sim_evm to simulate the tx without writing to db.
+        match sim_evm.transact_ref() {
             Ok(result_and_state) => result_and_state.result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
         }
