@@ -223,11 +223,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             )));
             self.set_registered = true;
         } else {
-            let x = self.compute_current_apy(state);
-            println!("{:?}", x);
-            channel.send(SimUpdate::World(CozyUpdate::AddToSets(
+            channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
                 format!("{:?}'s Set", self.name).into(),
-                CozySet::new(self.set_address.unwrap()),
+                self.compute_current_apy(state).unwrap()
             )));
         }
     }
