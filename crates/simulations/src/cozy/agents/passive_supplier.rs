@@ -19,18 +19,24 @@ use crate::cozy::{
 pub struct PassiveSupplier {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
-    cozyrouter: Option<Arc<CozyProtocolContract>>,
-    base_asset: Option<Arc<CozyProtocolContract>>,
+    cozyrouter: Arc<CozyProtocolContract>,
+    base_asset: Arc<CozyProtocolContract>,
     capital: EthersU256,
 }
 
 impl PassiveSupplier {
-    pub fn new(name: Option<Cow<'static, str>>, address: EvmAddress, capital: EthersU256) -> Self {
+    pub fn new(
+        name: Option<Cow<'static, str>>,
+        address: EvmAddress,
+        cozyrouter: Arc<CozyProtocolContract>,
+        base_asset: Arc<CozyProtocolContract>,
+        capital: EthersU256,
+    ) -> Self {
         Self {
             name,
             address,
-            cozyrouter: None,
-            base_asset: None,
+            cozyrouter,
+            base_asset,
             capital,
         }
     }
@@ -49,25 +55,6 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
-        self.cozyrouter = Some(
-            state
-                .world
-                .protocol_contracts
-                .get("CozyRouter")
-                .ok_or(CozyAgentError::UnregisteredAddress)
-                .unwrap()
-                .clone(),
-        );
-        self.base_asset = Some(
-            state
-                .world
-                .protocol_contracts
-                .get("DummyToken")
-                .ok_or(CozyAgentError::UnregisteredAddress)
-                .unwrap()
-                .clone(),
-        );
-
         channel.send(SimUpdate::Evm(
             self.build_max_approve_cozyrouter_tx().unwrap(),
         ))
@@ -89,11 +76,11 @@ impl PassiveSupplier {
     fn build_max_approve_cozyrouter_tx(&self) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.base_asset.as_ref().unwrap().address,
-            self.base_asset.as_ref().unwrap().contract.encode_function(
+            self.base_asset.as_ref().address,
+            self.base_asset.as_ref().contract.encode_function(
                 "approve",
                 (
-                    EthersAddress::from(self.cozyrouter.as_ref().unwrap().address),
+                    EthersAddress::from(self.cozyrouter.as_ref().address),
                     EthersU256::MAX,
                 ),
             )?,
@@ -105,10 +92,9 @@ impl PassiveSupplier {
     fn build_purchase_tx(&self, args: cozy_router::PurchaseCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("purchase", args)?,
             None,
@@ -122,10 +108,9 @@ impl PassiveSupplier {
     ) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("purchaseWithoutTransfer", args)?,
             None,
@@ -136,10 +121,9 @@ impl PassiveSupplier {
     fn cancel_protection(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("cancel", args)?,
             None,
@@ -150,10 +134,9 @@ impl PassiveSupplier {
     fn sell_protection(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("sell", args)?,
             None,
@@ -164,10 +147,9 @@ impl PassiveSupplier {
     fn claim_ptokens(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("claim", args)?,
             None,
@@ -178,10 +160,9 @@ impl PassiveSupplier {
     fn payout_protection(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            self.cozyrouter.as_ref().unwrap().address,
+            self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
-                .unwrap()
                 .contract
                 .encode_function("payout", args)?,
             None,

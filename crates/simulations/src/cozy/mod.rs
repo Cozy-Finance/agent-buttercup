@@ -12,8 +12,8 @@ pub use bindings::{
     cozy_protocol::shared_types::{MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
-use ethers::types::U256 as EthersU256;
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
+use ethers::types::{U128 as EthersU128, U256 as EthersU256};
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::U256 as EvmU256;
@@ -33,6 +33,7 @@ pub mod bindings_wrapper;
 pub mod types;
 pub mod utils;
 pub mod world;
+pub mod constants;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
     let mut rng = StdRng::seed_from_u64(88_u64);
@@ -97,12 +98,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     // Set admin.
     let state = sim_manager.stepper.sim_state();
-    let weth_addr = state
-        .world
-        .protocol_contracts
-        .get("Weth")
-        .unwrap()
-        .address;
+    let weth_addr = state.world.protocol_contracts.get("Weth").unwrap().address;
     let salt: Option<[u8; 32]> = Some(rand::random());
     let set_params = SetAdminParams {
         asset: EthersAddress::from(*weth_addr),
@@ -131,10 +127,16 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         }],
         salt,
     };
+
+    let sim_state = sim_manager.stepper.sim_state_writer();
+    let manager = sim_state.world.protocol_contracts.get("Manager");
+    let set_logic = sim_state.world.protocol_contracts.get("Set logic");
     let set_admin = Box::new(SetAdmin::new(
         Some("Set Admin".into()),
         EvmAddress::random_using(&mut rng),
         set_params,
+        manager.unwrap(),
+        set_logic.unwrap(),
     ));
     sim_manager.activate_agent(set_admin);
 

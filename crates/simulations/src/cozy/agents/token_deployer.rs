@@ -55,11 +55,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
 
     fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
-    fn step(
-        &mut self,
-        _state: &SimState<CozyUpdate, CozyWorld>,
-        _channel: AgentChannel<CozyUpdate>,
-    ) {
+    fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
     }
 
     fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}

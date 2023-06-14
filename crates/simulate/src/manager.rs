@@ -66,7 +66,6 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
                 }
                 s.spawn(|| {
                     for update in receiver.iter() {
-                        println!("{:?}", update);
                         self.stepper.append(update);
                     }
                 });
@@ -126,6 +125,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
 
         // Resolve activation step.
         new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
+
+        // Clear all results.
+        self.stepper.clear_all_results();
 
         // Adds agent to local data.
         self.agents.insert(id.clone(), new_agent);

@@ -1,4 +1,4 @@
-use crate::state::update::{UpdateData};
+use crate::state::update::UpdateData;
 
 pub trait World: Sync + Send + Clone {
     type WorldUpdateData: UpdateData;
