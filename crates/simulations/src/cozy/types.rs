@@ -2,6 +2,7 @@ pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     drip_decay_model_constant_factory,
 };
+use ethers::abi::Tokenize;
 
 #[derive(Debug, Clone)]
 pub enum CozySimCostModel {
@@ -24,4 +25,11 @@ pub struct CozyMarketParamsConfig {
     pub weight: u16,
     pub purchase_fee: u16,
     pub sale_fee: u16,
+}
+
+#[derive(Debug, Clone)]
+pub struct CozyTokenDeployParams {
+    pub name: String,
+    pub symbol: String,
+    pub decimals: u8,
 }
