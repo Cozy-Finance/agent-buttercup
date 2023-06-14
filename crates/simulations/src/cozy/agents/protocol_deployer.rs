@@ -184,13 +184,14 @@ impl ProtocolDeployer {
 
         // Initialize set logic.
         let empty_market_configs: Vec<MarketConfig> = vec![];
-        let (weth_addr, _) = state
+        let weth_addr = state
             .world
             .as_ref()
             .ok_or(CozyAgentError::MissingWorldState)?
             .protocol_contracts
             .get("Weth")
-            .ok_or(CozyAgentError::UnregisteredAddress)?;
+            .ok_or(CozyAgentError::UnregisteredAddress)?
+            .address;
         let weth_addr = EthersAddress::from(*weth_addr);
         let set_initialize_args = (
             EthersAddress::zero(),

@@ -57,7 +57,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     ));
     sim_manager.activate_agent(weth_deployer);
 
-    // Weth deployer.
+    // Token deployer.
     let token_deployer = Box::new(TokenDeployer::new(
         Some("Token Deployer".into()),
         EvmAddress::random_using(&mut rng),
@@ -97,13 +97,14 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     // Set admin.
     let state = sim_manager.stepper.sim_state();
-    let (weth_addr, _) = state
+    let weth_addr = state
         .world
         .as_ref()
         .unwrap()
         .protocol_contracts
         .get("Weth")
-        .unwrap();
+        .unwrap()
+        .address;
     let salt: Option<[u8; 32]> = Some(rand::random());
     let set_params = SetAdminParams {
         asset: EthersAddress::from(*weth_addr),
