@@ -3,8 +3,9 @@ use std::{borrow::Cow, collections::HashMap, sync::RwLock};
 use eyre::Result;
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
+    inspectors,
     primitives::{AccountInfo, Address, Env, ExecutionResult, TxEnv},
-    Database, EVM,
+    Database, Inspector, EVM,
 };
 use thiserror::Error;
 
@@ -12,7 +13,7 @@ use crate::{
     agent::agent_channel::AgentSimUpdate,
     state::{
         update::{SimUpdate, SimUpdateResult, UpdateData},
-        world::{World},
+        world::World,
     },
     time_policy::TimeEnv,
     utils::*,
@@ -39,6 +40,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     pub fn new(world: W) -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
+        evm.env.cfg.limit_contract_code_size = Some(0x10000000000); // This is a large contract size limit, beware!
         evm.database(db);
         SimState {
             evm,
@@ -96,6 +98,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// * `ExecutionResult` - The execution result of the transaction.
     pub fn execute_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
+        //let mut inspector = inspectors::CustomPrintTracer::default(); //creat the inspector
         match self.evm.transact_commit() {
             Ok(result) => result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
@@ -134,7 +137,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     pub fn clear_all_results(&mut self) {
-        self.update_results.clear()
+        self.update_results.clear();
     }
 
     pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {
