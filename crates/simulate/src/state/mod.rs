@@ -3,7 +3,7 @@ use std::{borrow::Cow, collections::HashMap, sync::RwLock};
 use eyre::Result;
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
-    primitives::{AccountInfo, Address, ExecutionResult, TxEnv},
+    primitives::{AccountInfo, Address, Env, ExecutionResult, TxEnv},
     Database, EVM,
 };
 use thiserror::Error;
@@ -12,7 +12,7 @@ use crate::{
     agent::agent_channel::AgentSimUpdate,
     state::{
         update::{SimUpdate, SimUpdateResult, UpdateData},
-        world::World,
+        world::{World},
     },
     time_policy::TimeEnv,
     utils::*,
@@ -28,31 +28,17 @@ pub enum SimStateError {
     EvmDbError,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct SimState<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub evm: EVM<CacheDB<EmptyDB>>,
-    pub world: Option<W>,
+    pub world: W,
     pub update_results: HashMap<EvmAddress, HashMap<Cow<'static, str>, SimUpdateResult<U>>>,
 }
 
-impl<U: UpdateData, W: World<WorldUpdateData = U>> Default for SimState<U, W> {
-    fn default() -> Self {
-        let mut evm = EVM::new();
-        let db = CacheDB::new(EmptyDB {});
-        evm.database(db);
-        SimState {
-            evm,
-            world: None,
-            update_results: HashMap::new(),
-        }
-    }
-}
-
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
-    pub fn new(world: Option<W>) -> Self {
+    pub fn new(world: W) -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
-        evm.env.cfg.limit_contract_code_size = Some(0x100000000000); // This is a large contract size limit, beware!
         evm.database(db);
         SimState {
             evm,
@@ -65,16 +51,17 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm.db.as_ref().expect("Db not initalized.")
     }
 
-    pub fn read_account_info_by_ref(&self, address: Address) -> AccountInfo {
+    pub fn read_account_info_ref(&self, address: Address) -> AccountInfo {
         self.get_read_db()
             .basic(address)
             .expect("Db not initialized")
             .expect("Account not found")
     }
 
-    pub fn simulate_evm_tx_by_ref(&self, tx: &TxEnv) -> ExecutionResult {
-        // Create a sim_evm with no db and cloned env (fairly cheap).
-        let mut sim_evm = EVM::with_env(self.evm.env.clone());
+    pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
+        // Create a sim_evm with no db and cloned and/or passed env (fairly cheap).
+        let env = env.unwrap_or(self.evm.env.clone());
+        let mut sim_evm = EVM::with_env(env);
         // Set sim_evm's db to a ref of the actual evm's db.
         sim_evm.database(self.get_read_db());
         // Update env to new tx.
@@ -129,10 +116,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     pub fn execute_world_update(&mut self, update: &U) -> Option<U> {
-        match self.world {
-            Some(ref mut world) => world.execute(update),
-            _ => None,
-        }
+        self.world.execute(update)
     }
 
     pub fn insert_into_update_results(

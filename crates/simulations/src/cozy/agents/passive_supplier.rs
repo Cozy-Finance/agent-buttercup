@@ -12,15 +12,15 @@ use simulate::{
 
 use crate::cozy::{
     agents::errors::CozyAgentError,
-    world::{CozyContractData, CozyUpdate, CozyWorld},
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmAddress,
 };
 
 pub struct PassiveSupplier {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
-    cozyrouter: Option<CozyContractData>,
-    base_asset: Option<CozyContractData>,
+    cozyrouter: Option<Arc<CozyProtocolContract>>,
+    base_asset: Option<Arc<CozyProtocolContract>>,
     capital: EthersU256,
 }
 
@@ -47,14 +47,11 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
     fn activation_step(
         &mut self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        _channel: AgentChannel<CozyUpdate>,
+        channel: AgentChannel<CozyUpdate>,
     ) {
         self.cozyrouter = Some(
             state
                 .world
-                .as_ref()
-                .ok_or(CozyAgentError::MissingWorldState)
-                .unwrap()
                 .protocol_contracts
                 .get("CozyRouter")
                 .ok_or(CozyAgentError::UnregisteredAddress)
@@ -64,15 +61,16 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         self.base_asset = Some(
             state
                 .world
-                .as_ref()
-                .ok_or(CozyAgentError::MissingWorldState)
-                .unwrap()
                 .protocol_contracts
                 .get("DummyToken")
                 .ok_or(CozyAgentError::UnregisteredAddress)
                 .unwrap()
                 .clone(),
         );
+
+        channel.send(SimUpdate::Evm(
+            self.build_max_approve_cozyrouter_tx().unwrap(),
+        ))
     }
 
     fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
@@ -88,7 +86,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 }
 
 impl PassiveSupplier {
-    fn max_approve_router(&self) -> Result<TxEnv> {
+    fn build_max_approve_cozyrouter_tx(&self) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.base_asset.as_ref().unwrap().address,
@@ -112,7 +110,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("purchase", args)?,
             None,
             None,
@@ -130,7 +127,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("purchaseWithoutTransfer", args)?,
             None,
             None,
@@ -145,7 +141,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("cancel", args)?,
             None,
             None,
@@ -160,7 +155,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("sell", args)?,
             None,
             None,
@@ -175,7 +169,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("claim", args)?,
             None,
             None,
@@ -190,7 +183,6 @@ impl PassiveSupplier {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("payout", args)?,
             None,
             None,

@@ -22,12 +22,6 @@ pub struct SimStepper<U: UpdateData, W: World<WorldUpdateData = U>> {
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimStepper<U, W> {
-    pub fn new_from_default() -> Self {
-        // Initializes SimState<U> to its default.
-        let (write, read) = left_right::new::<SimState<U, W>, AgentSimUpdate<U>>();
-        SimStepper { read, write }
-    }
-
     pub fn new_from_current_state(sim_state: SimState<U, W>) -> Self {
         // Clones SimState<U>.
         let (write, read) =

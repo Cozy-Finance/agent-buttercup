@@ -12,15 +12,15 @@ use simulate::{
 
 use crate::cozy::{
     agents::errors::CozyAgentError,
-    world::{CozyContractData, CozyUpdate, CozyWorld},
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmAddress,
 };
 
 pub struct PassiveBuyer {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
-    cozyrouter: Option<CozyContractData>,
-    base_asset: Option<CozyContractData>,
+    cozyrouter: Option<Arc<CozyProtocolContract>>,
+    base_asset: Option<Arc<CozyProtocolContract>>,
     capital: EthersU256,
 }
 
@@ -52,9 +52,6 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         self.cozyrouter = Some(
             state
                 .world
-                .as_ref()
-                .ok_or(CozyAgentError::MissingWorldState)
-                .unwrap()
                 .protocol_contracts
                 .get("CozyRouter")
                 .ok_or(CozyAgentError::UnregisteredAddress)
@@ -64,9 +61,6 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         self.base_asset = Some(
             state
                 .world
-                .as_ref()
-                .ok_or(CozyAgentError::MissingWorldState)
-                .unwrap()
                 .protocol_contracts
                 .get("DummyToken")
                 .ok_or(CozyAgentError::UnregisteredAddress)
@@ -112,7 +106,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("purchase", args)?,
             None,
             None,
@@ -130,7 +123,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("purchaseWithoutTransfer", args)?,
             None,
             None,
@@ -145,7 +137,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("cancel", args)?,
             None,
             None,
@@ -160,7 +151,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("sell", args)?,
             None,
             None,
@@ -175,7 +165,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("claim", args)?,
             None,
             None,
@@ -190,7 +179,6 @@ impl PassiveBuyer {
                 .as_ref()
                 .unwrap()
                 .contract
-                .as_ref()
                 .encode_function("payout", args)?,
             None,
             None,
