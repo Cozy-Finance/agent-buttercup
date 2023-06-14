@@ -3,6 +3,7 @@ use std::error::Error;
 use agents::{
     protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams},
     set_admin::{SetAdmin, SetAdminParams},
+    token_deployer::TokenDeployer,
     weth_deployer::WethDeployer,
 };
 use bindings::cozy_protocol::shared_types::{Delays, Fees};
@@ -22,6 +23,7 @@ use simulate::{
 };
 use world::CozyWorld;
 
+use self::types::CozyTokenDeployParams;
 use crate::cozy::types::{
     CozyMarketParamsConfig, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger,
 };
@@ -54,6 +56,18 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EvmAddress::random_using(&mut rng),
     ));
     sim_manager.activate_agent(weth_deployer);
+
+    // Weth deployer.
+    let token_deployer = Box::new(TokenDeployer::new(
+        Some("Token Deployer".into()),
+        EvmAddress::random_using(&mut rng),
+        CozyTokenDeployParams {
+            name: "Random Dummy Token".to_string(),
+            symbol: "RDM".to_string(),
+            decimals: 16_u8,
+        },
+    ));
+    sim_manager.activate_agent(token_deployer);
 
     // Protocol deployer.
     let deploy_params = ProtocolDeployerParams {

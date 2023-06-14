@@ -7,10 +7,12 @@ use bindings::{
     cozy_models::metadata::*,
     cozy_protocol::metadata::*,
     cozy_router::*,
+    cozy_simulation::metadata::*,
     cozy_triggers::metadata::*,
     delay_lib::*,
     demand_side_lib::*,
     drip_decay_model_constant_factory::*,
+    dummy_token::*,
     dummy_trigger::*,
     manager::*,
     p_token::*,
@@ -177,5 +179,12 @@ lazy_static! {
         unlinked_bytecode: None,
         name: WETH9_NAME,
         path: WETH9_PATH
+    };
+    pub static ref DUMMYTOKEN: BindingsWrapper = BindingsWrapper {
+        abi: &DUMMYTOKEN_ABI,
+        bytecode: Some(&DUMMYTOKEN_BYTECODE),
+        unlinked_bytecode: None,
+        name: DUMMYTOKEN_NAME,
+        path: DUMMYTOKEN_PATH
     };
 }
