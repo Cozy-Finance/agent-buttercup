@@ -13,7 +13,7 @@ use simulate::{
 use super::errors::CozyAgentError;
 use crate::cozy::{
     bindings_wrapper::*,
-    utils::{build_deploy_contract_tx, build_unlinked_deploy_contract_tx},
+    utils::{build_deploy_contract_tx, build_unlinked_deploy_contract_tx, Counter},
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EvmAddress,
 };
@@ -28,7 +28,7 @@ pub struct ProtocolDeployerParams {
 pub struct ProtocolDeployer {
     pub name: Option<Cow<'static, str>>,
     pub address: EvmAddress,
-    deploy_params: ProtocolDeployerParams,
+    deploy_params: ProtocolDeployerParams
 }
 
 impl ProtocolDeployer {
@@ -40,7 +40,7 @@ impl ProtocolDeployer {
         Self {
             name,
             address,
-            deploy_params,
+            deploy_params
         }
     }
 }
@@ -58,12 +58,13 @@ impl Agent<CozyUpdate, CozyWorld> for ProtocolDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        let mut nonce_counter = Counter::new(0);
         // Deploy external libraries.
         let libraries = self
-            .deploy_libraries(state, &channel)
+            .deploy_libraries(state, &channel, &mut nonce_counter)
             .expect("Error deploying libraries.");
         // Deploy core protocol.
-        self.deploy_protocol(state, &channel, &libraries.clone())
+        self.deploy_protocol(state, &channel, &libraries.clone(), &mut nonce_counter)
             .expect("Error deploying protocol.");
     }
 
@@ -84,20 +85,20 @@ impl ProtocolDeployer {
         &self,
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: &AgentChannel<CozyUpdate>,
+        nonce_counter: &mut Counter
     ) -> Result<HashMap<EthersAddress, &BindingsWrapper>> {
         let mut libraries: HashMap<EthersAddress, &BindingsWrapper> = HashMap::new();
 
-        let current_nonce = 0;
-        let configurator_addr = EthersAddress::from(create_address(self.address, current_nonce));
-        let delay_lib_addr = EthersAddress::from(create_address(self.address, current_nonce + 1));
+        let configurator_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        let delay_lib_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let demandside_lib_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 2));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let redemption_lib_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 3));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let state_transitions_lib_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 4));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let supply_side_lib_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 5));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
 
         libraries.insert(configurator_addr, &CONFIGURATORLIB);
         libraries.insert(delay_lib_addr, &DELAYLIB);
@@ -134,20 +135,22 @@ impl ProtocolDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: &AgentChannel<CozyUpdate>,
         libraries: &HashMap<EthersAddress, &BindingsWrapper>,
+        nonce_counter: &mut Counter
     ) -> Result<()> {
         // Pre-compute Cozy protocol addresses
-        let current_nonce = libraries.len() as u64;
-        let manager_addr = EthersAddress::from(create_address(self.address, current_nonce));
-        let set_logic_addr = EthersAddress::from(create_address(self.address, current_nonce + 1));
-        // current_nonce + 2 is initialization of the Set logic.
-        let set_factory_addr = EthersAddress::from(create_address(self.address, current_nonce + 3));
+        let manager_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        let set_logic_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        // next nonce is initialization of the Set logic.
+        nonce_counter.increment();
+        let set_factory_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let ptoken_logic_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 4));
-        // current_nonce + 5 is initialization of the PToken logic.
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        // next nonce is initialization of the PToken logic.
+        nonce_counter.increment();
         let ptoken_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 6));
-        let backstop_addr = EthersAddress::from(create_address(self.address, current_nonce + 7));
-        let cozyrouter_addr = EthersAddress::from(create_address(self.address, current_nonce + 8));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        let backstop_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
+        let cozyrouter_addr = EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
 
         let mut evm_updates: Vec<SimUpdate<CozyUpdate>> = vec![];
         let mut world_updates: Vec<SimUpdate<CozyUpdate>> = vec![];
@@ -278,15 +281,15 @@ impl ProtocolDeployer {
         )));
 
         let jump_rate_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 9));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let dynamic_level_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 10));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let drip_decay_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 11));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let uma_trigger_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 12));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
         let chainlink_trigger_factory_addr =
-            EthersAddress::from(create_address(self.address, current_nonce + 13));
+            EthersAddress::from(create_address(self.address, nonce_counter.get_and_increment_count()));
 
         // Deploy cost model jump rate factory.
         let (jump_rate_factory_tx, jump_rate_factory_contract) =
