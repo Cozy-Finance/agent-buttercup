@@ -52,7 +52,7 @@ impl World for CozyWorld {
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
                 let set = self.sets.get_mut(name).unwrap();
-                set.update_apy(*new_apy);
+                set.apy = *new_apy;
             }
         }
         None
@@ -86,19 +86,17 @@ impl CozyProtocolContract {
 #[derive(Debug, Clone)]
 pub struct CozySet {
     pub address: EvmAddress,
+    pub trigger_lookup: HashMap<EvmAddress, u16>,
     pub apy: u128,
 }
 
 impl CozySet {
-    pub fn new(address: EvmAddress) -> Self {
+    pub fn new(address: EvmAddress, trigger_lookup: HashMap<EvmAddress, u16>) -> Self {
         CozySet {
             address,
+            trigger_lookup,
             apy: 0 as u128,
         }
-    }
-
-    pub fn update_apy(&mut self, new_apy: u128) {
-        self.apy = new_apy;
     }
 }
 
