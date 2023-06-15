@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, collections::HashMap};
 
 use ethers::abi::Tokenize;
 use eyre::Result;
@@ -6,6 +6,7 @@ use revm::primitives::create_address;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
+    utils::build_call_contract_txenv,
 };
 
 use crate::cozy::{
@@ -13,13 +14,15 @@ use crate::cozy::{
     types::CozyTokenDeployParams,
     utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EvmAddress,
+    EthersAddress, EthersU256, EvmAddress,
 };
 
 pub struct TokenDeployer {
     name: Option<Cow<'static, str>>,
     address: EvmAddress,
     deploy_args: CozyTokenDeployParams,
+    allocate_addresses: HashMap<EvmAddress, EthersU256>,
+    finished_allocating: bool,
 }
 
 impl TokenDeployer {
@@ -27,11 +30,14 @@ impl TokenDeployer {
         name: Option<Cow<'static, str>>,
         address: EvmAddress,
         deploy_args: CozyTokenDeployParams,
+        allocate_addresses: HashMap<EvmAddress, EthersU256>,
     ) -> Self {
         Self {
             name,
             address,
             deploy_args,
+            allocate_addresses,
+            finished_allocating: false,
         }
     }
 }
@@ -56,6 +62,11 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
     fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
+        if !self.finished_allocating {
+            self.allocate_token(state, channel)
+                .expect("Error allocating tokens");
+            self.finished_allocating = true;
+        }
     }
 
     fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
@@ -83,6 +94,24 @@ impl TokenDeployer {
             "DummyToken".into(),
             CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
         )));
+
+        Ok(())
+    }
+
+    fn allocate_token(
+        &mut self,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        channel: AgentChannel<CozyUpdate>,
+    ) -> Result<()> {
+        let token = state.world.protocol_contracts.get("DummyToken").unwrap();
+
+        for (receiver, amount) in self.allocate_addresses.iter() {
+            let call_data = token
+                .contract
+                .encode_function("mint", (EthersAddress::from(*receiver), *amount))?;
+            let tx = build_call_contract_txenv(self.address, token.address, call_data, None, None);
+            channel.send(SimUpdate::Evm(tx));
+        }
 
         Ok(())
     }
