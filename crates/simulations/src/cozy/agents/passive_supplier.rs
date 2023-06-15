@@ -5,14 +5,12 @@ use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
-    contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
     utils::{build_call_contract_txenv, unpack_execution},
 };
 
 use crate::cozy::{
-    agents::errors::CozyAgentError,
-    world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmAddress,
 };
 
@@ -28,15 +26,15 @@ impl PassiveSupplier {
     pub fn new(
         name: Option<Cow<'static, str>>,
         address: EvmAddress,
-        cozyrouter: Arc<CozyProtocolContract>,
-        token: Arc<CozyProtocolContract>,
+        cozyrouter: &Arc<CozyProtocolContract>,
+        token: &Arc<CozyProtocolContract>,
         capital: EthersU256,
     ) -> Self {
         Self {
             name,
             address,
-            cozyrouter,
-            token,
+            cozyrouter: cozyrouter.clone(),
+            token: token.clone(),
             capital,
         }
     }
@@ -55,12 +53,8 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
-        channel.send(SimUpdate::Evm(
-            self.build_max_approve_cozyrouter_tx().unwrap(),
-        ));
+        channel.send(SimUpdate::Evm(self.build_max_approve_router_tx().unwrap()));
     }
-
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if self.capital > EthersU256::from(0) {
@@ -82,6 +76,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
         self.capital = self.get_token_balance(state).unwrap();
+        println!("{:?}", self.capital);
     }
 }
 
@@ -102,7 +97,7 @@ impl PassiveSupplier {
         Ok(balance)
     }
 
-    fn build_max_approve_cozyrouter_tx(&self) -> Result<TxEnv> {
+    fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,

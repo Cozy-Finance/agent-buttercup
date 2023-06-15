@@ -174,11 +174,6 @@ impl ProtocolDeployer {
         let set_logic_args = (manager_addr, ptoken_factory_addr, backstop_addr);
         let (set_logic_tx, set_logic_contract) =
             build_unlinked_deploy_contract_tx(self.address, &SET, &libraries, set_logic_args)?;
-        evm_updates.push(SimUpdate::Evm(set_logic_tx));
-        world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            SET.name.into(),
-            CozyProtocolContract::new(set_logic_addr.into(), set_logic_contract.clone()),
-        )));
 
         // Initialize set logic.
         let empty_market_configs: Vec<MarketConfig> = vec![];
@@ -209,6 +204,12 @@ impl ProtocolDeployer {
             None,
             None,
         );
+
+        evm_updates.push(SimUpdate::Evm(set_logic_tx));
+        world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
+            SET.name.into(),
+            CozyProtocolContract::new(set_logic_addr.into(), set_logic_contract),
+        )));
         evm_updates.push(SimUpdate::Evm(set_initialize_tx));
 
         // Deploy set factory.
@@ -225,11 +226,6 @@ impl ProtocolDeployer {
         let ptoken_logic_args = (manager_addr,);
         let (ptoken_logic_tx, ptoken_logic_contract) =
             build_deploy_contract_tx(self.address, &PTOKEN, ptoken_logic_args)?;
-        evm_updates.push(SimUpdate::Evm(ptoken_logic_tx));
-        world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            PTOKEN.name.into(),
-            CozyProtocolContract::new(ptoken_logic_addr.into(), ptoken_logic_contract.clone()),
-        )));
 
         // Initialize ptoken logic.
         let ptoken_initialize_args = (EthersAddress::zero(), EthersAddress::zero(), 0_u8);
@@ -243,6 +239,12 @@ impl ProtocolDeployer {
             None,
             None,
         );
+
+        evm_updates.push(SimUpdate::Evm(ptoken_logic_tx));
+        world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
+            PTOKEN.name.into(),
+            CozyProtocolContract::new(ptoken_logic_addr.into(), ptoken_logic_contract),
+        )));
         evm_updates.push(SimUpdate::Evm(ptoken_initialize_tx));
 
         // Deploy ptoken factory.

@@ -5,11 +5,13 @@ use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
     contract::{sim_contract::SimContract, utils as contract_utils},
-    utils::build_deploy_contract_txenv,
+    utils::{build_call_contract_txenv, build_deploy_contract_txenv},
 };
 use thiserror::Error;
 
-use crate::cozy::{bindings_wrapper::*, EthersAddress, EthersBytes, EvmAddress};
+use crate::cozy::{
+    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes, EvmAddress,
+};
 
 #[derive(Error, Debug)]
 pub enum DeploymentError {
@@ -65,5 +67,23 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
     Ok((
         build_deploy_contract_txenv(agent_address, bytecode, None, None),
         contract,
+    ))
+}
+
+pub fn build_call_protocol_contract_tx<T: Tokenize>(
+    agent_address: EvmAddress,
+    contract_data: &Arc<CozyProtocolContract>,
+    func_name: &str,
+    args: T,
+) -> Result<TxEnv> {
+    Ok(build_call_contract_txenv(
+        agent_address,
+        contract_data.as_ref().address,
+        contract_data
+            .as_ref()
+            .contract
+            .encode_function(func_name, args)?,
+        None,
+        None,
     ))
 }

@@ -55,9 +55,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
-        channel.send(SimUpdate::Evm(
-            self.build_max_approve_cozyrouter_tx().unwrap(),
-        ))
+        channel.send(SimUpdate::Evm(self.build_max_approve_router_tx().unwrap()))
     }
 
     fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
@@ -73,7 +71,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 }
 
 impl PassiveBuyer {
-    fn build_max_approve_cozyrouter_tx(&self) -> Result<TxEnv> {
+    fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.base_asset.as_ref().address,
@@ -102,7 +100,7 @@ impl PassiveBuyer {
         ))
     }
 
-    fn purchase_protection_without_transfer(
+    fn build_purchase_without_transfer_tx(
         &self,
         args: cozy_router::PurchaseWithoutTransferCall,
     ) -> Result<TxEnv> {
@@ -118,7 +116,7 @@ impl PassiveBuyer {
         ))
     }
 
-    fn cancel_protection(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
+    fn build_cancel_tx(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.cozyrouter.as_ref().address,
@@ -131,7 +129,7 @@ impl PassiveBuyer {
         ))
     }
 
-    fn sell_protection(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
+    fn build_sell_tx(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.cozyrouter.as_ref().address,
@@ -144,7 +142,7 @@ impl PassiveBuyer {
         ))
     }
 
-    fn claim_ptokens(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
+    fn build_claim_tx(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.cozyrouter.as_ref().address,
@@ -157,7 +155,7 @@ impl PassiveBuyer {
         ))
     }
 
-    fn payout_protection(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
+    fn build_payout_tx(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
             self.cozyrouter.as_ref().address,

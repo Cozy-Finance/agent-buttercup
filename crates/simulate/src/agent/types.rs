@@ -5,7 +5,7 @@ use std::{
 
 use revm::primitives::{Address as EvmAddress, U256 as EvmU256};
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, Clone)]
 pub struct AgentId {
     pub address: EvmAddress,
     pub name: Option<Cow<'static, str>>,
@@ -16,6 +16,13 @@ impl Hash for AgentId {
         self.address.hash(state);
     }
 }
+
+impl PartialEq for AgentId {
+    fn eq(&self, other: &Self) -> bool {
+        self.address == other.address
+    }
+}
+impl Eq for AgentId {}
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone)]
 pub struct AgentTxGas {
