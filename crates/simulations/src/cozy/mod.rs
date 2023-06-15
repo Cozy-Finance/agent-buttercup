@@ -160,7 +160,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     ));
     sim_manager.activate_agent(triggers_deployer);
 
-
     let supplier_addr = EvmAddress::random_using(&mut rng);
     let supplier_addr2 = EvmAddress::random_using(&mut rng);
     let mut allocate_addrs = HashMap::new();
@@ -178,11 +177,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     ));
     sim_manager.activate_agent(token_deployer);
 
-
-    let world = sim_manager
-        .stepper
-        .sim_state_writer()
-        .world;
+    let world = sim_manager.stepper.sim_state_writer().world;
     let protocol_contracts = sim_manager
         .stepper
         .sim_state_writer()
@@ -194,19 +189,15 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let drip_decay_model_addr = world.drip_decay_models.get("Basic").unwrap().address;
     let dummy_token_addr = protocol_contracts.get(DUMMYTOKEN.name).unwrap().address;
 
-
-
     let salt: Option<[u8; 32]> = Some(rand::random());
-    let market_configs = vec![
-        MarketConfig {
-            trigger: trigger_addr.into(),
-            cost_model: cost_model_addr.into(),
-            drip_decay_model: drip_decay_model_addr.into(),
-            weight: 10000_u16,
-            purchase_fee: 0_u16,
-            sale_fee: 0_u16,
-        }
-    ];
+    let market_configs = vec![MarketConfig {
+        trigger: trigger_addr.into(),
+        cost_model: cost_model_addr.into(),
+        drip_decay_model: drip_decay_model_addr.into(),
+        weight: 10000_u16,
+        purchase_fee: 0_u16,
+        sale_fee: 0_u16,
+    }];
 
     let set_params = SetAdminParams {
         asset: EthersAddress::from(*dummy_token_addr),
@@ -218,32 +209,32 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         salt,
     };
 
-        let set_admin = Box::new(SetAdmin::new(
-            Some(SET_ADMIN.into()),
-            EvmAddress::random_using(&mut rng),
-            set_params,
-            protocol_contracts.get(SET.name).unwrap(),
-            protocol_contracts.get(MANAGER.name).unwrap(),
-        ));
-        sim_manager.activate_agent(set_admin);
+    let set_admin = Box::new(SetAdmin::new(
+        Some(SET_ADMIN.into()),
+        EvmAddress::random_using(&mut rng),
+        set_params,
+        protocol_contracts.get(SET.name).unwrap(),
+        protocol_contracts.get(MANAGER.name).unwrap(),
+    ));
+    sim_manager.activate_agent(set_admin);
 
-        let passive_supplier = Box::new(PassiveSupplier::new(
-            Some(PASSIVE_SUPPLIER.into()),
-            supplier_addr,
-            protocol_contracts.get(COZYROUTER.name).unwrap(),
-            protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
-            EthersU256::from(90000),
-        ));
-        sim_manager.activate_agent(passive_supplier);
+    let passive_supplier = Box::new(PassiveSupplier::new(
+        Some(PASSIVE_SUPPLIER.into()),
+        supplier_addr,
+        protocol_contracts.get(COZYROUTER.name).unwrap(),
+        protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+        EthersU256::from(90000),
+    ));
+    sim_manager.activate_agent(passive_supplier);
 
-        let passive_supplier2 = Box::new(PassiveSupplier::new(
-            Some((PASSIVE_SUPPLIER.to_owned() + "te").into()),
-            supplier_addr2,
-            protocol_contracts.get(COZYROUTER.name).unwrap(),
-            protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
-            EthersU256::from(77),
-        ));
-        sim_manager.activate_agent(passive_supplier2);
+    let passive_supplier2 = Box::new(PassiveSupplier::new(
+        Some((PASSIVE_SUPPLIER.to_owned() + "te").into()),
+        supplier_addr2,
+        protocol_contracts.get(COZYROUTER.name).unwrap(),
+        protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+        EthersU256::from(77),
+    ));
+    sim_manager.activate_agent(passive_supplier2);
 
     sim_manager.run_sim();
     Ok(())
