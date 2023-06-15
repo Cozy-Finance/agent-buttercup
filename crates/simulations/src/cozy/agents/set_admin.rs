@@ -1,4 +1,4 @@
-use std::{borrow::Cow, sync::Arc};
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
@@ -91,9 +91,17 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         self.set_address = Some(set_addr);
         self.set_name = Some(format!("{:?}'s Set", self.name));
 
+        let trigger_lookup = self
+            .set_admin_params
+            .market_configs
+            .iter()
+            .enumerate()
+            .map(|(i, config)| (config.trigger.into(), i as u16))
+            .collect::<HashMap<_, _>>();
+
         let world_update = CozyUpdate::AddToSets(
             self.set_name.clone().unwrap().into(),
-            CozySet::new(self.set_address.unwrap()),
+            CozySet::new(self.set_address.unwrap(), trigger_lookup),
         );
 
         channel.send(SimUpdate::Bundle(evm_tx, world_update));

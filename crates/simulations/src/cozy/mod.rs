@@ -27,8 +27,8 @@ use world::CozyWorld;
 use self::{
     agents::{
         cost_models_deployer::CostModelsDeployer,
-        drip_decay_models_deployer::DripDecayModelsDeployer, passive_supplier::PassiveSupplier,
-        triggers_deployer::TriggersDeployer,
+        drip_decay_models_deployer::DripDecayModelsDeployer, passive_buyer::PassiveBuyer,
+        passive_supplier::PassiveSupplier, triggers_deployer::TriggersDeployer,
     },
     bindings_wrapper::MANAGER,
     constants::{DUMMYTOKEN_DEPLOYER, PASSIVE_SUPPLIER, SET_ADMIN, WETH_DEPLOYER},
@@ -55,7 +55,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EvmU256::from(1200),
         12_u64,
         10_u64,
-        Some(50_u64),
+        Some(500_u64),
         None,
     )?);
 
@@ -162,9 +162,14 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     let supplier_addr = EvmAddress::random_using(&mut rng);
     let supplier_addr2 = EvmAddress::random_using(&mut rng);
+    let buyer_addr = EvmAddress::random_using(&mut rng);
+    let buyer_addr2 = EvmAddress::random_using(&mut rng);
+
     let mut allocate_addrs = HashMap::new();
     allocate_addrs.insert(supplier_addr, EthersU256::from(88));
     allocate_addrs.insert(supplier_addr2, EthersU256::from(880000000));
+    allocate_addrs.insert(buyer_addr, EthersU256::from(99999));
+    allocate_addrs.insert(buyer_addr2, EthersU256::from(99999));
     let token_deployer = Box::new(TokenDeployer::new(
         Some(DUMMYTOKEN_DEPLOYER.into()),
         EvmAddress::random_using(&mut rng),
@@ -235,6 +240,28 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EthersU256::from(77),
     ));
     sim_manager.activate_agent(passive_supplier2);
+
+    let passive_buyer = Box::new(PassiveBuyer::new(
+        Some(PASSIVE_BUYER.into()),
+        buyer_addr,
+        protocol_contracts.get(COZYROUTER.name).unwrap(),
+        protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+        vec![trigger_addr],
+        vec![EthersU256::from(900)],
+        EthersU256::from(900000000),
+    ));
+    sim_manager.activate_agent(passive_buyer);
+
+    let passive_buyer2 = Box::new(PassiveBuyer::new(
+        Some((PASSIVE_BUYER.to_owned() + "2").into()),
+        buyer_addr2,
+        protocol_contracts.get(COZYROUTER.name).unwrap(),
+        protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+        vec![trigger_addr],
+        vec![EthersU256::from(100)],
+        EthersU256::from(100000000),
+    ));
+    sim_manager.activate_agent(passive_buyer2);
 
     sim_manager.run_sim();
     Ok(())
