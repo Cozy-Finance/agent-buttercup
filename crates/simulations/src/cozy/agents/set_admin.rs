@@ -121,7 +121,6 @@ impl SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         args: manager::CreateSetCall,
     ) -> Result<(EvmAddress, TxEnv)> {
-        println!("{:?}", args);
         let call_data = self.manager.contract.encode_function("createSet", args)?;
         let tx = build_call_contract_txenv(
             self.address,
