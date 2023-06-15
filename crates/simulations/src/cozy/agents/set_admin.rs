@@ -18,6 +18,7 @@ use simulate::{
     utils::{build_call_contract_txenv, unpack_execution},
 };
 
+pub use crate::cozy::constants;
 use crate::cozy::{
     agents::errors::CozyAgentError,
     bindings_wrapper::*,
@@ -87,21 +88,21 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         let jump_rate = state
             .world
             .protocol_contracts
-            .get("CostModelJumpRateFactory")
+            .get(COSTMODELJUMPRATEFACTORY.name)
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
 
         let dynamic_level = state
             .world
             .protocol_contracts
-            .get("CostModelDynamicLevelFactory")
+            .get(COSTMODELDYNAMICLEVELFACTORY.name)
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
 
         let drip_decay = state
             .world
             .protocol_contracts
-            .get("DripDecayFactory")
+            .get(DRIPDECAYMODELCONSTANTFACTORY.name)
             .ok_or(CozyAgentError::UnregisteredAddress)
             .unwrap();
 
@@ -196,7 +197,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .build_create_set_tx(state, create_set_args, &mut nonce)
             .expect("Error building create set tx.");
 
-        channel.send_with_tag(SimUpdate::Evm(set_evm_tx), "Set deployment".into());
+        channel.send_with_tag(SimUpdate::Evm(set_evm_tx), constants::SET_DEPLOYMENT.into());
     }
 
     fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
@@ -204,7 +205,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .update_results
             .get(&self.address)
             .expect("No set deployment results.")
-            .get("Set deployment")
+            .get(constants::SET_DEPLOYMENT)
             .expect("No set deployment results.");
         if let SimUpdateResult::Evm(evm_result) = results {
             let evm_result = unpack_execution(evm_result.clone()).expect("Set deployment failed.");

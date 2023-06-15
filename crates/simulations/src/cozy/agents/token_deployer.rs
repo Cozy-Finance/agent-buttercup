@@ -91,7 +91,7 @@ impl TokenDeployer {
 
         let dummy_token_addr = create_address(self.address, 0);
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "DummyToken".into(),
+            DUMMYTOKEN.name.into(),
             CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
         )));
 
@@ -103,7 +103,7 @@ impl TokenDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let token = state.world.protocol_contracts.get("DummyToken").unwrap();
+        let token = state.world.protocol_contracts.get(DUMMYTOKEN.name).unwrap();
 
         for (receiver, amount) in self.allocate_addresses.iter() {
             let call_data = token

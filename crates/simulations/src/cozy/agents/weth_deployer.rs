@@ -65,7 +65,7 @@ impl WethDeployer {
 
         let weth_addr = create_address(self.address, 0);
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Weth".into(),
+            WETH.name.into(),
             CozyProtocolContract::new(weth_addr, weth_contract),
         )));
 
