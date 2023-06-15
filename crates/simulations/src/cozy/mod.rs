@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{collections::HashMap, error::Error};
 
 use agents::{
     protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams},
@@ -23,17 +23,17 @@ use simulate::{
 };
 use world::CozyWorld;
 
-use self::types::CozyTokenDeployParams;
+use self::{agents::passive_supplier::PassiveSupplier, types::CozyTokenDeployParams};
 use crate::cozy::types::{
     CozyMarketParams, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger,
 };
 
 pub mod agents;
 pub mod bindings_wrapper;
+pub mod constants;
 pub mod types;
 pub mod utils;
 pub mod world;
-pub mod constants;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
     let mut rng = StdRng::seed_from_u64(88_u64);
@@ -59,6 +59,10 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     sim_manager.activate_agent(weth_deployer);
 
     // Token deployer.
+    let supplier_addr = EvmAddress::random_using(&mut rng);
+    let mut allocate_addrs = HashMap::new();
+    allocate_addrs.insert(supplier_addr, EthersU256::from(88));
+
     let token_deployer = Box::new(TokenDeployer::new(
         Some("Token Deployer".into()),
         EvmAddress::random_using(&mut rng),
@@ -67,6 +71,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             symbol: "RDM".to_string(),
             decimals: 16_u8,
         },
+        allocate_addrs,
     ));
     sim_manager.activate_agent(token_deployer);
 
@@ -98,7 +103,12 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     // Set admin.
     let state = sim_manager.stepper.sim_state();
-    let weth_addr = state.world.protocol_contracts.get("Weth").unwrap().address;
+    let weth_addr = state
+        .world
+        .protocol_contracts
+        .get("DummyToken")
+        .unwrap()
+        .address;
     let salt: Option<[u8; 32]> = Some(rand::random());
     let set_params = SetAdminParams {
         asset: EthersAddress::from(*weth_addr),
@@ -131,6 +141,9 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let sim_state = sim_manager.stepper.sim_state_writer();
     let manager = sim_state.world.protocol_contracts.get("Manager");
     let set_logic = sim_state.world.protocol_contracts.get("Set logic");
+    let cozy_router = sim_state.world.protocol_contracts.get("CozyRouter");
+    let token = sim_state.world.protocol_contracts.get("DummyToken");
+
     let set_admin = Box::new(SetAdmin::new(
         Some("Set Admin".into()),
         EvmAddress::random_using(&mut rng),
@@ -139,6 +152,15 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         set_logic.unwrap(),
     ));
     sim_manager.activate_agent(set_admin);
+
+    let passive_supplier = Box::new(PassiveSupplier::new(
+        Some("Supplier".into()),
+        supplier_addr,
+        cozy_router.unwrap().clone(),
+        token.unwrap().clone(),
+        EthersU256::from(90000),
+    ));
+    sim_manager.activate_agent(passive_supplier);
 
     sim_manager.run_sim();
     Ok(())

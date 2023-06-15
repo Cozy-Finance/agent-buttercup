@@ -3,7 +3,8 @@ use std::{borrow::Cow, sync::Arc};
 use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
-    drip_decay_model_constant_factory, manager, set::{MarketsReturn, AccountingReturn}
+    drip_decay_model_constant_factory, manager,
+    set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
 use revm::primitives::{create_address, Env, TxEnv};
@@ -20,10 +21,11 @@ use simulate::{
 use crate::cozy::{
     agents::errors::CozyAgentError,
     bindings_wrapper::*,
+    constants::SECONDS_IN_YEAR,
     types::{CozyMarketParams, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger},
     utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU128, EthersU256, EvmAddress, EvmBytes, constants::SECONDS_IN_YEAR,
+    EthersAddress, EthersU128, EthersU256, EvmAddress, EvmBytes,
 };
 
 #[derive(Debug, Clone)]
@@ -225,7 +227,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         } else {
             channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
                 format!("{:?}'s Set", self.name).into(),
-                self.compute_current_apy(state).unwrap()
+                self.compute_current_apy(state).unwrap(),
             )));
         }
     }
@@ -372,10 +374,7 @@ impl SetAdmin {
         }
 
         // Get total assets.
-        let call_data = self
-            .set_logic
-            .contract
-            .encode_function("accounting", ())?;
+        let call_data = self.set_logic.contract.encode_function("accounting", ())?;
         let query = build_call_contract_txenv(
             self.address,
             self.set_address.unwrap(),

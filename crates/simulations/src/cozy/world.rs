@@ -18,7 +18,7 @@ pub struct CozyWorld {
 pub enum CozyUpdate {
     AddToProtocolContracts(Cow<'static, str>, CozyProtocolContract),
     AddToSets(Cow<'static, str>, CozySet),
-    UpdateSetData(Cow<'static, str>, u128)
+    UpdateSetData(Cow<'static, str>, u128),
 }
 
 impl UpdateData for CozyUpdate {}

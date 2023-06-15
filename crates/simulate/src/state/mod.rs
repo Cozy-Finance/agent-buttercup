@@ -98,7 +98,6 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// * `ExecutionResult` - The execution result of the transaction.
     pub fn execute_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
         self.evm.env.tx = tx.clone();
-        //let mut inspector = inspectors::CustomPrintTracer::default(); //creat the inspector
         match self.evm.transact_commit() {
             Ok(result) => result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
@@ -212,7 +211,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                     self.insert_into_update_results(
                         tag.clone(),
                         agent_update.address,
-                        SimUpdateResult::MultiBundle(true, sim_evm_results, vec![]),
+                        SimUpdateResult::MultiBundle(false, sim_evm_results, vec![]),
                     );
                 }
             }
