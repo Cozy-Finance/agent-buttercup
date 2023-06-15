@@ -7,6 +7,9 @@ pub static SECONDS_IN_YEAR: u128 = 365 * 24 * 3600;
 pub static SET_DEPLOYMENT: &str = "Set Deployment";
 
 // Agent names
+pub static COST_MODELS_DEPLOYER: &str = "Cost Models Deployer";
+pub static DRIP_DECAY_MODELS_DEPLOYER: &str = "Drip Decay Models Deployer";
+pub static TRIGGERS_DEPLOYER: &str = "Triggers Deployer";
 pub static WETH_DEPLOYER: &str = "wETH Deployer";
 pub static DUMMYTOKEN_DEPLOYER: &str = "Dummy Token Deployer";
 pub static PROTOCOL_DEPLOYER: &str = "Protocol Deployer";

@@ -12,6 +12,7 @@ pub use bindings::{
     cozy_protocol::shared_types::{MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
+pub use bindings_wrapper::*;
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
 use ethers::types::{U128 as EthersU128, U256 as EthersU256};
 use eyre::Result;
@@ -24,15 +25,16 @@ use simulate::{
 use world::CozyWorld;
 
 use self::{
-    agents::passive_supplier::PassiveSupplier,
+    agents::{
+        cost_models_deployer::CostModelsDeployer,
+        drip_decay_models_deployer::DripDecayModelsDeployer, passive_supplier::PassiveSupplier,
+        triggers_deployer::TriggersDeployer,
+    },
     bindings_wrapper::MANAGER,
     constants::{DUMMYTOKEN_DEPLOYER, PASSIVE_SUPPLIER, SET_ADMIN, WETH_DEPLOYER},
-    types::CozyTokenDeployParams,
+    types::{CozyCostModelType, CozyDripDecayModelType, CozyTokenDeployParams, CozyTriggerType},
 };
-use crate::cozy::{
-    constants::*,
-    types::{CozyMarketParams, CozySimCostModel, CozySimDripDecayModel, CozySimTrigger},
-};
+use crate::cozy::constants::*;
 
 pub mod agents;
 pub mod bindings_wrapper;
@@ -44,42 +46,29 @@ pub mod world;
 pub fn run() -> Result<(), Box<dyn Error>> {
     let mut rng = StdRng::seed_from_u64(88_u64);
 
+    // Create sim manager.
     let world_state = CozyWorld::new();
     let sim_state = SimState::new(world_state);
+
     let time_policy = Box::new(FixedTimePolicy::new(
         EvmU256::from(10),
         EvmU256::from(1200),
         12_u64,
         10_u64,
-        Some(5000_u64),
+        Some(50_u64),
         None,
     )?);
+
     let mut sim_manager = SimManager::new(sim_state, time_policy);
 
     // Create and activate agents.
+
     // Weth deployer.
     let weth_deployer = Box::new(WethDeployer::new(
         Some(WETH_DEPLOYER.into()),
         EvmAddress::random_using(&mut rng),
     ));
     sim_manager.activate_agent(weth_deployer);
-
-    // Token deployer.
-    let supplier_addr = EvmAddress::random_using(&mut rng);
-    let mut allocate_addrs = HashMap::new();
-    allocate_addrs.insert(supplier_addr, EthersU256::from(88));
-
-    let token_deployer = Box::new(TokenDeployer::new(
-        Some(DUMMYTOKEN_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
-        CozyTokenDeployParams {
-            name: "Random Dummy Token".to_string(),
-            symbol: "RDM".to_string(),
-            decimals: 16_u8,
-        },
-        allocate_addrs,
-    ));
-    sim_manager.activate_agent(token_deployer);
 
     // Protocol deployer.
     let deploy_params = ProtocolDeployerParams {
@@ -107,66 +96,154 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     ));
     sim_manager.activate_agent(protocol_deployer);
 
-    // Set admin.
-    let state = sim_manager.stepper.sim_state();
-    let weth_addr = state
+    let protocol_contracts = sim_manager
+        .stepper
+        .sim_state_writer()
         .world
-        .protocol_contracts
-        .get(DUMMYTOKEN.name)
-        .unwrap()
-        .address;
+        .protocol_contracts;
+
+    // Cost Models deployer
+    let mut cost_models = HashMap::new();
+    cost_models.insert(
+        "Basic".into(),
+        CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
+            kink: float_to_wad(0.8),
+            cost_factor_at_full_utilization: float_to_wad(0.95),
+            cost_factor_at_kink_utilization: float_to_wad(0.8),
+            cost_factor_at_zero_utilization: float_to_wad(0.01),
+        }),
+    );
+    let cost_models_deployer = Box::new(CostModelsDeployer::new(
+        Some(COST_MODELS_DEPLOYER.into()),
+        EvmAddress::random_using(&mut rng),
+        cost_models,
+        protocol_contracts
+            .get(COSTMODELJUMPRATEFACTORY.name)
+            .unwrap(),
+        protocol_contracts
+            .get(COSTMODELDYNAMICLEVELFACTORY.name)
+            .unwrap(),
+    ));
+    sim_manager.activate_agent(cost_models_deployer);
+
+    // Drip decay models deployer
+    let mut drip_decay_models = HashMap::new();
+    drip_decay_models.insert(
+        "Basic".into(),
+        CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
+            rate_per_second: float_to_wad(0.8),
+        }),
+    );
+
+    let drip_decay_models_deployer = Box::new(DripDecayModelsDeployer::new(
+        Some(DRIP_DECAY_MODELS_DEPLOYER.into()),
+        EvmAddress::random_using(&mut rng),
+        drip_decay_models,
+        protocol_contracts
+            .get(DRIPDECAYMODELCONSTANTFACTORY.name)
+            .unwrap(),
+    ));
+    sim_manager.activate_agent(drip_decay_models_deployer);
+
+    // Triggers deployer
+    let mut triggers = HashMap::new();
+    triggers.insert("Basic".into(), CozyTriggerType::DummyTrigger);
+    let triggers_deployer = Box::new(TriggersDeployer::new(
+        Some(TRIGGERS_DEPLOYER.into()),
+        EvmAddress::random_using(&mut rng),
+        triggers,
+        protocol_contracts.get(UMATRIGGERFACTORY.name).unwrap(),
+        protocol_contracts
+            .get(CHAINLINKTRIGGERFACTORY.name)
+            .unwrap(),
+        protocol_contracts.get(MANAGER.name).unwrap(),
+    ));
+    sim_manager.activate_agent(triggers_deployer);
+
+
+    let supplier_addr = EvmAddress::random_using(&mut rng);
+    let supplier_addr2 = EvmAddress::random_using(&mut rng);
+    let mut allocate_addrs = HashMap::new();
+    allocate_addrs.insert(supplier_addr, EthersU256::from(88));
+    allocate_addrs.insert(supplier_addr2, EthersU256::from(880000000));
+    let token_deployer = Box::new(TokenDeployer::new(
+        Some(DUMMYTOKEN_DEPLOYER.into()),
+        EvmAddress::random_using(&mut rng),
+        CozyTokenDeployParams {
+            name: "Random Dummy Token".to_string(),
+            symbol: "RDM".to_string(),
+            decimals: 16_u8,
+        },
+        allocate_addrs,
+    ));
+    sim_manager.activate_agent(token_deployer);
+
+
+    let world = sim_manager
+        .stepper
+        .sim_state_writer()
+        .world;
+    let protocol_contracts = sim_manager
+        .stepper
+        .sim_state_writer()
+        .world
+        .protocol_contracts;
+
+    let trigger_addr = world.triggers.get("Basic").unwrap().address;
+    let cost_model_addr = world.cost_models.get("Basic").unwrap().address;
+    let drip_decay_model_addr = world.drip_decay_models.get("Basic").unwrap().address;
+    let dummy_token_addr = protocol_contracts.get(DUMMYTOKEN.name).unwrap().address;
+
+
+
     let salt: Option<[u8; 32]> = Some(rand::random());
+    let market_configs = vec![
+        MarketConfig {
+            trigger: trigger_addr.into(),
+            cost_model: cost_model_addr.into(),
+            drip_decay_model: drip_decay_model_addr.into(),
+            weight: 10000_u16,
+            purchase_fee: 0_u16,
+            sale_fee: 0_u16,
+        }
+    ];
+
     let set_params = SetAdminParams {
-        asset: EthersAddress::from(*weth_addr),
+        asset: EthersAddress::from(*dummy_token_addr),
         set_config: SetConfig {
             leverage_factor: 10000_u32,
             deposit_fee: 0_u16,
         },
-        triggers: vec![CozySimTrigger::DummyTrigger],
-        cost_models: vec![CozySimCostModel::JumpRate(
-            cost_model_jump_rate_factory::DeployModelCall {
-                kink: float_to_wad(0.8),
-                cost_factor_at_full_utilization: float_to_wad(0.95),
-                cost_factor_at_kink_utilization: float_to_wad(0.8),
-                cost_factor_at_zero_utilization: float_to_wad(0.01),
-            },
-        )],
-        drip_decay_models: vec![CozySimDripDecayModel::Constant(
-            drip_decay_model_constant_factory::DeployModelCall {
-                rate_per_second: float_to_wad(0.8),
-            },
-        )],
-        market_params_configs: vec![CozyMarketParams {
-            weight: 10000_u16,
-            purchase_fee: 0_u16,
-            sale_fee: 0_u16,
-        }],
+        market_configs,
         salt,
     };
 
-    let sim_state = sim_manager.stepper.sim_state_writer();
-    let manager = sim_state.world.protocol_contracts.get(MANAGER.name);
-    let set_logic = sim_state.world.protocol_contracts.get(SET.name);
-    let cozy_router = sim_state.world.protocol_contracts.get(COZYROUTER.name);
-    let token = sim_state.world.protocol_contracts.get(DUMMYTOKEN.name);
+        let set_admin = Box::new(SetAdmin::new(
+            Some(SET_ADMIN.into()),
+            EvmAddress::random_using(&mut rng),
+            set_params,
+            protocol_contracts.get(SET.name).unwrap(),
+            protocol_contracts.get(MANAGER.name).unwrap(),
+        ));
+        sim_manager.activate_agent(set_admin);
 
-    let set_admin = Box::new(SetAdmin::new(
-        Some(SET_ADMIN.into()),
-        EvmAddress::random_using(&mut rng),
-        set_params,
-        manager.unwrap(),
-        set_logic.unwrap(),
-    ));
-    sim_manager.activate_agent(set_admin);
+        let passive_supplier = Box::new(PassiveSupplier::new(
+            Some(PASSIVE_SUPPLIER.into()),
+            supplier_addr,
+            protocol_contracts.get(COZYROUTER.name).unwrap(),
+            protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+            EthersU256::from(90000),
+        ));
+        sim_manager.activate_agent(passive_supplier);
 
-    let passive_supplier = Box::new(PassiveSupplier::new(
-        Some(PASSIVE_SUPPLIER.into()),
-        supplier_addr,
-        cozy_router.unwrap().clone(),
-        token.unwrap().clone(),
-        EthersU256::from(90000),
-    ));
-    sim_manager.activate_agent(passive_supplier);
+        let passive_supplier2 = Box::new(PassiveSupplier::new(
+            Some((PASSIVE_SUPPLIER.to_owned() + "te").into()),
+            supplier_addr2,
+            protocol_contracts.get(COZYROUTER.name).unwrap(),
+            protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
+            EthersU256::from(77),
+        ));
+        sim_manager.activate_agent(passive_supplier2);
 
     sim_manager.run_sim();
     Ok(())

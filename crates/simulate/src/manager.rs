@@ -4,7 +4,6 @@
 use std::{collections::HashMap, str::FromStr, thread};
 
 use crossbeam_channel::unbounded;
-use eyre::Result;
 
 use crate::{
     agent::{
@@ -98,11 +97,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
     pub fn activate_agent(
         &mut self,
         mut new_agent: Box<dyn Agent<U, W>>,
-    ) -> Result<(), ManagerError> {
+    ) -> Result<(), SimManagerError> {
         // Register agent account info.
         let id = new_agent.id();
         if self.agents.contains_key(&id) {
-            return Err(ManagerError::AddressCollision(id.address));
+            return Err(SimManagerError::AddressCollision(id));
         }
 
         self.stepper

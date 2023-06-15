@@ -59,8 +59,6 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
             .expect("Error deploying token.");
     }
 
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
-
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if !self.finished_allocating {
             self.allocate_token(state, channel)
@@ -68,8 +66,6 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
             self.finished_allocating = true;
         }
     }
-
-    fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
 impl TokenDeployer {

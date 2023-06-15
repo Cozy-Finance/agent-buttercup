@@ -41,17 +41,6 @@ impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
         self.deploy_weth(state, channel)
             .expect("Error deploying weth.");
     }
-
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
-
-    fn step(
-        &mut self,
-        _state: &SimState<CozyUpdate, CozyWorld>,
-        _channel: AgentChannel<CozyUpdate>,
-    ) {
-    }
-
-    fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
 impl WethDeployer {

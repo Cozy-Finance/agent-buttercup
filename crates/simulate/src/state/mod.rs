@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap, sync::RwLock};
+use std::{borrow::Cow, collections::HashMap};
 
 use eyre::Result;
 use revm::{
