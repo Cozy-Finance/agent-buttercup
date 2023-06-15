@@ -166,7 +166,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &MANAGER, manager_args)?;
         evm_updates.push(SimUpdate::Evm(manager_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Manager".into(),
+            MANAGER.name.into(),
             CozyProtocolContract::new(manager_addr.into(), manager_contract),
         )));
 
@@ -176,7 +176,7 @@ impl ProtocolDeployer {
             build_unlinked_deploy_contract_tx(self.address, &SET, &libraries, set_logic_args)?;
         evm_updates.push(SimUpdate::Evm(set_logic_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Set logic".into(),
+            SET.name.into(),
             CozyProtocolContract::new(set_logic_addr.into(), set_logic_contract.clone()),
         )));
 
@@ -185,7 +185,7 @@ impl ProtocolDeployer {
         let weth_addr = state
             .world
             .protocol_contracts
-            .get("Weth")
+            .get(WETH.name)
             .ok_or(CozyAgentError::UnregisteredAddress)?
             .address;
         let weth_addr = EthersAddress::from(*weth_addr);
@@ -217,7 +217,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &SETFACTORY, set_factory_args)?;
         evm_updates.push(SimUpdate::Evm(set_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Set factory".into(),
+            SETFACTORY.name.into(),
             CozyProtocolContract::new(set_factory_addr.into(), set_factory_contract),
         )));
 
@@ -227,7 +227,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &PTOKEN, ptoken_logic_args)?;
         evm_updates.push(SimUpdate::Evm(ptoken_logic_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Ptoken logic".into(),
+            PTOKEN.name.into(),
             CozyProtocolContract::new(ptoken_logic_addr.into(), ptoken_logic_contract.clone()),
         )));
 
@@ -251,7 +251,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &PTOKENFACTORY, ptoken_factory_args)?;
         evm_updates.push(SimUpdate::Evm(ptoken_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Ptoken factory".into(),
+            PTOKENFACTORY.name.into(),
             CozyProtocolContract::new(ptoken_factory_addr.into(), ptoken_factory_contract),
         )));
 
@@ -261,7 +261,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &BACKSTOP, backstop_args)?;
         evm_updates.push(SimUpdate::Evm(backstop_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Backstop".into(),
+            BACKSTOP.name.into(),
             CozyProtocolContract::new(backstop_addr.into(), backstop_contract),
         )));
 
@@ -271,7 +271,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &COZYROUTER, cozyrouter_args)?;
         evm_updates.push(SimUpdate::Evm(cozyrouter_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "CozyRouter".into(),
+            COZYROUTER.name.into(),
             CozyProtocolContract::new(cozyrouter_addr.into(), cozyrouter_contract),
         )));
 
@@ -291,7 +291,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &COSTMODELJUMPRATEFACTORY, ())?;
         evm_updates.push(SimUpdate::Evm(jump_rate_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "CostModelJumpRateFactory".into(),
+            COSTMODELJUMPRATEFACTORY.name.into(),
             CozyProtocolContract::new(jump_rate_factory_addr.into(), jump_rate_factory_contract),
         )));
 
@@ -300,7 +300,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &COSTMODELDYNAMICLEVELFACTORY, ())?;
         evm_updates.push(SimUpdate::Evm(dynamic_level_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "CostModelDynamicLevelFactory".into(),
+            COSTMODELDYNAMICLEVELFACTORY.name.into(),
             CozyProtocolContract::new(
                 dynamic_level_factory_addr.into(),
                 dynamic_level_factory_contract,
@@ -312,7 +312,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &DRIPDECAYMODELCONSTANTFACTORY, ())?;
         evm_updates.push(SimUpdate::Evm(drip_decay_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "DripDecayFactory".into(),
+            DRIPDECAYMODELCONSTANTFACTORY.name.into(),
             CozyProtocolContract::new(drip_decay_factory_addr.into(), drip_decay_factory_contract),
         )));
 
@@ -322,7 +322,7 @@ impl ProtocolDeployer {
             build_deploy_contract_tx(self.address, &UMATRIGGERFACTORY, uma_trigger_factory_args)?;
         evm_updates.push(SimUpdate::Evm(uma_trigger_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "UmaTriggerFactory".into(),
+            UMATRIGGERFACTORY.name.into(),
             CozyProtocolContract::new(
                 uma_trigger_factory_addr.into(),
                 uma_trigger_factory_contract,
@@ -339,7 +339,7 @@ impl ProtocolDeployer {
             )?;
         evm_updates.push(SimUpdate::Evm(chainlink_trigger_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "ChainlinkTriggerFactory".into(),
+            CHAINLINKTRIGGERFACTORY.name.into(),
             CozyProtocolContract::new(
                 chainlink_trigger_factory_addr.into(),
                 chainlink_trigger_factory_contract,
