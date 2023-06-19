@@ -1,4 +1,8 @@
-use std::{borrow::Cow, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use simulate::{
     contract::sim_contract::SimContract,
@@ -12,18 +16,18 @@ use crate::cozy::EvmAddress;
 pub struct CozyWorld {
     pub protocol_contracts: HashMap<Cow<'static, str>, Arc<CozyProtocolContract>>,
     pub sets: HashMap<Cow<'static, str>, CozySet>,
-    pub cost_models: HashMap<Cow<'static, str>, CozyCostModel>,
-    pub drip_decay_models: HashMap<Cow<'static, str>, CozyDripDecayModel>,
-    pub triggers: HashMap<Cow<'static, str>, CozyTrigger>,
+    pub cost_models: HashMap<Cow<'static, str>, Arc<CozyCostModel>>,
+    pub drip_decay_models: HashMap<Cow<'static, str>, Arc<CozyDripDecayModel>>,
+    pub triggers: HashMap<Cow<'static, str>, Arc<CozyTrigger>>,
 }
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
-    AddToProtocolContracts(Cow<'static, str>, CozyProtocolContract),
+    AddToProtocolContracts(Cow<'static, str>, Arc<CozyProtocolContract>),
     AddToSets(Cow<'static, str>, CozySet),
-    AddToCostModels(Cow<'static, str>, CozyCostModel),
-    AddToDripDecayModels(Cow<'static, str>, CozyDripDecayModel),
-    AddToTriggers(Cow<'static, str>, CozyTrigger),
+    AddToCostModels(Cow<'static, str>, Arc<CozyCostModel>),
+    AddToDripDecayModels(Cow<'static, str>, Arc<CozyDripDecayModel>),
+    AddToTriggers(Cow<'static, str>, Arc<CozyTrigger>),
     UpdateSetData(Cow<'static, str>, u128),
 }
 
@@ -35,7 +39,7 @@ impl World for CozyWorld {
         match update {
             CozyUpdate::AddToProtocolContracts(name, contract) => {
                 self.protocol_contracts
-                    .insert(name.clone(), Arc::new(contract.clone()));
+                    .insert(name.clone(), contract.clone());
             }
             CozyUpdate::AddToSets(name, set) => {
                 self.sets.insert(name.clone(), set.clone());
@@ -51,7 +55,7 @@ impl World for CozyWorld {
                 self.triggers.insert(name.clone(), trigger.clone());
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
-                let set = self.sets.get_mut(name).unwrap();
+                let mut set = self.sets.get_mut(name).unwrap();
                 set.apy = *new_apy;
             }
         }
@@ -78,8 +82,8 @@ pub struct CozyProtocolContract {
 }
 
 impl CozyProtocolContract {
-    pub fn new(address: EvmAddress, contract: SimContract) -> Self {
-        CozyProtocolContract { address, contract }
+    pub fn new(address: EvmAddress, contract: SimContract) -> Arc<Self> {
+        Arc::new(CozyProtocolContract { address, contract })
     }
 }
 
@@ -106,8 +110,8 @@ pub struct CozyCostModel {
 }
 
 impl CozyCostModel {
-    pub fn new(address: EvmAddress) -> Self {
-        CozyCostModel { address }
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyCostModel { address })
     }
 }
 
@@ -117,8 +121,8 @@ pub struct CozyDripDecayModel {
 }
 
 impl CozyDripDecayModel {
-    pub fn new(address: EvmAddress) -> Self {
-        CozyDripDecayModel { address }
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyDripDecayModel { address })
     }
 }
 
@@ -128,7 +132,7 @@ pub struct CozyTrigger {
 }
 
 impl CozyTrigger {
-    pub fn new(address: EvmAddress) -> Self {
-        CozyTrigger { address }
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyTrigger { address })
     }
 }
