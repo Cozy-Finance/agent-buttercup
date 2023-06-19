@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::EvmAddress;
+use crate::agent::types::AgentId;
 
 #[derive(Error, Debug)]
 pub enum ChannelError<T> {
@@ -9,7 +9,7 @@ pub enum ChannelError<T> {
 }
 
 #[derive(Error, Debug)]
-pub enum ManagerError {
-    #[error("collision in agent address: `{0}`")]
-    AddressCollision(EvmAddress),
+pub enum SimManagerError {
+    #[error("address collision for agent id: `{0:?}`")]
+    AddressCollision(AgentId),
 }

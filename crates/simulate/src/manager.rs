@@ -1,11 +1,9 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-use std::{collections::HashMap, thread};
+use std::{collections::HashMap, str::FromStr, thread};
 
 use crossbeam_channel::unbounded;
-use eyre::Result;
-use revm::primitives::AccountInfo;
 
 use crate::{
     agent::{
@@ -99,11 +97,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
     pub fn activate_agent(
         &mut self,
         mut new_agent: Box<dyn Agent<U, W>>,
-    ) -> Result<(), ManagerError> {
+    ) -> Result<(), SimManagerError> {
         // Register agent account info.
         let id = new_agent.id();
         if self.agents.contains_key(&id) {
-            return Err(ManagerError::AddressCollision(id.address));
+            return Err(SimManagerError::AddressCollision(id));
         }
 
         self.stepper
@@ -127,8 +125,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         // Resolve activation step.
         new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
 
+        // Clear all results.
+        self.stepper.clear_all_results();
+
         // Adds agent to local data.
-        self.agents.insert(id, new_agent);
+        self.agents.insert(id.clone(), new_agent);
 
         Ok(())
     }

@@ -3,8 +3,9 @@ use std::{borrow::Cow, collections::HashMap};
 use eyre::Result;
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
-    primitives::{AccountInfo, Address, ExecutionResult, TxEnv},
-    Database, EVM,
+    inspectors,
+    primitives::{AccountInfo, Address, Env, ExecutionResult, TxEnv},
+    Database, Inspector, EVM,
 };
 use thiserror::Error;
 
@@ -28,31 +29,18 @@ pub enum SimStateError {
     EvmDbError,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct SimState<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub evm: EVM<CacheDB<EmptyDB>>,
-    pub world: Option<W>,
+    pub world: W,
     pub update_results: HashMap<EvmAddress, HashMap<Cow<'static, str>, SimUpdateResult<U>>>,
 }
 
-impl<U: UpdateData, W: World<WorldUpdateData = U>> Default for SimState<U, W> {
-    fn default() -> Self {
-        let mut evm = EVM::new();
-        let db = CacheDB::new(EmptyDB {});
-        evm.database(db);
-        SimState {
-            evm,
-            world: None,
-            update_results: HashMap::new(),
-        }
-    }
-}
-
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
-    pub fn new(world: Option<W>) -> Self {
+    pub fn new(world: W) -> Self {
         let mut evm = EVM::new();
         let db = CacheDB::new(EmptyDB {});
-        evm.env.cfg.limit_contract_code_size = Some(0x100000000000); // This is a large contract size limit, beware!
+        evm.env.cfg.limit_contract_code_size = Some(0x10000000000); // This is a large contract size limit, beware!
         evm.database(db);
         SimState {
             evm,
@@ -65,20 +53,23 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm.db.as_ref().expect("Db not initalized.")
     }
 
-    pub fn read_account_info(&self, address: Address) -> AccountInfo {
+    pub fn read_account_info_ref(&self, address: Address) -> AccountInfo {
         self.get_read_db()
             .basic(address)
             .expect("Db not initialized")
             .expect("Account not found")
     }
 
-    pub fn read_simulate_evm_tx(&self, tx: &TxEnv) -> ExecutionResult {
-        // This is probably inefficient and not the best way to do this.
-        // But agent's only have immutable ref to evm, but they need to update the evm.env.tx.
-        // And RefDbWrapper does not give you access to the transact().
-        let mut evm_cloned = self.evm.clone();
-        evm_cloned.env.tx = tx.clone();
-        match evm_cloned.transact_ref() {
+    pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
+        // Create a sim_evm with no db and cloned and/or passed env (fairly cheap).
+        let env = env.unwrap_or(self.evm.env.clone());
+        let mut sim_evm = EVM::with_env(env);
+        // Set sim_evm's db to a ref of the actual evm's db.
+        sim_evm.database(self.get_read_db());
+        // Update env to new tx.
+        sim_evm.env.tx = tx.clone();
+        // We can now use the sim_evm to simulate the tx without writing to db.
+        match sim_evm.transact_ref() {
             Ok(result_and_state) => result_and_state.result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
         }
@@ -127,10 +118,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     pub fn execute_world_update(&mut self, update: &U) -> Option<U> {
-        match self.world {
-            Some(ref mut world) => world.execute(update),
-            _ => None,
-        }
+        self.world.execute(update)
     }
 
     pub fn insert_into_update_results(
@@ -148,7 +136,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     pub fn clear_all_results(&mut self) {
-        self.update_results.clear()
+        self.update_results.clear();
     }
 
     pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {
@@ -223,7 +211,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                     self.insert_into_update_results(
                         tag.clone(),
                         agent_update.address,
-                        SimUpdateResult::MultiBundle(true, sim_evm_results, vec![]),
+                        SimUpdateResult::MultiBundle(false, sim_evm_results, vec![]),
                     );
                 }
             }

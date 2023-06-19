@@ -19,7 +19,7 @@ forge install https://github.com/Cozy-Finance/cozy-simulation-contracts --no-com
 echo "Building contract artifacts ... "
 for d in ./contracts/*/ ; do (cd "$d" && [ -d "test" ] && mv "test" "test_ignore"); done
 for d in ./contracts/*/ ; do (cd "$d" && [ -d "script" ] && mv "script" "script_ignore"); done
-for d in ./contracts/*/ ; do (cd "$d" && FOUNDRY_PROFILE='default' forge build); done
+for d in ./contracts/*/ ; do (cd "$d" && FOUNDRY_PROFILE='default' forge build --revert-strings debug); done
 
 echo "Removing some artifacts ... "
 rm -r "contracts/cozy-protocol-v2/out/structs"

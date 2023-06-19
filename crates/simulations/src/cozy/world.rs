@@ -1,21 +1,34 @@
-use std::{borrow::Cow, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
-use ethers_contract::multicall_contract;
 use simulate::{
     contract::sim_contract::SimContract,
     state::{update::UpdateData, world::World},
 };
 
+use super::bindings_wrapper::{SET, SETFACTORY};
 use crate::cozy::EvmAddress;
 
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
-    pub protocol_contracts: HashMap<Cow<'static, str>, (EvmAddress, Arc<SimContract>)>,
+    pub protocol_contracts: HashMap<Cow<'static, str>, Arc<CozyProtocolContract>>,
+    pub sets: HashMap<Cow<'static, str>, CozySet>,
+    pub cost_models: HashMap<Cow<'static, str>, Arc<CozyCostModel>>,
+    pub drip_decay_models: HashMap<Cow<'static, str>, Arc<CozyDripDecayModel>>,
+    pub triggers: HashMap<Cow<'static, str>, Arc<CozyTrigger>>,
 }
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
-    AddToProtocolContracts(Cow<'static, str>, EvmAddress, Arc<SimContract>),
+    AddToProtocolContracts(Cow<'static, str>, Arc<CozyProtocolContract>),
+    AddToSets(Cow<'static, str>, CozySet),
+    AddToCostModels(Cow<'static, str>, Arc<CozyCostModel>),
+    AddToDripDecayModels(Cow<'static, str>, Arc<CozyDripDecayModel>),
+    AddToTriggers(Cow<'static, str>, Arc<CozyTrigger>),
+    UpdateSetData(Cow<'static, str>, u128),
 }
 
 impl UpdateData for CozyUpdate {}
@@ -24,12 +37,29 @@ impl World for CozyWorld {
     type WorldUpdateData = CozyUpdate;
     fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
-            CozyUpdate::AddToProtocolContracts(name, address, contract) => {
+            CozyUpdate::AddToProtocolContracts(name, contract) => {
                 self.protocol_contracts
-                    .insert(name.clone(), (*address, contract.clone()));
-                None
+                    .insert(name.clone(), contract.clone());
+            }
+            CozyUpdate::AddToSets(name, set) => {
+                self.sets.insert(name.clone(), set.clone());
+            }
+            CozyUpdate::AddToCostModels(name, cost_model) => {
+                self.cost_models.insert(name.clone(), cost_model.clone());
+            }
+            CozyUpdate::AddToDripDecayModels(name, drip_decay_model) => {
+                self.drip_decay_models
+                    .insert(name.clone(), drip_decay_model.clone());
+            }
+            CozyUpdate::AddToTriggers(name, trigger) => {
+                self.triggers.insert(name.clone(), trigger.clone());
+            }
+            CozyUpdate::UpdateSetData(name, new_apy) => {
+                let mut set = self.sets.get_mut(name).unwrap();
+                set.apy = *new_apy;
             }
         }
+        None
     }
 }
 
@@ -37,6 +67,72 @@ impl CozyWorld {
     pub fn new() -> Self {
         CozyWorld {
             protocol_contracts: HashMap::new(),
+            sets: HashMap::new(),
+            cost_models: HashMap::new(),
+            drip_decay_models: HashMap::new(),
+            triggers: HashMap::new(),
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CozyProtocolContract {
+    pub address: EvmAddress,
+    pub contract: SimContract,
+}
+
+impl CozyProtocolContract {
+    pub fn new(address: EvmAddress, contract: SimContract) -> Arc<Self> {
+        Arc::new(CozyProtocolContract { address, contract })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CozySet {
+    pub address: EvmAddress,
+    pub trigger_lookup: HashMap<EvmAddress, u16>,
+    pub apy: u128,
+}
+
+impl CozySet {
+    pub fn new(address: EvmAddress, trigger_lookup: HashMap<EvmAddress, u16>) -> Self {
+        CozySet {
+            address,
+            trigger_lookup,
+            apy: 0 as u128,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CozyCostModel {
+    pub address: EvmAddress,
+}
+
+impl CozyCostModel {
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyCostModel { address })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CozyDripDecayModel {
+    pub address: EvmAddress,
+}
+
+impl CozyDripDecayModel {
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyDripDecayModel { address })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CozyTrigger {
+    pub address: EvmAddress,
+}
+
+impl CozyTrigger {
+    pub fn new(address: EvmAddress) -> Arc<Self> {
+        Arc::new(CozyTrigger { address })
     }
 }

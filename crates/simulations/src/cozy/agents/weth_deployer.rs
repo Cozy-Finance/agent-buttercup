@@ -10,7 +10,7 @@ use simulate::{
 use crate::cozy::{
     bindings_wrapper::*,
     utils::build_deploy_contract_tx,
-    world::{CozyUpdate, CozyWorld},
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EvmAddress,
 };
 
@@ -41,17 +41,6 @@ impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
         self.deploy_weth(state, channel)
             .expect("Error deploying weth.");
     }
-
-    fn resolve_activation_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
-
-    fn step(
-        &mut self,
-        _state: &SimState<CozyUpdate, CozyWorld>,
-        _channel: AgentChannel<CozyUpdate>,
-    ) {
-    }
-
-    fn resolve_step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>) {}
 }
 
 impl WethDeployer {
@@ -65,9 +54,8 @@ impl WethDeployer {
 
         let weth_addr = create_address(self.address, 0);
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            "Weth".into(),
-            weth_addr,
-            weth_contract,
+            WETH.name.into(),
+            CozyProtocolContract::new(weth_addr, weth_contract),
         )));
 
         Ok(())

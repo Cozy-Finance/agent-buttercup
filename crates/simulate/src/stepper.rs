@@ -22,12 +22,6 @@ pub struct SimStepper<U: UpdateData, W: World<WorldUpdateData = U>> {
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimStepper<U, W> {
-    pub fn new_from_default() -> Self {
-        // Initializes SimState<U> to its default.
-        let (write, read) = left_right::new::<SimState<U, W>, AgentSimUpdate<U>>();
-        SimStepper { read, write }
-    }
-
     pub fn new_from_current_state(sim_state: SimState<U, W>) -> Self {
         // Clones SimState<U>.
         let (write, read) =
@@ -58,18 +52,18 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimStepper<U, W> {
 
     pub fn update_time_env(&mut self, time_env: TimeEnv) {
         self.sim_state_writer().update_time_env(time_env);
-        self.write.publish();
+        self.publish();
     }
 
     pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
         self.sim_state_writer()
             .insert_account_info(address, account_info);
-        self.write.publish();
+        self.publish();
     }
 
     pub fn clear_all_results(&mut self) {
         self.sim_state_writer().clear_all_results();
-        self.write.publish();
+        self.publish();
     }
 }
 
