@@ -247,7 +247,7 @@ impl PassiveBuyer {
             self.set_logic
                 .as_ref()
                 .contract
-                .encode_function("remainingProtection", (market_id))?,
+                .encode_function("remainingProtection", market_id)?,
             None,
             None,
         ))

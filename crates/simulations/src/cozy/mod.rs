@@ -13,8 +13,8 @@ pub use bindings::{
     drip_decay_model_constant_factory,
 };
 pub use bindings_wrapper::*;
+use ethers::types::U256 as EthersU256;
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
-use ethers::types::{U128 as EthersU128, U256 as EthersU256};
 use eyre::Result;
 use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::U256 as EvmU256;
@@ -68,7 +68,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         Some(WETH_DEPLOYER.into()),
         EvmAddress::random_using(&mut rng),
     ));
-    sim_manager.activate_agent(weth_deployer);
+    let _ = sim_manager.activate_agent(weth_deployer);
 
     // Protocol deployer.
     let deploy_params = ProtocolDeployerParams {
@@ -94,7 +94,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         EvmAddress::random_using(&mut rng),
         deploy_params,
     ));
-    sim_manager.activate_agent(protocol_deployer);
+    let _ = sim_manager.activate_agent(protocol_deployer);
 
     let protocol_contracts = sim_manager
         .stepper
@@ -124,7 +124,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             .get(COSTMODELDYNAMICLEVELFACTORY.name)
             .unwrap(),
     ));
-    sim_manager.activate_agent(cost_models_deployer);
+    let _ = sim_manager.activate_agent(cost_models_deployer);
 
     // Drip decay models deployer
     let mut drip_decay_models = HashMap::new();
@@ -143,7 +143,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             .get(DRIPDECAYMODELCONSTANTFACTORY.name)
             .unwrap(),
     ));
-    sim_manager.activate_agent(drip_decay_models_deployer);
+    let _ = sim_manager.activate_agent(drip_decay_models_deployer);
 
     // Triggers deployer
     let mut triggers = HashMap::new();
@@ -158,7 +158,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
             .unwrap(),
         protocol_contracts.get(MANAGER.name).unwrap(),
     ));
-    sim_manager.activate_agent(triggers_deployer);
+    let _ = sim_manager.activate_agent(triggers_deployer);
 
     let supplier_addr = EvmAddress::random_using(&mut rng);
     let supplier_addr2 = EvmAddress::random_using(&mut rng);
@@ -180,7 +180,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         },
         allocate_addrs,
     ));
-    sim_manager.activate_agent(token_deployer);
+    let _ = sim_manager.activate_agent(token_deployer);
 
     let world = sim_manager.stepper.sim_state_writer().world;
     let protocol_contracts = sim_manager
@@ -221,7 +221,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         protocol_contracts.get(SET.name).unwrap(),
         protocol_contracts.get(MANAGER.name).unwrap(),
     ));
-    sim_manager.activate_agent(set_admin);
+    let _ = sim_manager.activate_agent(set_admin);
 
     let passive_supplier = Box::new(PassiveSupplier::new(
         Some(PASSIVE_SUPPLIER.into()),
@@ -230,7 +230,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
         EthersU256::from(90000),
     ));
-    sim_manager.activate_agent(passive_supplier);
+    let _ = sim_manager.activate_agent(passive_supplier);
 
     let passive_supplier2 = Box::new(PassiveSupplier::new(
         Some((PASSIVE_SUPPLIER.to_owned() + "te").into()),
@@ -239,7 +239,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
         EthersU256::from(77),
     ));
-    sim_manager.activate_agent(passive_supplier2);
+    let _ = sim_manager.activate_agent(passive_supplier2);
 
     let passive_buyer = Box::new(PassiveBuyer::new(
         Some(PASSIVE_BUYER.into()),
@@ -251,7 +251,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         vec![EthersU256::from(900)],
         EthersU256::from(900000000),
     ));
-    sim_manager.activate_agent(passive_buyer);
+    let _ = sim_manager.activate_agent(passive_buyer);
 
     let passive_buyer2 = Box::new(PassiveBuyer::new(
         Some((PASSIVE_BUYER.to_owned() + "2").into()),
@@ -263,7 +263,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         vec![EthersU256::from(100)],
         EthersU256::from(100000000),
     ));
-    sim_manager.activate_agent(passive_buyer2);
+    let _ = sim_manager.activate_agent(passive_buyer2);
 
     sim_manager.run_sim();
     Ok(())

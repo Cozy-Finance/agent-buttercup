@@ -11,7 +11,7 @@ use crate::cozy::{
     bindings_wrapper::*,
     utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EvmAddress,
+    EvmAddress,
 };
 
 pub struct WethDeployer {
