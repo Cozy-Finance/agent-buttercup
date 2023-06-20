@@ -1,8 +1,4 @@
-use std::{
-    borrow::Cow,
-    collections::HashMap,
-    sync::{Arc, Mutex},
-};
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use simulate::{
     contract::sim_contract::SimContract,
@@ -65,6 +61,7 @@ impl World for CozyWorld {
 
 impl CozyWorld {
     pub fn new() -> Self {
+        log::info!("Creating Cozy World");
         CozyWorld {
             protocol_contracts: HashMap::new(),
             sets: HashMap::new(),

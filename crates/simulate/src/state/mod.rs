@@ -1,11 +1,9 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use eyre::Result;
 use revm::{
-    db::{CacheDB, DatabaseRef, EmptyDB, RefDBWrapper},
-    inspectors,
+    db::{CacheDB, DatabaseRef, EmptyDB},
     primitives::{AccountInfo, Address, Env, ExecutionResult, TxEnv},
-    Database, Inspector, EVM,
+    EVM,
 };
 use thiserror::Error;
 
@@ -53,11 +51,14 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm.db.as_ref().expect("Db not initalized.")
     }
 
-    pub fn read_account_info_ref(&self, address: Address) -> AccountInfo {
-        self.get_read_db()
+    pub fn read_account_info(&self, address: Address) -> AccountInfo {
+        let account_info = self
+            .get_read_db()
             .basic(address)
             .expect("Db not initialized")
-            .expect("Account not found")
+            .expect("Account not found");
+        log::debug!("{:?}", account_info);
+        account_info
     }
 
     pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
@@ -136,7 +137,12 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     pub fn clear_all_results(&mut self) {
-        self.update_results.clear();
+        for results in self.update_results.drain() {
+            let address = format!("{:2X}", results.0);
+            for result in results.1.iter() {
+                log::debug!("{}({}): {:?}", result.0, address, result.1);
+            }
+        }
     }
 
     pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {

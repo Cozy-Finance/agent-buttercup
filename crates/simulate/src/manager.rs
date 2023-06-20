@@ -1,9 +1,10 @@
 #![warn(unsafe_code)]
 //! Simulation managers are used to manage the environments for a simulation.
 //! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
-use std::{collections::HashMap, str::FromStr, thread};
+use std::{collections::HashMap, thread};
 
 use crossbeam_channel::unbounded;
+use eyre::Result;
 
 use crate::{
     agent::{
@@ -15,7 +16,6 @@ use crate::{
     state::{update::UpdateData, world::World, SimState},
     stepper::*,
     time_policy::TimePolicy,
-    EvmAddress,
 };
 
 /// Manages simulations.
@@ -57,10 +57,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             //      2) Append queued updates via the write handle.
             thread::scope(|s| {
                 for (agent_id, agent) in &mut self.agents {
-                    let channel = AgentChannel {
-                        address: (*agent_id).address,
-                        sender: sender.clone(),
-                    };
+                    let channel: AgentChannel<U> = AgentChannel::new(&sender, agent_id);
                     s.spawn(|| agent.step(&self.stepper_read_factory.sim_state(), channel));
                 }
                 s.spawn(|| {
@@ -109,10 +106,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
 
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
-        let channel = AgentChannel {
-            address: id.address,
-            sender: sender.clone(),
-        };
+        let channel = AgentChannel::new(&sender, &id);
         new_agent.activation_step(&self.stepper_read_factory.sim_state(), channel);
 
         // Execute queued updates.
@@ -125,7 +119,6 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         // Resolve activation step.
         new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
 
-        // Clear all results.
         self.stepper.clear_all_results();
 
         // Adds agent to local data.

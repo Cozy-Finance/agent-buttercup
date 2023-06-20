@@ -7,13 +7,10 @@ pub use bindings::{
     set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
-use revm::primitives::{create_address, Env, TxEnv};
+use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
-    state::{
-        update::{SimUpdate, SimUpdateResult},
-        SimState,
-    },
+    state::{update::SimUpdate, SimState},
     utils::{build_call_contract_txenv, unpack_execution},
 };
 

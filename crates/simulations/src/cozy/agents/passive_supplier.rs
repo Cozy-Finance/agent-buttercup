@@ -87,7 +87,7 @@ impl PassiveSupplier {
             self.token
                 .as_ref()
                 .contract
-                .encode_function("balanceOf", (EthersAddress::from(self.address)))?,
+                .encode_function("balanceOf", EthersAddress::from(self.address))?,
             None,
             None,
         );

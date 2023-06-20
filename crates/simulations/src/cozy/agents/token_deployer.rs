@@ -1,6 +1,5 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use ethers::abi::Tokenize;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
