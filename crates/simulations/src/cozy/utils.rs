@@ -6,11 +6,12 @@ use revm::primitives::TxEnv;
 use simulate::{
     contract::{sim_contract::SimContract, utils as contract_utils},
     utils::{build_call_contract_txenv, build_deploy_contract_txenv},
+    address::Address
 };
 use thiserror::Error;
 
 use crate::cozy::{
-    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes, EvmAddress,
+    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes
 };
 
 #[derive(Error, Debug)]
@@ -26,7 +27,7 @@ pub enum DeploymentError {
 }
 
 pub fn build_deploy_contract_tx<T: Tokenize>(
-    agent_address: EvmAddress,
+    agent_address: Address,
     contract_bindings: &BindingsWrapper,
     args: T,
 ) -> Result<(TxEnv, SimContract)> {
@@ -45,14 +46,14 @@ pub fn build_deploy_contract_tx<T: Tokenize>(
 }
 
 pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
-    agent_address: EvmAddress,
+    agent_address: Address,
     contract_bindings: &BindingsWrapper,
-    libraries: &HashMap<EthersAddress, &BindingsWrapper>,
+    libraries: &HashMap<Address, &BindingsWrapper>,
     args: T,
 ) -> Result<(TxEnv, SimContract)> {
     let mut links: Vec<(&str, &str, EthersAddress)> = vec![];
     for (addr, lib_binding) in libraries.iter() {
-        links.push((lib_binding.path, lib_binding.name, *addr));
+        links.push((lib_binding.path, lib_binding.name, (*addr).into()));
     }
     let bytecode = contract_utils::build_linked_bytecode(
         (*contract_bindings)
@@ -71,14 +72,14 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
 }
 
 pub fn build_call_protocol_contract_tx<T: Tokenize>(
-    agent_address: EvmAddress,
+    agent_address: Address,
     contract_data: &Arc<CozyProtocolContract>,
     func_name: &str,
     args: T,
 ) -> Result<TxEnv> {
     Ok(build_call_contract_txenv(
         agent_address,
-        contract_data.as_ref().address,
+        contract_data.as_ref().address.into(),
         contract_data
             .as_ref()
             .contract

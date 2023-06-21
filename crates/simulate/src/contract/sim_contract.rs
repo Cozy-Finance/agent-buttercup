@@ -8,7 +8,7 @@ use eyre::Result;
 use revm::primitives::B256;
 use thiserror::Error;
 
-use crate::{EthersBytes, EvmAddress, EvmBytes};
+use crate::{EthersBytes, EvmBytes, address::Address};
 
 #[derive(Error, Debug)]
 pub enum SimContractError {
@@ -30,7 +30,7 @@ pub enum SimContractError {
 /// * `bytecode` - The contract's deployed bytecode.
 pub struct SimContract {
     /// The address of the contract within the relevant [`SimulationEnvironment`].
-    pub address: Option<EvmAddress>,
+    pub address: Option<Address>,
     /// The ethers [`BaseContract`] that holds the ABI.
     pub base_contract: EthersBaseContract,
     /// The contract's deployed bytecode.
