@@ -2,11 +2,10 @@ use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use simulate::{
     contract::sim_contract::SimContract,
-    state::{update::UpdateData, world::World},
+    state::{update::UpdateData, world::World}, address::Address,
 };
 
 use super::bindings_wrapper::{SET, SETFACTORY};
-use crate::cozy::EvmAddress;
 
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
@@ -74,25 +73,25 @@ impl CozyWorld {
 
 #[derive(Debug, Clone)]
 pub struct CozyProtocolContract {
-    pub address: EvmAddress,
+    pub address: Address,
     pub contract: SimContract,
 }
 
 impl CozyProtocolContract {
-    pub fn new(address: EvmAddress, contract: SimContract) -> Arc<Self> {
+    pub fn new(address: Address, contract: SimContract) -> Arc<Self> {
         Arc::new(CozyProtocolContract { address, contract })
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct CozySet {
-    pub address: EvmAddress,
-    pub trigger_lookup: HashMap<EvmAddress, u16>,
+    pub address: Address,
+    pub trigger_lookup: HashMap<Address, u16>,
     pub apy: u128,
 }
 
 impl CozySet {
-    pub fn new(address: EvmAddress, trigger_lookup: HashMap<EvmAddress, u16>) -> Self {
+    pub fn new(address: Address, trigger_lookup: HashMap<Address, u16>) -> Self {
         CozySet {
             address,
             trigger_lookup,
@@ -103,33 +102,33 @@ impl CozySet {
 
 #[derive(Debug, Clone)]
 pub struct CozyCostModel {
-    pub address: EvmAddress,
+    pub address: Address,
 }
 
 impl CozyCostModel {
-    pub fn new(address: EvmAddress) -> Arc<Self> {
+    pub fn new(address: Address) -> Arc<Self> {
         Arc::new(CozyCostModel { address })
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct CozyDripDecayModel {
-    pub address: EvmAddress,
+    pub address: Address,
 }
 
 impl CozyDripDecayModel {
-    pub fn new(address: EvmAddress) -> Arc<Self> {
+    pub fn new(address: Address) -> Arc<Self> {
         Arc::new(CozyDripDecayModel { address })
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct CozyTrigger {
-    pub address: EvmAddress,
+    pub address: Address,
 }
 
 impl CozyTrigger {
-    pub fn new(address: EvmAddress) -> Arc<Self> {
+    pub fn new(address: Address) -> Arc<Self> {
         Arc::new(CozyTrigger { address })
     }
 }

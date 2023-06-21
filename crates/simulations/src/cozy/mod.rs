@@ -20,7 +20,7 @@ use rand::{rngs::StdRng, SeedableRng};
 use revm::primitives::U256 as EvmU256;
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 use simulate::{
-    manager::SimManager, state::SimState, time_policy::FixedTimePolicy, utils::float_to_wad,
+    manager::SimManager, state::SimState, time_policy::FixedTimePolicy, utils::float_to_wad, address::Address,
 };
 use world::CozyWorld;
 
@@ -66,7 +66,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     // Weth deployer.
     let weth_deployer = Box::new(WethDeployer::new(
         Some(WETH_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
     ));
     let _ = sim_manager.activate_agent(weth_deployer);
 
@@ -91,7 +91,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     };
     let protocol_deployer = Box::new(ProtocolDeployer::new(
         Some(PROTOCOL_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         deploy_params,
     ));
     let _ = sim_manager.activate_agent(protocol_deployer);
@@ -115,7 +115,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     );
     let cost_models_deployer = Box::new(CostModelsDeployer::new(
         Some(COST_MODELS_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         cost_models,
         protocol_contracts
             .get(COSTMODELJUMPRATEFACTORY.name)
@@ -137,7 +137,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     let drip_decay_models_deployer = Box::new(DripDecayModelsDeployer::new(
         Some(DRIP_DECAY_MODELS_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         drip_decay_models,
         protocol_contracts
             .get(DRIPDECAYMODELCONSTANTFACTORY.name)
@@ -150,7 +150,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     triggers.insert("Basic".into(), CozyTriggerType::DummyTrigger);
     let triggers_deployer = Box::new(TriggersDeployer::new(
         Some(TRIGGERS_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         triggers,
         protocol_contracts.get(UMATRIGGERFACTORY.name).unwrap(),
         protocol_contracts
@@ -160,10 +160,10 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     ));
     let _ = sim_manager.activate_agent(triggers_deployer);
 
-    let supplier_addr = EvmAddress::random_using(&mut rng);
-    let supplier_addr2 = EvmAddress::random_using(&mut rng);
-    let buyer_addr = EvmAddress::random_using(&mut rng);
-    let buyer_addr2 = EvmAddress::random_using(&mut rng);
+    let supplier_addr = Address::random_using(&mut rng);
+    let supplier_addr2 = Address::random_using(&mut rng);
+    let buyer_addr = Address::random_using(&mut rng);
+    let buyer_addr2 = Address::random_using(&mut rng);
 
     let mut allocate_addrs = HashMap::new();
     allocate_addrs.insert(supplier_addr, EthersU256::from(88));
@@ -172,7 +172,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     allocate_addrs.insert(buyer_addr2, EthersU256::from(99999));
     let token_deployer = Box::new(TokenDeployer::new(
         Some(DUMMYTOKEN_DEPLOYER.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         CozyTokenDeployParams {
             name: "Random Dummy Token".to_string(),
             symbol: "RDM".to_string(),
@@ -205,7 +205,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     }];
 
     let set_params = SetAdminParams {
-        asset: EthersAddress::from(*dummy_token_addr),
+        asset: dummy_token_addr.into(),
         set_config: SetConfig {
             leverage_factor: 10000_u32,
             deposit_fee: 0_u16,
@@ -216,7 +216,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
 
     let set_admin = Box::new(SetAdmin::new(
         Some(SET_ADMIN.into()),
-        EvmAddress::random_using(&mut rng),
+        Address::random_using(&mut rng),
         set_params,
         protocol_contracts.get(SET.name).unwrap(),
         protocol_contracts.get(MANAGER.name).unwrap(),

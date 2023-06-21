@@ -3,23 +3,28 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use revm::primitives::{Address as EvmAddress, U256 as EvmU256};
+use revm::primitives::{U256 as EvmU256};
+
+use crate::address::Address;
 
 #[derive(Debug, Clone)]
 pub struct AgentId {
-    pub address: EvmAddress,
+    pub address: Address,
     pub name: Option<Cow<'static, str>>,
 }
 
 impl Hash for AgentId {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.address.hash(state);
+        let address: [u8; 20] = self.address.value;
+        address.hash(state);
     }
 }
 
 impl PartialEq for AgentId {
     fn eq(&self, other: &Self) -> bool {
-        self.address == other.address
+        let self_address: [u8; 20] = self.address.value;
+        let other_address: [u8; 20] = other.address.value;
+        self_address == other_address
     }
 }
 impl Eq for AgentId {}

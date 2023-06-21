@@ -4,8 +4,7 @@ use crossbeam_channel::Sender;
 
 use crate::{
     errors::ChannelError,
-    state::update::{SimUpdate, UpdateData},
-    EvmAddress,
+    state::update::{SimUpdate, UpdateData}, address::Address
 };
 
 use super::types::AgentId;
@@ -13,12 +12,12 @@ use super::types::AgentId;
 #[derive(Debug, Clone)]
 pub struct AgentSimUpdate<U: UpdateData> {
     pub update: SimUpdate<U>,
-    pub address: EvmAddress,
+    pub address: Address,
     pub tag: Option<Cow<'static, str>>,
 }
 pub struct AgentChannel<U: UpdateData> {
     pub sender: Sender<AgentSimUpdate<U>>,
-    pub address: EvmAddress,
+    pub address: Address,
     pub tag: Option<Cow<'static, str>>,
 }
 

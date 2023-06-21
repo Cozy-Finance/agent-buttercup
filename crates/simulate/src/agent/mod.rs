@@ -4,7 +4,7 @@ use revm::primitives::AccountInfo;
 use crate::{
     agent::types::AgentId,
     state::{update::UpdateData, world::World, SimState},
-    EvmAddress,
+    address::Address,
 };
 
 pub mod agent_channel;
@@ -15,7 +15,7 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
     /// Returns the address of the agent.
     fn id(&self) -> AgentId {
         AgentId {
-            address: EvmAddress::random(),
+            address: Address::random(),
             name: None,
         }
     }

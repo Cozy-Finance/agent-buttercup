@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::HashMap};
 
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB},
-    primitives::{AccountInfo, Address, Env, ExecutionResult, TxEnv},
+    primitives::{AccountInfo, Env, ExecutionResult, TxEnv},
     EVM,
 };
 use thiserror::Error;
@@ -15,7 +15,7 @@ use crate::{
     },
     time_policy::TimeEnv,
     utils::*,
-    EvmAddress,
+    address::Address,
 };
 
 pub mod update;
@@ -31,7 +31,7 @@ pub enum SimStateError {
 pub struct SimState<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub evm: EVM<CacheDB<EmptyDB>>,
     pub world: W,
-    pub update_results: HashMap<EvmAddress, HashMap<Cow<'static, str>, SimUpdateResult<U>>>,
+    pub update_results: HashMap<Address, HashMap<Cow<'static, str>, SimUpdateResult<U>>>,
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
@@ -54,7 +54,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     pub fn read_account_info(&self, address: Address) -> AccountInfo {
         let account_info = self
             .get_read_db()
-            .basic(address)
+            .basic(address.into())
             .expect("Db not initialized")
             .expect("Account not found");
         log::debug!("{:?}", account_info);
@@ -89,7 +89,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm
             .db()
             .expect("Db not initialized")
-            .insert_account_info(address, account_info);
+            .insert_account_info(address.into(), account_info);
     }
 
     /// Execute a transaction in the execution environment.
@@ -125,7 +125,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     pub fn insert_into_update_results(
         &mut self,
         tag: Cow<'static, str>,
-        address: EvmAddress,
+        address: Address,
         result: SimUpdateResult<U>,
     ) {
         if let Some(agent_update_results) = self.update_results.get_mut(&address) {
