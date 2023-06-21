@@ -19,3 +19,10 @@ rand.workspace = true
 crossbeam-channel.workspace = true
 
 lazy_static = "1.4.0"
+
+# Logging
+flexi_logger = "0.25"
+log = "0.4"
+
+# Binary Command Line Args
+clap = { workspace = true, features = ["derive"] }
