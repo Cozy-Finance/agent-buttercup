@@ -17,6 +17,7 @@ use simulate::{
 pub use crate::cozy::constants;
 use crate::cozy::{
     constants::SECONDS_IN_YEAR,
+    types::CozySetAdminParams,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256
 };

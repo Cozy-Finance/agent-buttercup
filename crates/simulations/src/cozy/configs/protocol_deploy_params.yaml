@@ -1,0 +1,14 @@
+delays:
+  config_update_delay: 172800
+  config_update_grace_period: 259200
+  min_deposit_duration: 86400
+  redemption_delay: 43200
+  purchase_delay: 57600
+fees:
+  deposit_fee_reserves: 0
+  deposit_fee_backstop: 0
+  purchase_fee_reserves: 0
+  purchase_fee_backstop: 0
+  sale_fee_reserves: 0
+  sale_fee_backstop: 0
+allowed_markets_per_set: 1000

@@ -28,14 +28,13 @@ impl PassiveSupplier {
         address: Address,
         cozyrouter: &Arc<CozyProtocolContract>,
         token: &Arc<CozyProtocolContract>,
-        capital: EthersU256,
     ) -> Self {
         Self {
             name,
             address,
             cozyrouter: cozyrouter.clone(),
             token: token.clone(),
-            capital,
+            capital: EthersU256::from(0),
         }
     }
 }
@@ -54,16 +53,17 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         channel: AgentChannel<CozyUpdate>,
     ) {
         channel.send(SimUpdate::Evm(self.build_max_approve_router_tx().unwrap()));
+        self.capital = self.get_token_balance(state).unwrap();
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if self.capital > EthersU256::from(0) {
             let mut sets = state.world.sets.values().collect::<Vec<_>>();
             if sets.len() > 0 {
-                sets.sort_by(|a, b| a.apy.cmp(&b.apy));
+                sets.sort_by(|a, b| a.read().unwrap().apy.cmp(&b.read().unwrap().apy));
                 let deposit_tx = self
                     .build_deposit_tx(cozy_router::DepositCall {
-                        set: sets[0].address.into(),
+                        set: sets[0].read().unwrap().address.into(),
                         assets: self.capital,
                         receiver: self.address.into(),
                         min_shares_received: EthersU256::from(0),

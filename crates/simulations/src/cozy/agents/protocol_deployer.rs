@@ -1,7 +1,6 @@
 use std::{borrow::Cow, collections::HashMap};
 
 use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
-use ethers::types::U256 as EthersU256;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
@@ -13,29 +12,23 @@ use simulate::{
 use super::errors::CozyAgentError;
 use crate::cozy::{
     bindings_wrapper::*,
+    types::CozyProtocolDeployParams,
     utils::{build_deploy_contract_tx, build_unlinked_deploy_contract_tx, Counter},
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress
 };
 
-#[derive(Debug, Clone)]
-pub struct ProtocolDeployerParams {
-    pub delays: Delays,
-    pub fees: Fees,
-    pub allowed_markets_per_set: EthersU256,
-}
-
 pub struct ProtocolDeployer {
     pub name: Option<Cow<'static, str>>,
     pub address: Address,
-    deploy_params: ProtocolDeployerParams,
+    deploy_params: CozyProtocolDeployParams,
 }
 
 impl ProtocolDeployer {
     pub fn new(
         name: Option<Cow<'static, str>>,
         address: Address,
-        deploy_params: ProtocolDeployerParams,
+        deploy_params: CozyProtocolDeployParams,
     ) -> Self {
         Self {
             name,
