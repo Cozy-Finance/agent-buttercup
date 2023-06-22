@@ -1,16 +1,18 @@
-use std::{borrow::Cow, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    collections::HashMap,
+    sync::{Arc, RwLock},
+};
 
 use simulate::{
     contract::sim_contract::SimContract,
     state::{update::UpdateData, world::World}, address::Address,
 };
 
-use super::bindings_wrapper::{SET, SETFACTORY};
-
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
     pub protocol_contracts: HashMap<Cow<'static, str>, Arc<CozyProtocolContract>>,
-    pub sets: HashMap<Cow<'static, str>, CozySet>,
+    pub sets: HashMap<Cow<'static, str>, Arc<RwLock<CozySet>>>,
     pub cost_models: HashMap<Cow<'static, str>, Arc<CozyCostModel>>,
     pub drip_decay_models: HashMap<Cow<'static, str>, Arc<CozyDripDecayModel>>,
     pub triggers: HashMap<Cow<'static, str>, Arc<CozyTrigger>>,
@@ -19,7 +21,7 @@ pub struct CozyWorld {
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
     AddToProtocolContracts(Cow<'static, str>, Arc<CozyProtocolContract>),
-    AddToSets(Cow<'static, str>, CozySet),
+    AddToSets(Cow<'static, str>, Arc<RwLock<CozySet>>),
     AddToCostModels(Cow<'static, str>, Arc<CozyCostModel>),
     AddToDripDecayModels(Cow<'static, str>, Arc<CozyDripDecayModel>),
     AddToTriggers(Cow<'static, str>, Arc<CozyTrigger>),
@@ -50,7 +52,7 @@ impl World for CozyWorld {
                 self.triggers.insert(name.clone(), trigger.clone());
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
-                let mut set = self.sets.get_mut(name).unwrap();
+                let mut set = self.sets.get_mut(name).unwrap().write().unwrap();
                 set.apy = *new_apy;
             }
         }
@@ -91,12 +93,17 @@ pub struct CozySet {
 }
 
 impl CozySet {
+<<<<<<< HEAD
     pub fn new(address: Address, trigger_lookup: HashMap<Address, u16>) -> Self {
         CozySet {
+=======
+    pub fn new(address: EvmAddress, trigger_lookup: HashMap<EvmAddress, u16>) -> Arc<RwLock<Self>> {
+        Arc::new(RwLock::new(CozySet {
+>>>>>>> 09ef492 (Set-up runner)
             address,
             trigger_lookup,
             apy: 0 as u128,
-        }
+        }))
     }
 }
 

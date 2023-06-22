@@ -1,9 +1,7 @@
 use std::{collections::HashMap, error::Error};
 
 use agents::{
-    protocol_deployer::{ProtocolDeployer, ProtocolDeployerParams},
-    set_admin::{SetAdmin, SetAdminParams},
-    token_deployer::TokenDeployer,
+    protocol_deployer::ProtocolDeployer, set_admin::SetAdmin, token_deployer::TokenDeployer,
     weth_deployer::WethDeployer,
 };
 use bindings::cozy_protocol::shared_types::{Delays, Fees};
@@ -31,19 +29,33 @@ use self::{
         passive_supplier::PassiveSupplier, triggers_deployer::TriggersDeployer,
     },
     bindings_wrapper::MANAGER,
-    constants::{DUMMYTOKEN_DEPLOYER, PASSIVE_SUPPLIER, SET_ADMIN, WETH_DEPLOYER},
-    types::{CozyCostModelType, CozyDripDecayModelType, CozyTokenDeployParams, CozyTriggerType},
+    constants::{BASE_TOKEN_DEPLOYER, PASSIVE_SUPPLIER, SET_ADMIN, WETH_DEPLOYER},
+    types::{
+        CozyCostModelType, CozyDripDecayModelType, CozyProtocolDeployParams, CozySetAdminParams,
+        CozyTokenDeployParams, CozyTriggerType,
+    },
 };
 use crate::cozy::constants::*;
 
 pub mod agents;
 pub mod bindings_wrapper;
 pub mod constants;
+pub mod runner;
 pub mod types;
 pub mod utils;
 pub mod world;
 
 pub fn run() -> Result<(), Box<dyn Error>> {
+    let settings = config::Config::builder()
+        .add_source(config::File::new(
+            "configs/protocol_deploy_params.yaml",
+            config::FileFormat::Yaml,
+        ))
+        .build()?;
+
+    let x = settings.try_deserialize::<CozyProtocolDeployParams>();
+    println!("{:?}", x);
+
     let mut rng = StdRng::seed_from_u64(88_u64);
 
     // Create sim manager.
@@ -71,7 +83,7 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     let _ = sim_manager.activate_agent(weth_deployer);
 
     // Protocol deployer.
-    let deploy_params = ProtocolDeployerParams {
+    let deploy_params = CozyProtocolDeployParams {
         delays: Delays {
             config_update_delay: EthersU256::from(172800),
             config_update_grace_period: EthersU256::from(259200),
@@ -171,8 +183,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
     allocate_addrs.insert(buyer_addr, EthersU256::from(99999));
     allocate_addrs.insert(buyer_addr2, EthersU256::from(99999));
     let token_deployer = Box::new(TokenDeployer::new(
-        Some(DUMMYTOKEN_DEPLOYER.into()),
-        Address::random_using(&mut rng),
+        Some(BASE_TOKEN_DEPLOYER.into()),
+        EvmAddress::random_using(&mut rng),
         CozyTokenDeployParams {
             name: "Random Dummy Token".to_string(),
             symbol: "RDM".to_string(),
@@ -204,8 +216,8 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         sale_fee: 0_u16,
     }];
 
-    let set_params = SetAdminParams {
-        asset: dummy_token_addr.into(),
+    let set_params = CozySetAdminParams {
+        asset: EthersAddress::from(*dummy_token_addr),
         set_config: SetConfig {
             leverage_factor: 10000_u32,
             deposit_fee: 0_u16,
@@ -228,7 +240,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         supplier_addr,
         protocol_contracts.get(COZYROUTER.name).unwrap(),
         protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
-        EthersU256::from(90000),
     ));
     let _ = sim_manager.activate_agent(passive_supplier);
 
@@ -237,7 +248,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         supplier_addr2,
         protocol_contracts.get(COZYROUTER.name).unwrap(),
         protocol_contracts.get(DUMMYTOKEN.name).unwrap(),
-        EthersU256::from(77),
     ));
     let _ = sim_manager.activate_agent(passive_supplier2);
 
@@ -249,7 +259,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         protocol_contracts.get(SET.name).unwrap(),
         vec![trigger_addr],
         vec![EthersU256::from(900)],
-        EthersU256::from(900000000),
     ));
     let _ = sim_manager.activate_agent(passive_buyer);
 
@@ -261,7 +270,6 @@ pub fn run() -> Result<(), Box<dyn Error>> {
         protocol_contracts.get(SET.name).unwrap(),
         vec![trigger_addr],
         vec![EthersU256::from(100)],
-        EthersU256::from(100000000),
     ));
     let _ = sim_manager.activate_agent(passive_buyer2);
 

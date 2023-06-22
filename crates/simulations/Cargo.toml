@@ -17,6 +17,7 @@ eyre.workspace = true
 rand.workspace = true
 
 crossbeam-channel.workspace = true
+serde.workspace = true
 
 lazy_static = "1.4.0"
 
@@ -26,3 +27,6 @@ log = "0.4"
 
 # Binary Command Line Args
 clap = { workspace = true, features = ["derive"] }
+
+# Configs
+config = "0.13.3"

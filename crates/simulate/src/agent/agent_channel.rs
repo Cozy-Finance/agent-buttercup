@@ -2,12 +2,11 @@ use std::borrow::Cow;
 
 use crossbeam_channel::Sender;
 
+use super::types::AgentId;
 use crate::{
     errors::ChannelError,
     state::update::{SimUpdate, UpdateData}, address::Address
 };
-
-use super::types::AgentId;
 
 #[derive(Debug, Clone)]
 pub struct AgentSimUpdate<U: UpdateData> {

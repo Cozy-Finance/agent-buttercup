@@ -1,4 +1,9 @@
-use std::{borrow::Cow, cmp::min, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    cmp::min,
+    collections::HashMap,
+    sync::{Arc, RwLock},
+};
 
 use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
@@ -27,7 +32,7 @@ pub struct PassiveBuyer {
     set_logic: Arc<CozyProtocolContract>,
     target_triggers: Vec<Address>,
     protection_desired: Vec<EthersU256>,
-    capital: Option<EthersU256>,
+    capital: EthersU256,
     ptokens_owned: Option<Vec<EthersU256>>,
     protection_owned: Option<Vec<EthersU256>>,
 }
@@ -41,7 +46,6 @@ impl PassiveBuyer {
         set_logic: &Arc<CozyProtocolContract>,
         target_triggers: Vec<Address>,
         protection_desired: Vec<EthersU256>,
-        capital: EthersU256,
     ) -> Self {
         Self {
             name,
@@ -51,7 +55,7 @@ impl PassiveBuyer {
             set_logic: set_logic.clone(),
             target_triggers,
             protection_desired,
-            capital: None,
+            capital: EthersU256::from(0),
             ptokens_owned: None,
             protection_owned: None,
         }
@@ -72,16 +76,15 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         channel: AgentChannel<CozyUpdate>,
     ) {
         channel.send(SimUpdate::Evm(self.build_max_approve_router_tx().unwrap()));
-    }
-
-    fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
-        self.capital = Some(self.get_token_balance(state).unwrap());
+        self.capital = self.get_token_balance(state).unwrap();
         self.ptokens_owned = Some(vec![EthersU256::from(0); self.target_triggers.len()]);
         self.protection_owned = Some(vec![EthersU256::from(0); self.target_triggers.len()]);
     }
 
+    fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {}
+
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
-        if self.capital.unwrap() == EthersU256::from(0) {
+        if self.capital == EthersU256::from(0) {
             return;
         }
 
@@ -138,23 +141,25 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
     }
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
-        self.capital = Some(self.get_token_balance(state).unwrap());
-        let purchase_results = match state.update_results.get(&self.address.into()) {
+        self.capital = self.get_token_balance(state).unwrap();
+        let purchase_results = match state.update_results.get(&self.address) {
             Some(pr) => pr,
             None => {
                 return;
             }
         };
-
-        for (id, result) in purchase_results {
-            let trigger_index: usize = id.parse().unwrap();
-            if let SimUpdateResult::Evm(execution_result) = result {
-                let parsed_execution_result = self.get_ptokens_received(execution_result);
-                if let Ok(ptokens_received) = parsed_execution_result {
-                    self.ptokens_owned.as_mut().unwrap()[trigger_index] += ptokens_received;
+        /*
+                for (id, result) in purchase_results {
+                    let trigger_index: usize = id.parse().unwrap();
+                    if let SimUpdateResult::Evm(execution_result) = result {
+                        let parsed_execution_result = self.get_ptokens_received(execution_result);
+                        if let Ok(ptokens_received) = parsed_execution_result {
+                            self.ptokens_owned.as_mut().unwrap()[trigger_index] += ptokens_received;
+                        }
+                    }
                 }
-            }
-        }
+        */
+        println!("{:?} PToken balances: {:?}", self.name, self.ptokens_owned);
     }
 }
 
@@ -190,13 +195,18 @@ impl PassiveBuyer {
     fn get_target_sets_and_markets_ids(
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        sets: Vec<&CozySet>,
+        sets: Vec<&Arc<RwLock<CozySet>>>,
         trigger: &Address,
         protection_delta: EthersU256,
     ) -> Vec<(Address, u16)> {
         sets.iter()
-            .filter(|set| set.trigger_lookup.contains_key(trigger))
-            .map(|set| (set.address, *set.trigger_lookup.get(trigger).unwrap()))
+            .filter(|set| set.read().unwrap().trigger_lookup.contains_key(trigger))
+            .map(|set| {
+                (
+                    set.read().unwrap().address,
+                    *set.read().unwrap().trigger_lookup.get(trigger).unwrap(),
+                )
+            })
             .filter(|(set_addr, market_id)| {
                 self.get_remaining_protection(state, *set_addr, *market_id)
                     .unwrap()

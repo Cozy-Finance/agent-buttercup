@@ -126,4 +126,8 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
 
         Ok(())
     }
+
+    pub fn get_state(&self) -> SimState<U, W> {
+        self.stepper_read_factory.sim_state()
+    }
 }
