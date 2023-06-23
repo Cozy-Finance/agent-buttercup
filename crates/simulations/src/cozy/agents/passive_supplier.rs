@@ -76,6 +76,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
         self.capital = self.get_token_balance(state).unwrap();
+        println!("{:?}", self.capital);
     }
 }
 
