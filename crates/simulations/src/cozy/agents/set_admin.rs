@@ -1,13 +1,12 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
-use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     drip_decay_model_constant_factory, manager,
     set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
-use revm::primitives::{bitvec::macros::internal::funty::Fundamental, TxEnv};
+use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
@@ -196,7 +195,7 @@ impl SetAdmin {
 
         if total_assets > 0 {
             let apy = total_market_return / total_assets;
-            Ok((apy.as_u128() * SECONDS_IN_YEAR.as_u128()) as f64 / 1e18)
+            Ok((apy.as_u128().as_f64() * SECONDS_IN_YEAR as f64) / 1e18)
         } else {
             Ok(0.0)
         }
