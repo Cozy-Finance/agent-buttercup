@@ -1,20 +1,15 @@
 use std::{borrow::Cow, collections::HashMap};
 
-pub use bindings::{
-    cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
-    cozy_protocol::shared_types::{MarketConfig, SetConfig},
-    drip_decay_model_constant_factory,
+use bindings::{
+    cozy_protocol::shared_types::{MarketConfig},
 };
-use config::Config;
-pub use ethers::types::U256 as EthersU256;
 use rand::{rngs::StdRng, Rng, SeedableRng};
-pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 use simulate::{
     manager::SimManager,
     state::SimState,
-    time_policy::{FixedTimePolicy, TimePolicy},
-    utils::float_to_wad,
+    time_policy::FixedTimePolicy,
 };
+use crate::cozy::{EvmAddress, EvmBytes, EthersAddress, EthersBytes, EthersU256};
 
 use super::{
     agents::{
@@ -146,7 +141,7 @@ impl CozySingleSetSimRunner {
 
         // Store cost model, drip decay model and trigger contracts.
         let world_cost_models = sim_manager.get_state().world.cost_models;
-        let world_drip_decay_models = sim_manager.get_state().world.cost_models;
+        let world_drip_decay_models = sim_manager.get_state().world.drip_decay_models;
         let world_triggers = sim_manager.get_state().world.triggers;
 
         // Set admin.
@@ -222,17 +217,13 @@ impl CozySingleSetSimRunner {
 
 impl Default for CozySingleSetSimRunner {
     fn default() -> Self {
-        let sim_setup_params = get_default_config("sim_setup")
-            .try_deserialize::<CozySimSetupParams>()
-            .unwrap();
+        let sim_setup_params = CozySimSetupParams::default();
+        let protocol_params = CozyProtocolDeployParams::default();
+        let time_policy_params = CozyFixedTimePolicyParams::default();
+        let base_token_params = CozyTokenDeployParams::default();
+        let buyers_and_suppliers = CozySimBuyersSuppliers::default();
+        let set_config_params = CozySetConfigParams::default();
 
-        let protocol_params = get_default_config("protocol_deploy_params")
-            .try_deserialize::<CozyProtocolDeployParams>()
-            .unwrap();
-
-        let time_policy_params = get_default_config("fixed_time_policy")
-            .try_deserialize::<CozyFixedTimePolicyParams>()
-            .unwrap();
         let fixed_time_policy = FixedTimePolicy::new(
             time_policy_params.start_block_number.into(),
             time_policy_params.start_block_timestamp.into(),
@@ -242,18 +233,6 @@ impl Default for CozySingleSetSimRunner {
             time_policy_params.time_to_generate,
         )
         .unwrap();
-
-        let base_token_params = get_default_config("base_token")
-            .try_deserialize::<CozyTokenDeployParams>()
-            .unwrap();
-
-        let buyers_and_suppliers = get_default_config("buyers_and_suppliers")
-            .try_deserialize::<CozySimBuyersSuppliers>()
-            .unwrap();
-
-        let set_config_params = get_default_config("set_config_params")
-            .try_deserialize::<CozySetConfigParams>()
-            .unwrap();
 
         CozySingleSetSimRunner {
             rand_seed: sim_setup_params.rand_seed,
@@ -273,12 +252,48 @@ impl Default for CozySingleSetSimRunner {
     }
 }
 
-fn get_default_config(name: &str) -> Config {
-    Config::builder()
-        .add_source(config::File::new(
-            &format!("configs/{}.yaml", name),
-            config::FileFormat::Yaml,
-        ))
-        .build()
-        .unwrap()
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use simulate::utils::float_to_wad;
+    use bindings::{
+        cost_model_jump_rate_factory,
+        drip_decay_model_constant_factory
+    };
+
+    #[test]
+    fn test_runner() {
+        let mut runner = CozySingleSetSimRunner::default();
+
+        let test_cost_models: Vec<(Cow<'static, str>, CozyCostModelType)> = vec![(
+            "TestCostModel".into(),
+            CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
+                kink: float_to_wad(0.8),
+                cost_factor_at_full_utilization: float_to_wad(0.95),
+                cost_factor_at_kink_utilization: float_to_wad(0.8),
+                cost_factor_at_zero_utilization: float_to_wad(0.01),
+            }),
+        )];
+        let test_drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)> = vec![(
+            "TestDripDecayModel".into(),
+            CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
+                rate_per_second: float_to_wad(0.8),
+            }),
+        )];
+        let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =
+            vec![("TestTrigger".into(), CozyTriggerType::DummyTrigger)];
+
+        runner.cost_models = test_cost_models;
+        runner.drip_decay_models = test_drip_decay_models;
+        runner.triggers = test_triggers;
+
+        let test_market_config_params = vec![CozyMarketConfigParams {
+            weight: 10000_u16,
+            purchase_fee: 0_u16,
+            sale_fee: 0_u16,
+        }];
+        runner.market_config_params = test_market_config_params;
+
+        runner.run();
+    }
 }

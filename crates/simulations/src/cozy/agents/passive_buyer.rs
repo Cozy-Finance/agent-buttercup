@@ -159,7 +159,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                     }
                 }
         */
-        println!("{:?} PToken balances: {:?}", self.name, self.ptokens_owned);
+        // println!("{:?} PToken balances: {:?}", self.name, self.ptokens_owned);
     }
 }
 
