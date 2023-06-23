@@ -40,7 +40,7 @@ impl Default for CozyTokenDeployParams {
         CozyTokenDeployParams {
             name: "Cozy Base Token".into(),
             symbol: "CBT".into(),
-            decimals: 18,
+            decimals: 6,
         }
     }
 }
@@ -144,8 +144,8 @@ impl Default for CozyBuyersParams {
         CozyBuyersParams {
             num_passive: 100,
             capital_dist: UniformRange::<EthersU256> {
-                min: 100_000.into(),
-                max: 1_000_000_000.into(),
+                min: (1_000_000 as i64).into(),
+                max: (2_000_000 as i64).into(),
             },
             time_dist: Exponential {
                 rate: 1.0,
@@ -167,8 +167,8 @@ impl Default for CozySuppliersParams {
         CozySuppliersParams {
             num_passive: 1,
             capital_dist: UniformRange::<EthersU256> {
-                min: 100_000.into(),
-                max: 1_000_000_000.into(),
+                min: (9_000_000_000 as i64).into(),
+                max: (10_000_000_000 as i64).into(),
             },
             time_dist: Exponential {
                 rate: 1.0,

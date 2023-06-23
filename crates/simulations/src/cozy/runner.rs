@@ -178,6 +178,10 @@ impl CozySingleSetSimRunner {
         let _ = sim_manager.activate_agent(set_admin);
 
         // Passive buyers.
+        let world_triggers_vec = world_triggers
+            .values()
+            .map(|wt| wt.address)
+            .collect::<Vec<_>>();
         for (i, (addr, _)) in buyers_map.into_iter().enumerate() {
             let name = format!("{}{}", PASSIVE_BUYER, i + 1);
             let passive_buyer = Box::new(PassiveBuyer::new(
@@ -186,8 +190,8 @@ impl CozySingleSetSimRunner {
                 world_protocol_contracts.get(COZYROUTER.name).unwrap(),
                 world_protocol_contracts.get(BASE_TOKEN).unwrap(),
                 world_protocol_contracts.get(SET.name).unwrap(),
-                vec![],
-                vec![],
+                world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
+                self.buyers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_buyer);
         }
@@ -261,15 +265,15 @@ mod tests {
             "TestCostModel".into(),
             CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
                 kink: float_to_wad(0.8),
-                cost_factor_at_full_utilization: float_to_wad(0.95),
-                cost_factor_at_kink_utilization: float_to_wad(0.8),
+                cost_factor_at_full_utilization: float_to_wad(0.10),
+                cost_factor_at_kink_utilization: float_to_wad(0.05),
                 cost_factor_at_zero_utilization: float_to_wad(0.01),
             }),
         )];
         let test_drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)> = vec![(
             "TestDripDecayModel".into(),
             CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
-                rate_per_second: float_to_wad(0.8),
+                rate_per_second: float_to_wad(0.000000009),
             }),
         )];
         let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =

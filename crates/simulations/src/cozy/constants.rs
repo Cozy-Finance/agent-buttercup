@@ -6,6 +6,7 @@ pub static SECONDS_IN_YEAR: u64 = 365 * 24 * 3600;
 
 // Static sim update tags
 pub static SET_DEPLOYMENT: &str = "Set Deployment";
+pub static PASSIVE_BUYER_PURCHASE: &str = "Protection Purchase";
 
 // Agent names
 pub static BASE_TOKEN: &str = "Cozy Base Token";
