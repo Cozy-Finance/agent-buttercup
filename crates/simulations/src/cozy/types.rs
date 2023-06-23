@@ -114,8 +114,8 @@ impl Default for CozyFixedTimePolicyParams {
             start_block_number: 1.into(),
             start_block_timestamp: 1.into(),
             time_per_block: 12,
-            blocks_per_step: 10,
-            blocks_to_generate: Some(1000),
+            blocks_per_step: 500,
+            blocks_to_generate: Some(50_000),
             time_to_generate: None,
         }
     }
@@ -136,6 +136,7 @@ impl Default for CozySimSetupParams {
 pub struct CozyBuyersParams {
     pub num_passive: u64,
     pub capital_dist: UniformRange<EthersU256>,
+    pub protection_desired_dist: UniformRange<EthersU256>,
     pub time_dist: Exponential,
 }
 
@@ -144,6 +145,10 @@ impl Default for CozyBuyersParams {
         CozyBuyersParams {
             num_passive: 100,
             capital_dist: UniformRange::<EthersU256> {
+                min: (1_000_000 as i64).into(),
+                max: (2_000_000 as i64).into(),
+            },
+            protection_desired_dist: UniformRange::<EthersU256> {
                 min: (1_000_000 as i64).into(),
                 max: (2_000_000 as i64).into(),
             },
@@ -165,10 +170,10 @@ pub struct CozySuppliersParams {
 impl Default for CozySuppliersParams {
     fn default() -> Self {
         CozySuppliersParams {
-            num_passive: 1,
+            num_passive: 5,
             capital_dist: UniformRange::<EthersU256> {
-                min: (9_000_000_000 as i64).into(),
-                max: (10_000_000_000 as i64).into(),
+                min: (1_000_000 as i64).into(),
+                max: (2_000_000 as i64).into(),
             },
             time_dist: Exponential {
                 rate: 1.0,
