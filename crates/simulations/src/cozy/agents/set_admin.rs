@@ -108,6 +108,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
+        let apy = self.compute_current_apy(state).unwrap();
+
+        log::info!("{:?} apy: {}", self.set_name, apy);
         channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
             self.set_name.clone().unwrap().into(),
             self.compute_current_apy(state).unwrap(),
@@ -167,7 +170,7 @@ impl SetAdmin {
         Ok(drip_rate * EthersU256::from(total_fees))
     }
 
-    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<u128> {
+    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<f64> {
         let num_markets = self.set_admin_params.market_configs.len();
         // Get total unscaled market returns.
         let mut total_market_return = EthersU256::from(0);
@@ -193,9 +196,9 @@ impl SetAdmin {
 
         if total_assets > 0 {
             let apy = total_market_return / total_assets;
-            Ok(apy.as_u128() * SECONDS_IN_YEAR.as_u128())
+            Ok((apy.as_u128() * SECONDS_IN_YEAR.as_u128()) as f64 / 1e18)
         } else {
-            Ok(0 as u128)
+            Ok(0.0)
         }
     }
 }

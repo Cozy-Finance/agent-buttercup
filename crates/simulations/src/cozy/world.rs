@@ -25,7 +25,7 @@ pub enum CozyUpdate {
     AddToCostModels(Cow<'static, str>, Arc<CozyCostModel>),
     AddToDripDecayModels(Cow<'static, str>, Arc<CozyDripDecayModel>),
     AddToTriggers(Cow<'static, str>, Arc<CozyTrigger>),
-    UpdateSetData(Cow<'static, str>, u128),
+    UpdateSetData(Cow<'static, str>, f64),
 }
 
 impl UpdateData for CozyUpdate {}
@@ -89,20 +89,15 @@ impl CozyProtocolContract {
 pub struct CozySet {
     pub address: Address,
     pub trigger_lookup: HashMap<Address, u16>,
-    pub apy: u128,
+    pub apy: f64,
 }
 
 impl CozySet {
-<<<<<<< HEAD
-    pub fn new(address: Address, trigger_lookup: HashMap<Address, u16>) -> Self {
-        CozySet {
-=======
-    pub fn new(address: EvmAddress, trigger_lookup: HashMap<EvmAddress, u16>) -> Arc<RwLock<Self>> {
+    pub fn new(address: Address, trigger_lookup: HashMap<Address, u16>) -> Arc<RwLock<Self>> {
         Arc::new(RwLock::new(CozySet {
->>>>>>> 09ef492 (Set-up runner)
             address,
             trigger_lookup,
-            apy: 0 as u128,
+            apy: 0.0,
         }))
     }
 }

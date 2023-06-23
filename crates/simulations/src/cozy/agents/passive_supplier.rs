@@ -69,7 +69,13 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
         let mut sets = state.world.sets.values().collect::<Vec<_>>();
         if sets.len() > 0 {
-            sets.sort_by(|a, b| a.read().unwrap().apy.cmp(&b.read().unwrap().apy));
+            sets.sort_by(|a, b| {
+                a.read()
+                    .unwrap()
+                    .apy
+                    .partial_cmp(&b.read().unwrap().apy)
+                    .unwrap()
+            });
             let deposit_tx = self
                 .build_deposit_tx(cozy_router::DepositCall {
                     set: sets[0].read().unwrap().address.into(),

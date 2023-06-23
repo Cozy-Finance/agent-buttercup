@@ -10,7 +10,6 @@ use eyre::Result;
 use revm::primitives::{ExecutionResult, TxEnv};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
-    contract::sim_contract::SimContract,
     state::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
@@ -19,8 +18,7 @@ use simulate::{
 };
 
 use crate::cozy::{
-    agents::errors::CozyAgentError,
-    constants::PASSIVE_BUYER_PURCHASE,
+    constants::*,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
 <<<<<<< HEAD
     EthersAddress, EthersU256
@@ -41,6 +39,7 @@ pub struct PassiveBuyer {
 =======
     target_trigger: EvmAddress,
     target_set: Option<(EvmAddress, u16)>,
+    protection_desired: EthersU256,
     protection_owned: EthersU256,
     ptokens_owned: HashMap<(EvmAddress, u16), EvmU256>,
 >>>>>>> d70411b (Fix passive buyer)
@@ -61,6 +60,7 @@ impl PassiveBuyer {
         protection_desired: Vec<EthersU256>,
 =======
         target_trigger: EvmAddress,
+        protection_desired: EthersU256,
         waiting_time: f64,
 >>>>>>> d70411b (Fix passive buyer)
     ) -> Self {
@@ -72,6 +72,7 @@ impl PassiveBuyer {
             set_logic: set_logic.clone(),
             target_trigger,
             target_set: None,
+            protection_desired,
             protection_owned: EthersU256::from(0),
             ptokens_owned: HashMap::new(),
             capital: EthersU256::from(0),
@@ -105,6 +106,12 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             return;
         }
 
+        let protection_delta = if self.protection_desired > self.protection_owned {
+            self.protection_desired - self.protection_owned
+        } else {
+            0.into()
+        };
+
         let sets = state.world.sets.values().collect::<Vec<_>>();
         let targets =
             self.get_target_sets_and_markets_ids(state, sets.clone(), &self.target_trigger);
@@ -112,13 +119,13 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             return;
         }
 
-        let opt_target = targets
+        let target_set_idx = targets
             .iter()
             .map(|(set_address, market_id)| {
                 let purchase_args = cozy_router::PurchaseCall {
                     set: (*set_address).into(),
                     market_id: market_id.clone(),
-                    protection: self.capital,
+                    protection: protection_delta,
                     receiver: self.address.into(),
                     max_cost: EthersU256::MAX,
                 };
@@ -128,19 +135,26 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             .iter()
             .enumerate()
             .min_by(|(_, a), (_, b)| a.cmp(b))
-            .map(|(index, _)| index);
+            .map(|(index, _)| index)
+            .unwrap();
 
-        let (opt_set_address, opt_market_id) = targets[opt_target.unwrap()];
-        let opt_purchase_args = cozy_router::PurchaseCall {
-            set: opt_set_address.into(),
-            market_id: opt_market_id,
-            protection: self.capital,
+        let (set_addr, set_market_id) = targets[target_set_idx];
+        self.target_set = Some((set_addr, set_market_id));
+
+        let protection_purchase_amt = min(
+            protection_delta,
+            self.get_remaining_protection(state, set_addr, set_market_id)
+                .unwrap(),
+        );
+        let purchase_args = cozy_router::PurchaseCall {
+            set: set_addr.into(),
+            market_id: set_market_id,
+            protection: protection_purchase_amt,
             receiver: self.address.into(),
             max_cost: EthersU256::MAX,
         };
-        let evm_tx = self.build_purchase_tx(opt_purchase_args).unwrap();
+        let evm_tx = self.build_purchase_tx(purchase_args).unwrap();
         channel.send_with_tag(SimUpdate::Evm(evm_tx), PASSIVE_BUYER_PURCHASE.into());
-        self.target_set = Some((opt_set_address, opt_market_id));
     }
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
@@ -156,22 +170,29 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                     SimUpdateResult::Evm(purchase_result) if tag == PASSIVE_BUYER_PURCHASE => {
                         let ptokens = self.get_ptokens_received(purchase_result);
                         if let Ok(ptokens) = ptokens {
-                            self.ptokens_owned
-                                .insert(self.target_set.unwrap(), ptokens.into());
-                            self.protection_owned = self
-                                .get_protection_balance(
-                                    state,
-                                    self.target_set.unwrap().0,
-                                    self.target_set.unwrap().1,
-                                    ptokens.into(),
-                                )
-                                .unwrap();
+                            match self.ptokens_owned.get_mut(&self.target_set.unwrap()) {
+                                None => {
+                                    self.ptokens_owned
+                                        .insert(self.target_set.unwrap(), ptokens.into());
+                                }
+                                Some(curr_ptokens) => {
+                                    *curr_ptokens += Into::<EvmU256>::into(ptokens)
+                                }
+                            };
                         }
                     }
                     _ => {}
                 }
             }
         }
+
+        let mut protection_owned = EthersU256::from(0);
+        for ((set_addr, set_market_id), ptokens) in self.ptokens_owned.iter() {
+            protection_owned += self
+                .get_protection_balance(state, *set_addr, *set_market_id, (*ptokens).into())
+                .unwrap();
+        }
+        self.protection_owned = protection_owned;
     }
 }
 
