@@ -19,6 +19,3 @@
 [submodule "contracts/cozy-simulation-contracts"]
 	path = contracts/cozy-simulation-contracts
 	url = https://github.com/Cozy-Finance/cozy-simulation-contracts
-[submodule "contracts/v3-core"]
-	path = contracts/v3-core
-	url = https://github.com/Uniswap/v3-core
