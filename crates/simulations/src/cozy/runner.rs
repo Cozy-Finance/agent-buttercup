@@ -1,17 +1,10 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use bindings::{
-    cozy_protocol::shared_types::{MarketConfig},
-};
+use bindings::cozy_protocol::shared_types::MarketConfig;
 use rand::{rngs::StdRng, Rng, SeedableRng};
-use simulate::{
-    manager::SimManager,
-    state::SimState,
-    time_policy::FixedTimePolicy,
-};
-use crate::cozy::{EvmAddress, EvmBytes, EthersAddress, EthersBytes, EthersU256};
+use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
 
-use super::{
+use crate::cozy::{
     agents::{
         cost_models_deployer::CostModelsDeployer,
         drip_decay_models_deployer::DripDecayModelsDeployer, passive_buyer::PassiveBuyer,
@@ -19,13 +12,16 @@ use super::{
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
         weth_deployer::WethDeployer,
     },
+    bindings_wrapper::*,
     constants::*,
+    distributions::Distribution,
     types::{
-        CozyCostModelType, CozyDripDecayModelType, CozyFixedTimePolicyParams,
+        CozyBuyersParams, CozyCostModelType, CozyDripDecayModelType, CozyFixedTimePolicyParams,
         CozyMarketConfigParams, CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams,
-        CozySimBuyersSuppliers, CozySimSetupParams, CozyTokenDeployParams, CozyTriggerType,
+        CozySimSetupParams, CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
     world::CozyWorld,
+    EthersAddress, EthersBytes, EthersU256, EvmAddress, EvmBytes,
 };
 
 pub struct CozySingleSetSimRunner {
@@ -33,10 +29,8 @@ pub struct CozySingleSetSimRunner {
     fixed_time_policy: FixedTimePolicy,
     protocol_params: CozyProtocolDeployParams,
     base_token_params: CozyTokenDeployParams,
-    num_passive_buyers: u64,
-    num_passive_suppliers: u64,
-    passive_buyer_capital: EthersU256,
-    passive_supplier_capital: EthersU256,
+    buyers_params: CozyBuyersParams,
+    suppliers_params: CozySuppliersParams,
     triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
     cost_models: Vec<(Cow<'static, str>, CozyCostModelType)>,
     drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)>,
@@ -71,17 +65,17 @@ impl CozySingleSetSimRunner {
 
         // Pre-generate <Address, Capital> map for passive buyers and suppliers.
         let mut buyers_map = HashMap::new();
-        for i in 0..self.num_passive_buyers {
+        for i in 0..self.buyers_params.num_passive {
             buyers_map.insert(
                 EvmAddress::random_using(&mut rng),
-                self.passive_buyer_capital,
+                self.buyers_params.capital_dist.sample(&mut rng),
             );
         }
         let mut suppliers_map = HashMap::new();
-        for i in 0..self.num_passive_suppliers {
+        for i in 0..self.suppliers_params.num_passive {
             suppliers_map.insert(
                 EvmAddress::random_using(&mut rng),
-                self.passive_supplier_capital,
+                self.suppliers_params.capital_dist.sample(&mut rng),
             );
         }
 
@@ -221,7 +215,8 @@ impl Default for CozySingleSetSimRunner {
         let protocol_params = CozyProtocolDeployParams::default();
         let time_policy_params = CozyFixedTimePolicyParams::default();
         let base_token_params = CozyTokenDeployParams::default();
-        let buyers_and_suppliers = CozySimBuyersSuppliers::default();
+        let buyers_params = CozyBuyersParams::default();
+        let suppliers_params = CozySuppliersParams::default();
         let set_config_params = CozySetConfigParams::default();
 
         let fixed_time_policy = FixedTimePolicy::new(
@@ -238,14 +233,12 @@ impl Default for CozySingleSetSimRunner {
             rand_seed: sim_setup_params.rand_seed,
             fixed_time_policy,
             protocol_params,
+            base_token_params,
+            buyers_params,
+            suppliers_params,
             triggers: vec![],
             cost_models: vec![],
             drip_decay_models: vec![],
-            base_token_params,
-            num_passive_buyers: buyers_and_suppliers.num_passive_buyers,
-            num_passive_suppliers: buyers_and_suppliers.num_passive_suppliers,
-            passive_buyer_capital: buyers_and_suppliers.passive_buyer_capital,
-            passive_supplier_capital: buyers_and_suppliers.passive_supplier_capital,
             market_config_params: vec![],
             set_config_params,
         }
@@ -254,12 +247,10 @@ impl Default for CozySingleSetSimRunner {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use bindings::{cost_model_jump_rate_factory, drip_decay_model_constant_factory};
     use simulate::utils::float_to_wad;
-    use bindings::{
-        cost_model_jump_rate_factory,
-        drip_decay_model_constant_factory
-    };
+
+    use super::*;
 
     #[test]
     fn test_runner() {

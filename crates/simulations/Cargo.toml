@@ -31,3 +31,7 @@ clap = { workspace = true, features = ["derive"] }
 # Configs
 config = "0.13.3"
 dunce = "1.0.4"
+
+# Distributions
+rand_distr = "0.4.3"
+num-traits = "0.2.15"
