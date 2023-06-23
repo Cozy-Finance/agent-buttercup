@@ -52,6 +52,7 @@ impl Agent<CozyUpdate, CozyWorld> for DripDecayModelsDeployer {
         channel: AgentChannel<CozyUpdate>,
     ) {
         for (name, drip_decay_model_type) in &self.drip_decay_models {
+            log::info!("{:?} deploying {}.", self.name, name);
             match drip_decay_model_type {
                 CozyDripDecayModelType::Constant(args) => {
                     let (addr, evm_tx) = self

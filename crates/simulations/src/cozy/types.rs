@@ -115,7 +115,7 @@ impl Default for CozyFixedTimePolicyParams {
             start_block_timestamp: 1.into(),
             time_per_block: 12,
             blocks_per_step: 10,
-            blocks_to_generate: Some(100_000),
+            blocks_to_generate: Some(1000),
             time_to_generate: None,
         }
     }
