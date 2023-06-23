@@ -1,10 +1,11 @@
-use serde::Deserialize;
-
 use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
+use serde::Deserialize;
+
+use super::distributions::UniformRange;
 use crate::cozy::{EthersAddress, EthersU256};
 
 #[derive(Debug, Clone)]
@@ -34,10 +35,10 @@ pub struct CozyTokenDeployParams {
 
 impl Default for CozyTokenDeployParams {
     fn default() -> Self {
-        CozyTokenDeployParams { 
+        CozyTokenDeployParams {
             name: "Cozy Base Token".into(),
             symbol: "CBT".into(),
-            decimals: 18
+            decimals: 18,
         }
     }
 }
@@ -74,23 +75,23 @@ pub struct CozyProtocolDeployParams {
 
 impl Default for CozyProtocolDeployParams {
     fn default() -> Self {
-        CozyProtocolDeployParams { 
+        CozyProtocolDeployParams {
             delays: Delays {
                 config_update_delay: 172_800.into(),
                 config_update_grace_period: 259_200.into(),
                 min_deposit_duration: 86_400.into(),
                 redemption_delay: 43_200.into(),
                 purchase_delay: 57_600.into(),
-            }, 
+            },
             fees: Fees {
                 deposit_fee_reserves: 0,
                 deposit_fee_backstop: 0,
                 purchase_fee_reserves: 0,
                 purchase_fee_backstop: 0,
                 sale_fee_reserves: 0,
-                sale_fee_backstop: 0,              
+                sale_fee_backstop: 0,
             },
-            allowed_markets_per_set: 50.into()
+            allowed_markets_per_set: 50.into(),
         }
     }
 }
@@ -107,13 +108,13 @@ pub struct CozyFixedTimePolicyParams {
 
 impl Default for CozyFixedTimePolicyParams {
     fn default() -> Self {
-        CozyFixedTimePolicyParams { 
+        CozyFixedTimePolicyParams {
             start_block_number: 1.into(),
             start_block_timestamp: 1.into(),
             time_per_block: 12,
             blocks_per_step: 1,
-            blocks_to_generate: Some(100_000),
-            time_to_generate: None
+            blocks_to_generate: Some(100),
+            time_to_generate: None,
         }
     }
 }
@@ -125,27 +126,42 @@ pub struct CozySimSetupParams {
 
 impl Default for CozySimSetupParams {
     fn default() -> Self {
-        CozySimSetupParams { 
-            rand_seed: 1
+        CozySimSetupParams { rand_seed: 1 }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CozyBuyersParams {
+    pub num_passive: u64,
+    pub capital_dist: UniformRange<EthersU256>,
+}
+
+impl Default for CozyBuyersParams {
+    fn default() -> Self {
+        CozyBuyersParams {
+            num_passive: 100,
+            capital_dist: UniformRange::<EthersU256> {
+                min: 100_000.into(),
+                max: 1_000_000_000.into(),
+            },
         }
     }
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozySimBuyersSuppliers {
-    pub num_passive_buyers: u64,
-    pub num_passive_suppliers: u64,
-    pub passive_buyer_capital: EthersU256,
-    pub passive_supplier_capital: EthersU256,
+pub struct CozySuppliersParams {
+    pub num_passive: u64,
+    pub capital_dist: UniformRange<EthersU256>,
 }
 
-impl Default for CozySimBuyersSuppliers {
+impl Default for CozySuppliersParams {
     fn default() -> Self {
-        CozySimBuyersSuppliers { 
-            num_passive_buyers: 100,
-            num_passive_suppliers: 100,
-            passive_buyer_capital: 100_000.into(),
-            passive_supplier_capital: 100_000.into()
+        CozySuppliersParams {
+            num_passive: 100,
+            capital_dist: UniformRange::<EthersU256> {
+                min: 100_000.into(),
+                max: 1_000_000_000.into(),
+            },
         }
     }
 }
@@ -165,9 +181,9 @@ pub struct CozySetConfigParams {
 
 impl Default for CozySetConfigParams {
     fn default() -> Self {
-        CozySetConfigParams { 
+        CozySetConfigParams {
             leverage_factor: 10_000,
-            deposit_fee: 0
+            deposit_fee: 0,
         }
     }
 }
