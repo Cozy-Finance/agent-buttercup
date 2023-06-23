@@ -64,18 +64,8 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if !self.is_time_to_act(state.read_timestamp()) || self.capital <= EthersU256::from(0) {
-            println!("{:?} timestamp", EthersU256::from(state.read_timestamp()));
-            println!(
-                "{:?} last_action_time",
-                EthersU256::from(self.last_action_time) / (3600)
-            );
-            println!(
-                "{:?} waiting time",
-                EthersU256::from(self.waiting_time) / (3600)
-            );
             return;
         }
-        //println!("{:?} time to act", state.read_timestamp() - self.last_action_time);
 
         let mut sets = state.world.sets.values().collect::<Vec<_>>();
         if sets.len() > 0 {
@@ -96,10 +86,6 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         if !self.is_time_to_act(state.read_timestamp()) {
             return;
         }
-        println!(
-            "{:?} time to act",
-            state.read_timestamp() - self.last_action_time
-        );
         self.capital = self.get_token_balance(state).unwrap();
         self.last_action_time = state.read_timestamp();
     }

@@ -142,7 +142,7 @@ pub struct CozyBuyersParams {
 impl Default for CozyBuyersParams {
     fn default() -> Self {
         CozyBuyersParams {
-            num_passive: 1,
+            num_passive: 100,
             capital_dist: UniformRange::<EthersU256> {
                 min: 100_000.into(),
                 max: 1_000_000_000.into(),
