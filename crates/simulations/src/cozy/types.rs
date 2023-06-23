@@ -5,8 +5,10 @@ use bindings::{
 };
 use serde::Deserialize;
 
-use super::distributions::UniformRange;
-use crate::cozy::{EthersAddress, EthersU256};
+use crate::cozy::{
+    distributions::{Exponential, TimeUnit, UniformRange},
+    EthersAddress, EthersU256,
+};
 
 #[derive(Debug, Clone)]
 pub enum CozyCostModelType {
@@ -112,8 +114,8 @@ impl Default for CozyFixedTimePolicyParams {
             start_block_number: 1.into(),
             start_block_timestamp: 1.into(),
             time_per_block: 12,
-            blocks_per_step: 1,
-            blocks_to_generate: Some(100),
+            blocks_per_step: 10,
+            blocks_to_generate: Some(100_000),
             time_to_generate: None,
         }
     }
@@ -134,15 +136,20 @@ impl Default for CozySimSetupParams {
 pub struct CozyBuyersParams {
     pub num_passive: u64,
     pub capital_dist: UniformRange<EthersU256>,
+    pub time_dist: Exponential,
 }
 
 impl Default for CozyBuyersParams {
     fn default() -> Self {
         CozyBuyersParams {
-            num_passive: 100,
+            num_passive: 1,
             capital_dist: UniformRange::<EthersU256> {
                 min: 100_000.into(),
                 max: 1_000_000_000.into(),
+            },
+            time_dist: Exponential {
+                rate: 1.0,
+                time_unit: TimeUnit::Day,
             },
         }
     }
@@ -152,15 +159,20 @@ impl Default for CozyBuyersParams {
 pub struct CozySuppliersParams {
     pub num_passive: u64,
     pub capital_dist: UniformRange<EthersU256>,
+    pub time_dist: Exponential,
 }
 
 impl Default for CozySuppliersParams {
     fn default() -> Self {
         CozySuppliersParams {
-            num_passive: 100,
+            num_passive: 1,
             capital_dist: UniformRange::<EthersU256> {
                 min: 100_000.into(),
                 max: 1_000_000_000.into(),
+            },
+            time_dist: Exponential {
+                rate: 1.0,
+                time_unit: TimeUnit::Day,
             },
         }
     }

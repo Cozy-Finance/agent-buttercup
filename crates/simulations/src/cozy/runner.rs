@@ -14,7 +14,7 @@ use crate::cozy::{
     },
     bindings_wrapper::*,
     constants::*,
-    distributions::Distribution,
+    distributions::CozyDistribution,
     types::{
         CozyBuyersParams, CozyCostModelType, CozyDripDecayModelType, CozyFixedTimePolicyParams,
         CozyMarketConfigParams, CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams,
@@ -200,6 +200,7 @@ impl CozySingleSetSimRunner {
                 addr,
                 world_protocol_contracts.get(COZYROUTER.name).unwrap(),
                 world_protocol_contracts.get(BASE_TOKEN).unwrap(),
+                self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_supplier);
         }
