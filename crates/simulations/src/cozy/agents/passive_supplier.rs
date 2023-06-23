@@ -20,6 +20,8 @@ pub struct PassiveSupplier {
     cozyrouter: Arc<CozyProtocolContract>,
     token: Arc<CozyProtocolContract>,
     capital: EthersU256,
+    waiting_time: EvmU256,
+    last_action_time: EvmU256,
 }
 
 impl PassiveSupplier {
@@ -28,6 +30,7 @@ impl PassiveSupplier {
         address: Address,
         cozyrouter: &Arc<CozyProtocolContract>,
         token: &Arc<CozyProtocolContract>,
+        waiting_time: f64,
     ) -> Self {
         Self {
             name,
@@ -35,6 +38,8 @@ impl PassiveSupplier {
             cozyrouter: cozyrouter.clone(),
             token: token.clone(),
             capital: EthersU256::from(0),
+            waiting_time: EvmU256::from(waiting_time),
+            last_action_time: EvmU256::from(0),
         }
     }
 }
@@ -54,32 +59,57 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
     ) {
         channel.send(SimUpdate::Evm(self.build_max_approve_router_tx().unwrap()));
         self.capital = self.get_token_balance(state).unwrap();
+        self.last_action_time = state.read_timestamp();
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
-        if self.capital > EthersU256::from(0) {
-            let mut sets = state.world.sets.values().collect::<Vec<_>>();
-            if sets.len() > 0 {
-                sets.sort_by(|a, b| a.read().unwrap().apy.cmp(&b.read().unwrap().apy));
-                let deposit_tx = self
-                    .build_deposit_tx(cozy_router::DepositCall {
-                        set: sets[0].read().unwrap().address.into(),
-                        assets: self.capital,
-                        receiver: self.address.into(),
-                        min_shares_received: EthersU256::from(0),
-                    })
-                    .unwrap();
-                channel.send(SimUpdate::Evm(deposit_tx));
-            }
+        if !self.is_time_to_act(state.read_timestamp()) || self.capital <= EthersU256::from(0) {
+            println!("{:?} timestamp", EthersU256::from(state.read_timestamp()));
+            println!(
+                "{:?} last_action_time",
+                EthersU256::from(self.last_action_time) / (3600)
+            );
+            println!(
+                "{:?} waiting time",
+                EthersU256::from(self.waiting_time) / (3600)
+            );
+            return;
+        }
+        //println!("{:?} time to act", state.read_timestamp() - self.last_action_time);
+
+        let mut sets = state.world.sets.values().collect::<Vec<_>>();
+        if sets.len() > 0 {
+            sets.sort_by(|a, b| a.read().unwrap().apy.cmp(&b.read().unwrap().apy));
+            let deposit_tx = self
+                .build_deposit_tx(cozy_router::DepositCall {
+                    set: sets[0].read().unwrap().address.into(),
+                    assets: self.capital,
+                    receiver: self.address.into(),
+                    min_shares_received: EthersU256::from(0),
+                })
+                .unwrap();
+            channel.send(SimUpdate::Evm(deposit_tx));
         }
     }
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
+        if !self.is_time_to_act(state.read_timestamp()) {
+            return;
+        }
+        println!(
+            "{:?} time to act",
+            state.read_timestamp() - self.last_action_time
+        );
         self.capital = self.get_token_balance(state).unwrap();
+        self.last_action_time = state.read_timestamp();
     }
 }
 
 impl PassiveSupplier {
+    fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
+        (curr_timestamp - self.last_action_time) >= self.waiting_time
+    }
+
     fn get_token_balance(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<EthersU256> {
         let ethers_address: EthersAddress = self.address.into();
         let balance_tx = build_call_contract_txenv(

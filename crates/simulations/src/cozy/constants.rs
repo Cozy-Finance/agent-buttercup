@@ -1,5 +1,8 @@
 // Math
-pub static SECONDS_IN_YEAR: u128 = 365 * 24 * 3600;
+pub static SECONDS_IN_MINUTE: u64 = 60;
+pub static SECONDS_IN_HOUR: u64 = 3600;
+pub static SECONDS_IN_DAY: u64 = 24 * 3600;
+pub static SECONDS_IN_YEAR: u64 = 365 * 24 * 3600;
 
 // Static sim update tags
 pub static SET_DEPLOYMENT: &str = "Set Deployment";

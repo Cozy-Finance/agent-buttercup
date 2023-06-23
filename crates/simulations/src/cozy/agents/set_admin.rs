@@ -7,7 +7,7 @@ pub use bindings::{
     set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
-use revm::primitives::TxEnv;
+use revm::primitives::{bitvec::macros::internal::funty::Fundamental, TxEnv};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
@@ -191,7 +191,7 @@ impl SetAdmin {
 
         if total_assets > 0 {
             let apy = total_market_return / total_assets;
-            Ok(apy.as_u128() * SECONDS_IN_YEAR)
+            Ok(apy.as_u128() * SECONDS_IN_YEAR.as_u128())
         } else {
             Ok(0 as u128)
         }
