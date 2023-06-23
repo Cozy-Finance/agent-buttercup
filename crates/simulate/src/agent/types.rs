@@ -15,16 +15,13 @@ pub struct AgentId {
 
 impl Hash for AgentId {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        let address: [u8; 20] = self.address.value;
-        address.hash(state);
+        self.address.hash(state);
     }
 }
 
 impl PartialEq for AgentId {
     fn eq(&self, other: &Self) -> bool {
-        let self_address: [u8; 20] = self.address.value;
-        let other_address: [u8; 20] = other.address.value;
-        self_address == other_address
+        self.address == other.address
     }
 }
 impl Eq for AgentId {}
