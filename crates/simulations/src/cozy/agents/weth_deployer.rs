@@ -38,6 +38,7 @@ impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        log::info!("{:?} deploying wETH.", self.name);
         self.deploy_weth(state, channel)
             .expect("Error deploying weth.");
     }

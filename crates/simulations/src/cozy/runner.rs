@@ -1,8 +1,13 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use bindings::cozy_protocol::shared_types::MarketConfig;
+use bindings::{
+    cost_model_jump_rate_factory, cozy_protocol::shared_types::MarketConfig,
+    drip_decay_model_constant_factory,
+};
 use rand::{rngs::StdRng, Rng, SeedableRng};
-use simulate::{manager::SimManager, state::SimState, time_policy::FixedTimePolicy};
+use simulate::{
+    manager::SimManager, state::SimState, time_policy::FixedTimePolicy, utils::float_to_wad,
+};
 
 use crate::cozy::{
     agents::{
@@ -21,7 +26,7 @@ use crate::cozy::{
         CozySimSetupParams, CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
     world::CozyWorld,
-    EthersAddress, EthersBytes, EthersU256, EvmAddress, EvmBytes,
+    EvmAddress,
 };
 
 pub struct CozySingleSetSimRunner {
@@ -250,46 +255,49 @@ impl Default for CozySingleSetSimRunner {
     }
 }
 
+pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+    let mut runner = CozySingleSetSimRunner::default();
+
+    let test_cost_models: Vec<(Cow<'static, str>, CozyCostModelType)> = vec![(
+        "TestCostModel".into(),
+        CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
+            kink: float_to_wad(0.8),
+            cost_factor_at_full_utilization: float_to_wad(0.10),
+            cost_factor_at_kink_utilization: float_to_wad(0.05),
+            cost_factor_at_zero_utilization: float_to_wad(0.01),
+        }),
+    )];
+    let test_drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)> = vec![(
+        "TestDripDecayModel".into(),
+        CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
+            rate_per_second: float_to_wad(0.000000009),
+        }),
+    )];
+    let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =
+        vec![("TestTrigger".into(), CozyTriggerType::DummyTrigger)];
+
+    runner.cost_models = test_cost_models;
+    runner.drip_decay_models = test_drip_decay_models;
+    runner.triggers = test_triggers;
+
+    let test_market_config_params = vec![CozyMarketConfigParams {
+        weight: 10000_u16,
+        purchase_fee: 0_u16,
+        sale_fee: 0_u16,
+    }];
+    runner.market_config_params = test_market_config_params;
+
+    runner.run();
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
-    use bindings::{cost_model_jump_rate_factory, drip_decay_model_constant_factory};
-    use simulate::utils::float_to_wad;
-
     use super::*;
 
     #[test]
-    fn test_runner() {
-        let mut runner = CozySingleSetSimRunner::default();
-
-        let test_cost_models: Vec<(Cow<'static, str>, CozyCostModelType)> = vec![(
-            "TestCostModel".into(),
-            CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
-                kink: float_to_wad(0.8),
-                cost_factor_at_full_utilization: float_to_wad(0.10),
-                cost_factor_at_kink_utilization: float_to_wad(0.05),
-                cost_factor_at_zero_utilization: float_to_wad(0.01),
-            }),
-        )];
-        let test_drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)> = vec![(
-            "TestDripDecayModel".into(),
-            CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
-                rate_per_second: float_to_wad(0.000000009),
-            }),
-        )];
-        let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =
-            vec![("TestTrigger".into(), CozyTriggerType::DummyTrigger)];
-
-        runner.cost_models = test_cost_models;
-        runner.drip_decay_models = test_drip_decay_models;
-        runner.triggers = test_triggers;
-
-        let test_market_config_params = vec![CozyMarketConfigParams {
-            weight: 10000_u16,
-            purchase_fee: 0_u16,
-            sale_fee: 0_u16,
-        }];
-        runner.market_config_params = test_market_config_params;
-
-        runner.run();
+    fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
+        run()
     }
 }

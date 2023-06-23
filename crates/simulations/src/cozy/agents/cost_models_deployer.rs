@@ -55,6 +55,7 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
         channel: AgentChannel<CozyUpdate>,
     ) {
         for (name, cost_model_type) in &self.cost_models {
+            log::info!("{:?} deploying {}.", self.name, name);
             match cost_model_type {
                 CozyCostModelType::JumpRate(args) => {
                     let (addr, evm_tx) = self

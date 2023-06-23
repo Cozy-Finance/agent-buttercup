@@ -55,6 +55,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        log::info!("{:?} deploying base token.", self.name);
         self.deploy_token(state, channel)
             .expect("Error deploying token.");
     }

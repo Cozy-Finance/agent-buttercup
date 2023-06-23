@@ -53,10 +53,12 @@ impl Agent<CozyUpdate, CozyWorld> for ProtocolDeployer {
     ) {
         let mut nonce_counter = Counter::new(0);
         // Deploy external libraries.
+        log::info!("{:?} deploying protocol libraries.", self.name);
         let libraries = self
             .deploy_libraries(state, &channel, &mut nonce_counter)
             .expect("Error deploying libraries.");
         // Deploy core protocol.
+        log::info!("{:?} deploying core protocol.", self.name);
         self.deploy_protocol(state, &channel, &libraries.clone(), &mut nonce_counter)
             .expect("Error deploying protocol.");
     }

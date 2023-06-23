@@ -73,6 +73,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        self.set_name = Some(format!("{:?}'s Set", self.name));
+        log::info!("{:?} deploying {:?}.", self.name, self.set_name);
+
         let create_set_args = manager::CreateSetCall {
             owner: self.address.into(),
             pauser: self.address.into(),
@@ -87,7 +90,6 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
 
         let (set_addr, evm_tx) = self.build_create_set_tx(state, create_set_args).unwrap();
         self.set_address = Some(set_addr);
-        self.set_name = Some(format!("{:?}'s Set", self.name));
 
         let trigger_lookup = self
             .set_admin_params
