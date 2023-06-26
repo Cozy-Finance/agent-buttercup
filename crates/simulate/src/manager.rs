@@ -102,7 +102,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         }
 
         self.stepper
-            .insert_account_info(id.address.into(), new_agent.account_info());
+            .insert_account_info(id.address, new_agent.account_info());
 
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
