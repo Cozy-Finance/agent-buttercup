@@ -2,7 +2,7 @@ use std::{borrow::Cow, sync::Arc};
 
 use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
-use revm::primitives::TxEnv;
+use revm::primitives::{TxEnv, U256 as EvmU256};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},

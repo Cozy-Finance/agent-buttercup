@@ -4,6 +4,7 @@ pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     drip_decay_model_constant_factory, manager,
     set::{AccountingReturn, MarketsReturn},
+    cozy_protocol::shared_types::{SetConfig, MarketConfig}
 };
 use eyre::Result;
 use revm::primitives::{TxEnv, bitvec::macros::internal::funty::Fundamental};
@@ -21,18 +22,10 @@ use crate::cozy::{
     EthersAddress, EthersU256
 };
 
-#[derive(Debug, Clone)]
-pub struct SetAdminParams {
-    pub asset: Address,
-    pub set_config: SetConfig,
-    pub market_configs: Vec<MarketConfig>,
-    pub salt: Option<[u8; 32]>,
-}
-
 pub struct SetAdmin {
     name: Option<Cow<'static, str>>,
     address: Address,
-    set_admin_params: SetAdminParams,
+    set_admin_params: CozySetAdminParams,
     manager: Arc<CozyProtocolContract>,
     set_address: Option<Address>,
     set_name: Option<String>,
@@ -43,7 +36,7 @@ impl SetAdmin {
     pub fn new(
         name: Option<Cow<'static, str>>,
         address: Address,
-        set_admin_params: SetAdminParams,
+        set_admin_params: CozySetAdminParams,
         set_logic: &Arc<CozyProtocolContract>,
         manager: &Arc<CozyProtocolContract>,
     ) -> Self {

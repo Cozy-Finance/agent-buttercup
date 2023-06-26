@@ -7,6 +7,7 @@ use bindings::{
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use simulate::{
     manager::SimManager, state::SimState, time_policy::FixedTimePolicy, utils::float_to_wad,
+    address::Address
 };
 
 use crate::cozy::{
@@ -26,7 +27,6 @@ use crate::cozy::{
         CozySimSetupParams, CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
     world::CozyWorld,
-    EvmAddress,
 };
 
 pub struct CozySingleSetSimRunner {
@@ -56,14 +56,14 @@ impl CozySingleSetSimRunner {
         // Weth deployer.
         let weth_deployer = Box::new(WethDeployer::new(
             Some(WETH_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
         ));
         let _ = sim_manager.activate_agent(weth_deployer);
 
         // Protocol deployer.
         let protocol_deployer = Box::new(ProtocolDeployer::new(
             Some(PROTOCOL_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             self.protocol_params,
         ));
         let _ = sim_manager.activate_agent(protocol_deployer);
@@ -72,14 +72,14 @@ impl CozySingleSetSimRunner {
         let mut buyers_map = HashMap::new();
         for i in 0..self.buyers_params.num_passive {
             buyers_map.insert(
-                EvmAddress::random_using(&mut rng),
+                Address::random_using(&mut rng),
                 self.buyers_params.capital_dist.sample(&mut rng),
             );
         }
         let mut suppliers_map = HashMap::new();
         for i in 0..self.suppliers_params.num_passive {
             suppliers_map.insert(
-                EvmAddress::random_using(&mut rng),
+                Address::random_using(&mut rng),
                 self.suppliers_params.capital_dist.sample(&mut rng),
             );
         }
@@ -89,7 +89,7 @@ impl CozySingleSetSimRunner {
         allocate_addrs.extend(suppliers_map.clone());
         let base_token_deployer = Box::new(TokenDeployer::new(
             Some(BASE_TOKEN_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             self.base_token_params,
             allocate_addrs,
         ));
@@ -101,7 +101,7 @@ impl CozySingleSetSimRunner {
         // Cost models deployer.
         let cost_models_deployer = Box::new(CostModelsDeployer::new(
             Some(COST_MODELS_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             self.cost_models.iter().cloned().collect(),
             world_protocol_contracts
                 .get(COSTMODELJUMPRATEFACTORY.name)
@@ -115,7 +115,7 @@ impl CozySingleSetSimRunner {
         // Drip decay models deployer.
         let drip_decay_models_deployer = Box::new(DripDecayModelsDeployer::new(
             Some(DRIP_DECAY_MODELS_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             self.drip_decay_models.iter().cloned().collect(),
             world_protocol_contracts
                 .get(DRIPDECAYMODELCONSTANTFACTORY.name)
@@ -126,7 +126,7 @@ impl CozySingleSetSimRunner {
         // Triggers deployer.
         let triggers_deployer = Box::new(TriggersDeployer::new(
             Some(TRIGGERS_DEPLOYER.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             self.triggers.iter().cloned().collect(),
             world_protocol_contracts
                 .get(UMATRIGGERFACTORY.name)
@@ -175,7 +175,7 @@ impl CozySingleSetSimRunner {
 
         let set_admin = Box::new(SetAdmin::new(
             Some(SET_ADMIN.into()),
-            EvmAddress::random_using(&mut rng),
+            Address::random_using(&mut rng),
             set_params,
             world_protocol_contracts.get(SET.name).unwrap(),
             world_protocol_contracts.get(MANAGER.name).unwrap(),

@@ -20,11 +20,7 @@ use simulate::{
 use crate::cozy::{
     constants::*,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
-<<<<<<< HEAD
-    EthersAddress, EthersU256
-=======
-    EthersAddress, EthersU256, EvmAddress, EvmU256,
->>>>>>> d70411b (Fix passive buyer)
+    EthersAddress, EthersU256, EvmU256,
 };
 
 pub struct PassiveBuyer {
@@ -33,16 +29,11 @@ pub struct PassiveBuyer {
     cozyrouter: Arc<CozyProtocolContract>,
     token: Arc<CozyProtocolContract>,
     set_logic: Arc<CozyProtocolContract>,
-<<<<<<< HEAD
-    target_triggers: Vec<Address>,
-    protection_desired: Vec<EthersU256>,
-=======
-    target_trigger: EvmAddress,
-    target_set: Option<(EvmAddress, u16)>,
+    target_trigger: Address,
+    target_set: Option<(Address, u16)>,
     protection_desired: EthersU256,
     protection_owned: EthersU256,
-    ptokens_owned: HashMap<(EvmAddress, u16), EvmU256>,
->>>>>>> d70411b (Fix passive buyer)
+    ptokens_owned: HashMap<(Address, u16), EvmU256>,
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
@@ -55,14 +46,9 @@ impl PassiveBuyer {
         cozyrouter: &Arc<CozyProtocolContract>,
         token: &Arc<CozyProtocolContract>,
         set_logic: &Arc<CozyProtocolContract>,
-<<<<<<< HEAD
-        target_triggers: Vec<Address>,
-        protection_desired: Vec<EthersU256>,
-=======
-        target_trigger: EvmAddress,
+        target_trigger: Address,
         protection_desired: EthersU256,
         waiting_time: f64,
->>>>>>> d70411b (Fix passive buyer)
     ) -> Self {
         Self {
             name,
@@ -215,7 +201,7 @@ impl PassiveBuyer {
     fn get_protection_balance(
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        set_addr: EvmAddress,
+        set_addr: Address,
         market_id: u16,
         ptokens: EthersU256,
     ) -> Result<EthersU256> {
@@ -258,14 +244,8 @@ impl PassiveBuyer {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         sets: Vec<&Arc<RwLock<CozySet>>>,
-<<<<<<< HEAD
         trigger: &Address,
-        protection_delta: EthersU256,
     ) -> Vec<(Address, u16)> {
-=======
-        trigger: &EvmAddress,
-    ) -> Vec<(EvmAddress, u16)> {
->>>>>>> d70411b (Fix passive buyer)
         sets.iter()
             .filter(|set| set.read().unwrap().trigger_lookup.contains_key(trigger))
             .map(|set| {
