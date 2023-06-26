@@ -1,10 +1,10 @@
 use left_right::{Absorb, ReadHandle, ReadHandleFactory, WriteHandle};
-use revm::primitives::{AccountInfo, Address};
+use revm::primitives::{AccountInfo};
 
 use crate::{
     agent::agent_channel::AgentSimUpdate,
     state::{update::UpdateData, world::World, SimState},
-    time_policy::TimeEnv,
+    time_policy::TimeEnv, address::Address,
 };
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> Absorb<AgentSimUpdate<U>> for SimState<U, W> {

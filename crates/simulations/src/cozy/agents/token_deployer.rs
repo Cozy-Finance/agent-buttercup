@@ -5,7 +5,7 @@ use revm::primitives::create_address;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::build_call_contract_txenv,
+    utils::build_call_contract_txenv, address::Address,
 };
 
 use crate::cozy::{
@@ -13,23 +13,23 @@ use crate::cozy::{
     types::CozyTokenDeployParams,
     utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256, EvmAddress,
+    EthersAddress, EthersU256
 };
 
 pub struct TokenDeployer {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     deploy_args: CozyTokenDeployParams,
-    allocate_addresses: HashMap<EvmAddress, EthersU256>,
+    allocate_addresses: HashMap<Address, EthersU256>,
     finished_allocating: bool,
 }
 
 impl TokenDeployer {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         deploy_args: CozyTokenDeployParams,
-        allocate_addresses: HashMap<EvmAddress, EthersU256>,
+        allocate_addresses: HashMap<Address, EthersU256>,
     ) -> Self {
         Self {
             name,
@@ -84,7 +84,7 @@ impl TokenDeployer {
         )?;
         channel.send(SimUpdate::Evm(evm_tx));
 
-        let dummy_token_addr = create_address(self.address, 0);
+        let dummy_token_addr: Address = Address::from(create_address(self.address.into(), 0));
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             DUMMYTOKEN.name.into(),
             CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
@@ -101,9 +101,10 @@ impl TokenDeployer {
         let token = state.world.protocol_contracts.get(DUMMYTOKEN.name).unwrap();
 
         for (receiver, amount) in self.allocate_addresses.iter() {
+            let receiver_address: EthersAddress = (*receiver).into();
             let call_data = token
                 .contract
-                .encode_function("mint", (EthersAddress::from(*receiver), *amount))?;
+                .encode_function("mint", (receiver_address, *amount))?;
             let tx = build_call_contract_txenv(self.address, token.address, call_data, None, None);
             channel.send(SimUpdate::Evm(tx));
         }

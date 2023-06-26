@@ -6,18 +6,18 @@ use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
 };
 
 use crate::cozy::{
     types::CozyCostModelType,
     world::{CozyCostModel, CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EvmAddress,
+    EthersAddress
 };
 
 pub struct CostModelsDeployer {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     cost_models: HashMap<Cow<'static, str>, CozyCostModelType>,
     jump_rate_factory: Arc<CozyProtocolContract>,
     dynamic_level_factory: Arc<CozyProtocolContract>,
@@ -26,7 +26,7 @@ pub struct CostModelsDeployer {
 impl CostModelsDeployer {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         cost_models: HashMap<Cow<'static, str>, CozyCostModelType>,
         jump_rate_factory: &Arc<CozyProtocolContract>,
         dynamic_level_factory: &Arc<CozyProtocolContract>,
@@ -82,14 +82,14 @@ impl CostModelsDeployer {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         args: cost_model_jump_rate_factory::DeployModelCall,
-    ) -> Result<(EvmAddress, TxEnv)> {
+    ) -> Result<(Address, TxEnv)> {
         let call_data = self
             .jump_rate_factory
             .contract
             .encode_function("deployModel", args)?;
         let tx = build_call_contract_txenv(
             self.address,
-            (*self.jump_rate_factory.address).into(),
+            self.jump_rate_factory.address,
             call_data,
             None,
             None,
@@ -101,21 +101,21 @@ impl CostModelsDeployer {
             .contract
             .decode_output("deployModel", tx_result)?;
 
-        Ok((addr.into(), tx))
+        Ok((Address::from(addr), tx))
     }
 
     fn build_deploy_cost_model_dynamic_level_tx(
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         args: cost_model_dynamic_level_factory::DeployModelCall,
-    ) -> Result<(EvmAddress, TxEnv)> {
+    ) -> Result<(Address, TxEnv)> {
         let call_data = self
             .dynamic_level_factory
             .contract
             .encode_function("deployModel", args)?;
         let tx = build_call_contract_txenv(
             self.address,
-            (*self.dynamic_level_factory.address).into(),
+            self.dynamic_level_factory.address,
             call_data,
             None,
             None,
@@ -127,6 +127,6 @@ impl CostModelsDeployer {
             .contract
             .decode_output("deployModel", tx_result)?;
 
-        Ok((addr.into(), tx))
+        Ok((Address::from(addr), tx))
     }
 }

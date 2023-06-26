@@ -10,22 +10,22 @@ use simulate::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
     },
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
 };
 
 use crate::cozy::{
     agents::errors::CozyAgentError,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256, EvmAddress,
+    EthersAddress, EthersU256
 };
 
 pub struct PassiveBuyer {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     cozyrouter: Arc<CozyProtocolContract>,
     token: Arc<CozyProtocolContract>,
     set_logic: Arc<CozyProtocolContract>,
-    target_triggers: Vec<EvmAddress>,
+    target_triggers: Vec<Address>,
     protection_desired: Vec<EthersU256>,
     capital: Option<EthersU256>,
     ptokens_owned: Option<Vec<EthersU256>>,
@@ -35,11 +35,11 @@ pub struct PassiveBuyer {
 impl PassiveBuyer {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         cozyrouter: &Arc<CozyProtocolContract>,
         token: &Arc<CozyProtocolContract>,
         set_logic: &Arc<CozyProtocolContract>,
-        target_triggers: Vec<EvmAddress>,
+        target_triggers: Vec<Address>,
         protection_desired: Vec<EthersU256>,
         capital: EthersU256,
     ) -> Self {
@@ -139,7 +139,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
         self.capital = Some(self.get_token_balance(state).unwrap());
-        let purchase_results = match state.update_results.get(&self.address) {
+        let purchase_results = match state.update_results.get(&self.address.into()) {
             Some(pr) => pr,
             None => {
                 return;
@@ -173,13 +173,14 @@ impl PassiveBuyer {
     }
 
     fn get_token_balance(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<EthersU256> {
+        let ethers_address: EthersAddress = self.address.into();
         let balance_tx = build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
-                .encode_function("balanceOf", EthersAddress::from(self.address))?,
+                .encode_function("balanceOf", ethers_address)?,
             None,
             None,
         );
@@ -192,9 +193,9 @@ impl PassiveBuyer {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         sets: Vec<&CozySet>,
-        trigger: &EvmAddress,
+        trigger: &Address,
         protection_delta: EthersU256,
-    ) -> Vec<(EvmAddress, u16)> {
+    ) -> Vec<(Address, u16)> {
         sets.iter()
             .filter(|set| set.trigger_lookup.contains_key(trigger))
             .map(|set| (set.address, *set.trigger_lookup.get(trigger).unwrap()))
@@ -226,7 +227,7 @@ impl PassiveBuyer {
     fn get_remaining_protection(
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
-        set_address: EvmAddress,
+        set_address: Address,
         market_id: u16,
     ) -> Result<EthersU256> {
         let remaining_protection_tx = self.build_remaining_protection_tx(set_address, market_id)?;
@@ -240,7 +241,7 @@ impl PassiveBuyer {
 
     fn build_remaining_protection_tx(
         &self,
-        set_address: EvmAddress,
+        set_address: Address,
         market_id: u16,
     ) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
@@ -256,13 +257,14 @@ impl PassiveBuyer {
     }
 
     fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
+        let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
             self.token.as_ref().contract.encode_function(
                 "approve",
                 (
-                    EthersAddress::from(self.cozyrouter.as_ref().address),
+                    cozyrouter_address,
                     EthersU256::MAX,
                 ),
             )?,

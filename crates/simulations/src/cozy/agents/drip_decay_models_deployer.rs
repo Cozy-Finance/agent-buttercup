@@ -6,18 +6,18 @@ use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
 };
 
 use crate::cozy::{
     types::{CozyCostModelType, CozyDripDecayModelType},
     world::{CozyCostModel, CozyDripDecayModel, CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EvmAddress,
+    EthersAddress
 };
 
 pub struct DripDecayModelsDeployer {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     drip_decay_models: HashMap<Cow<'static, str>, CozyDripDecayModelType>,
     drip_decay_constant_factory: Arc<CozyProtocolContract>,
 }
@@ -25,7 +25,7 @@ pub struct DripDecayModelsDeployer {
 impl DripDecayModelsDeployer {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         drip_decay_models: HashMap<Cow<'static, str>, CozyDripDecayModelType>,
         drip_decay_constant_factory: &Arc<CozyProtocolContract>,
     ) -> Self {
@@ -73,14 +73,14 @@ impl DripDecayModelsDeployer {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         args: drip_decay_model_constant_factory::DeployModelCall,
-    ) -> Result<(EvmAddress, TxEnv)> {
+    ) -> Result<(Address, TxEnv)> {
         let call_data = self
             .drip_decay_constant_factory
             .contract
             .encode_function("deployModel", args)?;
         let tx = build_call_contract_txenv(
             self.address,
-            (*self.drip_decay_constant_factory.address).into(),
+            self.drip_decay_constant_factory.address,
             call_data,
             None,
             None,
@@ -92,6 +92,6 @@ impl DripDecayModelsDeployer {
             .contract
             .decode_output("deployModel", tx_result)?;
 
-        Ok((addr.into(), tx))
+        Ok((Address::from(addr), tx))
     }
 }

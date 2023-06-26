@@ -5,7 +5,7 @@ use eyre::Result;
 use revm::primitives::{create_address, TxEnv};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
-    state::{update::SimUpdate, SimState},
+    state::{update::SimUpdate, SimState}, address::Address,
 };
 
 use crate::cozy::{
@@ -13,12 +13,12 @@ use crate::cozy::{
     types::CozyTriggerType,
     utils::build_deploy_contract_tx,
     world::{CozyDripDecayModel, CozyProtocolContract, CozyTrigger, CozyUpdate, CozyWorld},
-    EthersAddress, EvmAddress,
+    EthersAddress
 };
 
 pub struct TriggersDeployer {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     triggers: HashMap<Cow<'static, str>, CozyTriggerType>,
     uma_trigger_factory: Arc<CozyProtocolContract>,
     chainlink_trigger_factory: Arc<CozyProtocolContract>,
@@ -28,7 +28,7 @@ pub struct TriggersDeployer {
 impl TriggersDeployer {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         triggers: HashMap<Cow<'static, str>, CozyTriggerType>,
         uma_trigger_factory: &Arc<CozyProtocolContract>,
         chainlink_trigger_factory: &Arc<CozyProtocolContract>,
@@ -82,12 +82,12 @@ impl TriggersDeployer {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         nonce: &mut u64,
-    ) -> Result<(EvmAddress, TxEnv)> {
-        let args = (EthersAddress::from(self.manager.address),);
+    ) -> Result<(Address, TxEnv)> {
+        let args: (EthersAddress,) = (self.manager.address.into(),);
         let (tx, _) = build_deploy_contract_tx(self.address, &DUMMYTRIGGER, args)?;
-        let addr = create_address(self.address, *nonce);
+        let addr = create_address(self.address.into(), *nonce);
         *nonce += 1;
 
-        Ok((addr, tx))
+        Ok((Address::from(addr), tx))
     }
 }

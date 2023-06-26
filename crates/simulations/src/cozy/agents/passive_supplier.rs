@@ -6,17 +6,17 @@ use revm::primitives::TxEnv;
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
 };
 
 use crate::cozy::{
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256, EvmAddress,
+    EthersAddress, EthersU256
 };
 
 pub struct PassiveSupplier {
     name: Option<Cow<'static, str>>,
-    address: EvmAddress,
+    address: Address,
     cozyrouter: Arc<CozyProtocolContract>,
     token: Arc<CozyProtocolContract>,
     capital: EthersU256,
@@ -25,7 +25,7 @@ pub struct PassiveSupplier {
 impl PassiveSupplier {
     pub fn new(
         name: Option<Cow<'static, str>>,
-        address: EvmAddress,
+        address: Address,
         cozyrouter: &Arc<CozyProtocolContract>,
         token: &Arc<CozyProtocolContract>,
         capital: EthersU256,
@@ -81,13 +81,14 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
 impl PassiveSupplier {
     fn get_token_balance(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<EthersU256> {
+        let ethers_address: EthersAddress = self.address.into();
         let balance_tx = build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
-                .encode_function("balanceOf", EthersAddress::from(self.address))?,
+                .encode_function("balanceOf", ethers_address)?,
             None,
             None,
         );
@@ -97,13 +98,14 @@ impl PassiveSupplier {
     }
 
     fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
+        let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
             self.token.as_ref().contract.encode_function(
                 "approve",
                 (
-                    EthersAddress::from(self.cozyrouter.as_ref().address),
+                    cozyrouter_address,
                     EthersU256::MAX,
                 ),
             )?,
@@ -113,13 +115,14 @@ impl PassiveSupplier {
     }
 
     fn build_transfer_token_to_router_tx(&self, amount: EthersU256) -> Result<TxEnv> {
+        let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
             self.token.as_ref().contract.encode_function(
                 "transfer",
                 (
-                    EthersAddress::from(self.cozyrouter.as_ref().address),
+                    cozyrouter_address,
                     amount,
                 ),
             )?,

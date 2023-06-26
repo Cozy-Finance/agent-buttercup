@@ -6,12 +6,11 @@ use std::{
 
 use bytes::Bytes;
 use ethers::prelude::{
-    abi::{AbiError, Tokenize},
-    Address, BaseContract as EthersBaseContract, U256 as EthersU256,
+    U256 as EthersU256,
 };
-use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, B160, U256 as EvmU256};
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256 as EvmU256};
 
-use crate::{agent::types::AgentTxGas, EvmAddress, EvmBytes};
+use crate::{agent::types::AgentTxGas, EvmBytes, address::Address};
 
 #[derive(Debug)]
 /// Error type for the simulation manager.
@@ -32,16 +31,6 @@ impl Display for UnpackError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "{}", self.message)
     }
-}
-
-/// Recast a B160 into an Address type
-/// # Arguments
-/// * `address` - B160 to recast. (B160)
-/// # Returns
-/// * `Address` - Recasted Address.
-pub fn recast_address(address: B160) -> Address {
-    let temp: [u8; 20] = address.as_bytes().try_into().unwrap();
-    Address::from(temp)
 }
 
 /// Converts a float to a WAD fixed point prepared U256 number.
@@ -98,14 +87,14 @@ pub fn is_execution_success(execution_result: &ExecutionResult) -> bool {
 }
 
 pub fn build_deploy_contract_txenv(
-    caller_address: EvmAddress,
+    caller_address: Address,
     bytecode: EvmBytes,
     value: Option<EvmU256>,
     gas_settings: Option<AgentTxGas>,
 ) -> TxEnv {
     let tx_gas_settings = gas_settings.unwrap_or_default();
     TxEnv {
-        caller: caller_address,
+        caller: caller_address.into(),
         gas_limit: tx_gas_settings.gas_limit,
         gas_price: tx_gas_settings.gas_price,
         gas_priority_fee: tx_gas_settings.gas_priority_fee,
@@ -119,19 +108,19 @@ pub fn build_deploy_contract_txenv(
 }
 
 pub fn build_call_contract_txenv(
-    caller_address: EvmAddress,
-    receiver_address: EvmAddress,
+    caller_address: Address,
+    receiver_address: Address,
     call_data: EvmBytes,
     value: Option<EvmU256>,
     gas_settings: Option<AgentTxGas>,
 ) -> TxEnv {
     let tx_gas_settings = gas_settings.unwrap_or_default();
     TxEnv {
-        caller: caller_address,
+        caller: caller_address.into(),
         gas_limit: tx_gas_settings.gas_limit,
         gas_price: tx_gas_settings.gas_price,
         gas_priority_fee: tx_gas_settings.gas_priority_fee,
-        transact_to: TransactTo::Call(receiver_address),
+        transact_to: TransactTo::Call(receiver_address.into()),
         value: value.unwrap_or(EvmU256::ZERO),
         data: call_data,
         chain_id: None,
