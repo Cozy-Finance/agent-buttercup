@@ -62,13 +62,13 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
                 }
                 s.spawn(|| {
                     for update in receiver.iter() {
-                        self.stepper.append(update);
+                        self.stepper.append_agent_sim_update(update);
                     }
                 });
                 drop(sender);
             });
 
-            // Publish new state.
+            // Publish new state with all agent sim updates.
             self.stepper.publish();
 
             // Let agents resolve the step.
@@ -82,9 +82,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             self.stepper.clear_all_results();
 
             // Update time policy.
-            self.time_policy.step();
-            self.stepper
-                .update_time_env(self.time_policy.current_time_env());
+            self.stepper.update_time_env(self.time_policy.step());
         }
     }
 
@@ -112,18 +110,23 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         // Execute queued updates.
         drop(sender);
         for update in receiver.iter() {
-            self.stepper.append(update);
+            self.stepper.append_agent_sim_update(update);
         }
         self.stepper.publish();
 
         // Resolve activation step.
         new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
 
+        // Clear all results.
         self.stepper.clear_all_results();
 
         // Adds agent to local data.
         self.agents.insert(id.clone(), new_agent);
 
         Ok(())
+    }
+
+    pub fn get_state(&self) -> SimState<U, W> {
+        self.stepper_read_factory.sim_state()
     }
 }

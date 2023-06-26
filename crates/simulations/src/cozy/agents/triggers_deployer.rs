@@ -61,6 +61,7 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
         let mut nonce = 0;
 
         for (name, trigger_type) in &self.triggers {
+            log::info!("{:?} deploying {}.", self.name, name);
             match trigger_type {
                 CozyTriggerType::DummyTrigger => {
                     let (addr, evm_tx) = self

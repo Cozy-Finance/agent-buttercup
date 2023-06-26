@@ -26,5 +26,5 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    crate::cozy::run()
+    cozy::runner::run()
 }

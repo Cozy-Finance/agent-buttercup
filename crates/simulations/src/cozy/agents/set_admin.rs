@@ -1,13 +1,13 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
-use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
     drip_decay_model_constant_factory, manager,
     set::{AccountingReturn, MarketsReturn},
+    cozy_protocol::shared_types::{SetConfig, MarketConfig}
 };
 use eyre::Result;
-use revm::primitives::TxEnv;
+use revm::primitives::{TxEnv, bitvec::macros::internal::funty::Fundamental};
 use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
@@ -17,22 +17,15 @@ use simulate::{
 pub use crate::cozy::constants;
 use crate::cozy::{
     constants::SECONDS_IN_YEAR,
+    types::CozySetAdminParams,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256
 };
 
-#[derive(Debug, Clone)]
-pub struct SetAdminParams {
-    pub asset: Address,
-    pub set_config: SetConfig,
-    pub market_configs: Vec<MarketConfig>,
-    pub salt: Option<[u8; 32]>,
-}
-
 pub struct SetAdmin {
     name: Option<Cow<'static, str>>,
     address: Address,
-    set_admin_params: SetAdminParams,
+    set_admin_params: CozySetAdminParams,
     manager: Arc<CozyProtocolContract>,
     set_address: Option<Address>,
     set_name: Option<String>,
@@ -43,7 +36,7 @@ impl SetAdmin {
     pub fn new(
         name: Option<Cow<'static, str>>,
         address: Address,
-        set_admin_params: SetAdminParams,
+        set_admin_params: CozySetAdminParams,
         set_logic: &Arc<CozyProtocolContract>,
         manager: &Arc<CozyProtocolContract>,
     ) -> Self {
@@ -72,6 +65,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        self.set_name = Some(format!("{:?}'s Set", self.name));
+        log::info!("{:?} deploying {:?}.", self.name, self.set_name);
+
         let create_set_args = manager::CreateSetCall {
             owner: self.address.into(),
             pauser: self.address.into(),
@@ -86,7 +82,6 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
 
         let (set_addr, evm_tx) = self.build_create_set_tx(state, create_set_args).unwrap();
         self.set_address = Some(set_addr);
-        self.set_name = Some(format!("{:?}'s Set", self.name));
 
         let trigger_lookup = self
             .set_admin_params
@@ -105,6 +100,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
+        let apy = self.compute_current_apy(state).unwrap();
+
+        log::info!("{:?} apy: {}", self.set_name, apy);
         channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
             self.set_name.clone().unwrap().into(),
             self.compute_current_apy(state).unwrap(),
@@ -133,7 +131,7 @@ impl SetAdmin {
             .contract
             .decode_output("createSet", tx_result)?;
 
-        Ok((Address::from(addr), tx))
+        Ok((addr.into(), tx))
     }
 
     fn compute_market_return(
@@ -164,7 +162,7 @@ impl SetAdmin {
         Ok(drip_rate * EthersU256::from(total_fees))
     }
 
-    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<u128> {
+    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<f64> {
         let num_markets = self.set_admin_params.market_configs.len();
         // Get total unscaled market returns.
         let mut total_market_return = EthersU256::from(0);
@@ -190,9 +188,9 @@ impl SetAdmin {
 
         if total_assets > 0 {
             let apy = total_market_return / total_assets;
-            Ok(apy.as_u128() * SECONDS_IN_YEAR)
+            Ok((apy.as_u128() * SECONDS_IN_YEAR.as_u128()) as f64 / 1e18)
         } else {
-            Ok(0 as u128)
+            Ok(0.0)
         }
     }
 }

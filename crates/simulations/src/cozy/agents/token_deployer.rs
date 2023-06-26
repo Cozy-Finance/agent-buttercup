@@ -10,6 +10,7 @@ use simulate::{
 
 use crate::cozy::{
     bindings_wrapper::*,
+    constants::BASE_TOKEN,
     types::CozyTokenDeployParams,
     utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
@@ -20,7 +21,7 @@ pub struct TokenDeployer {
     name: Option<Cow<'static, str>>,
     address: Address,
     deploy_args: CozyTokenDeployParams,
-    allocate_addresses: HashMap<Address, EthersU256>,
+    allocate_addrs: HashMap<Address, EthersU256>,
     finished_allocating: bool,
 }
 
@@ -29,13 +30,13 @@ impl TokenDeployer {
         name: Option<Cow<'static, str>>,
         address: Address,
         deploy_args: CozyTokenDeployParams,
-        allocate_addresses: HashMap<Address, EthersU256>,
+        allocate_addrs: HashMap<Address, EthersU256>,
     ) -> Self {
         Self {
             name,
             address,
             deploy_args,
-            allocate_addresses,
+            allocate_addrs,
             finished_allocating: false,
         }
     }
@@ -54,6 +55,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        log::info!("{:?} deploying base token.", self.name);
         self.deploy_token(state, channel)
             .expect("Error deploying token.");
     }
@@ -86,7 +88,7 @@ impl TokenDeployer {
 
         let dummy_token_addr: Address = Address::from(create_address(self.address.into(), 0));
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            DUMMYTOKEN.name.into(),
+            BASE_TOKEN.into(),
             CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
         )));
 
@@ -98,9 +100,9 @@ impl TokenDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let token = state.world.protocol_contracts.get(DUMMYTOKEN.name).unwrap();
+        let token = state.world.protocol_contracts.get(BASE_TOKEN).unwrap();
 
-        for (receiver, amount) in self.allocate_addresses.iter() {
+        for (receiver, amount) in self.allocate_addrs.iter() {
             let receiver_address: EthersAddress = (*receiver).into();
             let call_data = token
                 .contract

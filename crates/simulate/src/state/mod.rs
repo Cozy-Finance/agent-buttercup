@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::HashMap};
 
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB},
-    primitives::{AccountInfo, Env, ExecutionResult, TxEnv},
+    primitives::{AccountInfo, Env, ExecutionResult, TxEnv, U256 as EvmU256},
     EVM,
 };
 use thiserror::Error;
@@ -61,6 +61,14 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         account_info
     }
 
+    pub fn read_timestamp(&self) -> EvmU256 {
+        self.evm.env.block.timestamp
+    }
+
+    pub fn read_block_number(&self) -> EvmU256 {
+        self.evm.env.block.number
+    }
+
     pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
         // Create a sim_evm with no db and cloned and/or passed env (fairly cheap).
         let env = env.unwrap_or(self.evm.env.clone());
@@ -79,17 +87,17 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// Update the time env.
     /// # Arguments
     /// * `time_env` - The time env.
-    pub fn update_time_env(&mut self, time_env: TimeEnv) {
+    pub fn update_time_env(&mut self, time_env: &TimeEnv) {
         self.evm.env.block.number = time_env.number;
         self.evm.env.block.timestamp = time_env.timestamp;
     }
 
     // Add an account to evm.
-    pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
+    pub fn insert_account_info(&mut self, address: &Address, account_info: &AccountInfo) {
         self.evm
             .db()
             .expect("Db not initialized")
-            .insert_account_info(address.into(), account_info);
+            .insert_account_info((*address).into(), account_info.clone());
     }
 
     /// Execute a transaction in the execution environment.

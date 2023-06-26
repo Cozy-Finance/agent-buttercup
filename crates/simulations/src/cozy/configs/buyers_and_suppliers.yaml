@@ -1,0 +1,4 @@
+num_passive_buyers: 100
+num_passive_suppliers: 100
+passive_buyer_capital: 100000
+passive_supplier_capital: 100000
