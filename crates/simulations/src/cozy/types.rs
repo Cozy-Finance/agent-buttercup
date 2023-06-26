@@ -3,11 +3,12 @@ use bindings::{
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
+use simulate::address::Address;
 use serde::Deserialize;
 
 use crate::cozy::{
     distributions::{Exponential, TimeUnit, UniformRange},
-    EthersAddress, EthersU256,
+    EthersU256,
 };
 
 #[derive(Debug, Clone)]
@@ -216,7 +217,7 @@ impl Into<SetConfig> for CozySetConfigParams {
 
 #[derive(Debug, Clone)]
 pub struct CozySetAdminParams {
-    pub asset: EthersAddress,
+    pub asset: Address,
     pub set_config: SetConfig,
     pub market_configs: Vec<MarketConfig>,
     pub salt: Option<[u8; 32]>,
