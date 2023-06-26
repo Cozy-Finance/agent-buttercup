@@ -102,7 +102,7 @@ impl TokenDeployer {
     ) -> Result<()> {
         let token = state.world.protocol_contracts.get(BASE_TOKEN).unwrap();
 
-        for (receiver, amount) in self.allocate_addresses.iter() {
+        for (receiver, amount) in self.allocate_addrs.iter() {
             let receiver_address: EthersAddress = (*receiver).into();
             let call_data = token
                 .contract

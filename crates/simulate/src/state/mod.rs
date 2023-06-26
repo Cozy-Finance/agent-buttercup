@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::HashMap};
 
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB},
-    primitives::{AccountInfo, Env, ExecutionResult, TxEnv},
+    primitives::{AccountInfo, Env, ExecutionResult, TxEnv, U256 as EvmU256},
     EVM,
 };
 use thiserror::Error;
@@ -97,7 +97,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm
             .db()
             .expect("Db not initialized")
-            .insert_account_info(address.into(), account_info);
+            .insert_account_info((*address).into(), account_info.clone());
     }
 
     /// Execute a transaction in the execution environment.
