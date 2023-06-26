@@ -131,7 +131,7 @@ impl SetAdmin {
             .contract
             .decode_output("createSet", tx_result)?;
 
-        Ok((Address::from(addr), tx))
+        Ok((addr.into(), tx))
     }
 
     fn compute_market_return(
