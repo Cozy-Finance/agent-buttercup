@@ -4,15 +4,17 @@ pub use bindings::{cost_model_dynamic_level_factory, cost_model_jump_rate_factor
 use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
+    utils::{build_call_contract_txenv, unpack_execution},
 };
 
 use crate::cozy::{
+    bindings_wrapper::*,
     types::CozyCostModelType,
     world::{CozyCostModel, CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress
+    EthersAddress,
 };
 
 pub struct CostModelsDeployer {
@@ -62,7 +64,7 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                         .build_deploy_cost_model_jump_rate_tx(state, args.clone())
                         .unwrap();
                     let world_update =
-                        CozyUpdate::AddToCostModels((*name).clone(), CozyCostModel::new(addr));
+                        CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
                     channel.send(SimUpdate::Bundle(evm_tx, world_update));
                 }
                 CozyCostModelType::DynamicLevel(args) => {
@@ -70,7 +72,7 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                         .build_deploy_cost_model_dynamic_level_tx(state, args.clone())
                         .unwrap();
                     let world_update =
-                        CozyUpdate::AddToCostModels((*name).clone(), CozyCostModel::new(addr));
+                        CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
                     channel.send(SimUpdate::Bundle(evm_tx, world_update));
                 }
             }

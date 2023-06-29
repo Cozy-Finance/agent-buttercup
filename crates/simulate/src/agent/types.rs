@@ -3,7 +3,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use revm::primitives::{U256 as EvmU256};
+use revm::primitives::U256 as EvmU256;
 
 use crate::address::Address;
 

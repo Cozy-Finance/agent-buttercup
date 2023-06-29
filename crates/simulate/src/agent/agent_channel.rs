@@ -4,8 +4,9 @@ use crossbeam_channel::Sender;
 
 use super::types::AgentId;
 use crate::{
+    address::Address,
     errors::ChannelError,
-    state::update::{SimUpdate, UpdateData}, address::Address
+    state::update::{SimUpdate, UpdateData},
 };
 
 #[derive(Debug, Clone)]

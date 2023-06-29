@@ -2,6 +2,7 @@ use std::{
     borrow::Cow,
     cmp::min,
     collections::HashMap,
+    f32::consts::E,
     sync::{Arc, RwLock},
 };
 
@@ -20,26 +21,28 @@ use simulate::{
 
 use crate::cozy::{
     constants::*,
+    distributions::ProbTruncatedNorm,
+    utils::{float_to_wad, wad_to_float},
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmU256,
 };
 
-pub struct PassiveBuyer {
+pub struct ActiveBuyer {
     name: Option<Cow<'static, str>>,
     address: Address,
     cozyrouter: Arc<CozyProtocolContract>,
     token: Arc<CozyProtocolContract>,
     set_logic: Arc<CozyProtocolContract>,
     target_trigger: Address,
-    protection_desired: EthersU256,
     protection_owned: EthersU256,
-    ptokens_owned: HashMap<(Address, u16), EvmU256>,
+    ptokens_owned: HashMap<(Address, u16), EthersU256>,
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
+    rng: rand::rngs::StdRng,
 }
 
-impl PassiveBuyer {
+impl ActiveBuyer {
     pub fn new(
         name: Option<Cow<'static, str>>,
         address: Address,
@@ -47,8 +50,8 @@ impl PassiveBuyer {
         token: &Arc<CozyProtocolContract>,
         set_logic: &Arc<CozyProtocolContract>,
         target_trigger: Address,
-        protection_desired: EthersU256,
         waiting_time: f64,
+        rng: rand::rngs::StdRng,
     ) -> Self {
         Self {
             name,
@@ -57,17 +60,17 @@ impl PassiveBuyer {
             token: token.clone(),
             set_logic: set_logic.clone(),
             target_trigger,
-            protection_desired,
             protection_owned: EthersU256::from(0),
             ptokens_owned: HashMap::new(),
             capital: EthersU256::from(0),
             waiting_time: EvmU256::from(waiting_time),
             last_action_time: EvmU256::from(0),
+            rng,
         }
     }
 }
 
-impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
+impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
     fn id(&self) -> AgentId {
         AgentId {
             name: self.name.clone(),
@@ -89,55 +92,37 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             return;
         }
 
-        let protection_delta = if self.protection_desired > self.protection_owned {
-            self.protection_desired - self.protection_owned
-        } else {
-            0.into()
+        let targets = match self.get_target_sets_and_markets_ids(
+            state,
+            state.world.sets.values(),
+            &self.target_trigger,
+        ) {
+            targets if targets.is_empty() => return,
+            targets => targets,
         };
 
-        let sets = state.world.sets.values();
-        let targets = self.get_target_sets_and_markets_ids(state, sets, &self.target_trigger);
-        if targets.len() == 0 {
-            return;
-        }
+        let oracle_trigger_prob = state
+            .world
+            .triggers
+            .get_by_addr(&self.target_trigger)
+            .unwrap()
+            .current_prob;
+        let my_trigger_prob = ProbTruncatedNorm::new(oracle_trigger_prob, 0.1).sample(&mut self.rng);
 
-        let target_set_idx = targets
+        let chosen_purchase = targets
             .iter()
             .map(|(set_address, market_id)| {
-                let purchase_args = cozy_router::PurchaseCall {
-                    set: (*set_address).into(),
-                    market_id: market_id.clone(),
-                    protection: protection_delta,
-                    receiver: self.address.into(),
-                    max_cost: EthersU256::MAX,
-                };
-                self.get_purchase_cost(state, purchase_args).unwrap()
+                self.get_arb_purchase_tx(state, *set_address, *market_id, my_trigger_prob)
             })
-            .collect::<Vec<_>>()
-            .iter()
-            .enumerate()
-            .min_by(|(_, a), (_, b)| a.cmp(b))
-            .map(|(index, _)| index)
-            .unwrap();
-
-        let (set_addr, set_market_id) = targets[target_set_idx];
-        let protection_purchase_amt = min(
-            protection_delta,
-            self.get_remaining_protection(state, set_addr, set_market_id)
-                .unwrap(),
-        );
-        let purchase_args = cozy_router::PurchaseCall {
-            set: set_addr.into(),
-            market_id: set_market_id,
-            protection: protection_purchase_amt,
-            receiver: self.address.into(),
-            max_cost: EthersU256::MAX,
-        };
-        let evm_tx = self.build_purchase_tx(purchase_args).unwrap();
-        channel.send_with_tag(
-            SimUpdate::Evm(evm_tx),
-            format!("{} {:X} {}", PASSIVE_BUYER_PURCHASE, set_addr, set_market_id).into(),
-        );
+            .filter_map(Result::ok)
+            .flatten()
+            .max_by(|(.., a), (.., b)| a.cmp(b));
+        if let Some((tx, _, set_address, market_id)) = chosen_purchase {
+            channel.send_with_tag(
+                SimUpdate::Evm(tx),
+                format!("{} {:X} {}", ACTIVE_BUYER_PURCHASE, set_address, market_id).into(),
+            );
+        }
     }
 
     fn resolve_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
@@ -160,7 +145,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                                         .insert(target, ptokens.into());
                                 }
                                 Some(curr_ptokens) => {
-                                    *curr_ptokens += Into::<EvmU256>::into(ptokens)
+                                    *curr_ptokens += Into::<EthersU256>::into(ptokens)
                                 }
                             };
                         }
@@ -177,10 +162,11 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                 .unwrap();
         }
         self.protection_owned = protection_owned;
+        println!("{:?}", protection_owned);
     }
 }
 
-impl PassiveBuyer {
+impl ActiveBuyer {
     fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
         (curr_timestamp - self.last_action_time) >= self.waiting_time
     }
@@ -256,6 +242,75 @@ impl PassiveBuyer {
             .filter(|set| set.trigger_lookup.contains_key(trigger))
             .map(|set| (set.address, *set.trigger_lookup.get(trigger).unwrap()))
             .collect::<Vec<_>>()
+    }
+
+    fn get_arb_purchase_tx(
+        &self,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+        market_id: u16,
+        my_prob: f64,
+    ) -> Result<Option<(TxEnv, EthersU256, Address, u16)>> {
+        let max_cost = (self.capital * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128);
+
+        let mut purchase_amt = self.get_remaining_protection(state, set_address, market_id)?;
+        loop {
+            if purchase_amt == EthersU256::zero() {
+                return Ok(None);
+            }
+            let purchase_args = cozy_router::PurchaseCall {
+                set: set_address.into(),
+                market_id,
+                protection: purchase_amt,
+                receiver: self.address.into(),
+                max_cost,
+            };
+            let purchase_tx = Some(self.build_purchase_tx(purchase_args)?);
+            let purchase_result =
+                match unpack_execution(state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None)) {
+                    Ok(bytes) => bytes,
+                    _ => {
+                        purchase_amt /= 2;
+                        continue;
+                    }
+                };
+            return Ok(Some((purchase_tx.unwrap(), purchase_amt, set_address, market_id)));
+        }
+    }
+
+    fn get_arb_sell_tx(
+        &self,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+        market_id: u16,
+        my_prob: f64,
+    ) -> Result<Option<(TxEnv, EthersU256, Address, u16)>> {
+        let min_refund = (self.capital * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128);
+
+        let mut sell_amt = *(self.ptokens_owned.get(&(set_address, market_id)).unwrap());
+        loop {
+            if sell_amt == EthersU256::zero() {
+                return Ok(None);
+            }
+            let sell_args = cozy_router::SellCall {
+                set: set_address.into(),
+                market_id,
+                ptokens: sell_amt,
+                receiver: self.address.into(),
+                min_refund,
+            };
+            let sell_tx = Some(self.build_sell_tx(sell_args)?);
+            match unpack_execution(state.simulate_evm_tx_ref(sell_tx.as_ref().unwrap(), None)) {
+                Ok(bytes) => {
+                    
+                },
+                _ => {
+                    sell_amt /= 2;
+                    continue;
+                }
+            };
+            return Ok(Some((sell_tx.unwrap(), sell_amt, set_address, market_id)));
+        }
     }
 
     fn get_purchase_cost(

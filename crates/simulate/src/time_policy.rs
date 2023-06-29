@@ -24,9 +24,9 @@ pub trait TimePolicy: Sync + Send {
 pub struct FixedTimePolicy {
     current_time_env: TimeEnv,
     /// Each new block moves the timestamp forward by `time_per_block`
-    time_per_block: u64,
+    pub time_per_block: u64,
     /// Each step moves the block number forward by `blocks_per_step`
-    blocks_per_step: u64,
+    pub blocks_per_step: u64,
     /// Total number of blocks to generate before becoming inactive
     blocks_to_generate: Option<u64>,
     /// Total amount of time to generate before becoming inactive

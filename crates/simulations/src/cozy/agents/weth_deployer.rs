@@ -3,15 +3,15 @@ use std::borrow::Cow;
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    address::Address
 };
 
 use crate::cozy::{
     bindings_wrapper::*,
     utils::build_deploy_contract_tx,
-    world::{CozyProtocolContract, CozyUpdate, CozyWorld}
+    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
 };
 
 pub struct WethDeployer {
@@ -55,8 +55,7 @@ impl WethDeployer {
 
         let weth_addr = create_address(self.address.into(), 0);
         channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            WETH.name.into(),
-            CozyProtocolContract::new(Address::from(weth_addr), weth_contract),
+            CozyProtocolContract::new(WETH.name.into(), weth_addr.into(), weth_contract),
         )));
 
         Ok(())

@@ -4,14 +4,15 @@ use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
 use revm::primitives::{TxEnv, U256 as EvmU256};
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
+    utils::{build_call_contract_txenv, unpack_execution},
 };
 
 use crate::cozy::{
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256
+    EthersAddress, EthersU256,
 };
 
 pub struct PassiveSupplier {
@@ -67,18 +68,12 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
             return;
         }
 
-        let mut sets = state.world.sets.values().collect::<Vec<_>>();
+        let mut sets = state.world.sets.values().clone();
         if sets.len() > 0 {
-            sets.sort_by(|a, b| {
-                a.read()
-                    .unwrap()
-                    .apy
-                    .partial_cmp(&b.read().unwrap().apy)
-                    .unwrap()
-            });
+            sets.sort_by(|a, b| a.apy.partial_cmp(&b.apy).unwrap());
             let deposit_tx = self
                 .build_deposit_tx(cozy_router::DepositCall {
-                    set: sets[0].read().unwrap().address.into(),
+                    set: sets[0].address.into(),
                     assets: self.capital,
                     receiver: self.address.into(),
                     min_shares_received: EthersU256::from(0),
@@ -124,13 +119,10 @@ impl PassiveSupplier {
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
-            self.token.as_ref().contract.encode_function(
-                "approve",
-                (
-                    cozyrouter_address,
-                    EthersU256::MAX,
-                ),
-            )?,
+            self.token
+                .as_ref()
+                .contract
+                .encode_function("approve", (cozyrouter_address, EthersU256::MAX))?,
             None,
             None,
         ))
@@ -141,13 +133,10 @@ impl PassiveSupplier {
         Ok(build_call_contract_txenv(
             self.address,
             self.token.as_ref().address,
-            self.token.as_ref().contract.encode_function(
-                "transfer",
-                (
-                    cozyrouter_address,
-                    amount,
-                ),
-            )?,
+            self.token
+                .as_ref()
+                .contract
+                .encode_function("transfer", (cozyrouter_address, amount))?,
             None,
             None,
         ))

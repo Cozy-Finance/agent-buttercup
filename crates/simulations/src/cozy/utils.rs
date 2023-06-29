@@ -4,14 +4,14 @@ use ethers::abi::Tokenize;
 use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
+    address::Address,
     contract::{sim_contract::SimContract, utils as contract_utils},
     utils::{build_call_contract_txenv, build_deploy_contract_txenv},
-    address::Address
 };
 use thiserror::Error;
 
 use crate::cozy::{
-    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes
+    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes, EthersU256,
 };
 
 #[derive(Error, Debug)]
@@ -107,4 +107,22 @@ impl Counter {
     pub fn increment(&mut self) {
         self.count += 1;
     }
+}
+
+/// Converts a float to a WAD fixed point prepared U256 number.
+/// # Arguments
+/// * `x` - Float to convert. (f64)
+/// # Returns
+/// * `U256` - Converted U256 number.
+pub fn float_to_wad(x: f64) -> EthersU256 {
+    EthersU256::from((x * 1e18) as u128)
+}
+
+/// Converts a float to a WAD fixed point prepared U256 number.
+/// # Arguments
+/// * `x` - WAD to convert. (U256)
+/// # Returns
+/// * `f64` - Converted f64 number.
+pub fn wad_to_float(x: EthersU256) -> f64 {
+    x.as_u128() as f64 / 1e18
 }

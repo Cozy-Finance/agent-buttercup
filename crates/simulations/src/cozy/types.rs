@@ -3,11 +3,11 @@ use bindings::{
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
-use simulate::address::Address;
 use serde::Deserialize;
+use simulate::address::Address;
 
 use crate::cozy::{
-    distributions::{Exponential, TimeUnit, UniformRange},
+    distributions::{Exponential, TimeUnit, TriggerProbModel, UniformRange},
     EthersU256,
 };
 
@@ -24,7 +24,7 @@ pub enum CozyDripDecayModelType {
 
 #[derive(Debug, Clone)]
 pub enum CozyTriggerType {
-    DummyTrigger,
+    DummyTrigger(TriggerProbModel),
     UmaTrigger,
     ChainlinkTrigger,
 }
@@ -114,9 +114,9 @@ impl Default for CozyFixedTimePolicyParams {
         CozyFixedTimePolicyParams {
             start_block_number: 1.into(),
             start_block_timestamp: 1.into(),
-            time_per_block: 12,
-            blocks_per_step: 500,
-            blocks_to_generate: Some(50_000),
+            time_per_block: 60,
+            blocks_per_step: 10,
+            blocks_to_generate: Some(500_000),
             time_to_generate: None,
         }
     }
@@ -134,22 +134,45 @@ impl Default for CozySimSetupParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyBuyersParams {
+pub struct CozyPassiveBuyersParams {
     pub num_passive: u64,
     pub capital_dist: UniformRange<EthersU256>,
     pub protection_desired_dist: UniformRange<EthersU256>,
     pub time_dist: Exponential,
 }
 
-impl Default for CozyBuyersParams {
+impl Default for CozyPassiveBuyersParams {
     fn default() -> Self {
-        CozyBuyersParams {
-            num_passive: 100,
+        CozyPassiveBuyersParams {
+            num_passive: 1,
             capital_dist: UniformRange::<EthersU256> {
                 min: (1_000_000 as i64).into(),
                 max: (2_000_000 as i64).into(),
             },
             protection_desired_dist: UniformRange::<EthersU256> {
+                min: (1_000_000 as i64).into(),
+                max: (2_000_000 as i64).into(),
+            },
+            time_dist: Exponential {
+                rate: 10.0,
+                time_unit: TimeUnit::Day,
+            },
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CozyActiveBuyersParams {
+    pub num_active: u64,
+    pub capital_dist: UniformRange<EthersU256>,
+    pub time_dist: Exponential,
+}
+
+impl Default for CozyActiveBuyersParams {
+    fn default() -> Self {
+        CozyActiveBuyersParams {
+            num_active: 1,
+            capital_dist: UniformRange::<EthersU256> {
                 min: (1_000_000 as i64).into(),
                 max: (2_000_000 as i64).into(),
             },

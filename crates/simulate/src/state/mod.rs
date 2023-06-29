@@ -8,6 +8,7 @@ use revm::{
 use thiserror::Error;
 
 use crate::{
+    address::Address,
     agent::agent_channel::AgentSimUpdate,
     state::{
         update::{SimUpdate, SimUpdateResult, UpdateData},
@@ -15,7 +16,6 @@ use crate::{
     },
     time_policy::TimeEnv,
     utils::*,
-    address::Address,
 };
 
 pub mod update;
