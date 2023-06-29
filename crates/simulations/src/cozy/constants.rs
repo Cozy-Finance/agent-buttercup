@@ -1,12 +1,19 @@
+use crate::cozy::EthersU256;
+use lazy_static::lazy_static;
+
 // Math
 pub static SECONDS_IN_MINUTE: u64 = 60;
 pub static SECONDS_IN_HOUR: u64 = 3600;
 pub static SECONDS_IN_DAY: u64 = 24 * 3600;
 pub static SECONDS_IN_YEAR: u64 = 365 * 24 * 3600;
+lazy_static! {
+    pub static ref WAD: EthersU256 = EthersU256::from(1e18 as u128);
+}
 
 // Static sim update tags
-pub static SET_DEPLOYMENT: &str = "Set Deployment";
-pub static PASSIVE_BUYER_PURCHASE: &str = "Protection Purchase";
+pub static ACTIVE_BUYER_PURCHASE: &str = "Active_Buyer_Protection_Purchase";
+pub static PASSIVE_BUYER_PURCHASE: &str = "Passive_Buyer_Protection_Purchase";
+pub static SET_DEPLOYMENT: &str = "Set_Deployment";
 
 // Agent names
 pub static BASE_TOKEN: &str = "Cozy Base Token";
@@ -14,6 +21,7 @@ pub static BASE_TOKEN_DEPLOYER: &str = "Cozy Base Token Deployer";
 pub static COST_MODELS_DEPLOYER: &str = "Cost Models Deployer";
 pub static DRIP_DECAY_MODELS_DEPLOYER: &str = "Drip Decay Models Deployer";
 pub static PASSIVE_BUYER: &str = "Passive Buyer";
+pub static ACTIVE_BUYER: &str = "Active Buyer";
 pub static PASSIVE_SUPPLIER: &str = "Passive Supplier";
 pub static PROTOCOL_DEPLOYER: &str = "Protocol Deployer";
 pub static SET_ADMIN: &str = "Set Admin";

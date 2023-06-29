@@ -8,7 +8,7 @@ use eyre::Result;
 use revm::primitives::B256;
 use thiserror::Error;
 
-use crate::{EthersBytes, EvmBytes, address::Address};
+use crate::{address::Address, EthersBytes, EvmBytes};
 
 #[derive(Error, Debug)]
 pub enum SimContractError {

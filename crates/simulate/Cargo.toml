@@ -36,3 +36,4 @@ dyn-clone = "1"
 # logging
 flexi_logger = "0.25"
 log = "0.4"
+rustc-hex = "2.1.0"

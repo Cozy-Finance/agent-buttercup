@@ -6,13 +6,12 @@ use bindings::{
 };
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use simulate::{
-    manager::SimManager, state::SimState, time_policy::FixedTimePolicy, utils::float_to_wad,
-    address::Address
+    address::Address, manager::SimManager, state::SimState, time_policy::FixedTimePolicy,
 };
 
 use crate::cozy::{
     agents::{
-        cost_models_deployer::CostModelsDeployer,
+        active_buyer::ActiveBuyer, cost_models_deployer::CostModelsDeployer,
         drip_decay_models_deployer::DripDecayModelsDeployer, passive_buyer::PassiveBuyer,
         passive_supplier::PassiveSupplier, protocol_deployer::ProtocolDeployer,
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
@@ -20,12 +19,14 @@ use crate::cozy::{
     },
     bindings_wrapper::*,
     constants::*,
-    distributions::CozyDistribution,
+    distributions::{CozyDistribution, TriggerProbModel},
     types::{
-        CozyBuyersParams, CozyCostModelType, CozyDripDecayModelType, CozyFixedTimePolicyParams,
-        CozyMarketConfigParams, CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams,
-        CozySimSetupParams, CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
+        CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
+        CozyFixedTimePolicyParams, CozyMarketConfigParams, CozyPassiveBuyersParams,
+        CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams, CozySimSetupParams,
+        CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
+    utils::float_to_wad,
     world::CozyWorld,
 };
 
@@ -34,7 +35,8 @@ pub struct CozySingleSetSimRunner {
     fixed_time_policy: FixedTimePolicy,
     protocol_params: CozyProtocolDeployParams,
     base_token_params: CozyTokenDeployParams,
-    buyers_params: CozyBuyersParams,
+    passive_buyers_params: CozyPassiveBuyersParams,
+    active_buyers_params: CozyActiveBuyersParams,
     suppliers_params: CozySuppliersParams,
     triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
     cost_models: Vec<(Cow<'static, str>, CozyCostModelType)>,
@@ -60,20 +62,33 @@ impl CozySingleSetSimRunner {
         ));
         let _ = sim_manager.activate_agent(weth_deployer);
 
+        let world_protocol_contracts = sim_manager.get_state().world.protocol_contracts;
+        let weth = world_protocol_contracts
+            .get_by_name(&(WETH.name.into()))
+            .unwrap();
+
         // Protocol deployer.
         let protocol_deployer = Box::new(ProtocolDeployer::new(
             Some(PROTOCOL_DEPLOYER.into()),
             Address::random_using(&mut rng),
             self.protocol_params,
+            weth,
         ));
         let _ = sim_manager.activate_agent(protocol_deployer);
 
         // Pre-generate <Address, Capital> map for passive buyers and suppliers.
-        let mut buyers_map = HashMap::new();
-        for i in 0..self.buyers_params.num_passive {
-            buyers_map.insert(
+        let mut passive_buyers_map = HashMap::new();
+        for i in 0..self.passive_buyers_params.num_passive {
+            passive_buyers_map.insert(
                 Address::random_using(&mut rng),
-                self.buyers_params.capital_dist.sample(&mut rng),
+                self.passive_buyers_params.capital_dist.sample(&mut rng),
+            );
+        }
+        let mut active_buyers_map = HashMap::new();
+        for i in 0..self.active_buyers_params.num_active {
+            active_buyers_map.insert(
+                Address::random_using(&mut rng),
+                self.active_buyers_params.capital_dist.sample(&mut rng),
             );
         }
         let mut suppliers_map = HashMap::new();
@@ -85,7 +100,8 @@ impl CozySingleSetSimRunner {
         }
 
         // Base token deployer.
-        let mut allocate_addrs = buyers_map.clone();
+        let mut allocate_addrs = passive_buyers_map.clone();
+        allocate_addrs.extend(active_buyers_map.clone());
         allocate_addrs.extend(suppliers_map.clone());
         let base_token_deployer = Box::new(TokenDeployer::new(
             Some(BASE_TOKEN_DEPLOYER.into()),
@@ -104,10 +120,10 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.cost_models.iter().cloned().collect(),
             world_protocol_contracts
-                .get(COSTMODELJUMPRATEFACTORY.name)
+                .get_by_name(&(COSTMODELJUMPRATEFACTORY.name.into()))
                 .unwrap(),
             world_protocol_contracts
-                .get(COSTMODELDYNAMICLEVELFACTORY.name)
+                .get_by_name(&(COSTMODELDYNAMICLEVELFACTORY.name.into()))
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(cost_models_deployer);
@@ -118,7 +134,7 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.drip_decay_models.iter().cloned().collect(),
             world_protocol_contracts
-                .get(DRIPDECAYMODELCONSTANTFACTORY.name)
+                .get_by_name(&(DRIPDECAYMODELCONSTANTFACTORY.name.into()))
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(drip_decay_models_deployer);
@@ -129,12 +145,15 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.triggers.iter().cloned().collect(),
             world_protocol_contracts
-                .get(UMATRIGGERFACTORY.name)
+                .get_by_name(&(UMATRIGGERFACTORY.name.into()))
                 .unwrap(),
             world_protocol_contracts
-                .get(CHAINLINKTRIGGERFACTORY.name)
+                .get_by_name(&(CHAINLINKTRIGGERFACTORY.name.into()))
                 .unwrap(),
-            world_protocol_contracts.get(MANAGER.name).unwrap(),
+            world_protocol_contracts
+                .get_by_name(&(MANAGER.name.into()))
+                .unwrap(),
+            rng.clone(),
         ));
         let _ = sim_manager.activate_agent(triggers_deployer);
 
@@ -146,15 +165,11 @@ impl CozySingleSetSimRunner {
         // Set admin.
         let mut market_configs = vec![];
         for (i, market_config_param) in self.market_config_params.into_iter().enumerate() {
-            let cost_model_addr = world_cost_models
-                .get(&self.cost_models[i].0)
-                .unwrap()
-                .address;
+            let cost_model_addr = world_cost_models.get_addr(&self.cost_models[i].0).unwrap();
             let drip_decay_model_addr = world_drip_decay_models
-                .get(&self.drip_decay_models[i].0)
-                .unwrap()
-                .address;
-            let trigger_addr = world_triggers.get(&self.triggers[i].0).unwrap().address;
+                .get_addr(&self.drip_decay_models[i].0)
+                .unwrap();
+            let trigger_addr = world_triggers.get_addr(&self.triggers[i].0).unwrap();
             market_configs.push(MarketConfig {
                 trigger: trigger_addr.into(),
                 cost_model: cost_model_addr.into(),
@@ -165,7 +180,10 @@ impl CozySingleSetSimRunner {
             })
         }
         let salt: Option<[u8; 32]> = Some(rng.gen());
-        let base_asset_addr = world_protocol_contracts.get(BASE_TOKEN).unwrap().address;
+        let base_asset_addr = world_protocol_contracts
+            .get_by_name(&(BASE_TOKEN.into()))
+            .unwrap()
+            .address;
         let set_params = CozySetAdminParams {
             asset: base_asset_addr.into(),
             set_config: self.set_config_params.into(),
@@ -177,27 +195,64 @@ impl CozySingleSetSimRunner {
             Some(SET_ADMIN.into()),
             Address::random_using(&mut rng),
             set_params,
-            world_protocol_contracts.get(SET.name).unwrap(),
-            world_protocol_contracts.get(MANAGER.name).unwrap(),
+            world_protocol_contracts
+                .get_by_name(&(SET.name.into()))
+                .unwrap(),
+            world_protocol_contracts
+                .get_by_name(&(MANAGER.name.into()))
+                .unwrap(),
         ));
         let _ = sim_manager.activate_agent(set_admin);
 
         // Passive buyers.
         let world_triggers_vec = world_triggers
             .values()
+            .iter()
             .map(|wt| wt.address)
             .collect::<Vec<_>>();
-        for (i, (addr, _)) in buyers_map.into_iter().enumerate() {
+        for (i, (addr, _)) in passive_buyers_map.into_iter().enumerate() {
             let name = format!("{}{}", PASSIVE_BUYER, i + 1);
             let passive_buyer = Box::new(PassiveBuyer::new(
                 Some(name.into()),
                 addr,
-                world_protocol_contracts.get(COZYROUTER.name).unwrap(),
-                world_protocol_contracts.get(BASE_TOKEN).unwrap(),
-                world_protocol_contracts.get(SET.name).unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(COZYROUTER.name.into()))
+                    .unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(BASE_TOKEN.into()))
+                    .unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(SET.name.into()))
+                    .unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
-                self.buyers_params.protection_desired_dist.sample(&mut rng),
-                self.buyers_params.time_dist.sample_in_secs(&mut rng),
+                self.passive_buyers_params
+                    .protection_desired_dist
+                    .sample(&mut rng),
+                self.passive_buyers_params
+                    .time_dist
+                    .sample_in_secs(&mut rng),
+            ));
+            let _ = sim_manager.activate_agent(passive_buyer);
+        }
+
+        // Active buyers.
+        for (i, (addr, _)) in active_buyers_map.into_iter().enumerate() {
+            let name = format!("{}{}", ACTIVE_BUYER, i + 1);
+            let passive_buyer = Box::new(ActiveBuyer::new(
+                Some(name.into()),
+                addr,
+                world_protocol_contracts
+                    .get_by_name(&(COZYROUTER.name.into()))
+                    .unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(BASE_TOKEN.into()))
+                    .unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(SET.name.into()))
+                    .unwrap(),
+                world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
+                self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
+                rng.clone(),
             ));
             let _ = sim_manager.activate_agent(passive_buyer);
         }
@@ -208,8 +263,12 @@ impl CozySingleSetSimRunner {
             let passive_supplier = Box::new(PassiveSupplier::new(
                 Some(name.into()),
                 addr,
-                world_protocol_contracts.get(COZYROUTER.name).unwrap(),
-                world_protocol_contracts.get(BASE_TOKEN).unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(COZYROUTER.name.into()))
+                    .unwrap(),
+                world_protocol_contracts
+                    .get_by_name(&(BASE_TOKEN.into()))
+                    .unwrap(),
                 self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_supplier);
@@ -226,7 +285,8 @@ impl Default for CozySingleSetSimRunner {
         let protocol_params = CozyProtocolDeployParams::default();
         let time_policy_params = CozyFixedTimePolicyParams::default();
         let base_token_params = CozyTokenDeployParams::default();
-        let buyers_params = CozyBuyersParams::default();
+        let passive_buyers_params = CozyPassiveBuyersParams::default();
+        let active_buyers_params = CozyActiveBuyersParams::default();
         let suppliers_params = CozySuppliersParams::default();
         let set_config_params = CozySetConfigParams::default();
 
@@ -245,7 +305,8 @@ impl Default for CozySingleSetSimRunner {
             fixed_time_policy,
             protocol_params,
             base_token_params,
-            buyers_params,
+            passive_buyers_params,
+            active_buyers_params,
             suppliers_params,
             triggers: vec![],
             cost_models: vec![],
@@ -274,8 +335,12 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
             rate_per_second: float_to_wad(0.000000009),
         }),
     )];
-    let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =
-        vec![("TestTrigger".into(), CozyTriggerType::DummyTrigger)];
+    let step_in_secs =
+        runner.fixed_time_policy.blocks_per_step * runner.fixed_time_policy.time_per_block;
+    let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> = vec![(
+        "TestTrigger".into(),
+        CozyTriggerType::DummyTrigger(TriggerProbModel::new(0.02, step_in_secs, 0.001)),
+    )];
 
     runner.cost_models = test_cost_models;
     runner.drip_decay_models = test_drip_decay_models;
@@ -316,8 +381,12 @@ mod tests {
                 rate_per_second: float_to_wad(0.000000009),
             }),
         )];
-        let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> =
-            vec![("TestTrigger".into(), CozyTriggerType::DummyTrigger)];
+        let step_in_secs =
+            runner.fixed_time_policy.blocks_per_step * runner.fixed_time_policy.time_per_block;
+        let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> = vec![(
+            "TestTrigger".into(),
+            CozyTriggerType::DummyTrigger(TriggerProbModel::new(0.02, step_in_secs, 0.001)),
+        )];
 
         let test_fixed_time_policy_params = CozyFixedTimePolicyParams {
             start_block_number: 1.into(),

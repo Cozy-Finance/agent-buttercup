@@ -1,5 +1,5 @@
 use rand::Rng;
-use rand_distr::{num_traits::ToPrimitive, Distribution, Exp};
+use rand_distr::{num_traits::ToPrimitive, Distribution, Exp, Normal};
 use serde::Deserialize;
 
 use crate::cozy::{constants::*, EthersU256};
@@ -50,5 +50,98 @@ impl Exponential {
             TimeUnit::Hour => sample * SECONDS_IN_MINUTE.to_f64().unwrap(),
             TimeUnit::Day => sample * SECONDS_IN_DAY.to_f64().unwrap(),
         }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TriggerProbModel {
+    pub starting_prob: f64,
+    pub current_prob: f64,
+    pub current_logit: f64,
+    pub step_in_secs: u64,
+    pub annualized_logit_std: f64,
+}
+
+impl TriggerProbModel {
+    pub fn new(starting_prob: f64, step_in_secs: u64, annualized_logit_std: f64) -> Self {
+        TriggerProbModel {
+            starting_prob,
+            current_prob: starting_prob,
+            current_logit: logit(starting_prob),
+            step_in_secs,
+            annualized_logit_std,
+        }
+    }
+
+    pub fn step<R: Rng + ?Sized>(&mut self, rng: &mut R) -> f64 {
+        if self.annualized_logit_std == 0.0 {
+            return self.current_prob;
+        }
+        let normal = Normal::new(
+            self.current_logit,
+            self.annualized_logit_std
+                * (self.step_in_secs as f64 / SECONDS_IN_YEAR as f64)
+                    .to_f64()
+                    .unwrap()
+                    .sqrt(),
+        )
+        .unwrap();
+        self.current_logit = normal.sample(rng);
+        self.current_prob = logistic(self.current_logit);
+        self.current_prob
+    }
+}
+
+pub fn logit(p: f64) -> f64 {
+    (p / (1.0 - p)).ln()
+}
+
+pub fn logistic(x: f64) -> f64 {
+    1.0 / (1.0 + (-x).exp())
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct TruncatedNorm {
+    pub mean: f64,
+    pub std: f64,
+    pub lower_bd: f64,
+    pub upper_bd: f64,
+}
+
+impl TruncatedNorm {
+    pub fn new(mean: f64, std: f64, lower_bd: f64, upper_bd: f64) -> Self {
+        TruncatedNorm {
+            mean,
+            std,
+            lower_bd,
+            upper_bd,
+        }
+    }
+
+    pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> f64 {
+        let normal = Normal::new(self.mean, self.std).unwrap();
+
+        let mut sample = normal.sample(rng);
+        while !(sample >= self.lower_bd && sample <= self.upper_bd) {
+            sample = normal.sample(rng);
+        }
+
+        sample
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ProbTruncatedNorm {
+    pub mean: f64,
+    pub std: f64,
+}
+
+impl ProbTruncatedNorm {
+    pub fn new(mean: f64, std: f64) -> Self {
+        ProbTruncatedNorm { mean, std }
+    }
+
+    pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> f64 {
+        TruncatedNorm::new(self.mean, self.std, 0.0, 1.0).sample(rng)
     }
 }

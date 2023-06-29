@@ -4,15 +4,16 @@ pub use bindings::drip_decay_model_constant_factory;
 use eyre::Result;
 use revm::primitives::TxEnv;
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
+    utils::{build_call_contract_txenv, unpack_execution},
 };
 
 use crate::cozy::{
     types::{CozyCostModelType, CozyDripDecayModelType},
     world::{CozyCostModel, CozyDripDecayModel, CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress
+    EthersAddress,
 };
 
 pub struct DripDecayModelsDeployer {
@@ -58,10 +59,10 @@ impl Agent<CozyUpdate, CozyWorld> for DripDecayModelsDeployer {
                     let (addr, evm_tx) = self
                         .build_deploy_drip_decay_model_constant_tx(state, args.clone())
                         .unwrap();
-                    let world_update = CozyUpdate::AddToDripDecayModels(
+                    let world_update = CozyUpdate::AddToDripDecayModels(CozyDripDecayModel::new(
                         (*name).clone(),
-                        CozyDripDecayModel::new(addr),
-                    );
+                        addr,
+                    ));
                     channel.send(SimUpdate::Bundle(evm_tx, world_update));
                 }
             }

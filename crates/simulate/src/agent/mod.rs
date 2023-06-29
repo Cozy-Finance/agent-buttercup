@@ -2,9 +2,9 @@ use agent_channel::AgentChannel;
 use revm::primitives::AccountInfo;
 
 use crate::{
+    address::Address,
     agent::types::AgentId,
     state::{update::UpdateData, world::World, SimState},
-    address::Address,
 };
 
 pub mod agent_channel;

@@ -2,34 +2,36 @@ use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 pub use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
+    cozy_protocol::shared_types::{MarketConfig, SetConfig},
     drip_decay_model_constant_factory, manager,
     set::{AccountingReturn, MarketsReturn},
-    cozy_protocol::shared_types::{SetConfig, MarketConfig}
 };
 use eyre::Result;
-use revm::primitives::{TxEnv, bitvec::macros::internal::funty::Fundamental};
+use revm::primitives::{bitvec::macros::internal::funty::Fundamental, TxEnv};
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution}, address::Address,
+    utils::{build_call_contract_txenv, unpack_execution},
 };
 
 pub use crate::cozy::constants;
 use crate::cozy::{
+    bindings_wrapper::*,
     constants::SECONDS_IN_YEAR,
     types::CozySetAdminParams,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256
+    EthersAddress, EthersU256,
 };
 
 pub struct SetAdmin {
     name: Option<Cow<'static, str>>,
     address: Address,
     set_admin_params: CozySetAdminParams,
-    manager: Arc<CozyProtocolContract>,
     set_address: Option<Address>,
     set_name: Option<String>,
     set_logic: Arc<CozyProtocolContract>,
+    manager: Arc<CozyProtocolContract>,
 }
 
 impl SetAdmin {
@@ -44,10 +46,10 @@ impl SetAdmin {
             name,
             address,
             set_admin_params,
-            set_logic: set_logic.clone(),
-            manager: manager.clone(),
             set_address: None,
             set_name: None,
+            set_logic: set_logic.clone(),
+            manager: manager.clone(),
         }
     }
 }
@@ -91,10 +93,11 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .map(|(i, config)| (config.trigger.into(), i as u16))
             .collect::<HashMap<_, _>>();
 
-        let world_update = CozyUpdate::AddToSets(
+        let world_update = CozyUpdate::AddToSets(CozySet::new(
             self.set_name.clone().unwrap().into(),
-            CozySet::new(self.set_address.unwrap().into(), trigger_lookup),
-        );
+            self.set_address.unwrap().into(),
+            trigger_lookup,
+        ));
 
         channel.send(SimUpdate::Bundle(evm_tx, world_update));
     }
@@ -117,13 +120,8 @@ impl SetAdmin {
         args: manager::CreateSetCall,
     ) -> Result<(Address, TxEnv)> {
         let call_data = self.manager.contract.encode_function("createSet", args)?;
-        let tx = build_call_contract_txenv(
-            self.address,
-            self.manager.address.into(),
-            call_data,
-            None,
-            None,
-        );
+        let tx =
+            build_call_contract_txenv(self.address, self.manager.address, call_data, None, None);
         let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
             .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = self
