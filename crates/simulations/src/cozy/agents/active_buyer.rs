@@ -42,6 +42,13 @@ pub struct ActiveBuyer {
     rng: rand::rngs::StdRng,
 }
 
+pub struct ArbData {
+    tx: TxEnv,
+    amt: EthersU256,
+    set_address: Address,
+    market_id: u16,
+}
+
 impl ActiveBuyer {
     pub fn new(
         name: Option<Cow<'static, str>>,
@@ -107,7 +114,9 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             .get_by_addr(&self.target_trigger)
             .unwrap()
             .current_prob;
-        let my_trigger_prob = ProbTruncatedNorm::new(oracle_trigger_prob, 0.1).sample(&mut self.rng);
+        let my_trigger_prob =
+            ProbTruncatedNorm::new(oracle_trigger_prob + 0.01, 0.000001).sample(&mut self.rng);
+        println!("{:?}", my_trigger_prob);
 
         let chosen_purchase = targets
             .iter()
@@ -116,12 +125,37 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             })
             .filter_map(Result::ok)
             .flatten()
-            .max_by(|(.., a), (.., b)| a.cmp(b));
-        if let Some((tx, _, set_address, market_id)) = chosen_purchase {
+            .max_by(|a, b| a.amt.cmp(&b.amt));
+        if let Some(chosen_purchase) = chosen_purchase {
             channel.send_with_tag(
-                SimUpdate::Evm(tx),
-                format!("{} {:X} {}", ACTIVE_BUYER_PURCHASE, set_address, market_id).into(),
+                SimUpdate::Evm(chosen_purchase.tx),
+                format!(
+                    "{} {:X} {}",
+                    ACTIVE_BUYER_PURCHASE, chosen_purchase.set_address, chosen_purchase.market_id
+                )
+                .into(),
             );
+        } else {
+            println!("Sale loop");
+            let chosen_sale = targets
+                .iter()
+                .map(|(set_address, market_id)| {
+                    self.get_arb_sell_tx(state, *set_address, *market_id, my_trigger_prob)
+                })
+                .filter_map(Result::ok)
+                .flatten()
+                .max_by(|a, b| a.amt.cmp(&b.amt));
+            if let Some(chosen_sale) = chosen_sale {
+                println!("SALEEEEE");
+                channel.send_with_tag(
+                    SimUpdate::Evm(chosen_sale.tx),
+                    format!(
+                        "{} {:X} {}",
+                        ACTIVE_BUYER_SALE, chosen_sale.set_address, chosen_sale.market_id
+                    )
+                    .into(),
+                );
+            }
         }
     }
 
@@ -141,11 +175,11 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                         if let Ok(ptokens) = ptokens {
                             match self.ptokens_owned.get_mut(&target) {
                                 None => {
-                                    self.ptokens_owned
-                                        .insert(target, ptokens.into());
+                                    self.ptokens_owned.insert(target, ptokens.into());
                                 }
                                 Some(curr_ptokens) => {
-                                    *curr_ptokens += Into::<EthersU256>::into(ptokens)
+                                    *curr_ptokens += Into::<EthersU256>::into(ptokens);
+                                    println!("curr_ptokens: {:?}", curr_ptokens);
                                 }
                             };
                         }
@@ -162,7 +196,6 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                 .unwrap();
         }
         self.protection_owned = protection_owned;
-        println!("{:?}", protection_owned);
     }
 }
 
@@ -250,14 +283,17 @@ impl ActiveBuyer {
         set_address: Address,
         market_id: u16,
         my_prob: f64,
-    ) -> Result<Option<(TxEnv, EthersU256, Address, u16)>> {
-        let max_cost = (self.capital * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128);
-
+    ) -> Result<Option<ArbData>> {
         let mut purchase_amt = self.get_remaining_protection(state, set_address, market_id)?;
+        let mut max_cost = EthersU256::MAX;
         loop {
-            if purchase_amt == EthersU256::zero() {
+            if purchase_amt == EthersU256::zero() || max_cost == EthersU256::zero() {
                 return Ok(None);
             }
+            max_cost = min(
+                (purchase_amt * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128),
+                self.capital,
+            );
             let purchase_args = cozy_router::PurchaseCall {
                 set: set_address.into(),
                 market_id,
@@ -266,15 +302,27 @@ impl ActiveBuyer {
                 max_cost,
             };
             let purchase_tx = Some(self.build_purchase_tx(purchase_args)?);
-            let purchase_result =
-                match unpack_execution(state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None)) {
-                    Ok(bytes) => bytes,
-                    _ => {
-                        purchase_amt /= 2;
-                        continue;
-                    }
-                };
-            return Ok(Some((purchase_tx.unwrap(), purchase_amt, set_address, market_id)));
+            let purchase_result = match unpack_execution(
+                state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None),
+            ) {
+                Ok(bytes) => bytes,
+                _ => {
+                    purchase_amt /= 2;
+                    continue;
+                }
+            };
+            let assets_needed = self
+                .cozyrouter
+                .contract
+                .decode_output::<cozy_router::PurchaseReturn>("purchase", purchase_result)?
+                .assets_needed;
+            println!("assets_needed: {:?}", assets_needed);
+            return Ok(Some(ArbData {
+                tx: purchase_tx.unwrap(),
+                amt: purchase_amt,
+                set_address,
+                market_id,
+            }));
         }
     }
 
@@ -284,10 +332,13 @@ impl ActiveBuyer {
         set_address: Address,
         market_id: u16,
         my_prob: f64,
-    ) -> Result<Option<(TxEnv, EthersU256, Address, u16)>> {
+    ) -> Result<Option<ArbData>> {
         let min_refund = (self.capital * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128);
 
-        let mut sell_amt = *(self.ptokens_owned.get(&(set_address, market_id)).unwrap());
+        let mut sell_amt = match self.ptokens_owned.get(&(set_address, market_id)) {
+            None => return Ok(None),
+            Some(ptokens_owned) => *ptokens_owned,
+        };
         loop {
             if sell_amt == EthersU256::zero() {
                 return Ok(None);
@@ -301,15 +352,18 @@ impl ActiveBuyer {
             };
             let sell_tx = Some(self.build_sell_tx(sell_args)?);
             match unpack_execution(state.simulate_evm_tx_ref(sell_tx.as_ref().unwrap(), None)) {
-                Ok(bytes) => {
-                    
-                },
+                Ok(bytes) => bytes,
                 _ => {
                     sell_amt /= 2;
                     continue;
                 }
             };
-            return Ok(Some((sell_tx.unwrap(), sell_amt, set_address, market_id)));
+            return Ok(Some(ArbData {
+                tx: sell_tx.unwrap(),
+                amt: sell_amt,
+                set_address,
+                market_id,
+            }));
         }
     }
 

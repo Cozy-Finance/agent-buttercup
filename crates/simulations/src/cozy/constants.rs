@@ -1,5 +1,6 @@
-use crate::cozy::EthersU256;
 use lazy_static::lazy_static;
+
+use crate::cozy::EthersU256;
 
 // Math
 pub static SECONDS_IN_MINUTE: u64 = 60;
@@ -12,6 +13,7 @@ lazy_static! {
 
 // Static sim update tags
 pub static ACTIVE_BUYER_PURCHASE: &str = "Active_Buyer_Protection_Purchase";
+pub static ACTIVE_BUYER_SALE: &str = "Active_Buyer_Protection_Sale";
 pub static PASSIVE_BUYER_PURCHASE: &str = "Passive_Buyer_Protection_Purchase";
 pub static SET_DEPLOYMENT: &str = "Set_Deployment";
 

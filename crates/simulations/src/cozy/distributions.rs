@@ -1,20 +1,23 @@
+use ethers::utils::__serde_json::de;
 use rand::Rng;
 use rand_distr::{num_traits::ToPrimitive, Distribution, Exp, Normal};
 use serde::Deserialize;
 
-use crate::cozy::{constants::*, EthersU256};
+use crate::cozy::{constants::*, types::deserialize_string_to_u256, EthersU256};
 
 pub trait CozyDistribution<T> {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> T;
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct UniformRange<T> {
-    pub min: T,
-    pub max: T,
+pub struct U256UniformRange {
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub min: EthersU256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub max: EthersU256,
 }
 
-impl CozyDistribution<EthersU256> for UniformRange<EthersU256> {
+impl CozyDistribution<EthersU256> for U256UniformRange {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> EthersU256 {
         let mut sample = [0_u8; 32];
         rng.fill(&mut sample[..]);
@@ -54,12 +57,32 @@ impl Exponential {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+pub struct TriggerProbModelSettings {
+    pub starting_prob: f64,
+    pub step_in_secs: u64,
+    pub annualized_logit_std: f64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(from = "TriggerProbModelSettings")]
 pub struct TriggerProbModel {
     pub starting_prob: f64,
     pub current_prob: f64,
     pub current_logit: f64,
     pub step_in_secs: u64,
     pub annualized_logit_std: f64,
+}
+
+impl From<TriggerProbModelSettings> for TriggerProbModel {
+    fn from(settings: TriggerProbModelSettings) -> Self {
+        TriggerProbModel {
+            starting_prob: settings.starting_prob,
+            current_prob: settings.starting_prob,
+            current_logit: logit(settings.starting_prob),
+            step_in_secs: settings.step_in_secs,
+            annualized_logit_std: settings.annualized_logit_std,
+        }
+    }
 }
 
 impl TriggerProbModel {

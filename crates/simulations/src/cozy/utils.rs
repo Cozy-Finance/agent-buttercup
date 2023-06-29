@@ -3,6 +3,7 @@ use std::{collections::HashMap, sync::Arc};
 use ethers::abi::Tokenize;
 use eyre::Result;
 use revm::primitives::TxEnv;
+use serde::Deserialize;
 use simulate::{
     address::Address,
     contract::{sim_contract::SimContract, utils as contract_utils},
@@ -10,8 +11,12 @@ use simulate::{
 };
 use thiserror::Error;
 
+use super::types::CozyCostModelType;
 use crate::cozy::{
-    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes, EthersU256,
+    bindings_wrapper::*,
+    types::{CozyPassiveBuyersParams, CozyTriggerType},
+    world::CozyProtocolContract,
+    EthersAddress, EthersBytes, EthersU256,
 };
 
 #[derive(Error, Debug)]
@@ -125,4 +130,24 @@ pub fn float_to_wad(x: f64) -> EthersU256 {
 /// * `f64` - Converted f64 number.
 pub fn wad_to_float(x: EthersU256) -> f64 {
     x.as_u128() as f64 / 1e18
+}
+
+#[derive(Deserialize, Debug)]
+pub struct Test {
+    pub cost_models: Vec<(String, CozyCostModelType)>,
+}
+
+pub fn get_config(analysis_config_file: &str) -> Result<(), config::ConfigError> {
+    let base_path = std::env::current_dir().expect("Failed to determine the current directory.");
+    let configs_dir = base_path.join("src/cozy/configs");
+    println!("{:?}", configs_dir);
+    let settings = config::Config::builder()
+        .add_source(config::File::from(configs_dir.join(analysis_config_file)))
+        .build()?;
+    println!("{:?}", settings);
+    let x = settings.try_deserialize::<Test>();
+
+    println!("{:?}", x);
+
+    Ok(())
 }

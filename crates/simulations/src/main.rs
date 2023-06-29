@@ -5,7 +5,7 @@ use std::error::Error;
 pub mod cozy;
 
 use clap::Parser;
-use flexi_logger::{Duplicate, FileSpec, Logger};
+use flexi_logger::{Duplicate, Logger};
 
 /// Runs Cozy Simulation
 #[derive(Parser, Debug)]
@@ -18,7 +18,6 @@ struct Args {
 
 pub fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-
     let log_level = args.log_level;
 
     Logger::try_with_str(log_level)?
@@ -26,5 +25,9 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    cozy::runner::run()
+    let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("cost_models_analysis")?;
+    let runner = crate::cozy::runner::CozySingleSetSimRunner::new(settings);
+    runner.run();
+
+    Ok(())
 }
