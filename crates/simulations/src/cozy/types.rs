@@ -7,7 +7,7 @@ use serde::{Deserialize, Deserializer};
 use simulate::address::Address;
 
 use crate::cozy::{
-    distributions::{Exponential, TimeUnit, TriggerProbModel, U256UniformRange},
+    distributions::{Exponential, TriggerProbModel, U256UniformRange},
     EthersU256,
 };
 
@@ -86,16 +86,6 @@ pub struct CozyTokenDeployParams {
     pub decimals: u8,
 }
 
-impl Default for CozyTokenDeployParams {
-    fn default() -> Self {
-        CozyTokenDeployParams {
-            name: "Cozy Base Token".into(),
-            symbol: "CBT".into(),
-            decimals: 6,
-        }
-    }
-}
-
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "Delays")]
 pub struct CozyDelays {
@@ -132,29 +122,6 @@ pub struct CozyProtocolDeployParams {
     pub allowed_markets_per_set: EthersU256,
 }
 
-impl Default for CozyProtocolDeployParams {
-    fn default() -> Self {
-        CozyProtocolDeployParams {
-            delays: Delays {
-                config_update_delay: 172_800.into(),
-                config_update_grace_period: 259_200.into(),
-                min_deposit_duration: 86_400.into(),
-                redemption_delay: 43_200.into(),
-                purchase_delay: 57_600.into(),
-            },
-            fees: Fees {
-                deposit_fee_reserves: 0,
-                deposit_fee_backstop: 0,
-                purchase_fee_reserves: 0,
-                purchase_fee_backstop: 0,
-                sale_fee_reserves: 0,
-                sale_fee_backstop: 0,
-            },
-            allowed_markets_per_set: 50.into(),
-        }
-    }
-}
-
 #[derive(Debug, Clone, Deserialize)]
 pub struct CozyFixedTimePolicyParams {
     pub start_block_number: u64,
@@ -165,28 +132,9 @@ pub struct CozyFixedTimePolicyParams {
     pub time_to_generate: Option<u64>,
 }
 
-impl Default for CozyFixedTimePolicyParams {
-    fn default() -> Self {
-        CozyFixedTimePolicyParams {
-            start_block_number: 1,
-            start_block_timestamp: 1,
-            time_per_block: 60,
-            blocks_per_step: 10,
-            blocks_to_generate: Some(500_000),
-            time_to_generate: None,
-        }
-    }
-}
-
 #[derive(Debug, Clone, Deserialize)]
 pub struct CozySimSetupParams {
     pub rand_seed: u64,
-}
-
-impl Default for CozySimSetupParams {
-    fn default() -> Self {
-        CozySimSetupParams { rand_seed: 1 }
-    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -197,26 +145,6 @@ pub struct CozyPassiveBuyersParams {
     pub time_dist: Exponential,
 }
 
-impl Default for CozyPassiveBuyersParams {
-    fn default() -> Self {
-        CozyPassiveBuyersParams {
-            num_passive: 0,
-            capital_dist: U256UniformRange {
-                min: (1_000_000 as i64).into(),
-                max: (2_000_000 as i64).into(),
-            },
-            protection_desired_dist: U256UniformRange {
-                min: (1_000_000 as i64).into(),
-                max: (2_000_000 as i64).into(),
-            },
-            time_dist: Exponential {
-                rate: 10.0,
-                time_unit: TimeUnit::Day,
-            },
-        }
-    }
-}
-
 #[derive(Debug, Clone, Deserialize)]
 pub struct CozyActiveBuyersParams {
     pub num_active: u64,
@@ -224,43 +152,11 @@ pub struct CozyActiveBuyersParams {
     pub time_dist: Exponential,
 }
 
-impl Default for CozyActiveBuyersParams {
-    fn default() -> Self {
-        CozyActiveBuyersParams {
-            num_active: 1,
-            capital_dist: U256UniformRange {
-                min: (1_000_000 as i64).into(),
-                max: (2_000_000 as i64).into(),
-            },
-            time_dist: Exponential {
-                rate: 1.0,
-                time_unit: TimeUnit::Day,
-            },
-        }
-    }
-}
-
 #[derive(Debug, Clone, Deserialize)]
 pub struct CozySuppliersParams {
     pub num_passive: u64,
     pub capital_dist: U256UniformRange,
     pub time_dist: Exponential,
-}
-
-impl Default for CozySuppliersParams {
-    fn default() -> Self {
-        CozySuppliersParams {
-            num_passive: 1,
-            capital_dist: U256UniformRange {
-                min: (1_000_000_000 as i64).into(),
-                max: (2_000_000_000 as i64).into(),
-            },
-            time_dist: Exponential {
-                rate: 1.0,
-                time_unit: TimeUnit::Day,
-            },
-        }
-    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -274,15 +170,6 @@ pub struct CozyMarketConfigParams {
 pub struct CozySetConfigParams {
     pub leverage_factor: u32,
     pub deposit_fee: u16,
-}
-
-impl Default for CozySetConfigParams {
-    fn default() -> Self {
-        CozySetConfigParams {
-            leverage_factor: 10_000,
-            deposit_fee: 0,
-        }
-    }
 }
 
 impl Into<SetConfig> for CozySetConfigParams {

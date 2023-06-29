@@ -1,9 +1,6 @@
 use std::{borrow::Cow, collections::HashMap};
 
-use bindings::{
-    cost_model_jump_rate_factory, cozy_protocol::shared_types::MarketConfig,
-    drip_decay_model_constant_factory,
-};
+use bindings::cozy_protocol::shared_types::MarketConfig;
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use serde::Deserialize;
 use simulate::{
@@ -20,14 +17,13 @@ use crate::cozy::{
     },
     bindings_wrapper::*,
     constants::*,
-    distributions::{CozyDistribution, TriggerProbModel},
+    distributions::CozyDistribution,
     types::{
         CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
         CozyFixedTimePolicyParams, CozyMarketConfigParams, CozyPassiveBuyersParams,
         CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams, CozySimSetupParams,
         CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
-    utils::float_to_wad,
     world::CozyWorld,
 };
 
@@ -337,85 +333,6 @@ impl CozySingleSetSimRunner {
         // Run sim.
         sim_manager.run_sim();
     }
-}
-
-impl Default for CozySingleSetSimRunner {
-    fn default() -> Self {
-        let sim_setup_params = CozySimSetupParams::default();
-        let protocol_params = CozyProtocolDeployParams::default();
-        let time_policy_params = CozyFixedTimePolicyParams::default();
-        let base_token_params = CozyTokenDeployParams::default();
-        let passive_buyers_params = CozyPassiveBuyersParams::default();
-        let active_buyers_params = CozyActiveBuyersParams::default();
-        let suppliers_params = CozySuppliersParams::default();
-        let set_config_params = CozySetConfigParams::default();
-
-        let fixed_time_policy = FixedTimePolicy::new(
-            time_policy_params.start_block_number.into(),
-            time_policy_params.start_block_timestamp.into(),
-            time_policy_params.time_per_block,
-            time_policy_params.blocks_per_step,
-            time_policy_params.blocks_to_generate,
-            time_policy_params.time_to_generate,
-        )
-        .unwrap();
-
-        CozySingleSetSimRunner {
-            rand_seed: sim_setup_params.rand_seed,
-            fixed_time_policy,
-            protocol_params,
-            base_token_params,
-            passive_buyers_params,
-            active_buyers_params,
-            suppliers_params,
-            triggers: vec![],
-            cost_models: vec![],
-            drip_decay_models: vec![],
-            market_config_params: vec![],
-            set_config_params,
-        }
-    }
-}
-
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
-    let mut runner = CozySingleSetSimRunner::default();
-
-    let test_cost_models: Vec<(Cow<'static, str>, CozyCostModelType)> = vec![(
-        "TestCostModel".into(),
-        CozyCostModelType::JumpRate(cost_model_jump_rate_factory::DeployModelCall {
-            kink: float_to_wad(0.8),
-            cost_factor_at_full_utilization: float_to_wad(0.05),
-            cost_factor_at_kink_utilization: float_to_wad(0.02),
-            cost_factor_at_zero_utilization: float_to_wad(0.005),
-        }),
-    )];
-    let test_drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)> = vec![(
-        "TestDripDecayModel".into(),
-        CozyDripDecayModelType::Constant(drip_decay_model_constant_factory::DeployModelCall {
-            rate_per_second: float_to_wad(0.000000009),
-        }),
-    )];
-    let step_in_secs =
-        runner.fixed_time_policy.blocks_per_step * runner.fixed_time_policy.time_per_block;
-    let test_triggers: Vec<(Cow<'static, str>, CozyTriggerType)> = vec![(
-        "TestTrigger".into(),
-        CozyTriggerType::DummyTrigger(TriggerProbModel::new(0.02, step_in_secs, 0.001)),
-    )];
-
-    runner.cost_models = test_cost_models;
-    runner.drip_decay_models = test_drip_decay_models;
-    runner.triggers = test_triggers;
-
-    let test_market_config_params = vec![CozyMarketConfigParams {
-        weight: 10000_u16,
-        purchase_fee: 0_u16,
-        sale_fee: 0_u16,
-    }];
-    runner.market_config_params = test_market_config_params;
-
-    runner.run();
-
-    Ok(())
 }
 
 #[cfg(test)]
