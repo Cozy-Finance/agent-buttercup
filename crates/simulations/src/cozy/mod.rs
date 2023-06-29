@@ -5,7 +5,9 @@ pub use ethers::{
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress, U256 as EvmU256};
 
 pub mod agents;
+pub mod analysis;
 pub mod bindings_wrapper;
+pub mod configs;
 pub mod constants;
 pub mod distributions;
 pub mod runner;

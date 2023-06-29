@@ -136,7 +136,11 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         let evm_tx = self.build_purchase_tx(purchase_args).unwrap();
         channel.send_with_tag(
             SimUpdate::Evm(evm_tx),
-            format!("{} {:X} {}", PASSIVE_BUYER_PURCHASE, set_addr, set_market_id).into(),
+            format!(
+                "{} {:X} {}",
+                PASSIVE_BUYER_PURCHASE, set_addr, set_market_id
+            )
+            .into(),
         );
     }
 
@@ -156,8 +160,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                         if let Ok(ptokens) = ptokens {
                             match self.ptokens_owned.get_mut(&target) {
                                 None => {
-                                    self.ptokens_owned
-                                        .insert(target, ptokens.into());
+                                    self.ptokens_owned.insert(target, ptokens.into());
                                 }
                                 Some(curr_ptokens) => {
                                     *curr_ptokens += Into::<EvmU256>::into(ptokens)

@@ -27,8 +27,6 @@ log = "0.4"
 
 # Binary Command Line Args
 clap = { workspace = true, features = ["derive"] }
-
-# Configs
 config = "0.13.3"
 dunce = "1.0.4"
 
