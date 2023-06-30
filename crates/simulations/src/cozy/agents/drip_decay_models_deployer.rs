@@ -11,8 +11,8 @@ use simulate::{
 };
 
 use crate::cozy::{
-    types::{CozyCostModelType, CozyDripDecayModelType},
-    world::{CozyCostModel, CozyDripDecayModel, CozyProtocolContract, CozyUpdate, CozyWorld},
+    types::{CozyDripDecayModelType},
+    world::{CozyDripDecayModel, CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress,
 };
 

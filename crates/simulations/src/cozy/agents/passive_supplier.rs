@@ -69,7 +69,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         }
 
         let mut sets = state.world.sets.values().clone();
-        if sets.len() > 0 {
+        if !sets.is_empty() {
             sets.sort_by(|a, b| a.apy.partial_cmp(&b.apy).unwrap());
             let deposit_tx = self
                 .build_deposit_tx(cozy_router::DepositCall {

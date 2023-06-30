@@ -1,9 +1,8 @@
-use ethers::utils::__serde_json::de;
 use rand::Rng;
 use rand_distr::{num_traits::ToPrimitive, Distribution, Exp, Normal};
 use serde::Deserialize;
 
-use crate::cozy::{constants::*, types::deserialize_string_to_u256, EthersU256};
+use crate::cozy::{constants::*, utils::deserialize_string_to_u256, EthersU256};
 
 pub trait CozyDistribution<T> {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> T;
@@ -85,6 +84,14 @@ impl From<TriggerProbModelSettings> for TriggerProbModel {
     }
 }
 
+pub fn logit(p: f64) -> f64 {
+    (p / (1.0 - p)).ln()
+}
+
+pub fn logistic(x: f64) -> f64 {
+    1.0 / (1.0 + (-x).exp())
+}
+
 impl TriggerProbModel {
     pub fn new(starting_prob: f64, step_in_secs: u64, annualized_logit_std: f64) -> Self {
         TriggerProbModel {
@@ -113,14 +120,6 @@ impl TriggerProbModel {
         self.current_prob = logistic(self.current_logit);
         self.current_prob
     }
-}
-
-pub fn logit(p: f64) -> f64 {
-    (p / (1.0 - p)).ln()
-}
-
-pub fn logistic(x: f64) -> f64 {
-    1.0 / (1.0 + (-x).exp())
 }
 
 #[derive(Debug, Clone, Deserialize)]

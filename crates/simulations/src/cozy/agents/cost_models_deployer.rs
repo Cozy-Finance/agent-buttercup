@@ -11,7 +11,6 @@ use simulate::{
 };
 
 use crate::cozy::{
-    bindings_wrapper::*,
     types::CozyCostModelType,
     world::{CozyCostModel, CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress,

@@ -73,13 +73,13 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
             match trigger_type {
                 CozyTriggerType::DummyTrigger(trigger_prob_model) => {
                     self.triggers_models
-                        .insert(name.clone().into(), Some(trigger_prob_model.clone()));
+                        .insert(name.clone(), Some(trigger_prob_model.clone()));
 
                     let (addr, evm_tx) = self
                         .build_deploy_dummy_trigger_tx(state, &mut nonce)
                         .unwrap();
                     let world_update = CozyUpdate::AddToTriggers(CozyTrigger::new(
-                        name.clone().into(),
+                        name.clone(),
                         addr,
                         trigger_prob_model.current_prob,
                     ));
@@ -91,19 +91,19 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
         }
     }
 
-    fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
+    fn step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         for (name, trigger_prob_model) in self.triggers_models.iter_mut() {
             match trigger_prob_model {
                 Some(model) => {
                     let prob = model.step(&mut self.rng);
                     let triggered = Bernoulli::new(prob).unwrap().sample(&mut self.rng);
                     let prob_world_update = CozyUpdate::UpdateTriggerData(
-                        name.clone().into(),
+                        name.clone(),
                         model.step(&mut self.rng),
                     );
                     channel.send(SimUpdate::World(prob_world_update));
                     if triggered {
-                        let triggered_world_update = CozyUpdate::Triggered(name.clone().into());
+                        let triggered_world_update = CozyUpdate::Triggered(name.clone());
                         channel.send(SimUpdate::World(triggered_world_update));
                     }
                 }
@@ -116,7 +116,7 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
 impl TriggersDeployer {
     fn build_deploy_dummy_trigger_tx(
         &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         nonce: &mut u64,
     ) -> Result<(Address, TxEnv)> {
         let args: EthersAddress = self.manager.address.into();

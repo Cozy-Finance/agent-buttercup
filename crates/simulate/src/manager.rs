@@ -121,7 +121,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         self.stepper.clear_all_results();
 
         // Adds agent to local data.
-        self.agents.insert(id.clone(), new_agent);
+        self.agents.insert(id, new_agent);
 
         Ok(())
     }

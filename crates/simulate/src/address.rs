@@ -2,8 +2,8 @@ use std::{
     fmt::{Formatter, UpperHex, Display},
     str::FromStr,
 };
-use rustc_hex::FromHex;
-use ethers::{types::H160, prelude::k256::elliptic_curve::consts::B1};
+
+use ethers::{types::H160};
 use rand::Rng;
 use revm::primitives::B160;
 
@@ -67,14 +67,14 @@ impl From<B160> for Address {
     }
 }
 
-impl Into<H160> for Address {
-    fn into(self) -> H160 {
-        self.value.into()
+impl From<Address> for H160 {
+    fn from(val: Address) -> Self {
+        val.value.into()
     }
 }
 
-impl Into<B160> for Address {
-    fn into(self) -> B160 {
-        self.value.into()
+impl From<Address> for B160 {
+    fn from(val: Address) -> Self {
+        val.value.into()
     }
 }

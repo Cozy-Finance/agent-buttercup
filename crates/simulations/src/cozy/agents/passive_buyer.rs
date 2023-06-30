@@ -2,7 +2,7 @@ use std::{
     borrow::Cow,
     cmp::min,
     collections::HashMap,
-    sync::{Arc, RwLock},
+    sync::{Arc},
 };
 
 use bindings::cozy_protocol::cozy_router;
@@ -97,7 +97,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 
         let sets = state.world.sets.values();
         let targets = self.get_target_sets_and_markets_ids(state, sets, &self.target_trigger);
-        if targets.len() == 0 {
+        if targets.is_empty() {
             return;
         }
 
@@ -106,7 +106,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             .map(|(set_address, market_id)| {
                 let purchase_args = cozy_router::PurchaseCall {
                     set: (*set_address).into(),
-                    market_id: market_id.clone(),
+                    market_id: *market_id,
                     protection: protection_delta,
                     receiver: self.address.into(),
                     max_cost: EthersU256::MAX,
@@ -251,7 +251,7 @@ impl PassiveBuyer {
 
     fn get_target_sets_and_markets_ids(
         &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         sets: &Vec<CozySet>,
         trigger: &Address,
     ) -> Vec<(Address, u16)> {
@@ -296,7 +296,7 @@ impl PassiveBuyer {
     fn build_remaining_protection_tx(&self, set_address: Address, market_id: u16) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            set_address.into(),
+            set_address,
             self.set_logic
                 .as_ref()
                 .contract
