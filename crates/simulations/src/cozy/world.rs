@@ -1,24 +1,15 @@
 use std::{
     borrow::Cow,
     collections::HashMap,
-    sync::{Arc, RwLock},
+    sync::Arc,
 };
-
 use auto_impl::auto_impl;
+
 use simulate::{
     address::Address,
     contract::sim_contract::SimContract,
     state::{update::UpdateData, world::World},
 };
-
-#[derive(Debug, Clone)]
-pub struct CozyWorld {
-    pub protocol_contracts: CozyMap<Arc<CozyProtocolContract>>,
-    pub sets: CozyMap<CozySet>,
-    pub cost_models: CozyMap<Arc<CozyCostModel>>,
-    pub drip_decay_models: CozyMap<Arc<CozyDripDecayModel>>,
-    pub triggers: CozyMap<CozyTrigger>,
-}
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
@@ -33,6 +24,34 @@ pub enum CozyUpdate {
 }
 
 impl UpdateData for CozyUpdate {}
+
+#[derive(Debug, Clone)]
+pub struct CozyWorld {
+    pub protocol_contracts: CozyMap<Arc<CozyProtocolContract>>,
+    pub sets: CozyMap<CozySet>,
+    pub cost_models: CozyMap<Arc<CozyCostModel>>,
+    pub drip_decay_models: CozyMap<Arc<CozyDripDecayModel>>,
+    pub triggers: CozyMap<CozyTrigger>,
+}
+
+impl CozyWorld {
+    pub fn new() -> Self {
+        log::info!("Creating Cozy World");
+        CozyWorld {
+            protocol_contracts: CozyMap::new(),
+            sets: CozyMap::new(),
+            cost_models: CozyMap::new(),
+            drip_decay_models: CozyMap::new(),
+            triggers: CozyMap::new(),
+        }
+    }
+}
+
+impl Default for CozyWorld {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl World for CozyWorld {
     type WorldUpdateData = CozyUpdate;
@@ -67,19 +86,6 @@ impl World for CozyWorld {
             }
         }
         None
-    }
-}
-
-impl CozyWorld {
-    pub fn new() -> Self {
-        log::info!("Creating Cozy World");
-        CozyWorld {
-            protocol_contracts: CozyMap::new(),
-            sets: CozyMap::new(),
-            cost_models: CozyMap::new(),
-            drip_decay_models: CozyMap::new(),
-            triggers: CozyMap::new(),
-        }
     }
 }
 
@@ -213,25 +219,25 @@ impl<T: CozyMapId> CozyMap<T> {
 
     pub fn get_by_addr(&self, addr: &Address) -> Option<&T> {
         let idx = self.addr_to_idx_map.get(addr)?;
-        Some(self.items.get(*idx)?)
+        self.items.get(*idx)
     }
 
     pub fn get_mut_by_addr(&mut self, addr: &Address) -> Option<&mut T> {
         let idx = self.addr_to_idx_map.get(addr)?;
-        Some(self.items.get_mut(*idx)?)
+        self.items.get_mut(*idx)
     }
 
-    pub fn get_by_name(&self, name: &Cow<'static, str>) -> Option<&T> {
+    pub fn get_by_name(&self, name: &str) -> Option<&T> {
         let idx = self.name_to_idx_map.get(name)?;
-        Some(self.items.get(*idx)?)
+        self.items.get(*idx)
     }
 
-    pub fn get_mut_by_name(&mut self, name: &Cow<'static, str>) -> Option<&mut T> {
+    pub fn get_mut_by_name(&mut self, name: &str) -> Option<&mut T> {
         let idx = self.name_to_idx_map.get(name)?;
-        Some(self.items.get_mut(*idx)?)
+        self.items.get_mut(*idx)
     }
 
-    pub fn get_addr(&self, name: &Cow<'static, str>) -> Option<Address> {
+    pub fn get_addr(&self, name: &str) -> Option<Address> {
         let idx = self.name_to_idx_map.get(name)?;
         let addr = self.items[*idx].address();
         Some(addr)
@@ -263,5 +269,11 @@ impl<T: CozyMapId> CozyMap<T> {
 
     pub fn values(&self) -> &Vec<T> {
         &self.items
+    }
+}
+
+impl<T: CozyMapId> Default for CozyMap<T> {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -61,8 +61,8 @@ pub struct CozySingleSetSimRunner {
 impl CozySingleSetSimRunner {
     pub fn new(settings: CozySingleSetSimRunnerSettings) -> Self {
         let fixed_time_policy = FixedTimePolicy::new(
-            settings.time_policy_params.start_block_number.into(),
-            settings.time_policy_params.start_block_timestamp.into(),
+            settings.time_policy_params.start_block_number,
+            settings.time_policy_params.start_block_timestamp,
             settings.time_policy_params.time_per_block,
             settings.time_policy_params.blocks_per_step,
             settings.time_policy_params.blocks_to_generate,
@@ -120,7 +120,7 @@ impl CozySingleSetSimRunner {
 
         let world_protocol_contracts = sim_manager.get_state().world.protocol_contracts;
         let weth = world_protocol_contracts
-            .get_by_name(&(WETH.name.into()))
+            .get_by_name(&WETH.name)
             .unwrap();
 
         // Protocol deployer.
@@ -134,21 +134,21 @@ impl CozySingleSetSimRunner {
 
         // Pre-generate <Address, Capital> map for passive buyers and suppliers.
         let mut passive_buyers_map = HashMap::new();
-        for i in 0..self.passive_buyers_params.num_passive {
+        for _i in 0..self.passive_buyers_params.num_passive {
             passive_buyers_map.insert(
                 Address::random_using(&mut rng),
                 self.passive_buyers_params.capital_dist.sample(&mut rng),
             );
         }
         let mut active_buyers_map = HashMap::new();
-        for i in 0..self.active_buyers_params.num_active {
+        for _i in 0..self.active_buyers_params.num_active {
             active_buyers_map.insert(
                 Address::random_using(&mut rng),
                 self.active_buyers_params.capital_dist.sample(&mut rng),
             );
         }
         let mut suppliers_map = HashMap::new();
-        for i in 0..self.suppliers_params.num_passive {
+        for _i in 0..self.suppliers_params.num_passive {
             suppliers_map.insert(
                 Address::random_using(&mut rng),
                 self.suppliers_params.capital_dist.sample(&mut rng),
@@ -176,10 +176,10 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.cost_models.iter().cloned().collect(),
             world_protocol_contracts
-                .get_by_name(&(COSTMODELJUMPRATEFACTORY.name.into()))
+                .get_by_name(&COSTMODELJUMPRATEFACTORY.name)
                 .unwrap(),
             world_protocol_contracts
-                .get_by_name(&(COSTMODELDYNAMICLEVELFACTORY.name.into()))
+                .get_by_name(&COSTMODELDYNAMICLEVELFACTORY.name)
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(cost_models_deployer);
@@ -190,7 +190,7 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.drip_decay_models.iter().cloned().collect(),
             world_protocol_contracts
-                .get_by_name(&(DRIPDECAYMODELCONSTANTFACTORY.name.into()))
+                .get_by_name(&DRIPDECAYMODELCONSTANTFACTORY.name)
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(drip_decay_models_deployer);
@@ -201,13 +201,13 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             self.triggers.iter().cloned().collect(),
             world_protocol_contracts
-                .get_by_name(&(UMATRIGGERFACTORY.name.into()))
+                .get_by_name(&UMATRIGGERFACTORY.name)
                 .unwrap(),
             world_protocol_contracts
-                .get_by_name(&(CHAINLINKTRIGGERFACTORY.name.into()))
+                .get_by_name(&CHAINLINKTRIGGERFACTORY.name)
                 .unwrap(),
             world_protocol_contracts
-                .get_by_name(&(MANAGER.name.into()))
+                .get_by_name(&MANAGER.name)
                 .unwrap(),
             rng.clone(),
         ));
@@ -237,11 +237,11 @@ impl CozySingleSetSimRunner {
         }
         let salt: Option<[u8; 32]> = Some(rng.gen());
         let base_asset_addr = world_protocol_contracts
-            .get_by_name(&(BASE_TOKEN.into()))
+            .get_by_name(&BASE_TOKEN)
             .unwrap()
             .address;
         let set_params = CozySetAdminParams {
-            asset: base_asset_addr.into(),
+            asset: base_asset_addr,
             set_config: self.set_config_params.into(),
             market_configs,
             salt,
@@ -252,10 +252,10 @@ impl CozySingleSetSimRunner {
             Address::random_using(&mut rng),
             set_params,
             world_protocol_contracts
-                .get_by_name(&(SET.name.into()))
+                .get_by_name(&SET.name)
                 .unwrap(),
             world_protocol_contracts
-                .get_by_name(&(MANAGER.name.into()))
+                .get_by_name(&MANAGER.name)
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(set_admin);
@@ -272,13 +272,13 @@ impl CozySingleSetSimRunner {
                 Some(name.into()),
                 addr,
                 world_protocol_contracts
-                    .get_by_name(&(COZYROUTER.name.into()))
+                    .get_by_name(&COZYROUTER.name)
                     .unwrap(),
                 world_protocol_contracts
-                    .get_by_name(&(BASE_TOKEN.into()))
+                    .get_by_name(&BASE_TOKEN)
                     .unwrap(),
                 world_protocol_contracts
-                    .get_by_name(&(SET.name.into()))
+                    .get_by_name(&SET.name)
                     .unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.passive_buyers_params
@@ -298,13 +298,13 @@ impl CozySingleSetSimRunner {
                 Some(name.into()),
                 addr,
                 world_protocol_contracts
-                    .get_by_name(&(COZYROUTER.name.into()))
+                    .get_by_name(&COZYROUTER.name)
                     .unwrap(),
                 world_protocol_contracts
-                    .get_by_name(&(BASE_TOKEN.into()))
+                    .get_by_name(&BASE_TOKEN)
                     .unwrap(),
                 world_protocol_contracts
-                    .get_by_name(&(SET.name.into()))
+                    .get_by_name(&SET.name)
                     .unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
@@ -320,10 +320,10 @@ impl CozySingleSetSimRunner {
                 Some(name.into()),
                 addr,
                 world_protocol_contracts
-                    .get_by_name(&(COZYROUTER.name.into()))
+                    .get_by_name(&COZYROUTER.name)
                     .unwrap(),
                 world_protocol_contracts
-                    .get_by_name(&(BASE_TOKEN.into()))
+                    .get_by_name(&BASE_TOKEN)
                     .unwrap(),
                 self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));

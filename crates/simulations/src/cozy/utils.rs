@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Arc};
 use ethers::abi::Tokenize;
 use eyre::Result;
 use revm::primitives::TxEnv;
-use serde::Deserialize;
+use serde::Deserializer;
 use simulate::{
     address::Address,
     contract::{sim_contract::SimContract, utils as contract_utils},
@@ -11,10 +11,9 @@ use simulate::{
 };
 use thiserror::Error;
 
-use super::types::CozyCostModelType;
+
 use crate::cozy::{
     bindings_wrapper::*,
-    types::{CozyPassiveBuyersParams, CozyTriggerType},
     world::CozyProtocolContract,
     EthersAddress, EthersBytes, EthersU256,
 };
@@ -61,12 +60,12 @@ pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
         links.push((lib_binding.path, lib_binding.name, (*addr).into()));
     }
     let bytecode = contract_utils::build_linked_bytecode(
-        (*contract_bindings)
+        contract_bindings
             .unlinked_bytecode
             .ok_or(DeploymentError::MissingUnlinkedBytecode)?,
         links,
     )?;
-    let abi = (*contract_bindings).abi.clone();
+    let abi = contract_bindings.abi.clone();
     let contract = SimContract::new(abi, EthersBytes(bytecode));
     let bytecode = contract.encode_constructor(args)?;
 
@@ -84,7 +83,7 @@ pub fn build_call_protocol_contract_tx<T: Tokenize>(
 ) -> Result<TxEnv> {
     Ok(build_call_contract_txenv(
         agent_address,
-        contract_data.as_ref().address.into(),
+        contract_data.as_ref().address,
         contract_data
             .as_ref()
             .contract
@@ -114,6 +113,10 @@ impl Counter {
     }
 }
 
+pub fn wad() -> EthersU256 {
+    EthersU256::from(1e18 as u128)
+}
+
 /// Converts a float to a WAD fixed point prepared U256 number.
 /// # Arguments
 /// * `x` - Float to convert. (f64)
@@ -132,22 +135,12 @@ pub fn wad_to_float(x: EthersU256) -> f64 {
     x.as_u128() as f64 / 1e18
 }
 
-#[derive(Deserialize, Debug)]
-pub struct Test {
-    pub cost_models: Vec<(String, CozyCostModelType)>,
-}
-
-pub fn get_config(analysis_config_file: &str) -> Result<(), config::ConfigError> {
-    let base_path = std::env::current_dir().expect("Failed to determine the current directory.");
-    let configs_dir = base_path.join("src/cozy/configs");
-    println!("{:?}", configs_dir);
-    let settings = config::Config::builder()
-        .add_source(config::File::from(configs_dir.join(analysis_config_file)))
-        .build()?;
-    println!("{:?}", settings);
-    let x = settings.try_deserialize::<Test>();
-
-    println!("{:?}", x);
-
-    Ok(())
+pub fn deserialize_string_to_u256<'de, D>(deserializer: D) -> Result<EthersU256, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let string_value: String = serde::Deserialize::deserialize(deserializer)?;
+    let u256_value: EthersU256 =
+        EthersU256::from_dec_str(string_value.as_str()).map_err(serde::de::Error::custom)?;
+    Ok(u256_value)
 }

@@ -1,6 +1,7 @@
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 
 use revm::primitives::U256;
+use ethers::types::U256 as EthersU256;
 use thiserror::Error;
 
 #[derive(Debug, Copy, Clone)]
@@ -45,8 +46,8 @@ pub enum FixedTimePolicyError {
 
 impl FixedTimePolicy {
     pub fn new(
-        start_block_number: U256,
-        start_block_timestamp: U256,
+        start_block_number: u64,
+        start_block_timestamp: u64,
         time_per_block: u64,
         blocks_per_step: u64,
         blocks_to_generate: Option<u64>,
@@ -57,8 +58,8 @@ impl FixedTimePolicy {
         }
         Ok(FixedTimePolicy {
             current_time_env: TimeEnv {
-                number: start_block_number,
-                timestamp: start_block_timestamp,
+                number: EthersU256::from(start_block_number).into(),
+                timestamp: EthersU256::from(start_block_timestamp).into(),
             },
             time_per_block,
             blocks_per_step,

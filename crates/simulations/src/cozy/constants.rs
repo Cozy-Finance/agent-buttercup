@@ -7,9 +7,6 @@ pub static SECONDS_IN_MINUTE: u64 = 60;
 pub static SECONDS_IN_HOUR: u64 = 3600;
 pub static SECONDS_IN_DAY: u64 = 24 * 3600;
 pub static SECONDS_IN_YEAR: u64 = 365 * 24 * 3600;
-lazy_static! {
-    pub static ref WAD: EthersU256 = EthersU256::from(1e18 as u128);
-}
 
 // Static sim update tags
 pub static ACTIVE_BUYER_PURCHASE: &str = "Active_Buyer_Protection_Purchase";

@@ -17,7 +17,6 @@ use simulate::{
 
 pub use crate::cozy::constants;
 use crate::cozy::{
-    bindings_wrapper::*,
     constants::SECONDS_IN_YEAR,
     types::CozySetAdminParams,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
@@ -95,7 +94,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
 
         let world_update = CozyUpdate::AddToSets(CozySet::new(
             self.set_name.clone().unwrap().into(),
-            self.set_address.unwrap().into(),
+            self.set_address.unwrap(),
             trigger_lookup,
         ));
 

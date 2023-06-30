@@ -2,8 +2,7 @@ use std::{
     borrow::Cow,
     cmp::min,
     collections::HashMap,
-    f32::consts::E,
-    sync::{Arc, RwLock},
+    sync::{Arc},
 };
 
 use bindings::cozy_protocol::cozy_router;
@@ -22,7 +21,7 @@ use simulate::{
 use crate::cozy::{
     constants::*,
     distributions::ProbTruncatedNorm,
-    utils::{float_to_wad, wad_to_float},
+    utils::{float_to_wad},
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmU256,
 };
@@ -175,7 +174,7 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                         if let Ok(ptokens) = ptokens {
                             match self.ptokens_owned.get_mut(&target) {
                                 None => {
-                                    self.ptokens_owned.insert(target, ptokens.into());
+                                    self.ptokens_owned.insert(target, ptokens);
                                 }
                                 Some(curr_ptokens) => {
                                     *curr_ptokens += Into::<EthersU256>::into(ptokens);
@@ -192,7 +191,7 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
         let mut protection_owned = EthersU256::from(0);
         for ((set_addr, set_market_id), ptokens) in self.ptokens_owned.iter() {
             protection_owned += self
-                .get_protection_balance(state, *set_addr, *set_market_id, (*ptokens).into())
+                .get_protection_balance(state, *set_addr, *set_market_id, *ptokens)
                 .unwrap();
         }
         self.protection_owned = protection_owned;
@@ -267,7 +266,7 @@ impl ActiveBuyer {
 
     fn get_target_sets_and_markets_ids(
         &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         sets: &Vec<CozySet>,
         trigger: &Address,
     ) -> Vec<(Address, u16)> {
@@ -402,7 +401,7 @@ impl ActiveBuyer {
     fn build_remaining_protection_tx(&self, set_address: Address, market_id: u16) -> Result<TxEnv> {
         Ok(build_call_contract_txenv(
             self.address,
-            set_address.into(),
+            set_address,
             self.set_logic
                 .as_ref()
                 .contract

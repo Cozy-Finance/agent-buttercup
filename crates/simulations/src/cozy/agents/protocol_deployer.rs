@@ -1,6 +1,6 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
-use bindings::cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig};
+use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
@@ -10,7 +10,7 @@ use simulate::{
     utils::build_call_contract_txenv,
 };
 
-use super::errors::CozyAgentError;
+
 use crate::cozy::{
     bindings_wrapper::*,
     types::CozyProtocolDeployParams,
@@ -134,7 +134,7 @@ impl ProtocolDeployer {
 
     fn deploy_protocol(
         &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         channel: &AgentChannel<CozyUpdate>,
         libraries: &HashMap<Address, &BindingsWrapper>,
         nonce_counter: &mut Counter,
@@ -198,7 +198,7 @@ impl ProtocolDeployer {
         // Deploy set logic.
         let set_logic_args = (manager_addr, ptoken_factory_addr, backstop_addr);
         let (set_logic_tx, set_logic_contract) =
-            build_unlinked_deploy_contract_tx(self.address, &SET, &libraries, set_logic_args)?;
+            build_unlinked_deploy_contract_tx(self.address, &SET, libraries, set_logic_args)?;
 
         // Initialize set logic.
         let weth_addr = self.weth.address.into();

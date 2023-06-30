@@ -3,23 +3,14 @@ use bindings::{
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
-use serde::{Deserialize, Deserializer};
+use serde::Deserialize;
 use simulate::address::Address;
 
 use crate::cozy::{
     distributions::{Exponential, TriggerProbModel, U256UniformRange},
+    utils::deserialize_string_to_u256,
     EthersU256,
 };
-
-pub fn deserialize_string_to_u256<'de, D>(deserializer: D) -> Result<EthersU256, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let string_value: String = serde::Deserialize::deserialize(deserializer)?;
-    let u256_value: EthersU256 =
-        EthersU256::from_dec_str(string_value.as_str()).map_err(serde::de::Error::custom)?;
-    Ok(u256_value)
-}
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "cost_model_jump_rate_factory::DeployModelCall")]
@@ -172,11 +163,11 @@ pub struct CozySetConfigParams {
     pub deposit_fee: u16,
 }
 
-impl Into<SetConfig> for CozySetConfigParams {
-    fn into(self) -> SetConfig {
+impl From<CozySetConfigParams> for SetConfig {
+    fn from(val: CozySetConfigParams) -> Self {
         SetConfig {
-            leverage_factor: self.leverage_factor,
-            deposit_fee: self.deposit_fee,
+            leverage_factor: val.leverage_factor,
+            deposit_fee: val.deposit_fee,
         }
     }
 }

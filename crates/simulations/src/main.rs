@@ -25,7 +25,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("cost_models_analysis")?;
+    let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("test")?;
     let runner = crate::cozy::runner::CozySingleSetSimRunner::new(settings);
     runner.run();
 

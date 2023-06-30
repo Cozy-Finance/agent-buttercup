@@ -68,7 +68,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
             state
                 .world
                 .protocol_contracts
-                .get_by_name(&(BASE_TOKEN).into())
+                .get_by_name(&BASE_TOKEN)
                 .unwrap()
                 .clone(),
         );
@@ -110,7 +110,7 @@ impl TokenDeployer {
 
     fn allocate_token(
         &mut self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
         for (receiver, amount) in self.allocate_addrs.iter() {

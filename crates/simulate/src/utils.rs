@@ -5,7 +5,7 @@ use std::{
 };
 
 use bytes::Bytes;
-use ethers::prelude::U256 as EthersU256;
+
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256 as EvmU256};
 
 use crate::{address::Address, agent::types::AgentTxGas, EvmBytes};

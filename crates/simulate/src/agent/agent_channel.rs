@@ -24,7 +24,7 @@ pub struct AgentChannel<U: UpdateData> {
 impl<U: UpdateData> AgentChannel<U> {
     pub fn new(sender: &Sender<AgentSimUpdate<U>>, agent_id: &AgentId) -> Self {
         AgentChannel {
-            address: (*agent_id).address,
+            address: agent_id.address,
             sender: sender.clone(),
             tag: agent_id
                 .clone()
