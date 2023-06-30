@@ -7,7 +7,7 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
@@ -89,13 +89,7 @@ impl CostModelsDeployer {
             .jump_rate_factory
             .contract
             .encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
-            self.address,
-            self.jump_rate_factory.address,
-            call_data,
-            None,
-            None,
-        );
+        let tx = build_call_tx(self.address, self.jump_rate_factory.address, call_data);
         let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
             .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = self
@@ -115,13 +109,7 @@ impl CostModelsDeployer {
             .dynamic_level_factory
             .contract
             .encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
-            self.address,
-            self.dynamic_level_factory.address,
-            call_data,
-            None,
-            None,
-        );
+        let tx = build_call_tx(self.address, self.dynamic_level_factory.address, call_data);
         let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
             .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = self

@@ -7,6 +7,7 @@ use revm::primitives::{create_address, TxEnv};
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::utils::build_deploy_tx_and_contract,
     state::{update::SimUpdate, SimState},
 };
 
@@ -14,7 +15,6 @@ use crate::cozy::{
     bindings_wrapper::*,
     distributions::TriggerProbModel,
     types::CozyTriggerType,
-    utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyTrigger, CozyUpdate, CozyWorld},
     EthersAddress,
 };
@@ -91,16 +91,18 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
         }
     }
 
-    fn step(&mut self, _state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
+    fn step(
+        &mut self,
+        _state: &SimState<CozyUpdate, CozyWorld>,
+        channel: AgentChannel<CozyUpdate>,
+    ) {
         for (name, trigger_prob_model) in self.triggers_models.iter_mut() {
             match trigger_prob_model {
                 Some(model) => {
                     let prob = model.step(&mut self.rng);
                     let triggered = Bernoulli::new(prob).unwrap().sample(&mut self.rng);
-                    let prob_world_update = CozyUpdate::UpdateTriggerData(
-                        name.clone(),
-                        model.step(&mut self.rng),
-                    );
+                    let prob_world_update =
+                        CozyUpdate::UpdateTriggerData(name.clone(), model.step(&mut self.rng));
                     channel.send(SimUpdate::World(prob_world_update));
                     if triggered {
                         let triggered_world_update = CozyUpdate::Triggered(name.clone());
@@ -120,7 +122,12 @@ impl TriggersDeployer {
         nonce: &mut u64,
     ) -> Result<(Address, TxEnv)> {
         let args: EthersAddress = self.manager.address.into();
-        let (tx, _) = build_deploy_contract_tx(self.address, &DUMMYTRIGGER, args)?;
+        let (tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &DUMMYTRIGGER.abi,
+            &DUMMYTRIGGER.bytecode.unwrap(),
+            args,
+        )?;
         let addr = create_address(self.address.into(), *nonce);
         *nonce += 1;
 

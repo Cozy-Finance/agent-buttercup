@@ -1,7 +1,3 @@
-use lazy_static::lazy_static;
-
-use crate::cozy::EthersU256;
-
 // Math
 pub static SECONDS_IN_MINUTE: u64 = 60;
 pub static SECONDS_IN_HOUR: u64 = 3600;

@@ -5,7 +5,6 @@ use std::{
 };
 
 use bytes::Bytes;
-
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256 as EvmU256};
 
 use crate::{address::Address, agent::types::AgentTxGas, EvmBytes};
@@ -63,28 +62,27 @@ pub fn is_execution_success(execution_result: &ExecutionResult) -> bool {
     matches!(execution_result, ExecutionResult::Success { .. })
 }
 
-pub fn build_deploy_contract_txenv(
+pub fn build_call_tx(
     caller_address: Address,
-    bytecode: EvmBytes,
-    value: Option<EvmU256>,
-    gas_settings: Option<AgentTxGas>,
+    receiver_address: Address,
+    call_data: EvmBytes,
 ) -> TxEnv {
-    let tx_gas_settings = gas_settings.unwrap_or_default();
+    let tx_gas_settings = AgentTxGas::default();
     TxEnv {
         caller: caller_address.into(),
         gas_limit: tx_gas_settings.gas_limit,
         gas_price: tx_gas_settings.gas_price,
         gas_priority_fee: tx_gas_settings.gas_priority_fee,
-        transact_to: TransactTo::create(),
-        value: value.unwrap_or(EvmU256::ZERO),
-        data: bytecode,
+        transact_to: TransactTo::Call(receiver_address.into()),
+        value: EvmU256::ZERO,
+        data: call_data,
         chain_id: None,
         nonce: None,
         access_list: Vec::new(),
     }
 }
 
-pub fn build_call_contract_txenv(
+pub fn build_call_tx_w_settings(
     caller_address: Address,
     receiver_address: Address,
     call_data: EvmBytes,

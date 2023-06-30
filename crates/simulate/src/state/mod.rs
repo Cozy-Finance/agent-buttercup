@@ -201,10 +201,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                     .iter()
                     .map(|t| self.simulate_evm_tx(t))
                     .collect::<Vec<_>>();
-                let bundle_success = sim_evm_results
-                    .iter()
-                    .map(is_execution_success)
-                    .all(|x| x);
+                let bundle_success = sim_evm_results.iter().map(is_execution_success).all(|x| x);
                 if bundle_success {
                     let evm_results = txs
                         .iter()
