@@ -119,9 +119,7 @@ impl CozySingleSetSimRunner {
         let _ = sim_manager.activate_agent(weth_deployer);
 
         let world_protocol_contracts = sim_manager.get_state().world.protocol_contracts;
-        let weth = world_protocol_contracts
-            .get_by_name(&WETH.name)
-            .unwrap();
+        let weth = world_protocol_contracts.get_by_name(&WETH.name).unwrap();
 
         // Protocol deployer.
         let protocol_deployer = Box::new(ProtocolDeployer::new(
@@ -206,9 +204,7 @@ impl CozySingleSetSimRunner {
             world_protocol_contracts
                 .get_by_name(&CHAINLINKTRIGGERFACTORY.name)
                 .unwrap(),
-            world_protocol_contracts
-                .get_by_name(&MANAGER.name)
-                .unwrap(),
+            world_protocol_contracts.get_by_name(&MANAGER.name).unwrap(),
             rng.clone(),
         ));
         let _ = sim_manager.activate_agent(triggers_deployer);
@@ -251,12 +247,8 @@ impl CozySingleSetSimRunner {
             Some(SET_ADMIN.into()),
             Address::random_using(&mut rng),
             set_params,
-            world_protocol_contracts
-                .get_by_name(&SET.name)
-                .unwrap(),
-            world_protocol_contracts
-                .get_by_name(&MANAGER.name)
-                .unwrap(),
+            world_protocol_contracts.get_by_name(&SET.name).unwrap(),
+            world_protocol_contracts.get_by_name(&MANAGER.name).unwrap(),
         ));
         let _ = sim_manager.activate_agent(set_admin);
 
@@ -274,12 +266,8 @@ impl CozySingleSetSimRunner {
                 world_protocol_contracts
                     .get_by_name(&COZYROUTER.name)
                     .unwrap(),
-                world_protocol_contracts
-                    .get_by_name(&BASE_TOKEN)
-                    .unwrap(),
-                world_protocol_contracts
-                    .get_by_name(&SET.name)
-                    .unwrap(),
+                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
+                world_protocol_contracts.get_by_name(&SET.name).unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.passive_buyers_params
                     .protection_desired_dist
@@ -300,12 +288,8 @@ impl CozySingleSetSimRunner {
                 world_protocol_contracts
                     .get_by_name(&COZYROUTER.name)
                     .unwrap(),
-                world_protocol_contracts
-                    .get_by_name(&BASE_TOKEN)
-                    .unwrap(),
-                world_protocol_contracts
-                    .get_by_name(&SET.name)
-                    .unwrap(),
+                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
+                world_protocol_contracts.get_by_name(&SET.name).unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
                 rng.clone(),
@@ -322,9 +306,7 @@ impl CozySingleSetSimRunner {
                 world_protocol_contracts
                     .get_by_name(&COZYROUTER.name)
                     .unwrap(),
-                world_protocol_contracts
-                    .get_by_name(&BASE_TOKEN)
-                    .unwrap(),
+                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
                 self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_supplier);

@@ -7,11 +7,11 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
-    types::{CozyDripDecayModelType},
+    types::CozyDripDecayModelType,
     world::{CozyDripDecayModel, CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress,
 };
@@ -80,12 +80,10 @@ impl DripDecayModelsDeployer {
             .drip_decay_constant_factory
             .contract
             .encode_function("deployModel", args)?;
-        let tx = build_call_contract_txenv(
+        let tx = build_call_tx(
             self.address,
             self.drip_decay_constant_factory.address,
             call_data,
-            None,
-            None,
         );
         let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
             .expect("Error simulating drip decay model deployment.");

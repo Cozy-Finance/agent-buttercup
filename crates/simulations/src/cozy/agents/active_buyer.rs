@@ -1,9 +1,4 @@
-use std::{
-    borrow::Cow,
-    cmp::min,
-    collections::HashMap,
-    sync::{Arc},
-};
+use std::{borrow::Cow, cmp::min, collections::HashMap, sync::Arc};
 
 use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
@@ -15,13 +10,13 @@ use simulate::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
     },
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
     constants::*,
     distributions::ProbTruncatedNorm,
-    utils::{float_to_wad},
+    utils::float_to_wad,
     world::{CozyProtocolContract, CozySet, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256, EvmU256,
 };
@@ -229,15 +224,13 @@ impl ActiveBuyer {
         market_id: u16,
         ptokens: EthersU256,
     ) -> Result<EthersU256> {
-        let balance_tx = build_call_contract_txenv(
+        let balance_tx = build_call_tx(
             self.address,
             set_addr,
             self.set_logic
                 .as_ref()
                 .contract
                 .encode_function("convertToProtection", (market_id, ptokens))?,
-            None,
-            None,
         );
         let result = unpack_execution(state.simulate_evm_tx_ref(&balance_tx, None))?;
         let balance: EthersU256 = self
@@ -249,15 +242,13 @@ impl ActiveBuyer {
 
     fn get_token_balance(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<EthersU256> {
         let ethers_address: EthersAddress = self.address.into();
-        let balance_tx = build_call_contract_txenv(
+        let balance_tx = build_call_tx(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
                 .encode_function("balanceOf", ethers_address)?,
-            None,
-            None,
         );
         let result = unpack_execution(state.simulate_evm_tx_ref(&balance_tx, None))?;
         let balance: EthersU256 = self.token.contract.decode_output("balanceOf", result)?;
@@ -399,42 +390,36 @@ impl ActiveBuyer {
     }
 
     fn build_remaining_protection_tx(&self, set_address: Address, market_id: u16) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             set_address,
             self.set_logic
                 .as_ref()
                 .contract
                 .encode_function("remainingProtection", market_id)?,
-            None,
-            None,
         ))
     }
 
     fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
         let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
                 .encode_function("approve", (cozyrouter_address, EthersU256::MAX))?,
-            None,
-            None,
         ))
     }
 
     fn build_purchase_tx(&self, args: cozy_router::PurchaseCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("purchase", args)?,
-            None,
-            None,
         ))
     }
 
@@ -442,67 +427,57 @@ impl ActiveBuyer {
         &self,
         args: cozy_router::PurchaseWithoutTransferCall,
     ) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("purchaseWithoutTransfer", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_cancel_tx(&self, args: cozy_router::CancelCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("cancel", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_sell_tx(&self, args: cozy_router::SellCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("sell", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_claim_tx(&self, args: cozy_router::ClaimCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("claim", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_payout_tx(&self, args: cozy_router::PayoutCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("payout", args)?,
-            None,
-            None,
         ))
     }
 }

@@ -1,9 +1,9 @@
 use std::{
-    fmt::{Formatter, UpperHex, Display},
+    fmt::{Display, Formatter, UpperHex},
     str::FromStr,
 };
 
-use ethers::{types::H160};
+use ethers::types::H160;
 use rand::Rng;
 use revm::primitives::B160;
 
@@ -42,7 +42,7 @@ impl Display for Address {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", Into::<B160>::into(self.value))?;
         Ok(())
-    }   
+    }
 }
 
 impl FromStr for Address {

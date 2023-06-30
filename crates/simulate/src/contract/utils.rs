@@ -1,7 +1,12 @@
+use ethers::abi::{Contract as EthersContract, Tokenize};
 use ethers_solc::artifacts::BytecodeObject;
 use eyre::{Result, *};
+use revm::primitives::{TransactTo, TxEnv, U256 as EvmU256};
 
-use crate::{EthersAddress, EvmBytes};
+use crate::{
+    address::Address, agent::types::AgentTxGas, contract::sim_contract::SimContract, EthersAddress,
+    EthersBytes, EvmBytes,
+};
 
 pub fn build_linked_bytecode(
     unlinked_bytecode_str: &str,
@@ -12,5 +17,66 @@ pub fn build_linked_bytecode(
     match bytecode.resolve() {
         Some(b) => Ok(b.0.clone()),
         None => Err(eyre!("Could not link bytecode.")),
+    }
+}
+
+pub fn build_deploy_tx_and_contract<T: Tokenize>(
+    sender_addr: Address,
+    abi: &EthersContract,
+    bytecode: &EthersBytes,
+    args: T,
+) -> Result<(TxEnv, SimContract)> {
+    let contract = SimContract::new(abi.clone(), bytecode.clone());
+    let tx_bytecode = contract.encode_constructor(args)?;
+    Ok((build_deploy_tx(sender_addr, tx_bytecode), contract))
+}
+
+pub fn build_unlinked_deploy_tx_and_contract<T: Tokenize>(
+    sender_addr: Address,
+    abi: &EthersContract,
+    unlinked_bytecode: &str,
+    links: Vec<(&str, &str, EthersAddress)>,
+    args: T,
+) -> Result<(TxEnv, SimContract)> {
+    let linked_bytecode = build_linked_bytecode(unlinked_bytecode, links)?;
+    let contract = SimContract::new(abi.clone(), EthersBytes(linked_bytecode));
+    let tx_bytecode = contract.encode_constructor(args)?;
+    Ok((build_deploy_tx(sender_addr, tx_bytecode), contract))
+}
+
+pub fn build_deploy_tx(caller_address: Address, bytecode: EvmBytes) -> TxEnv {
+    let tx_gas_settings = AgentTxGas::default();
+    TxEnv {
+        caller: caller_address.into(),
+        gas_limit: tx_gas_settings.gas_limit,
+        gas_price: tx_gas_settings.gas_price,
+        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        transact_to: TransactTo::create(),
+        value: EvmU256::ZERO,
+        data: bytecode,
+        chain_id: None,
+        nonce: None,
+        access_list: Vec::new(),
+    }
+}
+
+pub fn build_deploy_tx_w_settings(
+    caller_address: Address,
+    bytecode: EvmBytes,
+    value: Option<EvmU256>,
+    gas_settings: Option<AgentTxGas>,
+) -> TxEnv {
+    let tx_gas_settings = gas_settings.unwrap_or_default();
+    TxEnv {
+        caller: caller_address.into(),
+        gas_limit: tx_gas_settings.gas_limit,
+        gas_price: tx_gas_settings.gas_price,
+        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        transact_to: TransactTo::create(),
+        value: value.unwrap_or(EvmU256::ZERO),
+        data: bytecode,
+        chain_id: None,
+        nonce: None,
+        access_list: Vec::new(),
     }
 }

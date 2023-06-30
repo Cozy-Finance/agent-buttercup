@@ -5,12 +5,12 @@ use revm::primitives::create_address;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::utils::build_deploy_tx_and_contract,
     state::{update::SimUpdate, SimState},
 };
 
 use crate::cozy::{
     bindings_wrapper::*,
-    utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
 };
 
@@ -50,7 +50,8 @@ impl WethDeployer {
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let (evm_tx, weth_contract) = build_deploy_contract_tx(self.address, &WETH, ())?;
+        let (evm_tx, weth_contract) =
+            build_deploy_tx_and_contract(self.address, &WETH.abi, &WETH.bytecode.unwrap(), ())?;
         channel.send(SimUpdate::Evm(evm_tx));
 
         let weth_addr = create_address(self.address.into(), 0);

@@ -1,10 +1,6 @@
-use std::{
-    borrow::Cow,
-    collections::HashMap,
-    sync::Arc,
-};
-use auto_impl::auto_impl;
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
+use auto_impl::auto_impl;
 use simulate::{
     address::Address,
     contract::sim_contract::SimContract,

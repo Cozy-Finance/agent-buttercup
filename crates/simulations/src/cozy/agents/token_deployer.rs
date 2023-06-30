@@ -5,15 +5,15 @@ use revm::primitives::create_address;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::utils::build_deploy_tx_and_contract,
     state::{update::SimUpdate, SimState},
-    utils::build_call_contract_txenv,
+    utils::build_call_tx,
 };
 
 use crate::cozy::{
     bindings_wrapper::*,
     constants::BASE_TOKEN,
     types::CozyTokenDeployParams,
-    utils::build_deploy_contract_tx,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress, EthersU256,
 };
@@ -89,9 +89,10 @@ impl TokenDeployer {
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let (evm_tx, dummy_token_contract) = build_deploy_contract_tx(
+        let (evm_tx, dummy_token_contract) = build_deploy_tx_and_contract(
             self.address,
-            &DUMMYTOKEN,
+            &DUMMYTOKEN.abi,
+            &DUMMYTOKEN.bytecode.unwrap(),
             (
                 self.deploy_args.name.to_string(),
                 self.deploy_args.symbol.to_string(),
@@ -121,12 +122,10 @@ impl TokenDeployer {
                 .unwrap()
                 .contract
                 .encode_function("mint", (receiver_address, *amount))?;
-            let tx = build_call_contract_txenv(
+            let tx = build_call_tx(
                 self.address,
                 self.token.as_ref().unwrap().address,
                 call_data,
-                None,
-                None,
             );
             channel.send(SimUpdate::Evm(tx));
         }

@@ -7,7 +7,7 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
@@ -99,15 +99,13 @@ impl PassiveSupplier {
 
     fn get_token_balance(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<EthersU256> {
         let ethers_address: EthersAddress = self.address.into();
-        let balance_tx = build_call_contract_txenv(
+        let balance_tx = build_call_tx(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
                 .encode_function("balanceOf", ethers_address)?,
-            None,
-            None,
         );
         let result = unpack_execution(state.simulate_evm_tx_ref(&balance_tx, None))?;
         let balance: EthersU256 = self.token.contract.decode_output("balanceOf", result)?;
@@ -116,42 +114,36 @@ impl PassiveSupplier {
 
     fn build_max_approve_router_tx(&self) -> Result<TxEnv> {
         let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
                 .encode_function("approve", (cozyrouter_address, EthersU256::MAX))?,
-            None,
-            None,
         ))
     }
 
     fn build_transfer_token_to_router_tx(&self, amount: EthersU256) -> Result<TxEnv> {
         let cozyrouter_address: EthersAddress = self.cozyrouter.as_ref().address.into();
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.token.as_ref().address,
             self.token
                 .as_ref()
                 .contract
                 .encode_function("transfer", (cozyrouter_address, amount))?,
-            None,
-            None,
         ))
     }
 
     fn build_deposit_tx(&self, args: cozy_router::DepositCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("deposit", args)?,
-            None,
-            None,
         ))
     }
 
@@ -159,67 +151,57 @@ impl PassiveSupplier {
         &self,
         args: cozy_router::DepositWithoutTransferCall,
     ) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("depositWithoutTransfer", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_withdraw_tx(&self, args: cozy_router::WithdrawCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("withdraw", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_redeem_tx(&self, args: cozy_router::RedeemCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("redeem", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_complete_withdraw_tx(&self, args: cozy_router::CompleteWithdrawCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("completeRedeem", args)?,
-            None,
-            None,
         ))
     }
 
     fn build_complete_redeem_tx(&self, args: cozy_router::CompleteRedeemCall) -> Result<TxEnv> {
-        Ok(build_call_contract_txenv(
+        Ok(build_call_tx(
             self.address,
             self.cozyrouter.as_ref().address,
             self.cozyrouter
                 .as_ref()
                 .contract
                 .encode_function("completeRedeem", args)?,
-            None,
-            None,
         ))
     }
 }

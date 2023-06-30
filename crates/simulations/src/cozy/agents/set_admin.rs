@@ -12,7 +12,7 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_contract_txenv, unpack_execution},
+    utils::{build_call_tx, unpack_execution},
 };
 
 pub use crate::cozy::constants;
@@ -119,8 +119,7 @@ impl SetAdmin {
         args: manager::CreateSetCall,
     ) -> Result<(Address, TxEnv)> {
         let call_data = self.manager.contract.encode_function("createSet", args)?;
-        let tx =
-            build_call_contract_txenv(self.address, self.manager.address, call_data, None, None);
+        let tx = build_call_tx(self.address, self.manager.address, call_data);
         let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
             .expect("Error simulating cost model deployment.");
         let addr: EthersAddress = self
@@ -140,13 +139,7 @@ impl SetAdmin {
             .set_logic
             .contract
             .encode_function("markets", (EthersU256::from(market_num),))?;
-        let query = build_call_contract_txenv(
-            self.address,
-            self.set_address.unwrap(),
-            call_data,
-            None,
-            None,
-        );
+        let query = build_call_tx(self.address, self.set_address.unwrap(), call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None))?;
         let market_data = self
             .set_logic
@@ -169,13 +162,7 @@ impl SetAdmin {
 
         // Get total assets.
         let call_data = self.set_logic.contract.encode_function("accounting", ())?;
-        let query = build_call_contract_txenv(
-            self.address,
-            self.set_address.unwrap(),
-            call_data,
-            None,
-            None,
-        );
+        let query = build_call_tx(self.address, self.set_address.unwrap(), call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None))?;
         let total_assets = self
             .set_logic

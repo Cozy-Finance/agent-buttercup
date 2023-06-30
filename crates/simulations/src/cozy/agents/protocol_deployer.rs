@@ -6,15 +6,15 @@ use revm::primitives::create_address;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::utils::{build_deploy_tx_and_contract, build_unlinked_deploy_tx_and_contract},
     state::{update::SimUpdate, SimState},
-    utils::build_call_contract_txenv,
+    utils::build_call_tx,
 };
-
 
 use crate::cozy::{
     bindings_wrapper::*,
     types::CozyProtocolDeployParams,
-    utils::{build_deploy_contract_tx, build_unlinked_deploy_contract_tx, Counter},
+    utils::Counter,
     world::{CozyProtocolContract, CozyUpdate, CozyWorld},
     EthersAddress,
 };
@@ -109,14 +109,42 @@ impl ProtocolDeployer {
         libraries.insert(state_transitions_lib_addr, &STATETRANSITIONSLIB);
         libraries.insert(supply_side_lib_addr, &SUPPLYSIDELIB);
 
-        let (configurator_lib_tx, _) =
-            build_deploy_contract_tx(self.address, &CONFIGURATORLIB, ())?;
-        let (delay_lib_tx, _) = build_deploy_contract_tx(self.address, &DELAYLIB, ())?;
-        let (demand_side_lib_tx, _) = build_deploy_contract_tx(self.address, &DEMANDSIDELIB, ())?;
-        let (redemption_lib_tx, _) = build_deploy_contract_tx(self.address, &REDEMPTIONLIB, ())?;
-        let (state_transitions_lib_tx, _) =
-            build_deploy_contract_tx(self.address, &STATETRANSITIONSLIB, ())?;
-        let (supply_side_lib_tx, _) = build_deploy_contract_tx(self.address, &SUPPLYSIDELIB, ())?;
+        let (configurator_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &CONFIGURATORLIB.abi,
+            &CONFIGURATORLIB.bytecode.unwrap(),
+            (),
+        )?;
+        let (delay_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &DELAYLIB.abi,
+            &DELAYLIB.bytecode.unwrap(),
+            (),
+        )?;
+        let (demand_side_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &DEMANDSIDELIB.abi,
+            &DEMANDSIDELIB.bytecode.unwrap(),
+            (),
+        )?;
+        let (redemption_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &REDEMPTIONLIB.abi,
+            &REDEMPTIONLIB.bytecode.unwrap(),
+            (),
+        )?;
+        let (state_transitions_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &STATETRANSITIONSLIB.abi,
+            &STATETRANSITIONSLIB.bytecode.unwrap(),
+            (),
+        )?;
+        let (supply_side_lib_tx, _) = build_deploy_tx_and_contract(
+            self.address,
+            &SUPPLYSIDELIB.abi,
+            &SUPPLYSIDELIB.bytecode.unwrap(),
+            (),
+        )?;
 
         for tx in vec![
             configurator_lib_tx,
@@ -188,8 +216,12 @@ impl ProtocolDeployer {
             self.deploy_params.fees.clone(),
             self.deploy_params.allowed_markets_per_set,
         );
-        let (manager_tx, manager_contract) =
-            build_deploy_contract_tx(self.address, &MANAGER, manager_args)?;
+        let (manager_tx, manager_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &MANAGER.abi,
+            &MANAGER.bytecode.unwrap(),
+            manager_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(manager_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(MANAGER.name.into(), manager_addr.into(), manager_contract),
@@ -197,8 +229,17 @@ impl ProtocolDeployer {
 
         // Deploy set logic.
         let set_logic_args = (manager_addr, ptoken_factory_addr, backstop_addr);
-        let (set_logic_tx, set_logic_contract) =
-            build_unlinked_deploy_contract_tx(self.address, &SET, libraries, set_logic_args)?;
+        let mut links: Vec<(&str, &str, EthersAddress)> = vec![];
+        for (addr, lib_binding) in libraries.iter() {
+            links.push((lib_binding.path, lib_binding.name, (*addr).into()));
+        }
+        let (set_logic_tx, set_logic_contract) = build_unlinked_deploy_tx_and_contract(
+            self.address,
+            &SET.abi,
+            &SET.unlinked_bytecode.unwrap(),
+            links,
+            set_logic_args,
+        )?;
 
         // Initialize set logic.
         let weth_addr = self.weth.address.into();
@@ -222,12 +263,10 @@ impl ProtocolDeployer {
         let set_initialize_call_data = set_logic_contract
             .encode_function("initialize", set_initialize_args)
             .expect("Issue encoding func.");
-        let set_initialize_tx = build_call_contract_txenv(
+        let set_initialize_tx = build_call_tx(
             self.address,
             set_logic_addr.into(),
             set_initialize_call_data,
-            None,
-            None,
         );
 
         evm_updates.push(SimUpdate::Evm(set_logic_tx));
@@ -238,8 +277,12 @@ impl ProtocolDeployer {
 
         // Deploy set factory.
         let set_factory_args = (manager_addr, set_logic_addr);
-        let (set_factory_tx, set_factory_contract) =
-            build_deploy_contract_tx(self.address, &SETFACTORY, set_factory_args)?;
+        let (set_factory_tx, set_factory_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &SETFACTORY.abi,
+            &SETFACTORY.bytecode.unwrap(),
+            set_factory_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(set_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -251,20 +294,22 @@ impl ProtocolDeployer {
 
         // Deploy ptoken logic.
         let ptoken_logic_args = (manager_addr,);
-        let (ptoken_logic_tx, ptoken_logic_contract) =
-            build_deploy_contract_tx(self.address, &PTOKEN, ptoken_logic_args)?;
+        let (ptoken_logic_tx, ptoken_logic_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &PTOKEN.abi,
+            &PTOKEN.bytecode.unwrap(),
+            ptoken_logic_args,
+        )?;
 
         // Initialize ptoken logic.
         let ptoken_initialize_args = (EthersAddress::zero(), EthersAddress::zero(), 0_u8);
         let ptoken_initialize_call_data = ptoken_logic_contract
             .encode_function("initialize", ptoken_initialize_args)
             .expect("Issue encoding func.");
-        let ptoken_initialize_tx = build_call_contract_txenv(
+        let ptoken_initialize_tx = build_call_tx(
             self.address,
             ptoken_logic_addr.into(),
             ptoken_initialize_call_data,
-            None,
-            None,
         );
 
         evm_updates.push(SimUpdate::Evm(ptoken_logic_tx));
@@ -279,8 +324,12 @@ impl ProtocolDeployer {
 
         // Deploy ptoken factory.
         let ptoken_factory_args = (ptoken_logic_addr,);
-        let (ptoken_factory_tx, ptoken_factory_contract) =
-            build_deploy_contract_tx(self.address, &PTOKENFACTORY, ptoken_factory_args)?;
+        let (ptoken_factory_tx, ptoken_factory_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &PTOKENFACTORY.abi,
+            &PTOKENFACTORY.bytecode.unwrap(),
+            ptoken_factory_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(ptoken_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -292,8 +341,12 @@ impl ProtocolDeployer {
 
         // Deploy backstop.
         let backstop_args = (manager_addr, weth_addr);
-        let (backstop_tx, backstop_contract) =
-            build_deploy_contract_tx(self.address, &BACKSTOP, backstop_args)?;
+        let (backstop_tx, backstop_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &BACKSTOP.abi,
+            &BACKSTOP.bytecode.unwrap(),
+            backstop_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(backstop_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -305,8 +358,12 @@ impl ProtocolDeployer {
 
         // Deploy CozyRouter.
         let cozyrouter_args = (manager_addr, weth_addr, weth_addr, weth_addr);
-        let (cozyrouter_tx, cozyrouter_contract) =
-            build_deploy_contract_tx(self.address, &COZYROUTER, cozyrouter_args)?;
+        let (cozyrouter_tx, cozyrouter_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &COZYROUTER.abi,
+            &COZYROUTER.bytecode.unwrap(),
+            cozyrouter_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(cozyrouter_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -338,8 +395,12 @@ impl ProtocolDeployer {
         ));
 
         // Deploy cost model jump rate factory.
-        let (jump_rate_factory_tx, jump_rate_factory_contract) =
-            build_deploy_contract_tx(self.address, &COSTMODELJUMPRATEFACTORY, ())?;
+        let (jump_rate_factory_tx, jump_rate_factory_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &COSTMODELJUMPRATEFACTORY.abi,
+            &COSTMODELJUMPRATEFACTORY.bytecode.unwrap(),
+            (),
+        )?;
         evm_updates.push(SimUpdate::Evm(jump_rate_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -351,7 +412,12 @@ impl ProtocolDeployer {
 
         // Deploy cost model dynamic level factory.
         let (dynamic_level_factory_tx, dynamic_level_factory_contract) =
-            build_deploy_contract_tx(self.address, &COSTMODELDYNAMICLEVELFACTORY, ())?;
+            build_deploy_tx_and_contract(
+                self.address,
+                &COSTMODELDYNAMICLEVELFACTORY.abi,
+                &COSTMODELDYNAMICLEVELFACTORY.bytecode.unwrap(),
+                (),
+            )?;
         evm_updates.push(SimUpdate::Evm(dynamic_level_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -362,8 +428,12 @@ impl ProtocolDeployer {
         )));
 
         // Deploy drip decay model factory.
-        let (drip_decay_factory_tx, drip_decay_factory_contract) =
-            build_deploy_contract_tx(self.address, &DRIPDECAYMODELCONSTANTFACTORY, ())?;
+        let (drip_decay_factory_tx, drip_decay_factory_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &DRIPDECAYMODELCONSTANTFACTORY.abi,
+            &DRIPDECAYMODELCONSTANTFACTORY.bytecode.unwrap(),
+            (),
+        )?;
         evm_updates.push(SimUpdate::Evm(drip_decay_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -375,8 +445,12 @@ impl ProtocolDeployer {
 
         // Deploy uma trigger factory.
         let uma_trigger_factory_args = (manager_addr, manager_addr);
-        let (uma_trigger_factory_tx, uma_trigger_factory_contract) =
-            build_deploy_contract_tx(self.address, &UMATRIGGERFACTORY, uma_trigger_factory_args)?;
+        let (uma_trigger_factory_tx, uma_trigger_factory_contract) = build_deploy_tx_and_contract(
+            self.address,
+            &UMATRIGGERFACTORY.abi,
+            &UMATRIGGERFACTORY.bytecode.unwrap(),
+            uma_trigger_factory_args,
+        )?;
         evm_updates.push(SimUpdate::Evm(uma_trigger_factory_tx));
         world_updates.push(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
             CozyProtocolContract::new(
@@ -389,9 +463,10 @@ impl ProtocolDeployer {
         // Deploy Chainlink trigger factory.
         let chainlink_trigger_factory_args = (manager_addr,);
         let (chainlink_trigger_factory_tx, chainlink_trigger_factory_contract) =
-            build_deploy_contract_tx(
+            build_deploy_tx_and_contract(
                 self.address,
-                &CHAINLINKTRIGGERFACTORY,
+                &CHAINLINKTRIGGERFACTORY.abi,
+                &CHAINLINKTRIGGERFACTORY.bytecode.unwrap(),
                 chainlink_trigger_factory_args,
             )?;
         evm_updates.push(SimUpdate::Evm(chainlink_trigger_factory_tx));
