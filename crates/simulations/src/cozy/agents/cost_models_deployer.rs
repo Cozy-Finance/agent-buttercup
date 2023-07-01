@@ -1,36 +1,33 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 pub use bindings::{cost_model_dynamic_level_factory, cost_model_jump_rate_factory};
-use eyre::Result;
-use revm::primitives::TxEnv;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
     types::CozyCostModelType,
-    world::{CozyCostModel, CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress,
+    world::{CozyCostModel, CozyUpdate, CozyWorld},
+    world_contracts::{CozyDynamicLevelFactory, CozyJumpRateFactory},
 };
 
 pub struct CostModelsDeployer {
-    name: Option<Cow<'static, str>>,
+    name: Cow<'static, str>,
     address: Address,
     cost_models: HashMap<Cow<'static, str>, CozyCostModelType>,
-    jump_rate_factory: Arc<CozyProtocolContract>,
-    dynamic_level_factory: Arc<CozyProtocolContract>,
+    jump_rate_factory: Arc<CozyJumpRateFactory>,
+    dynamic_level_factory: Arc<CozyDynamicLevelFactory>,
 }
 
 impl CostModelsDeployer {
     pub fn new(
-        name: Option<Cow<'static, str>>,
+        name: Cow<'static, str>,
         address: Address,
         cost_models: HashMap<Cow<'static, str>, CozyCostModelType>,
-        jump_rate_factory: &Arc<CozyProtocolContract>,
-        dynamic_level_factory: &Arc<CozyProtocolContract>,
+        jump_rate_factory: &Arc<CozyJumpRateFactory>,
+        dynamic_level_factory: &Arc<CozyDynamicLevelFactory>,
     ) -> Self {
         Self {
             name,
@@ -57,10 +54,12 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
     ) {
         for (name, cost_model_type) in &self.cost_models {
             log::info!("{:?} deploying {}.", self.name, name);
+
             match cost_model_type {
                 CozyCostModelType::JumpRate(args) => {
                     let (addr, evm_tx) = self
-                        .build_deploy_cost_model_jump_rate_tx(state, args.clone())
+                        .jump_rate_factory
+                        .build_deploy_cost_model_jump_rate_tx(self.address, state, args.clone())
                         .unwrap();
                     let world_update =
                         CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
@@ -68,7 +67,8 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                 }
                 CozyCostModelType::DynamicLevel(args) => {
                     let (addr, evm_tx) = self
-                        .build_deploy_cost_model_dynamic_level_tx(state, args.clone())
+                        .dynamic_level_factory
+                        .build_deploy_cost_model_dynamic_level_tx(self.address, state, args.clone())
                         .unwrap();
                     let world_update =
                         CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
@@ -76,47 +76,5 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                 }
             }
         }
-    }
-}
-
-impl CostModelsDeployer {
-    fn build_deploy_cost_model_jump_rate_tx(
-        &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
-        args: cost_model_jump_rate_factory::DeployModelCall,
-    ) -> Result<(Address, TxEnv)> {
-        let call_data = self
-            .jump_rate_factory
-            .contract
-            .encode_function("deployModel", args)?;
-        let tx = build_call_tx(self.address, self.jump_rate_factory.address, call_data);
-        let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
-            .expect("Error simulating cost model deployment.");
-        let addr: EthersAddress = self
-            .jump_rate_factory
-            .contract
-            .decode_output("deployModel", tx_result)?;
-
-        Ok((Address::from(addr), tx))
-    }
-
-    fn build_deploy_cost_model_dynamic_level_tx(
-        &self,
-        state: &SimState<CozyUpdate, CozyWorld>,
-        args: cost_model_dynamic_level_factory::DeployModelCall,
-    ) -> Result<(Address, TxEnv)> {
-        let call_data = self
-            .dynamic_level_factory
-            .contract
-            .encode_function("deployModel", args)?;
-        let tx = build_call_tx(self.address, self.dynamic_level_factory.address, call_data);
-        let tx_result = unpack_execution(state.simulate_evm_tx_ref(&tx, None))
-            .expect("Error simulating cost model deployment.");
-        let addr: EthersAddress = self
-            .dynamic_level_factory
-            .contract
-            .decode_output("deployModel", tx_result)?;
-
-        Ok((Address::from(addr), tx))
     }
 }

@@ -15,29 +15,30 @@ use crate::cozy::{
     bindings_wrapper::*,
     distributions::TriggerProbModel,
     types::CozyTriggerType,
-    world::{CozyProtocolContract, CozyTrigger, CozyUpdate, CozyWorld},
+    world::{CozyTrigger, CozyUpdate, CozyWorld},
+    world_contracts::{CozyChainlinkTriggerFactory, CozyManager, CozyUmaTriggerFactory},
     EthersAddress,
 };
 
 pub struct TriggersDeployer {
-    name: Option<Cow<'static, str>>,
+    name: Cow<'static, str>,
     address: Address,
     triggers: HashMap<Cow<'static, str>, CozyTriggerType>,
     triggers_models: HashMap<Cow<'static, str>, Option<TriggerProbModel>>,
-    uma_trigger_factory: Arc<CozyProtocolContract>,
-    chainlink_trigger_factory: Arc<CozyProtocolContract>,
-    manager: Arc<CozyProtocolContract>,
+    _uma_trigger_factory: Arc<CozyUmaTriggerFactory>,
+    _chainlink_trigger_factory: Arc<CozyChainlinkTriggerFactory>,
+    manager: Arc<CozyManager>,
     rng: rand::rngs::StdRng,
 }
 
 impl TriggersDeployer {
     pub fn new(
-        name: Option<Cow<'static, str>>,
+        name: Cow<'static, str>,
         address: Address,
         triggers: HashMap<Cow<'static, str>, CozyTriggerType>,
-        uma_trigger_factory: &Arc<CozyProtocolContract>,
-        chainlink_trigger_factory: &Arc<CozyProtocolContract>,
-        manager: &Arc<CozyProtocolContract>,
+        _uma_trigger_factory: &Arc<CozyUmaTriggerFactory>,
+        _chainlink_trigger_factory: &Arc<CozyChainlinkTriggerFactory>,
+        manager: &Arc<CozyManager>,
         rng: rand::rngs::StdRng,
     ) -> Self {
         Self {
@@ -45,8 +46,8 @@ impl TriggersDeployer {
             address,
             triggers,
             triggers_models: HashMap::new(),
-            uma_trigger_factory: uma_trigger_factory.clone(),
-            chainlink_trigger_factory: chainlink_trigger_factory.clone(),
+            _uma_trigger_factory: _uma_trigger_factory.clone(),
+            _chainlink_trigger_factory: _chainlink_trigger_factory.clone(),
             manager: manager.clone(),
             rng,
         }
@@ -124,8 +125,8 @@ impl TriggersDeployer {
         let args: EthersAddress = self.manager.address.into();
         let (tx, _) = build_deploy_tx_and_contract(
             self.address,
-            &DUMMYTRIGGER.abi,
-            &DUMMYTRIGGER.bytecode.unwrap(),
+            DUMMYTRIGGER.abi,
+            DUMMYTRIGGER.bytecode.unwrap(),
             args,
         )?;
         let addr = create_address(self.address.into(), *nonce);

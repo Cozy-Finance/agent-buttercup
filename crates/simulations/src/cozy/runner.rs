@@ -15,7 +15,6 @@ use crate::cozy::{
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
         weth_deployer::WethDeployer,
     },
-    bindings_wrapper::*,
     constants::*,
     distributions::CozyDistribution,
     types::{
@@ -113,20 +112,17 @@ impl CozySingleSetSimRunner {
         // Create and activate agents.
         // Weth deployer.
         let weth_deployer = Box::new(WethDeployer::new(
-            Some(WETH_DEPLOYER.into()),
+            WETH_DEPLOYER.into(),
             Address::random_using(&mut rng),
         ));
         let _ = sim_manager.activate_agent(weth_deployer);
 
-        let world_protocol_contracts = sim_manager.get_state().world.protocol_contracts;
-        let weth = world_protocol_contracts.get_by_name(&WETH.name).unwrap();
-
         // Protocol deployer.
         let protocol_deployer = Box::new(ProtocolDeployer::new(
-            Some(PROTOCOL_DEPLOYER.into()),
+            PROTOCOL_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.protocol_params,
-            weth,
+            &sim_manager.get_state().world.weth.unwrap(),
         ));
         let _ = sim_manager.activate_agent(protocol_deployer);
 
@@ -158,53 +154,48 @@ impl CozySingleSetSimRunner {
         allocate_addrs.extend(active_buyers_map.clone());
         allocate_addrs.extend(suppliers_map.clone());
         let base_token_deployer = Box::new(TokenDeployer::new(
-            Some(BASE_TOKEN_DEPLOYER.into()),
+            BASE_TOKEN_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.base_token_params,
             allocate_addrs,
         ));
         let _ = sim_manager.activate_agent(base_token_deployer);
 
-        // Store protocol contracts.
-        let world_protocol_contracts = sim_manager.get_state().world.protocol_contracts;
-
         // Cost models deployer.
         let cost_models_deployer = Box::new(CostModelsDeployer::new(
-            Some(COST_MODELS_DEPLOYER.into()),
+            COST_MODELS_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.cost_models.iter().cloned().collect(),
-            world_protocol_contracts
-                .get_by_name(&COSTMODELJUMPRATEFACTORY.name)
-                .unwrap(),
-            world_protocol_contracts
-                .get_by_name(&COSTMODELDYNAMICLEVELFACTORY.name)
-                .unwrap(),
+            &sim_manager.get_state().world.jump_rate_factory.unwrap(),
+            &sim_manager.get_state().world.dynamic_level_factory.unwrap(),
         ));
         let _ = sim_manager.activate_agent(cost_models_deployer);
 
         // Drip decay models deployer.
         let drip_decay_models_deployer = Box::new(DripDecayModelsDeployer::new(
-            Some(DRIP_DECAY_MODELS_DEPLOYER.into()),
+            DRIP_DECAY_MODELS_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.drip_decay_models.iter().cloned().collect(),
-            world_protocol_contracts
-                .get_by_name(&DRIPDECAYMODELCONSTANTFACTORY.name)
+            &sim_manager
+                .get_state()
+                .world
+                .drip_decay_constant_factory
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(drip_decay_models_deployer);
 
         // Triggers deployer.
         let triggers_deployer = Box::new(TriggersDeployer::new(
-            Some(TRIGGERS_DEPLOYER.into()),
+            TRIGGERS_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.triggers.iter().cloned().collect(),
-            world_protocol_contracts
-                .get_by_name(&UMATRIGGERFACTORY.name)
+            &sim_manager.get_state().world.uma_trigger_factory.unwrap(),
+            &sim_manager
+                .get_state()
+                .world
+                .chainlink_trigger_factory
                 .unwrap(),
-            world_protocol_contracts
-                .get_by_name(&CHAINLINKTRIGGERFACTORY.name)
-                .unwrap(),
-            world_protocol_contracts.get_by_name(&MANAGER.name).unwrap(),
+            &sim_manager.get_state().world.manager.unwrap(),
             rng.clone(),
         ));
         let _ = sim_manager.activate_agent(triggers_deployer);
@@ -232,10 +223,7 @@ impl CozySingleSetSimRunner {
             })
         }
         let salt: Option<[u8; 32]> = Some(rng.gen());
-        let base_asset_addr = world_protocol_contracts
-            .get_by_name(&BASE_TOKEN)
-            .unwrap()
-            .address;
+        let base_asset_addr = sim_manager.get_state().world.base_token.unwrap().address;
         let set_params = CozySetAdminParams {
             asset: base_asset_addr,
             set_config: self.set_config_params.into(),
@@ -244,11 +232,11 @@ impl CozySingleSetSimRunner {
         };
 
         let set_admin = Box::new(SetAdmin::new(
-            Some(SET_ADMIN.into()),
+            SET_ADMIN.into(),
             Address::random_using(&mut rng),
             set_params,
-            world_protocol_contracts.get_by_name(&SET.name).unwrap(),
-            world_protocol_contracts.get_by_name(&MANAGER.name).unwrap(),
+            &sim_manager.get_state().world.set_logic.unwrap(),
+            &sim_manager.get_state().world.manager.unwrap(),
         ));
         let _ = sim_manager.activate_agent(set_admin);
 
@@ -261,13 +249,11 @@ impl CozySingleSetSimRunner {
         for (i, (addr, _)) in passive_buyers_map.into_iter().enumerate() {
             let name = format!("{}{}", PASSIVE_BUYER, i + 1);
             let passive_buyer = Box::new(PassiveBuyer::new(
-                Some(name.into()),
+                name.into(),
                 addr,
-                world_protocol_contracts
-                    .get_by_name(&COZYROUTER.name)
-                    .unwrap(),
-                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
-                world_protocol_contracts.get_by_name(&SET.name).unwrap(),
+                &sim_manager.get_state().world.cozy_router.unwrap(),
+                &sim_manager.get_state().world.base_token.unwrap(),
+                &sim_manager.get_state().world.set_logic.unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.passive_buyers_params
                     .protection_desired_dist
@@ -283,13 +269,11 @@ impl CozySingleSetSimRunner {
         for (i, (addr, _)) in active_buyers_map.into_iter().enumerate() {
             let name = format!("{}{}", ACTIVE_BUYER, i + 1);
             let passive_buyer = Box::new(ActiveBuyer::new(
-                Some(name.into()),
+                name.into(),
                 addr,
-                world_protocol_contracts
-                    .get_by_name(&COZYROUTER.name)
-                    .unwrap(),
-                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
-                world_protocol_contracts.get_by_name(&SET.name).unwrap(),
+                &sim_manager.get_state().world.cozy_router.unwrap(),
+                &sim_manager.get_state().world.base_token.unwrap(),
+                &sim_manager.get_state().world.set_logic.unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
                 rng.clone(),
@@ -301,12 +285,10 @@ impl CozySingleSetSimRunner {
         for (i, (addr, _)) in suppliers_map.into_iter().enumerate() {
             let name = format!("{}{}", PASSIVE_SUPPLIER, i + 1);
             let passive_supplier = Box::new(PassiveSupplier::new(
-                Some(name.into()),
+                name.into(),
                 addr,
-                world_protocol_contracts
-                    .get_by_name(&COZYROUTER.name)
-                    .unwrap(),
-                world_protocol_contracts.get_by_name(&BASE_TOKEN).unwrap(),
+                &sim_manager.get_state().world.cozy_router.unwrap(),
+                &sim_manager.get_state().world.base_token.unwrap(),
                 self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_supplier);

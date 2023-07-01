@@ -26,10 +26,7 @@ impl<U: UpdateData> AgentChannel<U> {
         AgentChannel {
             address: agent_id.address,
             sender: sender.clone(),
-            tag: agent_id
-                .clone()
-                .name
-                .or(Some(Cow::Owned(format!("{:2X}", agent_id.address)))),
+            tag: agent_id.clone().name.into(),
         }
     }
 

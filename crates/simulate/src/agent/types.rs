@@ -10,7 +10,7 @@ use crate::address::Address;
 #[derive(Debug, Clone)]
 pub struct AgentId {
     pub address: Address,
-    pub name: Option<Cow<'static, str>>,
+    pub name: Cow<'static, str>,
 }
 
 impl Hash for AgentId {
