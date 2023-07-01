@@ -14,22 +14,23 @@ use crate::cozy::{
     bindings_wrapper::*,
     constants::BASE_TOKEN,
     types::CozyTokenDeployParams,
-    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
+    world::{CozyUpdate, CozyWorld},
+    world_contracts::CozyBaseToken,
     EthersAddress, EthersU256,
 };
 
 pub struct TokenDeployer {
-    name: Option<Cow<'static, str>>,
+    name: Cow<'static, str>,
     address: Address,
     deploy_args: CozyTokenDeployParams,
     allocate_addrs: HashMap<Address, EthersU256>,
     finished_allocating: bool,
-    token: Option<Arc<CozyProtocolContract>>,
+    token: Option<Arc<CozyBaseToken>>,
 }
 
 impl TokenDeployer {
     pub fn new(
-        name: Option<Cow<'static, str>>,
+        name: Cow<'static, str>,
         address: Address,
         deploy_args: CozyTokenDeployParams,
         allocate_addrs: HashMap<Address, EthersU256>,
@@ -64,14 +65,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
     }
 
     fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
-        self.token = Some(
-            state
-                .world
-                .protocol_contracts
-                .get_by_name(&BASE_TOKEN)
-                .unwrap()
-                .clone(),
-        );
+        self.token = state.world.base_token.clone();
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
@@ -91,8 +85,8 @@ impl TokenDeployer {
     ) -> Result<()> {
         let (evm_tx, dummy_token_contract) = build_deploy_tx_and_contract(
             self.address,
-            &DUMMYTOKEN.abi,
-            &DUMMYTOKEN.bytecode.unwrap(),
+            DUMMYTOKEN.abi,
+            DUMMYTOKEN.bytecode.unwrap(),
             (
                 self.deploy_args.name.to_string(),
                 self.deploy_args.symbol.to_string(),
@@ -102,8 +96,8 @@ impl TokenDeployer {
         channel.send(SimUpdate::Evm(evm_tx));
 
         let dummy_token_addr: Address = Address::from(create_address(self.address.into(), 0));
-        channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            CozyProtocolContract::new(BASE_TOKEN.into(), dummy_token_addr, dummy_token_contract),
+        channel.send(SimUpdate::World(CozyUpdate::AddCozyBaseToken(
+            CozyBaseToken::new(BASE_TOKEN.into(), dummy_token_addr, dummy_token_contract),
         )));
 
         Ok(())

@@ -16,7 +16,7 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
     fn id(&self) -> AgentId {
         AgentId {
             address: Address::random(),
-            name: None,
+            name: "Agent".into(),
         }
     }
 

@@ -1,15 +1,38 @@
-use std::{borrow::Cow, collections::HashMap, sync::Arc};
+use std::{borrow::Cow, collections::HashMap, fmt::Debug, sync::Arc};
 
 use auto_impl::auto_impl;
+use bindings::cozy_protocol::cozy_router;
+use eyre::Result;
+use revm::primitives::{ExecutionResult, TxEnv};
 use simulate::{
     address::Address,
     contract::sim_contract::SimContract,
     state::{update::UpdateData, world::World},
+    utils::build_call_tx,
+};
+
+use crate::cozy::world_contracts::{
+    CozyBackstop, CozyBaseToken, CozyChainlinkTriggerFactory, CozyDripDecayConstantFactory,
+    CozyDynamicLevelFactory, CozyJumpRateFactory, CozyManager, CozyPtoken, CozyPtokenFactory,
+    CozyRouter, CozySetFactory, CozySetLogic, CozyUmaTriggerFactory, Weth,
 };
 
 #[derive(Debug, Clone)]
 pub enum CozyUpdate {
-    AddToProtocolContracts(Arc<CozyProtocolContract>),
+    AddCozyRouter(Arc<CozyRouter>),
+    AddCozyBaseToken(Arc<CozyBaseToken>),
+    AddCozySetLogic(Arc<CozySetLogic>),
+    AddCozyJumpRateFactory(Arc<CozyJumpRateFactory>),
+    AddCozyDynamicLevelFactory(Arc<CozyDynamicLevelFactory>),
+    AddCozyDripDecayConstantFactory(Arc<CozyDripDecayConstantFactory>),
+    AddCozyUmaTriggerFactory(Arc<CozyUmaTriggerFactory>),
+    AddCozyChainlinkTriggerFactory(Arc<CozyChainlinkTriggerFactory>),
+    AddCozyManager(Arc<CozyManager>),
+    AddCozyBackstop(Arc<CozyBackstop>),
+    AddCozySetFactory(Arc<CozySetFactory>),
+    AddCozyPtoken(Arc<CozyPtoken>),
+    AddCozyPtokenFactory(Arc<CozyPtokenFactory>),
+    AddWeth(Arc<Weth>),
     AddToSets(CozySet),
     AddToCostModels(Arc<CozyCostModel>),
     AddToDripDecayModels(Arc<CozyDripDecayModel>),
@@ -23,7 +46,20 @@ impl UpdateData for CozyUpdate {}
 
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
-    pub protocol_contracts: CozyMap<Arc<CozyProtocolContract>>,
+    pub cozy_router: Option<Arc<CozyRouter>>,
+    pub base_token: Option<Arc<CozyBaseToken>>,
+    pub set_logic: Option<Arc<CozySetLogic>>,
+    pub jump_rate_factory: Option<Arc<CozyJumpRateFactory>>,
+    pub dynamic_level_factory: Option<Arc<CozyDynamicLevelFactory>>,
+    pub drip_decay_constant_factory: Option<Arc<CozyDripDecayConstantFactory>>,
+    pub uma_trigger_factory: Option<Arc<CozyUmaTriggerFactory>>,
+    pub chainlink_trigger_factory: Option<Arc<CozyChainlinkTriggerFactory>>,
+    pub manager: Option<Arc<CozyManager>>,
+    pub backstop: Option<Arc<CozyBackstop>>,
+    pub set_factory: Option<Arc<CozySetFactory>>,
+    pub ptoken: Option<Arc<CozyPtoken>>,
+    pub ptoken_factory: Option<Arc<CozyPtokenFactory>>,
+    pub weth: Option<Arc<Weth>>,
     pub sets: CozyMap<CozySet>,
     pub cost_models: CozyMap<Arc<CozyCostModel>>,
     pub drip_decay_models: CozyMap<Arc<CozyDripDecayModel>>,
@@ -34,7 +70,20 @@ impl CozyWorld {
     pub fn new() -> Self {
         log::info!("Creating Cozy World");
         CozyWorld {
-            protocol_contracts: CozyMap::new(),
+            cozy_router: None,
+            base_token: None,
+            set_logic: None,
+            jump_rate_factory: None,
+            dynamic_level_factory: None,
+            drip_decay_constant_factory: None,
+            uma_trigger_factory: None,
+            chainlink_trigger_factory: None,
+            manager: None,
+            backstop: None,
+            set_factory: None,
+            ptoken: None,
+            ptoken_factory: None,
+            weth: None,
             sets: CozyMap::new(),
             cost_models: CozyMap::new(),
             drip_decay_models: CozyMap::new(),
@@ -53,8 +102,47 @@ impl World for CozyWorld {
     type WorldUpdateData = CozyUpdate;
     fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
-            CozyUpdate::AddToProtocolContracts(contract) => {
-                let _ = self.protocol_contracts.insert(contract.clone());
+            CozyUpdate::AddCozyRouter(cozy_router) => {
+                self.cozy_router = Some(cozy_router.clone());
+            }
+            CozyUpdate::AddCozyBaseToken(base_token) => {
+                self.base_token = Some(base_token.clone());
+            }
+            CozyUpdate::AddCozySetLogic(set_logic) => {
+                self.set_logic = Some(set_logic.clone());
+            }
+            CozyUpdate::AddCozyJumpRateFactory(factory) => {
+                self.jump_rate_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyDynamicLevelFactory(factory) => {
+                self.dynamic_level_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyDripDecayConstantFactory(factory) => {
+                self.drip_decay_constant_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyUmaTriggerFactory(factory) => {
+                self.uma_trigger_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyChainlinkTriggerFactory(factory) => {
+                self.chainlink_trigger_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyManager(manager) => {
+                self.manager = Some(manager.clone());
+            }
+            CozyUpdate::AddCozyBackstop(backstop) => {
+                self.backstop = Some(backstop.clone());
+            }
+            CozyUpdate::AddCozySetFactory(factory) => {
+                self.set_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyPtoken(ptoken) => {
+                self.ptoken = Some(ptoken.clone());
+            }
+            CozyUpdate::AddCozyPtokenFactory(factory) => {
+                self.ptoken_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddWeth(weth) => {
+                self.weth = Some(weth.clone());
             }
             CozyUpdate::AddToSets(set) => {
                 let _ = self.sets.insert(set.clone());
@@ -91,6 +179,7 @@ pub trait CozyMapId {
     fn address(&self) -> Address;
 }
 
+#[macro_export]
 macro_rules! impl_cozy_map_id {
     ($struct_name:ident) => {
         impl CozyMapId for $struct_name {
@@ -104,24 +193,6 @@ macro_rules! impl_cozy_map_id {
         }
     };
 }
-
-#[derive(Debug, Clone)]
-pub struct CozyProtocolContract {
-    pub name: Cow<'static, str>,
-    pub address: Address,
-    pub contract: SimContract,
-}
-
-impl CozyProtocolContract {
-    pub fn new(name: Cow<'static, str>, address: Address, contract: SimContract) -> Arc<Self> {
-        Arc::new(CozyProtocolContract {
-            name,
-            address,
-            contract,
-        })
-    }
-}
-impl_cozy_map_id!(CozyProtocolContract);
 
 #[derive(Debug, Clone)]
 pub struct CozySet {

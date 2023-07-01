@@ -1,7 +1,7 @@
 use eyre::Result;
 use serde::Deserializer;
 
-use crate::cozy::{bindings_wrapper::*, world::CozyProtocolContract, EthersU256};
+use crate::cozy::EthersU256;
 
 pub struct Counter {
     count: u64,

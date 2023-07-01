@@ -14,3 +14,4 @@ pub mod runner;
 pub mod types;
 pub mod utils;
 pub mod world;
+pub mod world_contracts;
