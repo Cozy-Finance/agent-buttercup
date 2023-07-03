@@ -115,7 +115,6 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             .current_prob;
         let my_trigger_prob =
             ProbTruncatedNorm::new(oracle_trigger_prob + 0.01, 0.000001).sample(&mut self.rng);
-        println!("{:?}", my_trigger_prob);
 
         let chosen_purchase = targets
             .iter()
@@ -135,7 +134,6 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                 .into(),
             );
         } else {
-            println!("Sale loop");
             let chosen_sale = targets
                 .iter()
                 .map(|(set_address, market_id)| {
@@ -145,7 +143,6 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                 .flatten()
                 .max_by(|a, b| a.amt.cmp(&b.amt));
             if let Some(chosen_sale) = chosen_sale {
-                println!("SALEEEEE");
                 channel.send_with_tag(
                     SimUpdate::Evm(chosen_sale.tx),
                     format!(
@@ -178,7 +175,6 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                                 }
                                 Some(curr_ptokens) => {
                                     *curr_ptokens += Into::<EthersU256>::into(ptokens);
-                                    println!("curr_ptokens: {:?}", curr_ptokens);
                                 }
                             };
                         }
@@ -271,7 +267,6 @@ impl ActiveBuyer {
                 .contract
                 .decode_output::<cozy_router::PurchaseReturn>("purchase", purchase_result)?
                 .assets_needed;
-            println!("assets_needed: {:?}", assets_needed);
             return Ok(Some(ArbData {
                 tx: purchase_tx.unwrap(),
                 amt: purchase_amt,
