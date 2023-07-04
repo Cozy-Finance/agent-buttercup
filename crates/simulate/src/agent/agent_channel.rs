@@ -4,8 +4,9 @@ use crossbeam_channel::Sender;
 
 use super::types::AgentId;
 use crate::{
+    address::Address,
     errors::ChannelError,
-    state::update::{SimUpdate, UpdateData}, address::Address
+    state::update::{SimUpdate, UpdateData},
 };
 
 #[derive(Debug, Clone)]
@@ -23,12 +24,9 @@ pub struct AgentChannel<U: UpdateData> {
 impl<U: UpdateData> AgentChannel<U> {
     pub fn new(sender: &Sender<AgentSimUpdate<U>>, agent_id: &AgentId) -> Self {
         AgentChannel {
-            address: (*agent_id).address,
+            address: agent_id.address,
             sender: sender.clone(),
-            tag: agent_id
-                .clone()
-                .name
-                .or(Some(Cow::Owned(format!("{:2X}", agent_id.address)))),
+            tag: agent_id.clone().name.into(),
         }
     }
 

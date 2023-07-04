@@ -3,14 +3,14 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use revm::primitives::{U256 as EvmU256};
+use revm::primitives::U256 as EvmU256;
 
 use crate::address::Address;
 
 #[derive(Debug, Clone)]
 pub struct AgentId {
     pub address: Address,
-    pub name: Option<Cow<'static, str>>,
+    pub name: Cow<'static, str>,
 }
 
 impl Hash for AgentId {

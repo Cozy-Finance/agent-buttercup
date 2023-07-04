@@ -1,93 +1,7 @@
-use std::{collections::HashMap, sync::Arc};
-
-use ethers::abi::Tokenize;
 use eyre::Result;
-use revm::primitives::TxEnv;
-use simulate::{
-    contract::{sim_contract::SimContract, utils as contract_utils},
-    utils::{build_call_contract_txenv, build_deploy_contract_txenv},
-    address::Address
-};
-use thiserror::Error;
+use serde::Deserializer;
 
-use crate::cozy::{
-    bindings_wrapper::*, world::CozyProtocolContract, EthersAddress, EthersBytes
-};
-
-#[derive(Error, Debug)]
-pub enum DeploymentError {
-    #[error("tried accessing a non-existent library addr")]
-    NonExistentLibraryAddr,
-    #[error("failed to link set bytecode")]
-    LinkingBytecodeFailure,
-    #[error("missing linked bytecode")]
-    MissingLinkedBytecode,
-    #[error("missing unlinked bytecode")]
-    MissingUnlinkedBytecode,
-}
-
-pub fn build_deploy_contract_tx<T: Tokenize>(
-    agent_address: Address,
-    contract_bindings: &BindingsWrapper,
-    args: T,
-) -> Result<(TxEnv, SimContract)> {
-    let abi = contract_bindings.abi.clone();
-    let bytecode = contract_bindings
-        .bytecode
-        .ok_or(DeploymentError::MissingLinkedBytecode)?
-        .clone();
-    let contract = SimContract::new(abi, bytecode);
-    let bytecode = contract.encode_constructor(args)?;
-
-    Ok((
-        build_deploy_contract_txenv(agent_address, bytecode, None, None),
-        contract,
-    ))
-}
-
-pub fn build_unlinked_deploy_contract_tx<T: Tokenize>(
-    agent_address: Address,
-    contract_bindings: &BindingsWrapper,
-    libraries: &HashMap<Address, &BindingsWrapper>,
-    args: T,
-) -> Result<(TxEnv, SimContract)> {
-    let mut links: Vec<(&str, &str, EthersAddress)> = vec![];
-    for (addr, lib_binding) in libraries.iter() {
-        links.push((lib_binding.path, lib_binding.name, (*addr).into()));
-    }
-    let bytecode = contract_utils::build_linked_bytecode(
-        (*contract_bindings)
-            .unlinked_bytecode
-            .ok_or(DeploymentError::MissingUnlinkedBytecode)?,
-        links,
-    )?;
-    let abi = (*contract_bindings).abi.clone();
-    let contract = SimContract::new(abi, EthersBytes(bytecode));
-    let bytecode = contract.encode_constructor(args)?;
-
-    Ok((
-        build_deploy_contract_txenv(agent_address, bytecode, None, None),
-        contract,
-    ))
-}
-
-pub fn build_call_protocol_contract_tx<T: Tokenize>(
-    agent_address: Address,
-    contract_data: &Arc<CozyProtocolContract>,
-    func_name: &str,
-    args: T,
-) -> Result<TxEnv> {
-    Ok(build_call_contract_txenv(
-        agent_address,
-        contract_data.as_ref().address.into(),
-        contract_data
-            .as_ref()
-            .contract
-            .encode_function(func_name, args)?,
-        None,
-        None,
-    ))
-}
+use crate::cozy::EthersU256;
 
 pub struct Counter {
     count: u64,
@@ -107,4 +21,36 @@ impl Counter {
     pub fn increment(&mut self) {
         self.count += 1;
     }
+}
+
+pub fn wad() -> EthersU256 {
+    EthersU256::from(1e18 as u128)
+}
+
+/// Converts a float to a WAD fixed point prepared U256 number.
+/// # Arguments
+/// * `x` - Float to convert. (f64)
+/// # Returns
+/// * `U256` - Converted U256 number.
+pub fn float_to_wad(x: f64) -> EthersU256 {
+    EthersU256::from((x * 1e18) as u128)
+}
+
+/// Converts a float to a WAD fixed point prepared U256 number.
+/// # Arguments
+/// * `x` - WAD to convert. (U256)
+/// # Returns
+/// * `f64` - Converted f64 number.
+pub fn wad_to_float(x: EthersU256) -> f64 {
+    x.as_u128() as f64 / 1e18
+}
+
+pub fn deserialize_string_to_u256<'de, D>(deserializer: D) -> Result<EthersU256, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let string_value: String = serde::Deserialize::deserialize(deserializer)?;
+    let u256_value: EthersU256 =
+        EthersU256::from_dec_str(string_value.as_str()).map_err(serde::de::Error::custom)?;
+    Ok(u256_value)
 }

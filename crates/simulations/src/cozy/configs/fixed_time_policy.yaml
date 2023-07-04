@@ -1,6 +1,0 @@
-start_block_number: 1
-start_block_timestamp: 1
-time_per_block: 12
-blocks_per_step: 1
-blocks_to_generate: 100000
-time_to_generate: null

@@ -1,33 +1,36 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
+    address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::utils::build_deploy_tx_and_contract,
     state::{update::SimUpdate, SimState},
-    utils::build_call_contract_txenv, address::Address,
+    utils::build_call_tx,
 };
 
 use crate::cozy::{
     bindings_wrapper::*,
     constants::BASE_TOKEN,
     types::CozyTokenDeployParams,
-    utils::build_deploy_contract_tx,
-    world::{CozyProtocolContract, CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256
+    world::{CozyUpdate, CozyWorld},
+    world_contracts::CozyBaseToken,
+    EthersAddress, EthersU256,
 };
 
 pub struct TokenDeployer {
-    name: Option<Cow<'static, str>>,
+    name: Cow<'static, str>,
     address: Address,
     deploy_args: CozyTokenDeployParams,
     allocate_addrs: HashMap<Address, EthersU256>,
     finished_allocating: bool,
+    token: Option<Arc<CozyBaseToken>>,
 }
 
 impl TokenDeployer {
     pub fn new(
-        name: Option<Cow<'static, str>>,
+        name: Cow<'static, str>,
         address: Address,
         deploy_args: CozyTokenDeployParams,
         allocate_addrs: HashMap<Address, EthersU256>,
@@ -38,6 +41,7 @@ impl TokenDeployer {
             deploy_args,
             allocate_addrs,
             finished_allocating: false,
+            token: None,
         }
     }
 }
@@ -60,6 +64,10 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
             .expect("Error deploying token.");
     }
 
+    fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
+        self.token = state.world.base_token.clone();
+    }
+
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if !self.finished_allocating {
             self.allocate_token(state, channel)
@@ -75,9 +83,10 @@ impl TokenDeployer {
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let (evm_tx, dummy_token_contract) = build_deploy_contract_tx(
+        let (evm_tx, dummy_token_contract) = build_deploy_tx_and_contract(
             self.address,
-            &DUMMYTOKEN,
+            DUMMYTOKEN.abi,
+            DUMMYTOKEN.bytecode.unwrap(),
             (
                 self.deploy_args.name.to_string(),
                 self.deploy_args.symbol.to_string(),
@@ -87,9 +96,8 @@ impl TokenDeployer {
         channel.send(SimUpdate::Evm(evm_tx));
 
         let dummy_token_addr: Address = Address::from(create_address(self.address.into(), 0));
-        channel.send(SimUpdate::World(CozyUpdate::AddToProtocolContracts(
-            BASE_TOKEN.into(),
-            CozyProtocolContract::new(dummy_token_addr, dummy_token_contract),
+        channel.send(SimUpdate::World(CozyUpdate::AddCozyBaseToken(
+            CozyBaseToken::new(BASE_TOKEN.into(), dummy_token_addr, dummy_token_contract),
         )));
 
         Ok(())
@@ -97,17 +105,22 @@ impl TokenDeployer {
 
     fn allocate_token(
         &mut self,
-        state: &SimState<CozyUpdate, CozyWorld>,
+        _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) -> Result<()> {
-        let token = state.world.protocol_contracts.get(BASE_TOKEN).unwrap();
-
         for (receiver, amount) in self.allocate_addrs.iter() {
             let receiver_address: EthersAddress = (*receiver).into();
-            let call_data = token
+            let call_data = self
+                .token
+                .as_ref()
+                .unwrap()
                 .contract
                 .encode_function("mint", (receiver_address, *amount))?;
-            let tx = build_call_contract_txenv(self.address, token.address, call_data, None, None);
+            let tx = build_call_tx(
+                self.address,
+                self.token.as_ref().unwrap().address,
+                call_data,
+            );
             channel.send(SimUpdate::Evm(tx));
         }
 

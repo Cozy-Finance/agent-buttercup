@@ -8,6 +8,7 @@ use revm::{
 use thiserror::Error;
 
 use crate::{
+    address::Address,
     agent::agent_channel::AgentSimUpdate,
     state::{
         update::{SimUpdate, SimUpdateResult, UpdateData},
@@ -15,7 +16,6 @@ use crate::{
     },
     time_policy::TimeEnv,
     utils::*,
-    address::Address,
 };
 
 pub mod update;
@@ -166,7 +166,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 }
             }
             SimUpdate::World(update) => {
-                let result = self.execute_world_update(&update);
+                let result = self.execute_world_update(update);
                 if let Some(tag) = &agent_update.tag {
                     self.insert_into_update_results(
                         tag.clone(),
@@ -176,11 +176,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 }
             }
             SimUpdate::Bundle(tx, update) => {
-                let sim_evm_result = self.simulate_evm_tx(&tx);
+                let sim_evm_result = self.simulate_evm_tx(tx);
                 let bundle_success = is_execution_success(&sim_evm_result);
                 if bundle_success {
-                    let evm_result = self.execute_evm_tx(&tx);
-                    let world_result = self.execute_world_update(&update);
+                    let evm_result = self.execute_evm_tx(tx);
+                    let world_result = self.execute_world_update(update);
                     if let Some(tag) = &agent_update.tag {
                         self.insert_into_update_results(
                             tag.clone(),
@@ -201,10 +201,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                     .iter()
                     .map(|t| self.simulate_evm_tx(t))
                     .collect::<Vec<_>>();
-                let bundle_success = sim_evm_results
-                    .iter()
-                    .map(|result| is_execution_success(result))
-                    .all(|x| x);
+                let bundle_success = sim_evm_results.iter().map(is_execution_success).all(|x| x);
                 if bundle_success {
                     let evm_results = txs
                         .iter()

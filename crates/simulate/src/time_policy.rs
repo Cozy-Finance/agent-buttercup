@@ -1,5 +1,6 @@
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 
+use ethers::types::U256 as EthersU256;
 use revm::primitives::U256;
 use thiserror::Error;
 
@@ -24,9 +25,9 @@ pub trait TimePolicy: Sync + Send {
 pub struct FixedTimePolicy {
     current_time_env: TimeEnv,
     /// Each new block moves the timestamp forward by `time_per_block`
-    time_per_block: u64,
+    pub time_per_block: u64,
     /// Each step moves the block number forward by `blocks_per_step`
-    blocks_per_step: u64,
+    pub blocks_per_step: u64,
     /// Total number of blocks to generate before becoming inactive
     blocks_to_generate: Option<u64>,
     /// Total amount of time to generate before becoming inactive
@@ -45,8 +46,8 @@ pub enum FixedTimePolicyError {
 
 impl FixedTimePolicy {
     pub fn new(
-        start_block_number: U256,
-        start_block_timestamp: U256,
+        start_block_number: u64,
+        start_block_timestamp: u64,
         time_per_block: u64,
         blocks_per_step: u64,
         blocks_to_generate: Option<u64>,
@@ -57,8 +58,8 @@ impl FixedTimePolicy {
         }
         Ok(FixedTimePolicy {
             current_time_env: TimeEnv {
-                number: start_block_number,
-                timestamp: start_block_timestamp,
+                number: EthersU256::from(start_block_number).into(),
+                timestamp: EthersU256::from(start_block_timestamp).into(),
             },
             time_per_block,
             blocks_per_step,

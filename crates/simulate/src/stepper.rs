@@ -1,10 +1,11 @@
 use left_right::{Absorb, ReadHandle, ReadHandleFactory, WriteHandle};
-use revm::primitives::{AccountInfo};
+use revm::primitives::AccountInfo;
 
 use crate::{
+    address::Address,
     agent::agent_channel::AgentSimUpdate,
     state::{update::UpdateData, world::World, SimState},
-    time_policy::TimeEnv, address::Address,
+    time_policy::TimeEnv,
 };
 
 pub enum StepperStateUpdate<U: UpdateData> {

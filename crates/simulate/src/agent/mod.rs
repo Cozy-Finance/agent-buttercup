@@ -2,9 +2,9 @@ use agent_channel::AgentChannel;
 use revm::primitives::AccountInfo;
 
 use crate::{
+    address::Address,
     agent::types::AgentId,
     state::{update::UpdateData, world::World, SimState},
-    address::Address,
 };
 
 pub mod agent_channel;
@@ -16,7 +16,7 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
     fn id(&self) -> AgentId {
         AgentId {
             address: Address::random(),
-            name: None,
+            name: "Agent".into(),
         }
     }
 
@@ -25,14 +25,14 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
     }
 
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn activation_step(&mut self, state: &SimState<U, W>, channel: AgentChannel<U>) {}
+    fn activation_step(&mut self, _state: &SimState<U, W>, _channel: AgentChannel<U>) {}
 
     /// Executes actions against the simulation as soon as the agent is activated.
-    fn resolve_activation_step(&mut self, state: &SimState<U, W>) {}
+    fn resolve_activation_step(&mut self, _state: &SimState<U, W>) {}
 
     /// Executes the agents actions against the simulation environment.
-    fn step(&mut self, state: &SimState<U, W>, channel: AgentChannel<U>) {}
+    fn step(&mut self, _state: &SimState<U, W>, _channel: AgentChannel<U>) {}
 
     /// Executes the agents actions against the simulation environment.
-    fn resolve_step(&mut self, state: &SimState<U, W>) {}
+    fn resolve_step(&mut self, _state: &SimState<U, W>) {}
 }

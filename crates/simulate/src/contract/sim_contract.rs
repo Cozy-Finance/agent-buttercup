@@ -1,4 +1,3 @@
-//! This module contains the [`SimulationContract`] struct that is used to wrap around the ethers `BaseContract` and add some additional information relevant for revm and the simulation.
 use ethers::{
     abi::{Contract as EthersContract, Detokenize, Token, Tokenize},
     prelude::BaseContract as EthersBaseContract,
@@ -8,7 +7,7 @@ use eyre::Result;
 use revm::primitives::B256;
 use thiserror::Error;
 
-use crate::{EthersBytes, EvmBytes, address::Address};
+use crate::{EthersBytes, EvmBytes};
 
 #[derive(Error, Debug)]
 pub enum SimContractError {
@@ -29,8 +28,6 @@ pub enum SimContractError {
 /// * `base_contract` - The ethers [`BaseContract`] that holds the ABI.
 /// * `bytecode` - The contract's deployed bytecode.
 pub struct SimContract {
-    /// The address of the contract within the relevant [`SimulationEnvironment`].
-    pub address: Option<Address>,
     /// The ethers [`BaseContract`] that holds the ABI.
     pub base_contract: EthersBaseContract,
     /// The contract's deployed bytecode.
@@ -43,7 +40,6 @@ impl SimContract {
         Self {
             base_contract: EthersBaseContract::from(contract),
             bytecode: bytecode.0,
-            address: None,
         }
     }
 

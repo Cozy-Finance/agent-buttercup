@@ -1,6 +1,3 @@
-#![warn(unsafe_code)]
-//! Simulation managers are used to manage the environments for a simulation.
-//! Managers are responsible for adding agents, running agents, deploying contracts, calling contracts, and reading logs.
 use std::{collections::HashMap, thread};
 
 use crossbeam_channel::unbounded;
@@ -18,12 +15,6 @@ use crate::{
     time_policy::TimePolicy,
 };
 
-/// Manages simulations.
-/// # Fields
-/// * `state` - The simulation state that the manager controls.
-/// * `time_policy` - The time policy that the manager calls.
-/// * `agents` - The agents that are currently running in the simulation environment.
-/// * `rng` - Randomness generator.
 pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub time_policy: Box<dyn TimePolicy>,
     pub agents: HashMap<AgentId, Box<dyn Agent<U, W>>>,
@@ -73,7 +64,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
 
             // Let agents resolve the step.
             thread::scope(|t| {
-                for (_, agent) in &mut self.agents {
+                for agent in self.agents.values_mut() {
                     t.spawn(|| agent.resolve_step(&self.stepper_read_factory.sim_state()));
                 }
             });
@@ -121,7 +112,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         self.stepper.clear_all_results();
 
         // Adds agent to local data.
-        self.agents.insert(id.clone(), new_agent);
+        self.agents.insert(id, new_agent);
 
         Ok(())
     }

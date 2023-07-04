@@ -1,3 +1,4 @@
+pub mod active_buyer;
 pub mod cost_models_deployer;
 pub mod drip_decay_models_deployer;
 pub mod errors;
