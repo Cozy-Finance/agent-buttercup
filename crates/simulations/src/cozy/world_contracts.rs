@@ -373,8 +373,7 @@ impl CozySetLogic {
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
         let total_protection_available = self
             .contract
-            .decode_output::<TotalCollateralAvailableReturn>("totalCollateralAvailable", result)?
-            .0;
+            .decode_output::<EthersU256>("totalCollateralAvailable", result)?;
         Ok(total_protection_available)
     }
 }
