@@ -4,7 +4,8 @@ use bindings::cozy_protocol::shared_types::MarketConfig;
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use serde::Deserialize;
 use simulate::{
-    address::Address, manager::SimManager, state::SimState, time_policy::FixedTimePolicy,
+    address::Address, manager::SimManager, state::SimState, summarizer::Summarizer,
+    time_policy::FixedTimePolicy,
 };
 
 use crate::cozy::{
@@ -25,6 +26,8 @@ use crate::cozy::{
     },
     world::CozyWorld,
 };
+
+use super::summary_generators::set_summary::SetSummaryGenerator;
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct CozySingleSetSimRunnerSettings {
@@ -101,13 +104,16 @@ impl CozySingleSetSimRunner {
         }
     }
 
-    pub fn run(self) {
+    pub fn run(self, output_file: Cow<'static, str>) {
         let mut rng = StdRng::seed_from_u64(self.rand_seed);
 
         // Create sim manager.
         let world_state = CozyWorld::new();
         let sim_state = SimState::new(world_state);
-        let mut sim_manager = SimManager::new(sim_state, Box::new(self.fixed_time_policy));
+        let mut summarizer = Summarizer::new(output_file);
+        summarizer.register_summary_generator(SetSummaryGenerator::new());
+        let mut sim_manager =
+            SimManager::new(sim_state, Box::new(self.fixed_time_policy), summarizer);
 
         // Create and activate agents.
         // Weth deployer.
@@ -308,7 +314,7 @@ mod tests {
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let settings = build_cozy_sim_settings_from_dir("test")?;
         let runner = CozySingleSetSimRunner::new(settings);
-        runner.run();
+        runner.run(Cow::Owned("test_output").to_owned());
         Ok(())
     }
 }

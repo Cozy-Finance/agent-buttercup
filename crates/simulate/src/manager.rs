@@ -12,6 +12,7 @@ use crate::{
     errors::*,
     state::{update::UpdateData, world::World, SimState},
     stepper::*,
+    summarizer::{Summarizer, SummaryGenerator},
     time_policy::TimePolicy,
 };
 
@@ -20,10 +21,15 @@ pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub agents: HashMap<AgentId, Box<dyn Agent<U, W>>>,
     pub stepper: SimStepper<U, W>,
     pub stepper_read_factory: SimStepperReadHandleFactory<U, W>,
+    pub summarizer: Summarizer<U, W>,
 }
 
 impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
-    pub fn new(state: SimState<U, W>, time_policy: Box<dyn TimePolicy>) -> Self {
+    pub fn new(
+        state: SimState<U, W>,
+        time_policy: Box<dyn TimePolicy>,
+        summarizer: Summarizer<U, W>,
+    ) -> Self {
         let stepper: SimStepper<U, W> = SimStepper::new_from_current_state(state);
         let stepper_read_factory = stepper.factory();
         Self {
@@ -31,6 +37,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             agents: HashMap::new(),
             stepper,
             stepper_read_factory,
+            summarizer,
         }
     }
 
@@ -68,6 +75,11 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
                     t.spawn(|| agent.resolve_step(&self.stepper_read_factory.sim_state()));
                 }
             });
+
+            // Run summarizers.
+            let _ = self
+                .summarizer
+                .output_summaries(&self.stepper_read_factory.sim_state());
 
             // Clear all results.
             self.stepper.clear_all_results();
@@ -119,5 +131,12 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
 
     pub fn get_state(&self) -> SimState<U, W> {
         self.stepper_read_factory.sim_state()
+    }
+
+    pub fn register_summary_generator<T: serde::Serialize>(
+        &mut self,
+        generator: Box<dyn SummaryGenerator<U, W>>,
+    ) {
+        self.summarizer.register_summary_generator(generator)
     }
 }
