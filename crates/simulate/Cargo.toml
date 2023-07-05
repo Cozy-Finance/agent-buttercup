@@ -37,3 +37,5 @@ dyn-clone = "1"
 flexi_logger = "0.25"
 log = "0.4"
 rustc-hex = "2.1.0"
+
+auto_impl = "1.1.0"

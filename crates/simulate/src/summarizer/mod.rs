@@ -1,3 +1,4 @@
+use auto_impl::auto_impl;
 use eyre::Result;
 use std::fs::File;
 use std::io::Write;
@@ -5,26 +6,13 @@ use std::{borrow::Cow, io::BufWriter};
 
 use crate::state::{update::UpdateData, world::World, SimState};
 
+#[auto_impl(Box)]
 pub trait SummaryGenerator<U: UpdateData, W: World<WorldUpdateData = U>> {
     /// Yield the summary on the given world state.
     fn get_summary(&self, sim_state: &SimState<U, W>) -> Result<serde_json::Value>;
 
     /// The name of the summary.
     fn get_summary_name(&self) -> Cow<'static, str>;
-}
-
-/// Allows the Box<dyn SummaryGenerator> pointers to delegate the call to
-/// get_summary to the heap stored object.
-impl<U: UpdateData, W: World<WorldUpdateData = U>, S: SummaryGenerator<U, W>> SummaryGenerator<U, W>
-    for Box<S>
-{
-    fn get_summary(&self, sim_state: &SimState<U, W>) -> Result<serde_json::Value> {
-        (**self).get_summary(sim_state)
-    }
-
-    fn get_summary_name(&self) -> Cow<'static, str> {
-        (**self).get_summary_name()
-    }
 }
 
 pub struct Summarizer<U: UpdateData, W: World<WorldUpdateData = U>> {
