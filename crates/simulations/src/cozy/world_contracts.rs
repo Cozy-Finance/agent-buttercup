@@ -6,7 +6,7 @@ use bindings::{
         drip_decay_model_constant_factory,
     },
     cozy_protocol::{cozy_router, manager},
-    set::{AccountingReturn, MarketsReturn},
+    set::{AccountingReturn, MarketsReturn, TotalCollateralAvailableReturn},
 };
 use eyre::Result;
 use revm::primitives::{ExecutionResult, TxEnv};
@@ -358,6 +358,24 @@ impl CozySetLogic {
             .decode_output::<AccountingReturn>("accounting", result)?
             .asset_balance;
         Ok(total_assets)
+    }
+
+    pub fn read_total_protection_available(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("totalCollateralAvailable", ())?;
+        let query = build_call_tx(sender_addr, set_address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let total_protection_available = self
+            .contract
+            .decode_output::<TotalCollateralAvailableReturn>("totalCollateralAvailable", result)?
+            .0;
+        Ok(total_protection_available)
     }
 }
 
