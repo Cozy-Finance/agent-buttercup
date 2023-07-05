@@ -6,9 +6,12 @@ use std::{
 use ethers::types::H160;
 use rand::Rng;
 use revm::primitives::B160;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
+#[serde(transparent)]
 pub struct Address {
+    #[serde(with = "hex")]
     pub value: [u8; 20],
 }
 
