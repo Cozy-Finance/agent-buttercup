@@ -328,7 +328,7 @@ mod tests {
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let settings = build_cozy_sim_settings_from_dir("test")?;
         let runner = CozySingleSetSimRunner::new(settings);
-        runner.run(Cow::Owned("test_output").to_owned());
+        runner.run(Cow::Borrowed("output/summaries/test_output.txt"));
         Ok(())
     }
 }
