@@ -4,13 +4,17 @@ pub use bindings::{cost_model_dynamic_level_factory, cost_model_jump_rate_factor
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
+    contract::sim_contract::SimContract,
     state::{update::SimUpdate, SimState},
 };
 
 use crate::cozy::{
+    bindings_wrapper::{COSTMODELDYNAMICLEVEL, COSTMODELJUMPRATE},
     types::CozyCostModelType,
     world::{CozyCostModel, CozyUpdate, CozyWorld},
-    world_contracts::{CozyDynamicLevelFactory, CozyJumpRateFactory},
+    world_contracts::{
+        CozyDynamicLevelFactory, CozyDynamicLevelModel, CozyJumpRateFactory, CozyJumpRateModel,
+    },
 };
 
 pub struct CostModelsDeployer {
@@ -52,6 +56,9 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
         state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
     ) {
+        let mut jump_rate_model_contract_registered = false;
+        let mut dynamic_level_model_contract_registered = false;
+
         for (name, cost_model_type) in &self.cost_models {
             log::info!("{:?} deploying {}.", self.name, name);
 
@@ -61,18 +68,52 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                         .jump_rate_factory
                         .build_deploy_cost_model_jump_rate_tx(self.address, state, args.clone())
                         .unwrap();
-                    let world_update =
-                        CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
+                    let world_update = CozyUpdate::AddToCostModels(CozyCostModel::new(
+                        (*name).clone(),
+                        addr,
+                        cost_model_type.clone(),
+                    ));
                     channel.send(SimUpdate::Bundle(evm_tx, world_update));
+
+                    if !jump_rate_model_contract_registered {
+                        let world_update =
+                            CozyUpdate::AddCozyJumpRateModel(CozyJumpRateModel::new(
+                                (*COSTMODELJUMPRATE.name).into(),
+                                addr,
+                                SimContract::new(
+                                    COSTMODELJUMPRATE.abi.clone(),
+                                    COSTMODELJUMPRATE.bytecode.unwrap().clone(),
+                                ),
+                            ));
+                        channel.send(SimUpdate::World(world_update));
+                        jump_rate_model_contract_registered = true;
+                    }
                 }
                 CozyCostModelType::DynamicLevel(args) => {
                     let (addr, evm_tx) = self
                         .dynamic_level_factory
                         .build_deploy_cost_model_dynamic_level_tx(self.address, state, args.clone())
                         .unwrap();
-                    let world_update =
-                        CozyUpdate::AddToCostModels(CozyCostModel::new((*name).clone(), addr));
+                    let world_update = CozyUpdate::AddToCostModels(CozyCostModel::new(
+                        (*name).clone(),
+                        addr,
+                        cost_model_type.clone(),
+                    ));
                     channel.send(SimUpdate::Bundle(evm_tx, world_update));
+
+                    if !dynamic_level_model_contract_registered {
+                        let world_update =
+                            CozyUpdate::AddCozyDynamicLevelModel(CozyDynamicLevelModel::new(
+                                (*COSTMODELDYNAMICLEVEL.name).into(),
+                                addr,
+                                SimContract::new(
+                                    COSTMODELDYNAMICLEVEL.abi.clone(),
+                                    COSTMODELDYNAMICLEVEL.bytecode.unwrap().clone(),
+                                ),
+                            ));
+                        channel.send(SimUpdate::World(world_update));
+                        dynamic_level_model_contract_registered = true;
+                    }
                 }
             }
         }

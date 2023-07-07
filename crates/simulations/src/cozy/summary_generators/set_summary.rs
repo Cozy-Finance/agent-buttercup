@@ -2,13 +2,13 @@ use std::borrow::Cow;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use simulate::address::Address;
-use simulate::summarizer::SummaryGenerator;
-use simulate::utils::unpack_execution;
+use simulate::{address::Address, summarizer::SummaryGenerator, utils::unpack_execution};
 
-use crate::cozy::bindings_wrapper::SET;
-use crate::cozy::world::{CozyUpdate, CozyWorld};
-use crate::cozy::EthersU256;
+use crate::cozy::{
+    bindings_wrapper::SET,
+    world::{CozyUpdate, CozyWorld},
+    EthersU256,
+};
 
 #[derive(Serialize, Deserialize)]
 pub struct ProtectionSummary {

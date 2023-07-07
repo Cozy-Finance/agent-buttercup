@@ -2,7 +2,9 @@ use bindings::{
     backstop::*,
     chainlink_trigger_factory::*,
     configurator_lib::*,
+    cost_model_dynamic_level::*,
     cost_model_dynamic_level_factory::*,
+    cost_model_jump_rate::*,
     cost_model_jump_rate_factory::*,
     cozy_models::metadata::*,
     cozy_protocol::metadata::*,
@@ -185,5 +187,19 @@ lazy_static! {
         unlinked_bytecode: None,
         name: DUMMYTOKEN_NAME,
         path: DUMMYTOKEN_PATH
+    };
+    pub static ref COSTMODELJUMPRATE: BindingsWrapper = BindingsWrapper {
+        abi: &COSTMODELJUMPRATE_ABI,
+        bytecode: Some(&COSTMODELJUMPRATE_BYTECODE),
+        unlinked_bytecode: None,
+        name: COSTMODELJUMPRATE_NAME,
+        path: COSTMODELJUMPRATE_PATH
+    };
+    pub static ref COSTMODELDYNAMICLEVEL: BindingsWrapper = BindingsWrapper {
+        abi: &COSTMODELDYNAMICLEVEL_ABI,
+        bytecode: Some(&COSTMODELDYNAMICLEVEL_BYTECODE),
+        unlinked_bytecode: None,
+        name: COSTMODELDYNAMICLEVEL_NAME,
+        path: COSTMODELDYNAMICLEVEL_PATH
     };
 }

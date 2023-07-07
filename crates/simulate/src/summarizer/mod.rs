@@ -1,8 +1,11 @@
+use std::{
+    borrow::Cow,
+    fs::File,
+    io::{BufWriter, Write},
+};
+
 use auto_impl::auto_impl;
 use eyre::Result;
-use std::fs::File;
-use std::io::Write;
-use std::{borrow::Cow, io::BufWriter};
 
 use crate::state::{update::UpdateData, world::World, SimState};
 

@@ -11,10 +11,14 @@ use simulate::{
     utils::build_call_tx,
 };
 
-use crate::cozy::world_contracts::{
-    CozyBackstop, CozyBaseToken, CozyChainlinkTriggerFactory, CozyDripDecayConstantFactory,
-    CozyDynamicLevelFactory, CozyJumpRateFactory, CozyManager, CozyPtoken, CozyPtokenFactory,
-    CozyRouter, CozySetFactory, CozySetLogic, CozyUmaTriggerFactory, Weth,
+use crate::cozy::{
+    types::CozyCostModelType,
+    world_contracts::{
+        CozyBackstop, CozyBaseToken, CozyChainlinkTriggerFactory, CozyDripDecayConstantFactory,
+        CozyDynamicLevelFactory, CozyDynamicLevelModel, CozyJumpRateFactory, CozyJumpRateModel,
+        CozyManager, CozyPtoken, CozyPtokenFactory, CozyRouter, CozySetFactory, CozySetLogic,
+        CozyUmaTriggerFactory, Weth,
+    },
 };
 
 #[derive(Debug, Clone)]
@@ -24,6 +28,8 @@ pub enum CozyUpdate {
     AddCozySetLogic(Arc<CozySetLogic>),
     AddCozyJumpRateFactory(Arc<CozyJumpRateFactory>),
     AddCozyDynamicLevelFactory(Arc<CozyDynamicLevelFactory>),
+    AddCozyJumpRateModel(Arc<CozyJumpRateModel>),
+    AddCozyDynamicLevelModel(Arc<CozyDynamicLevelModel>),
     AddCozyDripDecayConstantFactory(Arc<CozyDripDecayConstantFactory>),
     AddCozyUmaTriggerFactory(Arc<CozyUmaTriggerFactory>),
     AddCozyChainlinkTriggerFactory(Arc<CozyChainlinkTriggerFactory>),
@@ -51,6 +57,8 @@ pub struct CozyWorld {
     pub set_logic: Option<Arc<CozySetLogic>>,
     pub jump_rate_factory: Option<Arc<CozyJumpRateFactory>>,
     pub dynamic_level_factory: Option<Arc<CozyDynamicLevelFactory>>,
+    pub jump_rate_model: Option<Arc<CozyJumpRateModel>>,
+    pub dynamic_level_model: Option<Arc<CozyDynamicLevelModel>>,
     pub drip_decay_constant_factory: Option<Arc<CozyDripDecayConstantFactory>>,
     pub uma_trigger_factory: Option<Arc<CozyUmaTriggerFactory>>,
     pub chainlink_trigger_factory: Option<Arc<CozyChainlinkTriggerFactory>>,
@@ -75,6 +83,8 @@ impl CozyWorld {
             set_logic: None,
             jump_rate_factory: None,
             dynamic_level_factory: None,
+            jump_rate_model: None,
+            dynamic_level_model: None,
             drip_decay_constant_factory: None,
             uma_trigger_factory: None,
             chainlink_trigger_factory: None,
@@ -116,6 +126,12 @@ impl World for CozyWorld {
             }
             CozyUpdate::AddCozyDynamicLevelFactory(factory) => {
                 self.dynamic_level_factory = Some(factory.clone());
+            }
+            CozyUpdate::AddCozyJumpRateModel(model) => {
+                self.jump_rate_model = Some(model.clone());
+            }
+            CozyUpdate::AddCozyDynamicLevelModel(model) => {
+                self.dynamic_level_model = Some(model.clone());
             }
             CozyUpdate::AddCozyDripDecayConstantFactory(factory) => {
                 self.drip_decay_constant_factory = Some(factory.clone());
@@ -199,7 +215,9 @@ pub struct CozySet {
     pub name: Cow<'static, str>,
     pub address: Address,
     pub trigger_lookup: HashMap<Address, u16>,
+    pub cost_model_lookup: HashMap<u16, Address>,
     pub apy: f64,
+    pub num_markets: u16,
 }
 
 impl CozySet {
@@ -207,12 +225,16 @@ impl CozySet {
         name: Cow<'static, str>,
         address: Address,
         trigger_lookup: HashMap<Address, u16>,
+        cost_model_lookup: HashMap<u16, Address>,
+        num_markets: u16,
     ) -> Self {
         CozySet {
             name,
             address,
             trigger_lookup,
+            cost_model_lookup,
             apy: 0.0,
+            num_markets,
         }
     }
 }
@@ -223,11 +245,20 @@ impl_cozy_map_id!(CozySet);
 pub struct CozyCostModel {
     pub name: Cow<'static, str>,
     pub address: Address,
+    pub model_type: CozyCostModelType,
 }
 
 impl CozyCostModel {
-    pub fn new(name: Cow<'static, str>, address: Address) -> Arc<Self> {
-        Arc::new(CozyCostModel { name, address })
+    pub fn new(
+        name: Cow<'static, str>,
+        address: Address,
+        model_type: CozyCostModelType,
+    ) -> Arc<Self> {
+        Arc::new(CozyCostModel {
+            name,
+            address,
+            model_type,
+        })
     }
 }
 
@@ -336,6 +367,14 @@ impl<T: CozyMapId> CozyMap<T> {
 
     pub fn values(&self) -> &Vec<T> {
         &self.items
+    }
+
+    pub fn addresses(&self) -> Vec<Address> {
+        self.addr_to_idx_map.keys().cloned().collect()
+    }
+
+    pub fn names(&self) -> Vec<Cow<'static, str>> {
+        self.name_to_idx_map.keys().cloned().collect()
     }
 }
 
