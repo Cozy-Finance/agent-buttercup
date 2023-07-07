@@ -18,8 +18,9 @@ use crate::cozy::{
     world::{CozyUpdate, CozyWorld},
     world_contracts::{
         CozyBackstop, CozyChainlinkTriggerFactory, CozyDripDecayConstantFactory,
-        CozyDynamicLevelFactory, CozyJumpRateFactory, CozyManager, CozyPtoken, CozyPtokenFactory,
-        CozyRouter, CozySetFactory, CozySetLogic, CozyUmaTriggerFactory, Weth,
+        CozyDynamicLevelFactory, CozyDynamicLevelModel, CozyJumpRateFactory, CozyJumpRateModel,
+        CozyManager, CozyPtoken, CozyPtokenFactory, CozyRouter, CozySetFactory, CozySetLogic,
+        CozyUmaTriggerFactory, Weth,
     },
     EthersAddress,
 };

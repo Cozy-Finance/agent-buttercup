@@ -1,6 +1,7 @@
 use std::{borrow::Cow, fmt::Debug, sync::Arc};
 
 use bindings::{
+    cost_model_jump_rate::cost_model_jump_rate,
     cozy_models::{
         cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
         drip_decay_model_constant_factory,
@@ -376,6 +377,22 @@ impl CozySetLogic {
             .decode_output::<EthersU256>("totalCollateralAvailable", result)?;
         Ok(total_protection_available)
     }
+
+    pub fn read_utilization(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+        market_id: u16,
+    ) -> Result<EthersU256> {
+        let call_data = self.contract.encode_function("utilization", market_id)?;
+        let query = build_call_tx(sender_addr, set_address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let utilization = self
+            .contract
+            .decode_output::<EthersU256>("utilization", result)?;
+        Ok(utilization)
+    }
 }
 
 impl_basic_world_contract!(CozyJumpRateFactory);
@@ -401,6 +418,44 @@ impl CozyJumpRateFactory {
     }
 }
 
+impl_basic_world_contract!(CozyJumpRateModel);
+
+impl CozyJumpRateModel {
+    pub fn read_current_cost_factor(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        utilization: EthersU256,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("costFactor", (utilization, utilization))?;
+        let query = build_call_tx(sender_addr, self.address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let costFactor = self
+            .contract
+            .decode_output::<EthersU256>("costFactor", result)?;
+        Ok(costFactor)
+    }
+
+    pub fn read_current_refund_factor(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        utilization: EthersU256,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("refundFactor", (utilization, utilization))?;
+        let query = build_call_tx(sender_addr, self.address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let refundFactor = self
+            .contract
+            .decode_output::<EthersU256>("refundFactor", result)?;
+        Ok(refundFactor)
+    }
+}
+
 impl_basic_world_contract!(CozyDynamicLevelFactory);
 
 impl CozyDynamicLevelFactory {
@@ -421,6 +476,44 @@ impl CozyDynamicLevelFactory {
             .into();
 
         Ok((addr, tx))
+    }
+}
+
+impl_basic_world_contract!(CozyDynamicLevelModel);
+
+impl CozyDynamicLevelModel {
+    pub fn read_current_cost_factor(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        utilization: EthersU256,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("costFactor", (utilization, utilization))?;
+        let query = build_call_tx(sender_addr, self.address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let costFactor = self
+            .contract
+            .decode_output::<EthersU256>("costFactor", result)?;
+        Ok(costFactor)
+    }
+
+    pub fn read_current_refund_factor(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        utilization: EthersU256,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("refundFactor", (utilization, utilization))?;
+        let query = build_call_tx(sender_addr, self.address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let refundFactor = self
+            .contract
+            .decode_output::<EthersU256>("refundFactor", result)?;
+        Ok(refundFactor)
     }
 }
 

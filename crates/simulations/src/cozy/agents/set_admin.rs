@@ -96,10 +96,20 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .map(|(i, config)| (config.trigger.into(), i as u16))
             .collect::<HashMap<_, _>>();
 
+        let cost_model_lookup = self
+            .set_admin_params
+            .market_configs
+            .iter()
+            .enumerate()
+            .map(|(i, config)| (i as u16, config.cost_model.into()))
+            .collect::<HashMap<_, _>>();
+
         let world_update = CozyUpdate::AddToSets(CozySet::new(
             self.set_name.clone().unwrap().into(),
             self.set_address.unwrap(),
             trigger_lookup,
+            cost_model_lookup,
+            self.set_admin_params.market_configs.len() as u16,
         ));
 
         channel.send(SimUpdate::Bundle(evm_tx, world_update));

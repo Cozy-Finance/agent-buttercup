@@ -18,6 +18,9 @@ use crate::cozy::{
     },
     constants::*,
     distributions::CozyDistribution,
+    summary_generators::{
+        cost_models_summary::CostModelsSummaryGenerator, set_summary::SetSummaryGenerator,
+    },
     types::{
         CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
         CozyFixedTimePolicyParams, CozyMarketConfigParams, CozyPassiveBuyersParams,
@@ -26,8 +29,6 @@ use crate::cozy::{
     },
     world::CozyWorld,
 };
-
-use super::summary_generators::set_summary::SetSummaryGenerator;
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct CozySingleSetSimRunnerSettings {
@@ -110,10 +111,11 @@ impl CozySingleSetSimRunner {
         // Create sim manager.
         let world_state = CozyWorld::new();
         let sim_state = SimState::new(world_state);
-        let mut summarizer = Summarizer::new(output_file);
-        summarizer.register_summary_generator(SetSummaryGenerator::new());
-        let mut sim_manager =
-            SimManager::new(sim_state, Box::new(self.fixed_time_policy), summarizer);
+        let mut sim_manager = SimManager::new(
+            sim_state,
+            Box::new(self.fixed_time_policy),
+            Summarizer::new(output_file),
+        );
 
         // Create and activate agents.
         // Weth deployer.
@@ -299,6 +301,18 @@ impl CozySingleSetSimRunner {
             ));
             let _ = sim_manager.activate_agent(passive_supplier);
         }
+
+        // Register summarizer generators.
+        sim_manager
+            .summarizer
+            .register_summary_generator(SetSummaryGenerator::new());
+        sim_manager
+            .summarizer
+            .register_summary_generator(CostModelsSummaryGenerator::new(
+                &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.jump_rate_model,
+                &sim_manager.get_state().world.dynamic_level_model,
+            ));
 
         // Run sim.
         sim_manager.run_sim();

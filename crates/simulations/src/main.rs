@@ -2,10 +2,12 @@
 //! Main lives in the `cli` crate so that we can do our input parsing.
 
 use std::{borrow::Cow, error::Error};
-pub mod cozy;
 
+use chrono;
 use clap::Parser;
 use flexi_logger::{Duplicate, Logger};
+
+pub mod cozy;
 
 /// Runs Cozy Simulation
 #[derive(Parser, Debug)]
@@ -21,8 +23,10 @@ struct Args {
 pub fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
     let log_level = args.log_level;
-    let output_file: Cow<'static, str> =
-        Cow::Owned(args.output_file.unwrap_or("summary.txt".to_owned()));
+    let output_file_name = format!(
+        "output/summaries/{}_summary.txt",
+        chrono::Utc::now().to_rfc3339()
+    );
 
     Logger::try_with_str(log_level)?
         .log_to_stdout()
@@ -31,7 +35,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
 
     let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("cost_models_analysis")?;
     let runner = crate::cozy::runner::CozySingleSetSimRunner::new(settings);
-    runner.run(output_file);
+    runner.run(output_file_name.into());
 
     Ok(())
 }
