@@ -1,13 +1,12 @@
 use std::{borrow::Cow, fmt::Debug, sync::Arc};
 
 use bindings::{
-    cost_model_jump_rate::cost_model_jump_rate,
     cozy_models::{
         cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
         drip_decay_model_constant_factory,
     },
     cozy_protocol::{cozy_router, manager},
-    set::{AccountingReturn, MarketsReturn, TotalCollateralAvailableReturn},
+    set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
 use revm::primitives::{ExecutionResult, TxEnv};
@@ -168,8 +167,8 @@ impl CozyRouter {
         args: cozy_router::SellCall,
     ) -> Result<TxEnv> {
         Ok(build_call_tx(
-            self.address,
             sender_addr,
+            self.address,
             self.contract.encode_function("sell", args)?,
         ))
     }
@@ -180,8 +179,8 @@ impl CozyRouter {
         args: cozy_router::ClaimCall,
     ) -> Result<TxEnv> {
         Ok(build_call_tx(
-            self.address,
             sender_addr,
+            self.address,
             self.contract.encode_function("claim", args)?,
         ))
     }
@@ -192,8 +191,8 @@ impl CozyRouter {
         args: cozy_router::PayoutCall,
     ) -> Result<TxEnv> {
         Ok(build_call_tx(
-            self.address,
             sender_addr,
+            self.address,
             self.contract.encode_function("payout", args)?,
         ))
     }
@@ -219,7 +218,7 @@ impl CozyRouter {
         &self,
         execution_result: &ExecutionResult,
     ) -> Result<EthersU256> {
-        let purchase_output = self.contract.decode_output::<cozy_router::PayoutReturn>(
+        let purchase_output = self.contract.decode_output::<cozy_router::PurchaseReturn>(
             "purchase",
             unpack_execution(execution_result.clone())?,
         )?;
@@ -280,7 +279,7 @@ impl CozyBaseToken {
 impl_basic_world_contract!(CozySetLogic);
 
 impl CozySetLogic {
-    pub fn get_protection_balance(
+    pub fn read_protection_balance(
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
@@ -393,6 +392,23 @@ impl CozySetLogic {
             .decode_output::<EthersU256>("utilization", result)?;
         Ok(utilization)
     }
+
+    pub fn read_ptoken_addr(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+        market_id: u16,
+    ) -> Result<Address> {
+        let call_data = self.contract.encode_function("markets", market_id)?;
+        let query = build_call_tx(sender_addr, set_address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let ptoken_addr = self
+            .contract
+            .decode_output::<MarketsReturn>("markets", result)?
+            .ptoken;
+        Ok(ptoken_addr.into())
+    }
 }
 
 impl_basic_world_contract!(CozyJumpRateFactory);
@@ -432,10 +448,10 @@ impl CozyJumpRateModel {
             .encode_function("costFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
-        let costFactor = self
+        let cost_factor = self
             .contract
             .decode_output::<EthersU256>("costFactor", result)?;
-        Ok(costFactor)
+        Ok(cost_factor)
     }
 
     pub fn read_current_refund_factor(
@@ -449,10 +465,10 @@ impl CozyJumpRateModel {
             .encode_function("refundFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
-        let refundFactor = self
+        let refund_factor = self
             .contract
             .decode_output::<EthersU256>("refundFactor", result)?;
-        Ok(refundFactor)
+        Ok(refund_factor)
     }
 }
 
@@ -493,10 +509,10 @@ impl CozyDynamicLevelModel {
             .encode_function("costFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
-        let costFactor = self
+        let cost_factor = self
             .contract
             .decode_output::<EthersU256>("costFactor", result)?;
-        Ok(costFactor)
+        Ok(cost_factor)
     }
 
     pub fn read_current_refund_factor(
@@ -510,10 +526,10 @@ impl CozyDynamicLevelModel {
             .encode_function("refundFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
-        let refundFactor = self
+        let refund_factor = self
             .contract
             .decode_output::<EthersU256>("refundFactor", result)?;
-        Ok(refundFactor)
+        Ok(refund_factor)
     }
 }
 
@@ -558,10 +574,28 @@ impl CozyDripDecayConstantFactory {
     }
 }
 
+impl_basic_world_contract!(CozyPtokenLogic);
+
+impl CozyPtokenLogic {
+    pub fn build_max_approve_router_tx(
+        &self,
+        sender_addr: Address,
+        ptoken_addr: Address,
+        cozyrouter_addr: Address,
+    ) -> Result<TxEnv> {
+        let cozyrouter_ethers_addr: EthersAddress = cozyrouter_addr.into();
+        Ok(build_call_tx(
+            sender_addr,
+            ptoken_addr,
+            self.contract
+                .encode_function("approve", (cozyrouter_ethers_addr, EthersU256::MAX))?,
+        ))
+    }
+}
+
 impl_basic_world_contract!(CozyUmaTriggerFactory);
 impl_basic_world_contract!(CozyChainlinkTriggerFactory);
 impl_basic_world_contract!(CozyBackstop);
 impl_basic_world_contract!(CozySetFactory);
-impl_basic_world_contract!(CozyPtoken);
 impl_basic_world_contract!(CozyPtokenFactory);
 impl_basic_world_contract!(Weth);
