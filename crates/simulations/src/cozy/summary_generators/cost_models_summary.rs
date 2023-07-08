@@ -26,7 +26,6 @@ pub struct CostModelsSummary {
 
 pub struct CostModelsSummaryGenerator {
     summary_name: Cow<'static, str>,
-    // Place Holder address for calling read txs.
     address: Address,
     set_logic: Arc<CozySetLogic>,
     jump_rate_model: Option<Arc<CozyJumpRateModel>>,
@@ -55,10 +54,9 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
     ) -> eyre::Result<Value> {
-        let mut set_data = vec![];
-
         let sets = sim_state.world.sets.values();
 
+        let mut set_data = vec![];
         for set in sets {
             let mut cost_data = vec![];
 
@@ -133,8 +131,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
             set_data,
         };
 
-        let return_val = serde_json::to_value(summary)?;
-        Ok(return_val)
+        Ok(serde_json::to_value(summary)?)
     }
 
     fn get_summary_name(&self) -> std::borrow::Cow<'static, str> {

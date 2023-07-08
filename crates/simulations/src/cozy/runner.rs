@@ -285,6 +285,7 @@ impl CozySingleSetSimRunner {
                 &sim_manager.get_state().world.ptoken_logic.unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
+                self.active_buyers_params.trigger_prob_dist.clone(),
                 rng.clone(),
             ));
             let _ = sim_manager.activate_agent(passive_buyer);

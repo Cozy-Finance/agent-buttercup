@@ -17,6 +17,10 @@ active_buyers_params:
   time_dist:
     rate: 2 # average 2-day waiting period
     time_unit: "Day"
+  trigger_prob_dist:
+    "Static":
+      mean: 0.02
+      std: 0.001
 suppliers_params:
   num_passive: 1
   capital_dist:
