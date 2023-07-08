@@ -139,16 +139,16 @@ pub struct CozyPassiveBuyersParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub enum CozyActiveBuyerTriggerProbDist {
+pub enum CozyAgentTriggerProbModel {
     Static(ProbTruncatedNorm),
     Dynamic(LinkedProbTruncatedNorm),
 }
 
-impl CozyActiveBuyerTriggerProbDist {
+impl CozyAgentTriggerProbModel {
     pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R, oracle_prob: f64) -> f64 {
         match self {
-            CozyActiveBuyerTriggerProbDist::Static(dist) => dist.sample(rng),
-            CozyActiveBuyerTriggerProbDist::Dynamic(dist) => dist.sample(oracle_prob, rng),
+            CozyAgentTriggerProbModel::Static(dist) => dist.sample(rng),
+            CozyAgentTriggerProbModel::Dynamic(dist) => dist.sample(oracle_prob, rng),
         }
     }
 }
@@ -158,7 +158,7 @@ pub struct CozyActiveBuyersParams {
     pub num_active: u64,
     pub capital_dist: U256UniformRange,
     pub time_dist: Exponential,
-    pub trigger_prob_dist: CozyActiveBuyerTriggerProbDist,
+    pub trigger_prob_dist: CozyAgentTriggerProbModel,
 }
 
 #[derive(Debug, Clone, Deserialize)]

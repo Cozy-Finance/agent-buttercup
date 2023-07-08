@@ -1,7 +1,7 @@
 #![warn(unsafe_code)]
 //! Main lives in the `cli` crate so that we can do our input parsing.
 
-use std::{borrow::Cow, error::Error};
+use std::error::Error;
 
 use chrono;
 use clap::Parser;
@@ -29,8 +29,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("cost_models_analysis")?;
-    let runner = crate::cozy::runner::CozySingleSetSimRunner::new(settings);
+    let runner = crate::cozy::configs::build_cozy_sim_runner_from_dir("base")?;
 
     let workspace_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .to_str()
