@@ -13,10 +13,15 @@ use crate::cozy::{
 };
 
 #[derive(Serialize, Deserialize)]
+pub struct CostData {
+    utilization: f64,
+    cost_factor: Option<f64>,
+    refund_factor: Option<f64>,
+}
+#[derive(Serialize, Deserialize)]
 pub struct CostModelsSummary {
     timestamp: EthersU256,
-    set_utilizations: Vec<Vec<Option<f64>>>,
-    set_cost_factors: Vec<Vec<Option<f64>>>,
+    set_data: Vec<(Address, Vec<CostData>)>,
 }
 
 pub struct CostModelsSummaryGenerator {
@@ -50,20 +55,18 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
     ) -> eyre::Result<Value> {
-        let mut set_utilizations = vec![];
-        let mut set_cost_factors = vec![];
+        let mut set_data = vec![];
 
         let sets = sim_state.world.sets.values();
 
         for set in sets {
-            let mut utilizations = vec![];
-            let mut cost_factors = vec![];
+            let mut cost_data = vec![];
+
             for i in 0..set.num_markets {
                 let utilization = self
                     .set_logic
                     .read_utilization(self.address, sim_state, set.address, i as u16)
                     .unwrap_or(EthersU256::from(0));
-                utilizations.push(Some(wad_to_float(utilization)));
 
                 let cost_model_addr = set.cost_model_lookup[&i];
                 let cost_model = sim_state
@@ -71,14 +74,24 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                     .cost_models
                     .get_by_addr(&cost_model_addr)
                     .unwrap();
-                let cost_factor = match cost_model.model_type {
-                    CozyCostModelType::JumpRate(_) => self
+                let (cost_factor, refund_factor) = match cost_model.model_type {
+                    CozyCostModelType::JumpRate(_) => {
+                    (
+                        self
                         .jump_rate_model
                         .as_ref()
                         .expect("Cost model deployer should have deployed jump rate model logic.")
                         .read_current_cost_factor(self.address, sim_state, utilization)
                         .ok(),
-                    CozyCostModelType::DynamicLevel(_) => self
+                        self
+                        .jump_rate_model
+                        .as_ref()
+                        .expect("Cost model deployer should have deployed jump rate model logic.")
+                        .read_current_cost_factor(self.address, sim_state, utilization)
+                        .ok(),
+                    )},
+                    CozyCostModelType::DynamicLevel(_) => {
+                        (self
                         .dynamic_level_model
                         .as_ref()
                         .expect(
@@ -86,22 +99,38 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                         )
                         .read_current_cost_factor(self.address, sim_state, utilization)
                         .ok(),
+                        self
+                        .dynamic_level_model
+                        .as_ref()
+                        .expect(
+                            "Cost model deployer should have deployed dynamic level model logic.",
+                        )
+                        .read_current_refund_factor(self.address, sim_state, utilization)
+                        .ok(),
+                    )}
                 };
                 let float_cost_factor = match cost_factor {
                     Some(cost_factor) => Some(wad_to_float(cost_factor)),
                     None => None,
                 };
-                cost_factors.push(float_cost_factor);
+                let float_refund_factor = match refund_factor {
+                    Some(refund_factor) => Some(wad_to_float(refund_factor)),
+                    None => None,
+                };
+
+                cost_data.push(CostData {
+                    utilization: wad_to_float(utilization),
+                    cost_factor: float_cost_factor,
+                    refund_factor: float_refund_factor,
+                });
             }
 
-            set_utilizations.push(utilizations);
-            set_cost_factors.push(cost_factors);
+            set_data.push((set.address, cost_data));
         }
 
         let summary = CostModelsSummary {
             timestamp: EthersU256::from(sim_state.read_timestamp()),
-            set_utilizations,
-            set_cost_factors,
+            set_data,
         };
 
         let return_val = serde_json::to_value(summary)?;

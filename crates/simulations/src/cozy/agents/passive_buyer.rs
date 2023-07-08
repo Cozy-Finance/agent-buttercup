@@ -1,4 +1,11 @@
-use std::{borrow::Cow, cmp::min, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    cmp::min,
+    collections::HashMap,
+    fmt::{Display, Formatter},
+    str::FromStr,
+    sync::Arc,
+};
 
 use bindings::cozy_protocol::cozy_router;
 use simulate::{
@@ -8,6 +15,7 @@ use simulate::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
     },
+    utils::is_execution_success,
 };
 
 use crate::cozy::{
@@ -26,10 +34,52 @@ pub struct PassiveBuyer {
     target_trigger: Address,
     protection_desired: EthersU256,
     protection_owned: EthersU256,
-    ptokens_owned: HashMap<(Address, u16), EvmU256>,
+    ptokens_owned: HashMap<(Address, u16), EthersU256>,
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
+}
+
+#[derive(Debug, Clone)]
+pub struct PassiveBuyerTxData {
+    tx_type: Cow<'static, str>,
+    amt: EthersU256,
+    set_address: Address,
+    market_id: u16,
+}
+
+impl Display for PassiveBuyerTxData {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{} {:X} {} {}",
+            self.tx_type, self.set_address, self.market_id, self.amt
+        )?;
+        Ok(())
+    }
+}
+
+impl FromStr for PassiveBuyerTxData {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut parts = s.trim().split_whitespace().collect::<Vec<_>>();
+        if parts.len() != 4 {
+            return Err("Invalid input format".to_string());
+        }
+
+        let amt = EthersU256::from_dec_str(parts.pop().unwrap()).unwrap();
+        let market_id: u16 = parts.pop().unwrap().parse().unwrap();
+        let set_address: Address = parts.pop().unwrap().parse().unwrap();
+        let tx_type: String = parts.pop().unwrap().into();
+
+        Ok(PassiveBuyerTxData {
+            tx_type: tx_type.into(),
+            amt,
+            set_address,
+            market_id,
+        })
+    }
 }
 
 impl PassiveBuyer {
@@ -120,16 +170,10 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             .unwrap();
 
         let (set_addr, set_market_id) = targets[target_set_idx];
-        let protection_purchase_amt = min(
-            protection_delta,
-            self.set_logic
-                .read_remaining_protection(self.address, state, set_addr, set_market_id)
-                .unwrap(),
-        );
         let purchase_args = cozy_router::PurchaseCall {
             set: set_addr.into(),
             market_id: set_market_id,
-            protection: protection_purchase_amt,
+            protection: protection_delta,
             receiver: self.address.into(),
             max_cost: EthersU256::MAX,
         };
@@ -137,11 +181,17 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             .cozyrouter
             .build_purchase_tx(self.address, purchase_args)
             .unwrap();
+
         channel.send_with_tag(
             SimUpdate::Evm(evm_tx),
             format!(
-                "{} {:X} {}",
-                PASSIVE_BUYER_PURCHASE, set_addr, set_market_id
+                "{}",
+                PassiveBuyerTxData {
+                    tx_type: PASSIVE_BUYER_PURCHASE.into(),
+                    amt: protection_delta,
+                    set_address: set_addr,
+                    market_id: set_market_id,
+                }
             )
             .into(),
         );
@@ -156,17 +206,25 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 
         if let Some(update_results) = state.update_results.get(&self.address) {
             for (tag, result) in update_results {
-                let target = self.parse_purchase_tag(tag);
                 match result {
-                    SimUpdateResult::Evm(purchase_result) => {
-                        let ptokens = self.cozyrouter.decode_ptokens_received(purchase_result);
-                        if let Ok(ptokens) = ptokens {
-                            match self.ptokens_owned.get_mut(&target) {
+                    SimUpdateResult::Evm(result) if tag.parse::<PassiveBuyerTxData>().is_ok() => {
+                        let tx_data: PassiveBuyerTxData = tag.parse().unwrap();
+                        if tx_data.tx_type == ACTIVE_BUYER_PURCHASE && is_execution_success(result)
+                        {
+                            let ptokens_received =
+                                self.cozyrouter.decode_ptokens_received(result).unwrap();
+                            match self
+                                .ptokens_owned
+                                .get_mut(&(tx_data.set_address, tx_data.market_id))
+                            {
                                 None => {
-                                    self.ptokens_owned.insert(target, ptokens.into());
+                                    self.ptokens_owned.insert(
+                                        (tx_data.set_address, tx_data.market_id),
+                                        ptokens_received,
+                                    );
                                 }
                                 Some(curr_ptokens) => {
-                                    *curr_ptokens += Into::<EvmU256>::into(ptokens)
+                                    *curr_ptokens += Into::<EthersU256>::into(ptokens_received);
                                 }
                             };
                         }
@@ -176,34 +234,19 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             }
         }
 
-        let mut protection_owned = EthersU256::from(0);
+        self.protection_owned = EthersU256::from(0);
         for ((set_addr, set_market_id), ptokens) in self.ptokens_owned.iter() {
-            protection_owned += self
+            self.protection_owned += self
                 .set_logic
-                .get_protection_balance(
-                    self.address,
-                    state,
-                    *set_addr,
-                    *set_market_id,
-                    (*ptokens).into(),
-                )
+                .read_protection_balance(self.address, state, *set_addr, *set_market_id, *ptokens)
                 .unwrap();
         }
-        self.protection_owned = protection_owned;
     }
 }
 
 impl PassiveBuyer {
     fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
         (curr_timestamp - self.last_action_time) >= self.waiting_time
-    }
-
-    fn parse_purchase_tag(&self, tag: &str) -> (Address, u16) {
-        let mut split = tag.split_whitespace();
-        let _ = split.next();
-        let set_addr: Address = split.next().unwrap().parse().unwrap();
-        let market_id: u16 = split.next().unwrap().parse().unwrap();
-        (set_addr, market_id)
     }
 
     fn get_target_sets_and_markets_ids(

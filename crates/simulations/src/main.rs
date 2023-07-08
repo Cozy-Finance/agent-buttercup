@@ -22,12 +22,8 @@ struct Args {
 
 pub fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
-    let log_level = args.log_level;
-    let output_file_name = format!(
-        "output/summaries/{}_summary.txt",
-        chrono::Utc::now().to_rfc3339()
-    );
 
+    let log_level = args.log_level;
     Logger::try_with_str(log_level)?
         .log_to_stdout()
         .duplicate_to_stderr(Duplicate::Warn)
@@ -35,6 +31,15 @@ pub fn main() -> Result<(), Box<dyn Error>> {
 
     let settings = crate::cozy::configs::build_cozy_sim_settings_from_dir("cost_models_analysis")?;
     let runner = crate::cozy::runner::CozySingleSetSimRunner::new(settings);
+
+    let workspace_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .to_str()
+        .unwrap();
+    let output_file_name = format!(
+        "{}/output/summaries/{}_summary.txt",
+        workspace_path,
+        chrono::Utc::now().to_rfc3339()
+    );
     runner.run(output_file_name.into());
 
     Ok(())

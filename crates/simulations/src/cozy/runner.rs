@@ -282,6 +282,7 @@ impl CozySingleSetSimRunner {
                 &sim_manager.get_state().world.cozy_router.unwrap(),
                 &sim_manager.get_state().world.base_token.unwrap(),
                 &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.ptoken_logic.unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
                 rng.clone(),
@@ -305,7 +306,9 @@ impl CozySingleSetSimRunner {
         // Register summarizer generators.
         sim_manager
             .summarizer
-            .register_summary_generator(SetSummaryGenerator::new());
+            .register_summary_generator(SetSummaryGenerator::new(
+                &sim_manager.get_state().world.set_logic.unwrap(),
+            ));
         sim_manager
             .summarizer
             .register_summary_generator(CostModelsSummaryGenerator::new(
