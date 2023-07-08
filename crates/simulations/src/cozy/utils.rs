@@ -1,5 +1,7 @@
+use std::borrow::Cow;
+
 use eyre::Result;
-use serde::Deserializer;
+use serde::{Deserialize, Deserializer};
 
 use crate::cozy::EthersU256;
 
@@ -43,4 +45,27 @@ where
     let u256_value: EthersU256 =
         EthersU256::from_dec_str(string_value.as_str()).map_err(serde::de::Error::custom)?;
     Ok(u256_value)
+}
+
+pub fn deserialize_cow<'de, D>(deserializer: D) -> Result<Cow<'static, str>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let s: String = serde::Deserialize::deserialize(deserializer)?;
+    Ok(Cow::Owned(s.into()))
+}
+
+pub fn deserialize_cow_tuple_vec<'de, D, T>(
+    deserializer: D,
+) -> Result<Vec<(Cow<'static, str>, T)>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: Deserialize<'de>,
+{
+    let vec: Vec<(String, T)> = Deserialize::deserialize(deserializer)?;
+    let transformed_vec: Vec<(Cow<'static, str>, T)> = vec
+        .into_iter()
+        .map(|(s, v)| (Cow::Owned(s.into()), v))
+        .collect();
+    Ok(transformed_vec)
 }

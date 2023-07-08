@@ -22,7 +22,7 @@ use simulate::{
 
 use crate::cozy::{
     constants::*,
-    types::CozyActiveBuyerTriggerProbDist,
+    types::CozyAgentTriggerProbModel,
     utils::{float_to_wad, wad},
     world::{CozySet, CozyUpdate, CozyWorld},
     world_contracts::{CozyBaseToken, CozyPtokenLogic, CozyRouter, CozySetLogic},
@@ -42,7 +42,7 @@ pub struct ActiveBuyer {
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
-    trigger_prob_dist: CozyActiveBuyerTriggerProbDist,
+    trigger_prob_dist: CozyAgentTriggerProbModel,
     rng: rand::rngs::StdRng,
 }
 
@@ -98,7 +98,7 @@ impl ActiveBuyer {
         ptoken_logic: &Arc<CozyPtokenLogic>,
         target_trigger: Address,
         waiting_time: f64,
-        trigger_prob_dist: CozyActiveBuyerTriggerProbDist,
+        trigger_prob_dist: CozyAgentTriggerProbModel,
         rng: rand::rngs::StdRng,
     ) -> Self {
         Self {
