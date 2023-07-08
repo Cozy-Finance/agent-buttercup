@@ -22,7 +22,6 @@ use simulate::{
 
 use crate::cozy::{
     constants::*,
-    distributions::ProbTruncatedNorm,
     types::CozyActiveBuyerTriggerProbDist,
     utils::{float_to_wad, wad},
     world::{CozySet, CozyUpdate, CozyWorld},

@@ -2,7 +2,7 @@ use std::{borrow::Cow, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use simulate::{address::Address, summarizer::SummaryGenerator, utils::unpack_execution};
+use simulate::{address::Address, summarizer::SummaryGenerator};
 
 use crate::cozy::{
     types::CozyCostModelType,
