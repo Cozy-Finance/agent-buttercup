@@ -1,6 +1,5 @@
 use std::{
     borrow::Cow,
-    cmp::min,
     collections::HashMap,
     fmt::{Display, Formatter},
     str::FromStr,

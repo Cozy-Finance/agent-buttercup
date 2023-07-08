@@ -6,7 +6,6 @@ edition = "2021"
 members = [
     "crates/binder",
     "crates/bindings",
-    "crates/onchain",
     "crates/simulate",
     "crates/simulations",
 ]
@@ -14,7 +13,6 @@ members = [
 [workspace.dependencies]
 binder = { path = "./crates/binder" }
 bindings = { path = "./crates/bindings" }
-onchain = { path = "./crates/onchain" }
 simulate = { path = "./crates/simulate" }
 simulations = { path = "./crates/simulations" }
 
