@@ -23,6 +23,7 @@ use simulate::{
 use crate::cozy::{
     constants::*,
     distributions::ProbTruncatedNorm,
+    types::CozyActiveBuyerTriggerProbDist,
     utils::{float_to_wad, wad},
     world::{CozySet, CozyUpdate, CozyWorld},
     world_contracts::{CozyBaseToken, CozyPtokenLogic, CozyRouter, CozySetLogic},
@@ -42,6 +43,7 @@ pub struct ActiveBuyer {
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
+    trigger_prob_dist: CozyActiveBuyerTriggerProbDist,
     rng: rand::rngs::StdRng,
 }
 
@@ -97,6 +99,7 @@ impl ActiveBuyer {
         ptoken_logic: &Arc<CozyPtokenLogic>,
         target_trigger: Address,
         waiting_time: f64,
+        trigger_prob_dist: CozyActiveBuyerTriggerProbDist,
         rng: rand::rngs::StdRng,
     ) -> Self {
         Self {
@@ -112,6 +115,7 @@ impl ActiveBuyer {
             capital: EthersU256::from(0),
             waiting_time: EvmU256::from(waiting_time),
             last_action_time: EvmU256::from(0),
+            trigger_prob_dist,
             rng,
         }
     }
@@ -158,8 +162,9 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             .get_by_addr(&self.target_trigger)
             .unwrap()
             .current_prob;
-        let my_trigger_prob =
-            ProbTruncatedNorm::new(oracle_trigger_prob, 0.000001).sample(&mut self.rng);
+        let my_trigger_prob = self
+            .trigger_prob_dist
+            .sample(&mut self.rng, oracle_trigger_prob);
 
         // Check if you want to make a purchase.
         let chosen_purchase = targets

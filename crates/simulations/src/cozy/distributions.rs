@@ -167,3 +167,18 @@ impl ProbTruncatedNorm {
         TruncatedNorm::new(self.mean, self.std, 0.0, 1.0).sample(rng)
     }
 }
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct LinkedProbTruncatedNorm {
+    pub std: f64,
+}
+
+impl LinkedProbTruncatedNorm {
+    pub fn new(std: f64) -> Self {
+        LinkedProbTruncatedNorm { std }
+    }
+
+    pub fn sample<R: Rng + ?Sized>(&self, mean: f64, rng: &mut R) -> f64 {
+        ProbTruncatedNorm::new(mean, self.std).sample(rng)
+    }
+}

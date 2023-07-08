@@ -5,8 +5,7 @@ use eyre::Result;
 use crate::cozy::runner::CozySingleSetSimRunnerSettings;
 
 pub fn build_config_from_dir(dir: &str) -> Result<config::Config> {
-    let workspace_path = env!("CARGO_MANIFEST_DIR");
-    let workspace_dir = std::path::Path::new(workspace_path);
+    let workspace_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
     let all_configs_dir = workspace_dir.join("src/cozy/configs");
     let configs_dir = all_configs_dir.join(dir);
 

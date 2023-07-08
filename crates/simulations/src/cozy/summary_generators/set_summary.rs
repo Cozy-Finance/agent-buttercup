@@ -24,7 +24,6 @@ pub struct SetSummary {
 
 pub struct SetSummaryGenerator {
     summary_name: Cow<'static, str>,
-    // Place Holder address for calling read txs.
     address: Address,
     set_logic: Arc<CozySetLogic>,
 }
@@ -54,6 +53,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
                 .set_logic
                 .read_total_protection_available(self.address, sim_state, set.address)
                 .unwrap_or(EthersU256::from(0));
+
             set_data.push((
                 set.address,
                 SetData {
@@ -68,8 +68,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
             set_data,
         };
 
-        let return_val = serde_json::to_value(summary)?;
-        Ok(return_val)
+        Ok(serde_json::to_value(summary)?)
     }
 
     fn get_summary_name(&self) -> std::borrow::Cow<'static, str> {
