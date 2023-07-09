@@ -6,7 +6,7 @@ use simulate::{address::Address, summarizer::SummaryGenerator};
 
 use crate::cozy::{
     types::CozyCostModelType,
-    utils::wad_to_float,
+    utils::{serialize_EthersU256_to_u128, wad_to_float},
     world::{CozyUpdate, CozyWorld},
     world_contracts::{CozyDynamicLevelModel, CozyJumpRateModel, CozySetLogic},
     EthersU256,
@@ -20,6 +20,7 @@ pub struct CostData {
 }
 #[derive(Serialize, Deserialize)]
 pub struct CostModelsSummary {
+    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
     timestamp: EthersU256,
     set_data: Vec<(Address, Vec<CostData>)>,
 }
