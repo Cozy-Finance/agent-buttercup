@@ -5,6 +5,7 @@ use serde_json::Value;
 use simulate::{address::Address, summarizer::SummaryGenerator};
 
 use crate::cozy::{
+    utils::serialize_EthersU256_to_u128,
     world::{CozyUpdate, CozyWorld},
     world_contracts::CozySetLogic,
     EthersU256,
@@ -12,12 +13,14 @@ use crate::cozy::{
 
 #[derive(Serialize, Deserialize)]
 pub struct SetData {
+    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
     protection_remaining: EthersU256,
     apy: f64,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct SetSummary {
+    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
     timestamp: EthersU256,
     set_data: Vec<(Address, SetData)>,
 }

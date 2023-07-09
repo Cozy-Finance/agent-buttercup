@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 use eyre::Result;
-use serde::{Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::cozy::EthersU256;
 
@@ -68,4 +68,12 @@ where
         .map(|(s, v)| (Cow::Owned(s.into()), v))
         .collect();
     Ok(transformed_vec)
+}
+
+pub fn serialize_EthersU256_to_u128<S>(value: &EthersU256, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let u128_value = value.as_u128();
+    serializer.serialize_u128(u128_value)
 }
