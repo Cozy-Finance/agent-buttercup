@@ -17,7 +17,10 @@ pub struct CostData {
     utilization: f64,
     cost_factor: Option<f64>,
     refund_factor: Option<f64>,
+    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
+    effective_active_protection: EthersU256,
 }
+
 #[derive(Serialize, Deserialize)]
 pub struct CostModelsSummary {
     #[serde(serialize_with = "serialize_EthersU256_to_u128")]
@@ -65,6 +68,16 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                 let utilization = self
                     .set_logic
                     .read_utilization(self.address, sim_state, set.address, i as u16)
+                    .unwrap_or(EthersU256::from(0));
+
+                let effective_active_protection = self
+                    .set_logic
+                    .read_effective_active_protection(
+                        self.address,
+                        sim_state,
+                        set.address,
+                        i as u16,
+                    )
                     .unwrap_or(EthersU256::from(0));
 
                 let cost_model_addr = set.cost_model_lookup[&i];
@@ -119,6 +132,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
 
                 cost_data.push(CostData {
                     utilization: wad_to_float(utilization),
+                    effective_active_protection,
                     cost_factor: float_cost_factor,
                     refund_factor: float_refund_factor,
                 });

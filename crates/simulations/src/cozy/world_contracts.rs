@@ -393,6 +393,24 @@ impl CozySetLogic {
         Ok(utilization)
     }
 
+    pub fn read_effective_active_protection(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        set_address: Address,
+        market_id: u16,
+    ) -> Result<EthersU256> {
+        let call_data = self
+            .contract
+            .encode_function("effectiveActiveProtection", market_id)?;
+        let query = build_call_tx(sender_addr, set_address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)).unwrap();
+        let effective_active_protection = self
+            .contract
+            .decode_output::<EthersU256>("effectiveActiveProtection", result)?;
+        Ok(effective_active_protection)
+    }
+
     pub fn read_ptoken_addr(
         &self,
         sender_addr: Address,

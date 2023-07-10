@@ -13,8 +13,6 @@ use crate::cozy::{
 
 #[derive(Serialize, Deserialize)]
 pub struct SetData {
-    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
-    protection_remaining: EthersU256,
     apy: f64,
 }
 
@@ -52,18 +50,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
         let sets = sim_state.world.sets.values();
 
         for set in sets {
-            let protection_remaining = self
-                .set_logic
-                .read_total_protection_available(self.address, sim_state, set.address)
-                .unwrap_or(EthersU256::from(0));
-
-            set_data.push((
-                set.address,
-                SetData {
-                    protection_remaining,
-                    apy: set.apy,
-                },
-            ))
+            set_data.push((set.address, SetData { apy: set.apy }))
         }
 
         let summary = SetSummary {
