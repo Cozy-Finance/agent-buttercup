@@ -18,8 +18,8 @@ use crate::cozy::{
     world::{CozyUpdate, CozyWorld},
     world_contracts::{
         CozyBackstop, CozyChainlinkTriggerFactory, CozyDripDecayConstantFactory,
-        CozyDynamicLevelFactory, CozyJumpRateFactory, CozyManager, CozyPtoken, CozyPtokenFactory,
-        CozyRouter, CozySetFactory, CozySetLogic, CozyUmaTriggerFactory, Weth,
+        CozyDynamicLevelFactory, CozyJumpRateFactory, CozyManager, CozyPtokenFactory,
+        CozyPtokenLogic, CozyRouter, CozySetFactory, CozySetLogic, CozyUmaTriggerFactory, Weth,
     },
     EthersAddress,
 };
@@ -318,8 +318,8 @@ impl ProtocolDeployer {
         );
 
         evm_updates.push(SimUpdate::Evm(ptoken_logic_tx));
-        world_updates.push(SimUpdate::World(CozyUpdate::AddCozyPtoken(
-            CozyPtoken::new(
+        world_updates.push(SimUpdate::World(CozyUpdate::AddCozyPtokenLogic(
+            CozyPtokenLogic::new(
                 PTOKEN.name.into(),
                 ptoken_logic_addr.into(),
                 ptoken_logic_contract,

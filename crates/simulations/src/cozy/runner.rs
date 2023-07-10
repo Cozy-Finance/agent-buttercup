@@ -16,21 +16,24 @@ use crate::cozy::{
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
         weth_deployer::WethDeployer,
     },
+    configs::build_config_from_dir,
     constants::*,
     distributions::CozyDistribution,
+    summary_generators::{
+        cost_models_summary::CostModelsSummaryGenerator, set_summary::SetSummaryGenerator,
+    },
     types::{
         CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
         CozyFixedTimePolicyParams, CozyMarketConfigParams, CozyPassiveBuyersParams,
         CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams, CozySimSetupParams,
         CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
+    utils::deserialize_cow_tuple_vec,
     world::CozyWorld,
 };
 
-use super::summary_generators::set_summary::SetSummaryGenerator;
-
 #[derive(Deserialize, Debug, Clone)]
-pub struct CozySingleSetSimRunnerSettings {
+pub struct CozySingleSetSimRunner {
     pub sim_setup_params: CozySimSetupParams,
     pub protocol_params: CozyProtocolDeployParams,
     pub time_policy_params: CozyFixedTimePolicyParams,
@@ -38,82 +41,37 @@ pub struct CozySingleSetSimRunnerSettings {
     pub passive_buyers_params: CozyPassiveBuyersParams,
     pub active_buyers_params: CozyActiveBuyersParams,
     pub suppliers_params: CozySuppliersParams,
-    pub triggers: Vec<(String, CozyTriggerType)>,
-    pub cost_models: Vec<(String, CozyCostModelType)>,
-    pub drip_decay_models: Vec<(String, CozyDripDecayModelType)>,
+    #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
+    pub triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
+    #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
+    pub cost_models: Vec<(Cow<'static, str>, CozyCostModelType)>,
+    #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
+    pub drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)>,
     pub market_config_params: Vec<CozyMarketConfigParams>,
     pub set_config_params: CozySetConfigParams,
 }
 
-pub struct CozySingleSetSimRunner {
-    rand_seed: u64,
-    fixed_time_policy: FixedTimePolicy,
-    protocol_params: CozyProtocolDeployParams,
-    base_token_params: CozyTokenDeployParams,
-    passive_buyers_params: CozyPassiveBuyersParams,
-    active_buyers_params: CozyActiveBuyersParams,
-    suppliers_params: CozySuppliersParams,
-    triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
-    cost_models: Vec<(Cow<'static, str>, CozyCostModelType)>,
-    drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)>,
-    market_config_params: Vec<CozyMarketConfigParams>,
-    set_config_params: CozySetConfigParams,
-}
-
 impl CozySingleSetSimRunner {
-    pub fn new(settings: CozySingleSetSimRunnerSettings) -> Self {
-        let fixed_time_policy = FixedTimePolicy::new(
-            settings.time_policy_params.start_block_number,
-            settings.time_policy_params.start_block_timestamp,
-            settings.time_policy_params.time_per_block,
-            settings.time_policy_params.blocks_per_step,
-            settings.time_policy_params.blocks_to_generate,
-            settings.time_policy_params.time_to_generate,
-        )
-        .unwrap();
-
-        let triggers = settings
-            .triggers
-            .into_iter()
-            .map(|(name, val)| (name.into(), val))
-            .collect::<Vec<_>>();
-        let cost_models = settings
-            .cost_models
-            .into_iter()
-            .map(|(name, val)| (name.into(), val))
-            .collect::<Vec<_>>();
-        let drip_decay_models = settings
-            .drip_decay_models
-            .into_iter()
-            .map(|(name, val)| (name.into(), val))
-            .collect::<Vec<_>>();
-
-        CozySingleSetSimRunner {
-            rand_seed: settings.sim_setup_params.rand_seed,
-            fixed_time_policy,
-            protocol_params: settings.protocol_params,
-            base_token_params: settings.base_token_params,
-            passive_buyers_params: settings.passive_buyers_params,
-            active_buyers_params: settings.active_buyers_params,
-            suppliers_params: settings.suppliers_params,
-            triggers,
-            cost_models,
-            drip_decay_models,
-            market_config_params: settings.market_config_params,
-            set_config_params: settings.set_config_params,
-        }
-    }
-
     pub fn run(self, output_file: Cow<'static, str>) {
-        let mut rng = StdRng::seed_from_u64(self.rand_seed);
+        let mut rng = StdRng::seed_from_u64(self.sim_setup_params.rand_seed);
 
         // Create sim manager.
         let world_state = CozyWorld::new();
         let sim_state = SimState::new(world_state);
-        let mut summarizer = Summarizer::new(output_file);
-        summarizer.register_summary_generator(SetSummaryGenerator::new());
-        let mut sim_manager =
-            SimManager::new(sim_state, Box::new(self.fixed_time_policy), summarizer);
+        let fixed_time_policy = FixedTimePolicy::new(
+            self.time_policy_params.start_block_number,
+            self.time_policy_params.start_block_timestamp,
+            self.time_policy_params.time_per_block,
+            self.time_policy_params.blocks_per_step,
+            self.time_policy_params.blocks_to_generate,
+            self.time_policy_params.time_to_generate,
+        )
+        .unwrap();
+        let mut sim_manager = SimManager::new(
+            sim_state,
+            Box::new(fixed_time_policy),
+            Summarizer::new(output_file),
+        );
 
         // Create and activate agents.
         // Weth deployer.
@@ -280,8 +238,10 @@ impl CozySingleSetSimRunner {
                 &sim_manager.get_state().world.cozy_router.unwrap(),
                 &sim_manager.get_state().world.base_token.unwrap(),
                 &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.ptoken_logic.unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
+                self.active_buyers_params.trigger_prob_dist.clone(),
                 rng.clone(),
             ));
             let _ = sim_manager.activate_agent(passive_buyer);
@@ -300,6 +260,20 @@ impl CozySingleSetSimRunner {
             let _ = sim_manager.activate_agent(passive_supplier);
         }
 
+        // Register summarizer generators.
+        sim_manager
+            .summarizer
+            .register_summary_generator(SetSummaryGenerator::new(
+                &sim_manager.get_state().world.set_logic.unwrap(),
+            ));
+        sim_manager
+            .summarizer
+            .register_summary_generator(CostModelsSummaryGenerator::new(
+                &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.jump_rate_model,
+                &sim_manager.get_state().world.dynamic_level_model,
+            ));
+
         // Run sim.
         sim_manager.run_sim();
     }
@@ -308,13 +282,12 @@ impl CozySingleSetSimRunner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cozy::configs::build_cozy_sim_settings_from_dir;
+    use crate::cozy::configs::build_cozy_sim_runner_from_dir;
 
     #[test]
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
-        let settings = build_cozy_sim_settings_from_dir("test")?;
-        let runner = CozySingleSetSimRunner::new(settings);
-        runner.run(Cow::Owned("test_output").to_owned());
+        let runner = build_cozy_sim_runner_from_dir("test")?;
+        runner.run(Cow::Borrowed("output/summaries/test_output.json"));
         Ok(())
     }
 }

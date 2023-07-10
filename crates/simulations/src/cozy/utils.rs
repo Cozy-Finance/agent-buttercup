@@ -1,5 +1,7 @@
+use std::borrow::Cow;
+
 use eyre::Result;
-use serde::Deserializer;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::cozy::EthersU256;
 
@@ -27,20 +29,10 @@ pub fn wad() -> EthersU256 {
     EthersU256::from(1e18 as u128)
 }
 
-/// Converts a float to a WAD fixed point prepared U256 number.
-/// # Arguments
-/// * `x` - Float to convert. (f64)
-/// # Returns
-/// * `U256` - Converted U256 number.
 pub fn float_to_wad(x: f64) -> EthersU256 {
     EthersU256::from((x * 1e18) as u128)
 }
 
-/// Converts a float to a WAD fixed point prepared U256 number.
-/// # Arguments
-/// * `x` - WAD to convert. (U256)
-/// # Returns
-/// * `f64` - Converted f64 number.
 pub fn wad_to_float(x: EthersU256) -> f64 {
     x.as_u128() as f64 / 1e18
 }
@@ -53,4 +45,35 @@ where
     let u256_value: EthersU256 =
         EthersU256::from_dec_str(string_value.as_str()).map_err(serde::de::Error::custom)?;
     Ok(u256_value)
+}
+
+pub fn deserialize_cow<'de, D>(deserializer: D) -> Result<Cow<'static, str>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let s: String = serde::Deserialize::deserialize(deserializer)?;
+    Ok(Cow::Owned(s.into()))
+}
+
+pub fn deserialize_cow_tuple_vec<'de, D, T>(
+    deserializer: D,
+) -> Result<Vec<(Cow<'static, str>, T)>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: Deserialize<'de>,
+{
+    let vec: Vec<(String, T)> = Deserialize::deserialize(deserializer)?;
+    let transformed_vec: Vec<(Cow<'static, str>, T)> = vec
+        .into_iter()
+        .map(|(s, v)| (Cow::Owned(s.into()), v))
+        .collect();
+    Ok(transformed_vec)
+}
+
+pub fn serialize_EthersU256_to_u128<S>(value: &EthersU256, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let u128_value = value.as_u128();
+    serializer.serialize_u128(u128_value)
 }

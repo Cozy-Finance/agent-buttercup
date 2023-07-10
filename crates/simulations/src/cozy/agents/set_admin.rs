@@ -7,18 +7,18 @@ pub use bindings::{
     set::{AccountingReturn, MarketsReturn},
 };
 use eyre::Result;
-use revm::primitives::{bitvec::macros::internal::funty::Fundamental, TxEnv};
+use revm::primitives::bitvec::macros::internal::funty::Fundamental;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
-    utils::{build_call_tx, unpack_execution},
 };
 
 pub use crate::cozy::constants;
 use crate::cozy::{
     constants::SECONDS_IN_YEAR,
     types::CozySetAdminParams,
+    utils::wad,
     world::{CozySet, CozyUpdate, CozyWorld},
     world_contracts::{CozyManager, CozySetLogic},
     EthersU256,
@@ -96,19 +96,26 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .map(|(i, config)| (config.trigger.into(), i as u16))
             .collect::<HashMap<_, _>>();
 
+        let cost_model_lookup = self
+            .set_admin_params
+            .market_configs
+            .iter()
+            .enumerate()
+            .map(|(i, config)| (i as u16, config.cost_model.into()))
+            .collect::<HashMap<_, _>>();
+
         let world_update = CozyUpdate::AddToSets(CozySet::new(
             self.set_name.clone().unwrap().into(),
             self.set_address.unwrap(),
             trigger_lookup,
+            cost_model_lookup,
+            self.set_admin_params.market_configs.len() as u16,
         ));
 
         channel.send(SimUpdate::Bundle(evm_tx, world_update));
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
-        let apy = self.compute_current_apy(state).unwrap();
-
-        log::info!("{:?} apy: {}", self.set_name, apy);
         channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
             self.set_name.clone().unwrap().into(),
             self.compute_current_apy(state).unwrap(),
@@ -135,7 +142,6 @@ impl SetAdmin {
 
     fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<f64> {
         let num_markets = self.set_admin_params.market_configs.len();
-        // Get total unscaled market returns.
         let mut total_market_return = EthersU256::from(0);
         for i in 0..num_markets {
             total_market_return += self.compute_market_return(state, i)?;
@@ -146,8 +152,8 @@ impl SetAdmin {
             .unwrap();
 
         if total_assets > 0 {
-            let apy = total_market_return / total_assets;
-            Ok((apy.as_u128() * SECONDS_IN_YEAR.as_u128()) as f64 / 1e18)
+            let apy = (total_market_return / total_assets).as_u128();
+            Ok((apy * SECONDS_IN_YEAR.as_u128()) as f64 / wad().as_u128() as f64)
         } else {
             Ok(0.0)
         }

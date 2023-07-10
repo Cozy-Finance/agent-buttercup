@@ -4,7 +4,6 @@ version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-onchain.workspace = true
 simulate.workspace = true
 bindings.workspace = true
 
@@ -38,3 +37,6 @@ auto_impl = "1.1.0"
 # JSON
 serde_json = "1.0.96"
 hex = { version = "0.4", features = ["serde"] }
+
+# Time
+chrono = "0.4.26"

@@ -1,8 +1,15 @@
-use std::{borrow::Cow, cmp::min, collections::HashMap, sync::Arc};
+use std::{
+    borrow::Cow,
+    cmp::min,
+    collections::HashMap,
+    fmt::{Display, Formatter},
+    str::FromStr,
+    sync::Arc,
+};
 
 use bindings::cozy_protocol::cozy_router;
 use eyre::Result;
-use revm::primitives::{ExecutionResult, TxEnv};
+use revm::primitives::TxEnv;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
@@ -10,16 +17,16 @@ use simulate::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
     },
-    utils::{build_call_tx, unpack_execution},
+    utils::{is_execution_success, unpack_execution},
 };
 
 use crate::cozy::{
     constants::*,
-    distributions::ProbTruncatedNorm,
-    utils::float_to_wad,
+    types::CozyAgentTriggerProbModel,
+    utils::{float_to_wad, wad},
     world::{CozySet, CozyUpdate, CozyWorld},
-    world_contracts::{CozyBaseToken, CozyRouter, CozySetLogic},
-    EthersAddress, EthersU256, EvmU256,
+    world_contracts::{CozyBaseToken, CozyPtokenLogic, CozyRouter, CozySetLogic},
+    EthersU256, EvmU256,
 };
 
 pub struct ActiveBuyer {
@@ -27,6 +34,7 @@ pub struct ActiveBuyer {
     address: Address,
     cozyrouter: Arc<CozyRouter>,
     token: Arc<CozyBaseToken>,
+    ptoken_logic: Arc<CozyPtokenLogic>,
     set_logic: Arc<CozySetLogic>,
     target_trigger: Address,
     protection_owned: EthersU256,
@@ -34,14 +42,50 @@ pub struct ActiveBuyer {
     capital: EthersU256,
     waiting_time: EvmU256,
     last_action_time: EvmU256,
+    trigger_prob_dist: CozyAgentTriggerProbModel,
     rng: rand::rngs::StdRng,
 }
 
-pub struct ArbData {
-    tx: TxEnv,
+#[derive(Debug, Clone)]
+pub struct ActiveBuyerTxData {
+    tx_type: Cow<'static, str>,
     amt: EthersU256,
     set_address: Address,
     market_id: u16,
+}
+
+impl Display for ActiveBuyerTxData {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{} {:X} {} {}",
+            self.tx_type, self.set_address, self.market_id, self.amt
+        )?;
+        Ok(())
+    }
+}
+
+impl FromStr for ActiveBuyerTxData {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut parts = s.trim().split_whitespace().collect::<Vec<_>>();
+        if parts.len() != 4 {
+            return Err("Invalid input format".to_string());
+        }
+
+        let amt = EthersU256::from_dec_str(parts.pop().unwrap()).unwrap();
+        let market_id: u16 = parts.pop().unwrap().parse().unwrap();
+        let set_address: Address = parts.pop().unwrap().parse().unwrap();
+        let tx_type: String = parts.pop().unwrap().into();
+
+        Ok(ActiveBuyerTxData {
+            tx_type: tx_type.into(),
+            amt,
+            set_address,
+            market_id,
+        })
+    }
 }
 
 impl ActiveBuyer {
@@ -51,8 +95,10 @@ impl ActiveBuyer {
         cozyrouter: &Arc<CozyRouter>,
         token: &Arc<CozyBaseToken>,
         set_logic: &Arc<CozySetLogic>,
+        ptoken_logic: &Arc<CozyPtokenLogic>,
         target_trigger: Address,
         waiting_time: f64,
+        trigger_prob_dist: CozyAgentTriggerProbModel,
         rng: rand::rngs::StdRng,
     ) -> Self {
         Self {
@@ -61,12 +107,14 @@ impl ActiveBuyer {
             cozyrouter: cozyrouter.clone(),
             token: token.clone(),
             set_logic: set_logic.clone(),
+            ptoken_logic: ptoken_logic.clone(),
             target_trigger,
             protection_owned: EthersU256::from(0),
             ptokens_owned: HashMap::new(),
             capital: EthersU256::from(0),
             waiting_time: EvmU256::from(waiting_time),
             last_action_time: EvmU256::from(0),
+            trigger_prob_dist,
             rng,
         }
     }
@@ -113,9 +161,11 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             .get_by_addr(&self.target_trigger)
             .unwrap()
             .current_prob;
-        let my_trigger_prob =
-            ProbTruncatedNorm::new(oracle_trigger_prob + 0.01, 0.000001).sample(&mut self.rng);
+        let my_trigger_prob = self
+            .trigger_prob_dist
+            .sample(&mut self.rng, oracle_trigger_prob);
 
+        // Check if you want to make a purchase.
         let chosen_purchase = targets
             .iter()
             .map(|(set_address, market_id)| {
@@ -123,17 +173,32 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             })
             .filter_map(Result::ok)
             .flatten()
-            .max_by(|a, b| a.amt.cmp(&b.amt));
-        if let Some(chosen_purchase) = chosen_purchase {
+            .max_by(|(_, a_data), (_, b_data)| a_data.amt.cmp(&b_data.amt));
+
+        if let Some((chosen_purchase_tx, chosen_purchase_data)) = chosen_purchase {
             channel.send_with_tag(
-                SimUpdate::Evm(chosen_purchase.tx),
-                format!(
-                    "{} {:X} {}",
-                    ACTIVE_BUYER_PURCHASE, chosen_purchase.set_address, chosen_purchase.market_id
-                )
-                .into(),
+                SimUpdate::Evm(chosen_purchase_tx),
+                format!("{}", chosen_purchase_data).into(),
             );
+
+            // Approve CozyRouter to spend corresponding pTokens, in case you want to sell.
+            let ptoken_addr = self
+                .set_logic
+                .read_ptoken_addr(
+                    self.address,
+                    state,
+                    chosen_purchase_data.set_address,
+                    chosen_purchase_data.market_id,
+                )
+                .unwrap();
+            let ptoken_approve_tx = self
+                .ptoken_logic
+                .build_max_approve_router_tx(self.address, ptoken_addr, self.cozyrouter.address)
+                .unwrap();
+
+            channel.send(SimUpdate::Evm(ptoken_approve_tx));
         } else {
+            // Check if you want to make a sale.
             let chosen_sale = targets
                 .iter()
                 .map(|(set_address, market_id)| {
@@ -141,15 +206,12 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
                 })
                 .filter_map(Result::ok)
                 .flatten()
-                .max_by(|a, b| a.amt.cmp(&b.amt));
-            if let Some(chosen_sale) = chosen_sale {
+                .max_by(|(_, a_data), (_, b_data)| a_data.amt.cmp(&b_data.amt));
+
+            if let Some((chosen_sale_tx, chosen_sale_data)) = chosen_sale {
                 channel.send_with_tag(
-                    SimUpdate::Evm(chosen_sale.tx),
-                    format!(
-                        "{} {:X} {}",
-                        ACTIVE_BUYER_SALE, chosen_sale.set_address, chosen_sale.market_id
-                    )
-                    .into(),
+                    SimUpdate::Evm(chosen_sale_tx),
+                    format!("{}", chosen_sale_data).into(),
                 );
             }
         }
@@ -164,17 +226,37 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
 
         if let Some(update_results) = state.update_results.get(&self.address) {
             for (tag, result) in update_results {
-                let target = self.parse_purchase_tag(tag);
                 match result {
-                    SimUpdateResult::Evm(purchase_result) => {
-                        let ptokens = self.cozyrouter.decode_ptokens_received(purchase_result);
-                        if let Ok(ptokens) = ptokens {
-                            match self.ptokens_owned.get_mut(&target) {
+                    SimUpdateResult::Evm(result) if tag.parse::<ActiveBuyerTxData>().is_ok() => {
+                        let tx_data: ActiveBuyerTxData = tag.parse().unwrap();
+                        if tx_data.tx_type == ACTIVE_BUYER_PURCHASE && is_execution_success(result)
+                        {
+                            let ptokens_received =
+                                self.cozyrouter.decode_ptokens_received(result).unwrap();
+                            match self
+                                .ptokens_owned
+                                .get_mut(&(tx_data.set_address, tx_data.market_id))
+                            {
                                 None => {
-                                    self.ptokens_owned.insert(target, ptokens);
+                                    self.ptokens_owned.insert(
+                                        (tx_data.set_address, tx_data.market_id),
+                                        ptokens_received,
+                                    );
                                 }
                                 Some(curr_ptokens) => {
-                                    *curr_ptokens += Into::<EthersU256>::into(ptokens);
+                                    *curr_ptokens += Into::<EthersU256>::into(ptokens_received);
+                                }
+                            };
+                        } else if tx_data.tx_type == ACTIVE_BUYER_SALE
+                            && is_execution_success(result)
+                        {
+                            match self
+                                .ptokens_owned
+                                .get_mut(&(tx_data.set_address, tx_data.market_id))
+                            {
+                                None => {}
+                                Some(curr_ptokens) => {
+                                    *curr_ptokens -= tx_data.amt;
                                 }
                             };
                         }
@@ -184,28 +266,19 @@ impl Agent<CozyUpdate, CozyWorld> for ActiveBuyer {
             }
         }
 
-        let mut protection_owned = EthersU256::from(0);
+        self.protection_owned = EthersU256::from(0);
         for ((set_addr, set_market_id), ptokens) in self.ptokens_owned.iter() {
-            protection_owned += self
+            self.protection_owned += self
                 .set_logic
-                .get_protection_balance(self.address, state, *set_addr, *set_market_id, *ptokens)
+                .read_protection_balance(self.address, state, *set_addr, *set_market_id, *ptokens)
                 .unwrap();
         }
-        self.protection_owned = protection_owned;
     }
 }
 
 impl ActiveBuyer {
     fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
         (curr_timestamp - self.last_action_time) >= self.waiting_time
-    }
-
-    fn parse_purchase_tag(&self, tag: &str) -> (Address, u16) {
-        let mut split = tag.split_whitespace();
-        let _ = split.next();
-        let set_addr: Address = split.next().unwrap().parse().unwrap();
-        let market_id: u16 = split.next().unwrap().parse().unwrap();
-        (set_addr, market_id)
     }
 
     fn get_target_sets_and_markets_ids(
@@ -226,7 +299,7 @@ impl ActiveBuyer {
         set_address: Address,
         market_id: u16,
         my_prob: f64,
-    ) -> Result<Option<ArbData>> {
+    ) -> Result<Option<(TxEnv, ActiveBuyerTxData)>> {
         let mut purchase_amt = self.set_logic.read_remaining_protection(
             self.address,
             state,
@@ -238,10 +311,7 @@ impl ActiveBuyer {
             if purchase_amt == EthersU256::zero() || max_cost == EthersU256::zero() {
                 return Ok(None);
             }
-            max_cost = min(
-                (purchase_amt * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128),
-                self.capital,
-            );
+            max_cost = min((purchase_amt * float_to_wad(my_prob)) / wad(), self.capital);
             let purchase_args = cozy_router::PurchaseCall {
                 set: set_address.into(),
                 market_id,
@@ -253,26 +323,23 @@ impl ActiveBuyer {
                 self.cozyrouter
                     .build_purchase_tx(self.address, purchase_args)?,
             );
-            let purchase_result = match unpack_execution(
-                state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None),
-            ) {
-                Ok(bytes) => bytes,
+            match unpack_execution(state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None)) {
+                Ok(_) => {
+                    return Ok(Some((
+                        purchase_tx.unwrap(),
+                        ActiveBuyerTxData {
+                            tx_type: ACTIVE_BUYER_PURCHASE.into(),
+                            amt: purchase_amt,
+                            set_address,
+                            market_id,
+                        },
+                    )));
+                }
                 _ => {
                     purchase_amt /= 2;
                     continue;
                 }
             };
-            let assets_needed = self
-                .cozyrouter
-                .contract
-                .decode_output::<cozy_router::PurchaseReturn>("purchase", purchase_result)?
-                .assets_needed;
-            return Ok(Some(ArbData {
-                tx: purchase_tx.unwrap(),
-                amt: purchase_amt,
-                set_address,
-                market_id,
-            }));
         }
     }
 
@@ -282,8 +349,8 @@ impl ActiveBuyer {
         set_address: Address,
         market_id: u16,
         my_prob: f64,
-    ) -> Result<Option<ArbData>> {
-        let min_refund = (self.capital * float_to_wad(my_prob)) / EthersU256::from(1e18 as u128);
+    ) -> Result<Option<(TxEnv, ActiveBuyerTxData)>> {
+        let min_refund = (self.capital * float_to_wad(my_prob)) / wad();
 
         let mut sell_amt = match self.ptokens_owned.get(&(set_address, market_id)) {
             None => return Ok(None),
@@ -300,20 +367,27 @@ impl ActiveBuyer {
                 receiver: self.address.into(),
                 min_refund,
             };
-            let sell_tx = Some(self.cozyrouter.build_sell_tx(self.address, sell_args)?);
+            let sell_tx = Some(
+                self.cozyrouter
+                    .build_sell_tx(self.address, sell_args.clone())?,
+            );
             match unpack_execution(state.simulate_evm_tx_ref(sell_tx.as_ref().unwrap(), None)) {
-                Ok(bytes) => bytes,
+                Ok(_) => {
+                    return Ok(Some((
+                        sell_tx.unwrap(),
+                        ActiveBuyerTxData {
+                            tx_type: ACTIVE_BUYER_SALE.into(),
+                            amt: sell_amt,
+                            set_address,
+                            market_id,
+                        },
+                    )));
+                }
                 _ => {
                     sell_amt /= 2;
                     continue;
                 }
             };
-            return Ok(Some(ArbData {
-                tx: sell_tx.unwrap(),
-                amt: sell_amt,
-                set_address,
-                market_id,
-            }));
         }
     }
 }

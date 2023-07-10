@@ -1,31 +1,31 @@
 passive_buyers_params:
   num_passive: 1
   capital_dist:
-    min: "1000000"
-    max: "2000000"
+    min: "10000000"
+    max: "20000000"
   protection_desired_dist:
-    min: "1000000"
-    max: "2000000"
+    min: "10000000"
+    max: "20000000"
   time_dist:
     rate: 10 # average 10-day waiting period
     time_unit: "Day"
 active_buyers_params:
-  num_active: 1
-  capital_dist:
-    min: "1000000"
-    max: "2000000"
-  time_dist:
-    rate: 2 # average 2-day waiting period
-    time_unit: "Day"
-  trigger_prob_dist:
-    "Static":
-      mean: 0.02
-      std: 0.001
-suppliers_params:
-  num_passive: 1
+  num_active: 10
   capital_dist:
     min: "10000000"
     max: "20000000"
+  time_dist:
+    rate: 4 # average 2-day waiting period
+    time_unit: "Day"
+  trigger_prob_dist:
+    "Static":
+      std: 0.005
+      mean: 0.03
+suppliers_params:
+  num_passive: 5
+  capital_dist:
+    min: "1000000000"
+    max: "2000000000"
   time_dist:
     rate: 10 # average 10-day waiting period
     time_unit: "Day"

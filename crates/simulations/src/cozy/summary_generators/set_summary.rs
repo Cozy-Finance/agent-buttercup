@@ -1,33 +1,40 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use simulate::address::Address;
-use simulate::summarizer::SummaryGenerator;
-use simulate::utils::unpack_execution;
+use simulate::{address::Address, summarizer::SummaryGenerator};
 
-use crate::cozy::bindings_wrapper::SET;
-use crate::cozy::world::{CozyUpdate, CozyWorld};
-use crate::cozy::EthersU256;
+use crate::cozy::{
+    utils::serialize_EthersU256_to_u128,
+    world::{CozyUpdate, CozyWorld},
+    world_contracts::CozySetLogic,
+    EthersU256,
+};
 
 #[derive(Serialize, Deserialize)]
-pub struct ProtectionSummary {
+pub struct SetData {
+    apy: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SetSummary {
+    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
     timestamp: EthersU256,
-    protection_bought: Vec<(Address, EthersU256)>,
+    set_data: Vec<(Address, SetData)>,
 }
 
 pub struct SetSummaryGenerator {
     summary_name: Cow<'static, str>,
-
-    // Place Holder address for calling read txs.
     address: Address,
+    set_logic: Arc<CozySetLogic>,
 }
 
 /// Generates general summary data about the deployed sets in CozyWorld.
 impl SetSummaryGenerator {
-    pub fn new() -> Box<Self> {
+    pub fn new(set_logic: &Arc<CozySetLogic>) -> Box<Self> {
         Box::new(SetSummaryGenerator {
-            summary_name: Cow::Owned("Protection Summary".to_owned()),
+            set_logic: set_logic.clone(),
+            summary_name: Cow::Owned("Set Summary".to_owned()),
             address: Address::random(),
         })
     }
@@ -38,39 +45,20 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
     ) -> eyre::Result<Value> {
-        let set_addrs = sim_state
-            .world
-            .sets
-            .items
-            .iter()
-            .map(|set| set.address)
-            .collect::<Vec<_>>();
+        let mut set_data = vec![];
 
-        let set_logic = sim_state
-            .world
-            .set_logic
-            .as_ref()
-            .expect("Set Logic should be set when summarizer runs");
+        let sets = sim_state.world.sets.values();
 
-        let addr_protection_bought = set_addrs
-            .iter()
-            .map(|set_addr| {
-                (
-                    set_addr.clone(),
-                    set_logic
-                        .read_total_protection_available(self.address, sim_state, set_addrs[0])
-                        .unwrap_or(EthersU256::from(0)),
-                )
-            })
-            .collect::<Vec<_>>();
+        for set in sets {
+            set_data.push((set.address, SetData { apy: set.apy }))
+        }
 
-        let summary = ProtectionSummary {
+        let summary = SetSummary {
             timestamp: EthersU256::from(sim_state.read_timestamp()),
-            protection_bought: addr_protection_bought,
+            set_data,
         };
 
-        let return_val = serde_json::to_value(summary)?;
-        Ok(return_val)
+        Ok(serde_json::to_value(summary)?)
     }
 
     fn get_summary_name(&self) -> std::borrow::Cow<'static, str> {

@@ -3,11 +3,13 @@ use bindings::{
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
+use rand::Rng;
 use serde::Deserialize;
 use simulate::address::Address;
 
+use super::distributions::LinkedProbTruncatedNorm;
 use crate::cozy::{
-    distributions::{Exponential, TriggerProbModel, U256UniformRange},
+    distributions::{Exponential, ProbTruncatedNorm, TriggerProbModel, U256UniformRange},
     utils::deserialize_string_to_u256,
     EthersU256,
 };
@@ -137,10 +139,26 @@ pub struct CozyPassiveBuyersParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+pub enum CozyAgentTriggerProbModel {
+    Static(ProbTruncatedNorm),
+    Dynamic(LinkedProbTruncatedNorm),
+}
+
+impl CozyAgentTriggerProbModel {
+    pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R, oracle_prob: f64) -> f64 {
+        match self {
+            CozyAgentTriggerProbModel::Static(dist) => dist.sample(rng),
+            CozyAgentTriggerProbModel::Dynamic(dist) => dist.sample(oracle_prob, rng),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
 pub struct CozyActiveBuyersParams {
     pub num_active: u64,
     pub capital_dist: U256UniformRange,
     pub time_dist: Exponential,
+    pub trigger_prob_dist: CozyAgentTriggerProbModel,
 }
 
 #[derive(Debug, Clone, Deserialize)]

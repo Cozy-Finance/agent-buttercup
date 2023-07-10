@@ -2,11 +2,10 @@ use std::fs;
 
 use eyre::Result;
 
-use crate::cozy::runner::CozySingleSetSimRunnerSettings;
+use crate::cozy::runner::CozySingleSetSimRunner;
 
 pub fn build_config_from_dir(dir: &str) -> Result<config::Config> {
-    let workspace_path = env!("CARGO_MANIFEST_DIR");
-    let workspace_dir = std::path::Path::new(workspace_path);
+    let workspace_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
     let all_configs_dir = workspace_dir.join("src/cozy/configs");
     let configs_dir = all_configs_dir.join(dir);
 
@@ -29,7 +28,7 @@ pub fn build_config_from_dir(dir: &str) -> Result<config::Config> {
     Ok(config_builder.build()?)
 }
 
-pub fn build_cozy_sim_settings_from_dir(dir: &str) -> Result<CozySingleSetSimRunnerSettings> {
+pub fn build_cozy_sim_runner_from_dir(dir: &str) -> Result<CozySingleSetSimRunner> {
     let config = build_config_from_dir(dir)?;
-    Ok(config.try_deserialize::<CozySingleSetSimRunnerSettings>()?)
+    Ok(config.try_deserialize::<CozySingleSetSimRunner>()?)
 }
