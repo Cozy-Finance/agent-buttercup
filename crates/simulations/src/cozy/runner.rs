@@ -16,6 +16,7 @@ use crate::cozy::{
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
         weth_deployer::WethDeployer,
     },
+    configs::build_config_from_dir,
     constants::*,
     distributions::CozyDistribution,
     summary_generators::{
@@ -286,7 +287,7 @@ mod tests {
     #[test]
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let runner = build_cozy_sim_runner_from_dir("test")?;
-        runner.run(Cow::Borrowed("output/summaries/test_output.txt"));
+        runner.run(Cow::Borrowed("output/summaries/test_output.json"));
         Ok(())
     }
 }
