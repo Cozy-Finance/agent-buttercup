@@ -20,7 +20,7 @@ active_buyers_params:
   trigger_prob_dist:
     "Static":
       std: 0.005
-      mean: 0.03
+      mean: 0.02
 suppliers_params:
   num_passive: 5
   capital_dist:

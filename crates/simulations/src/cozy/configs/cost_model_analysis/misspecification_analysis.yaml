@@ -1,0 +1,9 @@
+kink: "750000000000000000"
+cost_factor_at_zero_utilization: "5000000000000000"
+cost_factor_at_full_utilization: "100000000000000000"
+min_kink_cost: "5000000000000000"
+max_kink_cost: "85000000000000000"
+optimal_zone_rate: "30450617280"
+agent_std: 0.02
+num_runs_per_setting: 1
+num_steps: 8
