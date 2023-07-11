@@ -55,10 +55,10 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> Summarizer<U, W> {
     }
 
     pub fn get_num_summary_generators(&self) -> usize {
-        return self.summary_generators.len();
+        self.summary_generators.len()
     }
 
-    pub fn get_summary_generator(&self, index: usize) -> &Box<dyn SummaryGenerator<U, W>> {
-        return &self.summary_generators[index];
+    pub fn get_summary_generator(&self, index: usize) -> &dyn SummaryGenerator<U, W> {
+        &self.summary_generators[index]
     }
 }

@@ -5,7 +5,7 @@ use serde_json::Value;
 use simulate::{address::Address, summarizer::SummaryGenerator};
 
 use crate::cozy::{
-    utils::serialize_EthersU256_to_u128,
+    utils::serialize_ethers_u256_to_u128,
     world::{CozyUpdate, CozyWorld},
     world_contracts::CozySetLogic,
     EthersU256,
@@ -18,24 +18,24 @@ pub struct SetData {
 
 #[derive(Serialize, Deserialize)]
 pub struct SetSummary {
-    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
+    #[serde(serialize_with = "serialize_ethers_u256_to_u128")]
     timestamp: EthersU256,
     set_data: Vec<(Address, SetData)>,
 }
 
 pub struct SetSummaryGenerator {
     summary_name: Cow<'static, str>,
-    address: Address,
-    set_logic: Arc<CozySetLogic>,
+    _address: Address,
+    _set_logic: Arc<CozySetLogic>,
 }
 
 /// Generates general summary data about the deployed sets in CozyWorld.
 impl SetSummaryGenerator {
     pub fn new(set_logic: &Arc<CozySetLogic>) -> Box<Self> {
         Box::new(SetSummaryGenerator {
-            set_logic: set_logic.clone(),
+            _set_logic: set_logic.clone(),
             summary_name: Cow::Owned("Set Summary".to_owned()),
-            address: Address::random(),
+            _address: Address::random(),
         })
     }
 }

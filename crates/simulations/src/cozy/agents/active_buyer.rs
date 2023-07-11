@@ -69,7 +69,7 @@ impl FromStr for ActiveBuyerTxData {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut parts = s.trim().split_whitespace().collect::<Vec<_>>();
+        let mut parts = s.split_whitespace().collect::<Vec<_>>();
         if parts.len() != 4 {
             return Err("Invalid input format".to_string());
         }
@@ -89,6 +89,7 @@ impl FromStr for ActiveBuyerTxData {
 }
 
 impl ActiveBuyer {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         name: Cow<'static, str>,
         address: Address,
@@ -284,7 +285,7 @@ impl ActiveBuyer {
     fn get_target_sets_and_markets_ids(
         &self,
         _state: &SimState<CozyUpdate, CozyWorld>,
-        sets: &Vec<CozySet>,
+        sets: &[CozySet],
         trigger: &Address,
     ) -> Vec<(Address, u16)> {
         sets.iter()
