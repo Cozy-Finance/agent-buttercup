@@ -182,3 +182,30 @@ impl LinkedProbTruncatedNorm {
         ProbTruncatedNorm::new(mean, self.std).sample(rng)
     }
 }
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct JumpProbTruncatedNorm {
+    mean1: f64,
+    mean2: f64,
+    std: f64,
+    jump_prob: f64,
+}
+
+impl JumpProbTruncatedNorm {
+    pub fn new(mean1: f64, mean2: f64, std: f64, jump_prob: f64) -> Self {
+        JumpProbTruncatedNorm {
+            mean1,
+            mean2,
+            std,
+            jump_prob,
+        }
+    }
+
+    pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> f64 {
+        if rng.gen_bool(self.jump_prob) {
+            ProbTruncatedNorm::new(self.mean2, self.std).sample(rng)
+        } else {
+            ProbTruncatedNorm::new(self.mean1, self.std).sample(rng)
+        }
+    }
+}
