@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 use eyre::Result;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::{Deserialize, Deserializer, Serializer};
 
 use crate::cozy::EthersU256;
 
@@ -52,7 +52,7 @@ where
     D: serde::Deserializer<'de>,
 {
     let s: String = serde::Deserialize::deserialize(deserializer)?;
-    Ok(Cow::Owned(s.into()))
+    Ok(Cow::Owned(s))
 }
 
 pub fn deserialize_cow_tuple_vec<'de, D, T>(
@@ -65,12 +65,12 @@ where
     let vec: Vec<(String, T)> = Deserialize::deserialize(deserializer)?;
     let transformed_vec: Vec<(Cow<'static, str>, T)> = vec
         .into_iter()
-        .map(|(s, v)| (Cow::Owned(s.into()), v))
+        .map(|(s, v)| (Cow::Owned(s), v))
         .collect();
     Ok(transformed_vec)
 }
 
-pub fn serialize_EthersU256_to_u128<S>(value: &EthersU256, serializer: S) -> Result<S::Ok, S::Error>
+pub fn serialize_ethers_u256_to_u128<S>(value: &EthersU256, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {

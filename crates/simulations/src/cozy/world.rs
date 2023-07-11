@@ -169,15 +169,15 @@ impl World for CozyWorld {
                 let _ = self.triggers.insert(trigger);
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
-                let mut set = self.sets.get_mut_by_name(&name).unwrap();
+                let set = self.sets.get_mut_by_name(&name).unwrap();
                 set.apy = new_apy;
             }
             CozyUpdate::UpdateTriggerData(name, new_prob) => {
-                let mut trigger = self.triggers.get_mut_by_name(&name).unwrap();
+                let trigger = self.triggers.get_mut_by_name(&name).unwrap();
                 trigger.current_prob = new_prob;
             }
             CozyUpdate::Triggered(name) => {
-                let mut trigger = self.triggers.get_mut_by_name(&name).unwrap();
+                let trigger = self.triggers.get_mut_by_name(&name).unwrap();
                 trigger.triggered = true;
             }
         }
