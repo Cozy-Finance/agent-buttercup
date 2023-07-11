@@ -106,78 +106,78 @@ impl Default for CozyWorld {
 
 impl World for CozyWorld {
     type WorldUpdateData = CozyUpdate;
-    fn execute(&mut self, update: &Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
+    fn execute(&mut self, update: Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
         match update {
             CozyUpdate::AddCozyRouter(cozy_router) => {
-                self.cozy_router = Some(cozy_router.clone());
+                self.cozy_router = Some(cozy_router);
             }
             CozyUpdate::AddCozyBaseToken(base_token) => {
-                self.base_token = Some(base_token.clone());
+                self.base_token = Some(base_token);
             }
             CozyUpdate::AddCozySetLogic(set_logic) => {
-                self.set_logic = Some(set_logic.clone());
+                self.set_logic = Some(set_logic);
             }
             CozyUpdate::AddCozyJumpRateFactory(factory) => {
-                self.jump_rate_factory = Some(factory.clone());
+                self.jump_rate_factory = Some(factory);
             }
             CozyUpdate::AddCozyDynamicLevelFactory(factory) => {
-                self.dynamic_level_factory = Some(factory.clone());
+                self.dynamic_level_factory = Some(factory);
             }
             CozyUpdate::AddCozyJumpRateModel(model) => {
-                self.jump_rate_model = Some(model.clone());
+                self.jump_rate_model = Some(model);
             }
             CozyUpdate::AddCozyDynamicLevelModel(model) => {
-                self.dynamic_level_model = Some(model.clone());
+                self.dynamic_level_model = Some(model);
             }
             CozyUpdate::AddCozyDripDecayConstantFactory(factory) => {
-                self.drip_decay_constant_factory = Some(factory.clone());
+                self.drip_decay_constant_factory = Some(factory);
             }
             CozyUpdate::AddCozyUmaTriggerFactory(factory) => {
-                self.uma_trigger_factory = Some(factory.clone());
+                self.uma_trigger_factory = Some(factory);
             }
             CozyUpdate::AddCozyChainlinkTriggerFactory(factory) => {
-                self.chainlink_trigger_factory = Some(factory.clone());
+                self.chainlink_trigger_factory = Some(factory);
             }
             CozyUpdate::AddCozyManager(manager) => {
-                self.manager = Some(manager.clone());
+                self.manager = Some(manager);
             }
             CozyUpdate::AddCozyBackstop(backstop) => {
-                self.backstop = Some(backstop.clone());
+                self.backstop = Some(backstop);
             }
             CozyUpdate::AddCozySetFactory(factory) => {
-                self.set_factory = Some(factory.clone());
+                self.set_factory = Some(factory);
             }
             CozyUpdate::AddCozyPtokenLogic(ptoken_logic) => {
-                self.ptoken_logic = Some(ptoken_logic.clone());
+                self.ptoken_logic = Some(ptoken_logic);
             }
             CozyUpdate::AddCozyPtokenFactory(factory) => {
-                self.ptoken_factory = Some(factory.clone());
+                self.ptoken_factory = Some(factory);
             }
             CozyUpdate::AddWeth(weth) => {
-                self.weth = Some(weth.clone());
+                self.weth = Some(weth);
             }
             CozyUpdate::AddToSets(set) => {
-                let _ = self.sets.insert(set.clone());
+                let _ = self.sets.insert(set);
             }
             CozyUpdate::AddToCostModels(cost_model) => {
-                let _ = self.cost_models.insert(cost_model.clone());
+                let _ = self.cost_models.insert(cost_model);
             }
             CozyUpdate::AddToDripDecayModels(drip_decay_model) => {
-                let _ = self.drip_decay_models.insert(drip_decay_model.clone());
+                let _ = self.drip_decay_models.insert(drip_decay_model);
             }
             CozyUpdate::AddToTriggers(trigger) => {
-                let _ = self.triggers.insert(trigger.clone());
+                let _ = self.triggers.insert(trigger);
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
-                let mut set = self.sets.get_mut_by_name(name).unwrap();
-                set.apy = *new_apy;
+                let mut set = self.sets.get_mut_by_name(&name).unwrap();
+                set.apy = new_apy;
             }
             CozyUpdate::UpdateTriggerData(name, new_prob) => {
-                let mut trigger = self.triggers.get_mut_by_name(name).unwrap();
-                trigger.current_prob = *new_prob;
+                let mut trigger = self.triggers.get_mut_by_name(&name).unwrap();
+                trigger.current_prob = new_prob;
             }
             CozyUpdate::Triggered(name) => {
-                let mut trigger = self.triggers.get_mut_by_name(name).unwrap();
+                let mut trigger = self.triggers.get_mut_by_name(&name).unwrap();
                 trigger.triggered = true;
             }
         }

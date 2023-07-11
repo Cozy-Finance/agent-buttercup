@@ -15,8 +15,10 @@ fn from_num_agents(c: &mut Criterion) {
                     let workspace_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
                         .to_str()
                         .unwrap();
-                    let output_file_name =
-                        format!("{}/output/summaries/benches/{}_summary.json", workspace_path, num_agents);
+                    let output_file_name = format!(
+                        "{}/output/summaries/benches/{}_summary.json",
+                        workspace_path, num_agents
+                    );
 
                     runner.active_buyers_params.num_active = num_agents;
                     runner.passive_buyers_params.num_passive = num_agents;
