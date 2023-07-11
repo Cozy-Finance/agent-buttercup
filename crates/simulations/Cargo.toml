@@ -40,3 +40,10 @@ hex = { version = "0.4", features = ["serde"] }
 
 # Time
 chrono = "0.4.26"
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "cozy_benchmark"
+harness = false
