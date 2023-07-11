@@ -48,10 +48,10 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             // Concurrently:
             //      1) Spawn agents to access immutable state via a read handle and queue updates.
             //      2) Append queued updates via the write handle.
-            thread::scope(|s| {
+            rayon::scope(|s| {
                 for (agent_id, agent) in &mut self.agents {
                     let channel: AgentChannel<U> = AgentChannel::new(&sender, agent_id);
-                    s.spawn(|| agent.step(&self.state, channel));
+                    s.spawn(|_| agent.step(&self.state, channel));
                 }
                 drop(sender);
             });
