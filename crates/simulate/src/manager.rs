@@ -68,9 +68,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             });
 
             // Run summarizers.
-            let _ = self
-                .summarizer
-                .output_summaries(&self.state);
+            let _ = self.summarizer.output_summaries(&self.state);
 
             // Clear all results.
             self.state.clear_all_results();
