@@ -63,14 +63,15 @@ where
     T: Deserialize<'de>,
 {
     let vec: Vec<(String, T)> = Deserialize::deserialize(deserializer)?;
-    let transformed_vec: Vec<(Cow<'static, str>, T)> = vec
-        .into_iter()
-        .map(|(s, v)| (Cow::Owned(s), v))
-        .collect();
+    let transformed_vec: Vec<(Cow<'static, str>, T)> =
+        vec.into_iter().map(|(s, v)| (Cow::Owned(s), v)).collect();
     Ok(transformed_vec)
 }
 
-pub fn serialize_ethers_u256_to_u128<S>(value: &EthersU256, serializer: S) -> Result<S::Ok, S::Error>
+pub fn serialize_ethers_u256_to_u128<S>(
+    value: &EthersU256,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {

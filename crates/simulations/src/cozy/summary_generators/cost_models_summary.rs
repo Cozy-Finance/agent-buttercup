@@ -72,12 +72,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
 
                 let effective_active_protection = self
                     .set_logic
-                    .read_effective_active_protection(
-                        self.address,
-                        sim_state,
-                        set.address,
-                        i,
-                    )
+                    .read_effective_active_protection(self.address, sim_state, set.address, i)
                     .unwrap_or(EthersU256::from(0));
 
                 let cost_model_addr = set.cost_model_lookup[&i];

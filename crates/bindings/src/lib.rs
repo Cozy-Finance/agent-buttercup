@@ -1,3 +1,4 @@
+#![allow(clippy::all)]
 pub mod cozy_triggers;
 pub use cozy_triggers::*;
 pub mod cozy_models;
