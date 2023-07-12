@@ -20,21 +20,13 @@ ethers.workspace = true
 ethers-solc.workspace = true
 revm.workspace = true
 
-# price_simulation
-rand_chacha = "0.3.1"
-rand_distr = "0.4.3"
-plotly = "0.8.3"
-
 # void_middleware
 async-trait = "0.1.68"
 
 # stepper concurrency primitives
-left-right = "0.11.5"
 crossbeam-utils = "0.8.1"
-dyn-clone = "1"
 
 # logging
-flexi_logger = "0.25"
 log = "0.4"
 rustc-hex = "2.1.0"
 
