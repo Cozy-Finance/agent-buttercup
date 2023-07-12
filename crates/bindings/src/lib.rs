@@ -1,4 +1,4 @@
-#![allow(clippy::all)]
+#![allow(ambiguous_glob_reexports)]
 pub mod cozy_triggers;
 pub use cozy_triggers::*;
 pub mod cozy_models;
