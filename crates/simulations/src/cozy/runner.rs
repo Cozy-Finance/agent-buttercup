@@ -16,7 +16,6 @@ use crate::cozy::{
         set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
         weth_deployer::WethDeployer,
     },
-    configs::build_config_from_dir,
     constants::*,
     distributions::CozyDistribution,
     summary_generators::{
@@ -86,7 +85,7 @@ impl CozySingleSetSimRunner {
             PROTOCOL_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.protocol_params,
-            &sim_manager.get_state().world.weth.unwrap(),
+            &sim_manager.get_state().world.weth.as_ref().unwrap(),
         ));
         let _ = sim_manager.activate_agent(protocol_deployer);
 
@@ -130,8 +129,18 @@ impl CozySingleSetSimRunner {
             COST_MODELS_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.cost_models.iter().cloned().collect(),
-            &sim_manager.get_state().world.jump_rate_factory.unwrap(),
-            &sim_manager.get_state().world.dynamic_level_factory.unwrap(),
+            &sim_manager
+                .get_state()
+                .world
+                .jump_rate_factory
+                .as_ref()
+                .unwrap(),
+            &sim_manager
+                .get_state()
+                .world
+                .dynamic_level_factory
+                .as_ref()
+                .unwrap(),
         ));
         let _ = sim_manager.activate_agent(cost_models_deployer);
 
@@ -144,6 +153,7 @@ impl CozySingleSetSimRunner {
                 .get_state()
                 .world
                 .drip_decay_constant_factory
+                .as_ref()
                 .unwrap(),
         ));
         let _ = sim_manager.activate_agent(drip_decay_models_deployer);
@@ -153,21 +163,27 @@ impl CozySingleSetSimRunner {
             TRIGGERS_DEPLOYER.into(),
             Address::random_using(&mut rng),
             self.triggers.iter().cloned().collect(),
-            &sim_manager.get_state().world.uma_trigger_factory.unwrap(),
+            &sim_manager
+                .get_state()
+                .world
+                .uma_trigger_factory
+                .as_ref()
+                .unwrap(),
             &sim_manager
                 .get_state()
                 .world
                 .chainlink_trigger_factory
+                .as_ref()
                 .unwrap(),
-            &sim_manager.get_state().world.manager.unwrap(),
+            &sim_manager.get_state().world.manager.as_ref().unwrap(),
             rng.clone(),
         ));
         let _ = sim_manager.activate_agent(triggers_deployer);
 
         // Store cost model, drip decay model and trigger contracts.
-        let world_cost_models = sim_manager.get_state().world.cost_models;
-        let world_drip_decay_models = sim_manager.get_state().world.drip_decay_models;
-        let world_triggers = sim_manager.get_state().world.triggers;
+        let world_cost_models = sim_manager.get_state().world.cost_models.clone();
+        let world_drip_decay_models = sim_manager.get_state().world.drip_decay_models.clone();
+        let world_triggers = sim_manager.get_state().world.triggers.clone();
 
         // Set admin.
         let mut market_configs = vec![];
@@ -187,7 +203,13 @@ impl CozySingleSetSimRunner {
             })
         }
         let salt: Option<[u8; 32]> = Some(rng.gen());
-        let base_asset_addr = sim_manager.get_state().world.base_token.unwrap().address;
+        let base_asset_addr = sim_manager
+            .get_state()
+            .world
+            .base_token
+            .as_ref()
+            .unwrap()
+            .address;
         let set_params = CozySetAdminParams {
             asset: base_asset_addr,
             set_config: self.set_config_params.into(),
@@ -199,8 +221,8 @@ impl CozySingleSetSimRunner {
             SET_ADMIN.into(),
             Address::random_using(&mut rng),
             set_params,
-            &sim_manager.get_state().world.set_logic.unwrap(),
-            &sim_manager.get_state().world.manager.unwrap(),
+            &sim_manager.get_state().world.set_logic.as_ref().unwrap(),
+            &sim_manager.get_state().world.manager.as_ref().unwrap(),
         ));
         let _ = sim_manager.activate_agent(set_admin);
 
@@ -215,9 +237,9 @@ impl CozySingleSetSimRunner {
             let passive_buyer = Box::new(PassiveBuyer::new(
                 name.into(),
                 addr,
-                &sim_manager.get_state().world.cozy_router.unwrap(),
-                &sim_manager.get_state().world.base_token.unwrap(),
-                &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.cozy_router.as_ref().unwrap(),
+                &sim_manager.get_state().world.base_token.as_ref().unwrap(),
+                &sim_manager.get_state().world.set_logic.as_ref().unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.passive_buyers_params
                     .protection_desired_dist
@@ -235,10 +257,10 @@ impl CozySingleSetSimRunner {
             let passive_buyer = Box::new(ActiveBuyer::new(
                 name.into(),
                 addr,
-                &sim_manager.get_state().world.cozy_router.unwrap(),
-                &sim_manager.get_state().world.base_token.unwrap(),
-                &sim_manager.get_state().world.set_logic.unwrap(),
-                &sim_manager.get_state().world.ptoken_logic.unwrap(),
+                &sim_manager.get_state().world.cozy_router.as_ref().unwrap(),
+                &sim_manager.get_state().world.base_token.as_ref().unwrap(),
+                &sim_manager.get_state().world.set_logic.as_ref().unwrap(),
+                &sim_manager.get_state().world.ptoken_logic.as_ref().unwrap(),
                 world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
                 self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
                 self.active_buyers_params.trigger_prob_dist.clone(),
@@ -253,8 +275,8 @@ impl CozySingleSetSimRunner {
             let passive_supplier = Box::new(PassiveSupplier::new(
                 name.into(),
                 addr,
-                &sim_manager.get_state().world.cozy_router.unwrap(),
-                &sim_manager.get_state().world.base_token.unwrap(),
+                &sim_manager.get_state().world.cozy_router.as_ref().unwrap(),
+                &sim_manager.get_state().world.base_token.as_ref().unwrap(),
                 self.suppliers_params.time_dist.sample_in_secs(&mut rng),
             ));
             let _ = sim_manager.activate_agent(passive_supplier);
@@ -264,12 +286,12 @@ impl CozySingleSetSimRunner {
         sim_manager
             .summarizer
             .register_summary_generator(SetSummaryGenerator::new(
-                &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.set_logic.as_ref().unwrap(),
             ));
         sim_manager
             .summarizer
             .register_summary_generator(CostModelsSummaryGenerator::new(
-                &sim_manager.get_state().world.set_logic.unwrap(),
+                &sim_manager.get_state().world.set_logic.as_ref().unwrap(),
                 &sim_manager.get_state().world.jump_rate_model,
                 &sim_manager.get_state().world.dynamic_level_model,
             ));

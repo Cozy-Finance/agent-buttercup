@@ -11,7 +11,6 @@ use crate::{
     },
     errors::*,
     state::{update::UpdateData, world::World, SimState},
-    stepper::*,
     summarizer::{Summarizer, SummaryGenerator},
     time_policy::TimePolicy,
 };
@@ -19,8 +18,7 @@ use crate::{
 pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub time_policy: Box<dyn TimePolicy>,
     pub agents: HashMap<AgentId, Box<dyn Agent<U, W>>>,
-    pub stepper: SimStepper<U, W>,
-    pub stepper_read_factory: SimStepperReadHandleFactory<U, W>,
+    pub state: SimState<U, W>,
     pub summarizer: Summarizer<U, W>,
 }
 
@@ -30,13 +28,10 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         time_policy: Box<dyn TimePolicy>,
         summarizer: Summarizer<U, W>,
     ) -> Self {
-        let stepper: SimStepper<U, W> = SimStepper::new_from_current_state(state);
-        let stepper_read_factory = stepper.factory();
         Self {
             time_policy,
             agents: HashMap::new(),
-            stepper,
-            stepper_read_factory,
+            state,
             summarizer,
         }
     }
@@ -44,7 +39,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
     /// Run the time policy and agents to update the simulation environment.
     pub fn run_sim(&mut self) {
         // Initiate block time policy.
-        self.stepper
+        self.state
             .update_time_env(self.time_policy.current_time_env());
 
         while self.time_policy.is_active() {
@@ -53,39 +48,35 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             // Concurrently:
             //      1) Spawn agents to access immutable state via a read handle and queue updates.
             //      2) Append queued updates via the write handle.
-            thread::scope(|s| {
+            rayon::scope(|s| {
                 for (agent_id, agent) in &mut self.agents {
                     let channel: AgentChannel<U> = AgentChannel::new(&sender, agent_id);
-                    s.spawn(|| agent.step(&self.stepper_read_factory.sim_state(), channel));
+                    s.spawn(|_| agent.step(&self.state, channel));
                 }
-                s.spawn(|| {
-                    for update in receiver.iter() {
-                        self.stepper.append_agent_sim_update(update);
-                    }
-                });
                 drop(sender);
             });
 
-            // Publish new state with all agent sim updates.
-            self.stepper.publish();
+            for update in receiver.iter() {
+                self.state.execute(update);
+            }
 
             // Let agents resolve the step.
             thread::scope(|t| {
                 for agent in self.agents.values_mut() {
-                    t.spawn(|| agent.resolve_step(&self.stepper_read_factory.sim_state()));
+                    t.spawn(|| agent.resolve_step(&self.state));
                 }
             });
 
             // Run summarizers.
             let _ = self
                 .summarizer
-                .output_summaries(&self.stepper_read_factory.sim_state());
+                .output_summaries(&self.state);
 
             // Clear all results.
-            self.stepper.clear_all_results();
+            self.state.clear_all_results();
 
             // Update time policy.
-            self.stepper.update_time_env(self.time_policy.step());
+            self.state.update_time_env(self.time_policy.step());
         }
     }
 
@@ -102,26 +93,25 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             return Err(SimManagerError::AddressCollision(id));
         }
 
-        self.stepper
+        self.state
             .insert_account_info(id.address, new_agent.account_info());
 
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
         let channel = AgentChannel::new(&sender, &id);
-        new_agent.activation_step(&self.stepper_read_factory.sim_state(), channel);
+        new_agent.activation_step(&self.state, channel);
 
         // Execute queued updates.
         drop(sender);
         for update in receiver.iter() {
-            self.stepper.append_agent_sim_update(update);
+            self.state.execute(update);
         }
-        self.stepper.publish();
 
         // Resolve activation step.
-        new_agent.resolve_activation_step(&self.stepper_read_factory.sim_state());
+        new_agent.resolve_activation_step(&self.state);
 
         // Clear all results.
-        self.stepper.clear_all_results();
+        self.state.clear_all_results();
 
         // Adds agent to local data.
         self.agents.insert(id, new_agent);
@@ -129,8 +119,8 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         Ok(())
     }
 
-    pub fn get_state(&self) -> SimState<U, W> {
-        self.stepper_read_factory.sim_state()
+    pub fn get_state(&self) -> &SimState<U, W> {
+        &self.state
     }
 
     pub fn register_summary_generator<T: serde::Serialize>(

@@ -87,17 +87,17 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// Update the time env.
     /// # Arguments
     /// * `time_env` - The time env.
-    pub fn update_time_env(&mut self, time_env: &TimeEnv) {
+    pub fn update_time_env(&mut self, time_env: TimeEnv) {
         self.evm.env.block.number = time_env.number;
         self.evm.env.block.timestamp = time_env.timestamp;
     }
 
     // Add an account to evm.
-    pub fn insert_account_info(&mut self, address: &Address, account_info: &AccountInfo) {
+    pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
         self.evm
             .db()
             .expect("Db not initialized")
-            .insert_account_info((*address).into(), account_info.clone());
+            .insert_account_info(address.into(), account_info);
     }
 
     /// Execute a transaction in the execution environment.
@@ -105,8 +105,8 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn execute_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
-        self.evm.env.tx = tx.clone();
+    pub fn execute_evm_tx(&mut self, tx: TxEnv) -> ExecutionResult {
+        self.evm.env.tx = tx;
         match self.evm.transact_commit() {
             Ok(result) => result,
             Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
@@ -126,7 +126,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         }
     }
 
-    pub fn execute_world_update(&mut self, update: &U) -> Option<U> {
+    pub fn execute_world_update(&mut self, update: U) -> Option<U> {
         self.world.execute(update)
     }
 
@@ -153,13 +153,13 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         }
     }
 
-    pub fn execute(&mut self, agent_update: &AgentSimUpdate<U>) {
-        match &agent_update.update {
+    pub fn execute(&mut self, agent_update: AgentSimUpdate<U>) {
+        match agent_update.update {
             SimUpdate::Evm(tx) => {
                 let result = self.execute_evm_tx(tx);
-                if let Some(tag) = &agent_update.tag {
+                if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
-                        tag.clone(),
+                        tag,
                         agent_update.address,
                         SimUpdateResult::Evm(result),
                     );
@@ -167,30 +167,30 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
             }
             SimUpdate::World(update) => {
                 let result = self.execute_world_update(update);
-                if let Some(tag) = &agent_update.tag {
+                if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
-                        tag.clone(),
+                        tag,
                         agent_update.address,
                         SimUpdateResult::World(result),
                     );
                 }
             }
             SimUpdate::Bundle(tx, update) => {
-                let sim_evm_result = self.simulate_evm_tx(tx);
+                let sim_evm_result = self.simulate_evm_tx(&tx);
                 let bundle_success = is_execution_success(&sim_evm_result);
                 if bundle_success {
                     let evm_result = self.execute_evm_tx(tx);
                     let world_result = self.execute_world_update(update);
-                    if let Some(tag) = &agent_update.tag {
+                    if let Some(tag) = agent_update.tag {
                         self.insert_into_update_results(
-                            tag.clone(),
+                            tag,
                             agent_update.address,
                             SimUpdateResult::Bundle(true, evm_result, world_result),
                         );
                     }
-                } else if let Some(tag) = &agent_update.tag {
+                } else if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
-                        tag.clone(),
+                        tag,
                         agent_update.address,
                         SimUpdateResult::Bundle(false, sim_evm_result, None),
                     );
@@ -204,23 +204,23 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 let bundle_success = sim_evm_results.iter().map(is_execution_success).all(|x| x);
                 if bundle_success {
                     let evm_results = txs
-                        .iter()
+                        .into_iter()
                         .map(|tx| self.execute_evm_tx(tx))
                         .collect::<Vec<_>>();
                     let world_results = updates
-                        .iter()
+                        .into_iter()
                         .map(|update| self.execute_world_update(update))
                         .collect::<Vec<_>>();
-                    if let Some(tag) = &agent_update.tag {
+                    if let Some(tag) = agent_update.tag {
                         self.insert_into_update_results(
-                            tag.clone(),
+                            tag,
                             agent_update.address,
                             SimUpdateResult::MultiBundle(true, evm_results, world_results),
                         );
                     }
-                } else if let Some(tag) = &agent_update.tag {
+                } else if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
-                        tag.clone(),
+                        tag,
                         agent_update.address,
                         SimUpdateResult::MultiBundle(false, sim_evm_results, vec![]),
                     );

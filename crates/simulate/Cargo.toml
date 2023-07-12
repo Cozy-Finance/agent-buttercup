@@ -39,3 +39,4 @@ log = "0.4"
 rustc-hex = "2.1.0"
 
 auto_impl = "1.1.0"
+rayon = "1.7.0"
