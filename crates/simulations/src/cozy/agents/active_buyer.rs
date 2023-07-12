@@ -320,14 +320,13 @@ impl ActiveBuyer {
                 receiver: self.address.into(),
                 max_cost,
             };
-            let purchase_tx = Some(
-                self.cozyrouter
-                    .build_purchase_tx(self.address, purchase_args)?,
-            );
-            match unpack_execution(state.simulate_evm_tx_ref(purchase_tx.as_ref().unwrap(), None)) {
+            let purchase_tx = self
+                .cozyrouter
+                .build_purchase_tx(self.address, purchase_args)?;
+            match unpack_execution(state.simulate_evm_tx_ref(&purchase_tx, None)) {
                 Ok(_) => {
                     return Ok(Some((
-                        purchase_tx.unwrap(),
+                        purchase_tx,
                         ActiveBuyerTxData {
                             tx_type: ACTIVE_BUYER_PURCHASE.into(),
                             amt: purchase_amt,
@@ -368,14 +367,13 @@ impl ActiveBuyer {
                 receiver: self.address.into(),
                 min_refund,
             };
-            let sell_tx = Some(
-                self.cozyrouter
-                    .build_sell_tx(self.address, sell_args.clone())?,
-            );
-            match unpack_execution(state.simulate_evm_tx_ref(sell_tx.as_ref().unwrap(), None)) {
+            let sell_tx = self
+                .cozyrouter
+                .build_sell_tx(self.address, sell_args.clone())?;
+            match unpack_execution(state.simulate_evm_tx_ref(&sell_tx, None)) {
                 Ok(_) => {
                     return Ok(Some((
-                        sell_tx.unwrap(),
+                        sell_tx,
                         ActiveBuyerTxData {
                             tx_type: ACTIVE_BUYER_SALE.into(),
                             amt: sell_amt,
