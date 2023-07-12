@@ -13,7 +13,6 @@ rand.workspace = true
 crossbeam-channel.workspace = true
 serde.workspace = true
 hex.workspace = true
-csv.workspace = true
 serde_json.workspace = true
 
 ethers.workspace = true
