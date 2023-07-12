@@ -50,4 +50,10 @@ jobs:
         run: cargo +nightly fmt --all -- --check
 
       - name: cargo clippy
-        run: cargo +nightly clippy --all --all-features -- -D warnings
+        run: cargo +nightly clippy -p binder --all-features -- -D warnings
+
+      - name: cargo clippy
+        run: cargo +nightly clippy -p simulate --all-features -- -D warnings
+
+      - name: cargo clippy
+        run: cargo +nightly clippy -p simulations --no-deps --all-features -- -D warnings
