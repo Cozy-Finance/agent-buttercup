@@ -2,7 +2,7 @@ use std::fmt::Debug;
 
 use revm::primitives::{ExecutionResult, TxEnv};
 
-pub trait UpdateData: Send + Sync + Clone + Debug {}
+pub trait UpdateData: Send + Sync + Debug + Clone {}
 
 #[derive(Debug, Clone)]
 pub enum SimUpdate<U: UpdateData> {

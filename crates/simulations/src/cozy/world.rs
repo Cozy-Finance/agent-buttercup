@@ -1,7 +1,6 @@
 use std::{borrow::Cow, collections::HashMap, fmt::Debug, sync::Arc};
 
 use auto_impl::auto_impl;
-use eyre::Result;
 use simulate::{
     address::Address,
     state::{update::UpdateData, world::World},
@@ -169,15 +168,21 @@ impl World for CozyWorld {
                 let _ = self.triggers.insert(trigger);
             }
             CozyUpdate::UpdateSetData(name, new_apy) => {
-                let set = self.sets.get_mut_by_name(&name).unwrap();
+                let set = self.sets.get_mut_by_name(&name).expect("Set not found.");
                 set.apy = new_apy;
             }
             CozyUpdate::UpdateTriggerData(name, new_prob) => {
-                let trigger = self.triggers.get_mut_by_name(&name).unwrap();
+                let trigger = self
+                    .triggers
+                    .get_mut_by_name(&name)
+                    .expect("Trigger not found.");
                 trigger.current_prob = new_prob;
             }
             CozyUpdate::Triggered(name) => {
-                let trigger = self.triggers.get_mut_by_name(&name).unwrap();
+                let trigger = self
+                    .triggers
+                    .get_mut_by_name(&name)
+                    .expect("Trigger not found.");
                 trigger.triggered = true;
             }
         }

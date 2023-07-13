@@ -5,11 +5,11 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use anyhow::Context;
 use ethers_solc::{
     artifacts::{BytecodeObject, ContractBytecode},
     ConfigurableContractArtifact,
 };
-use eyre::Result;
 use proc_macro2::{Literal, TokenStream};
 use quote::{format_ident, quote};
 
@@ -24,16 +24,16 @@ impl RawAbiData {
     pub fn from_path(
         path: PathBuf,
         name_counter: Option<&mut HashMap<String, u64>>,
-    ) -> Result<Self> {
+    ) -> Result<Self, anyhow::Error> {
         let file_name = path
             .file_name()
-            .ok_or_else(|| eyre::eyre!("Invalid path"))?;
+            .with_context(|| "Invalid path to raw abis.")?;
         let name = file_name
             .to_str()
-            .ok_or_else(|| eyre::eyre!("File name contains invalid UTF-8"))?
+            .with_context(|| "File name contains invalid UTF-8")?
             .split('.') // ignore everything after the first `.`
             .next()
-            .unwrap(); // file_name is not empty as asserted by .file_name() already
+            .expect("File name is not empty as asserted by .file_name().");
         let abi_source = fs::read_to_string(&path)?;
 
         let name = match name_counter {
@@ -101,7 +101,7 @@ impl MultiMetadataAbigen {
         }
     }
 
-    pub fn build(&self) -> Result<TokenStream> {
+    pub fn build(&self) -> Result<TokenStream, anyhow::Error> {
         let mut ok_include_strs_code: Vec<TokenStream> = vec![];
 
         for (name, path) in self.names_and_abi_paths.clone() {
@@ -114,7 +114,7 @@ impl MultiMetadataAbigen {
                     .settings
                     .compilation_target
                     .pop_first()
-                    .ok_or_else(|| eyre::eyre!("Could not get name and lib from abi metadata."))?;
+                    .with_context(|| "Could not get name and lib from abi metadata.")?;
                 let var_abi_contract_name = format_ident!("{}_NAME", name.to_uppercase());
                 let var_abi_contract_path = format_ident!("{}_PATH", name.to_uppercase());
                 let abi_contract_name = Literal::string(&abi_contract_name);
@@ -122,9 +122,9 @@ impl MultiMetadataAbigen {
 
                 let bytecode: ContractBytecode =
                     configurable_contract.into_contract_bytecode().into();
-                let bytecode = bytecode.bytecode.ok_or_else(|| {
-                    eyre::eyre!("Could not convert raw abi bytecode to bytecode.")
-                })?;
+                let bytecode = bytecode
+                    .bytecode
+                    .with_context(|| "Could not convert raw abi bytecode to bytecode.")?;
 
                 match bytecode.object {
                     BytecodeObject::Bytecode(_) => ok_include_strs_code.push(quote! {
@@ -154,7 +154,10 @@ impl MultiMetadataAbigen {
         })
     }
 
-    pub fn write_to_module(binding: TokenStream, mod_path: impl AsRef<Path>) -> Result<()> {
+    pub fn write_to_module(
+        binding: TokenStream,
+        mod_path: impl AsRef<Path>,
+    ) -> Result<(), anyhow::Error> {
         let mod_path = mod_path.as_ref();
         let file = mod_path.join("metadata.rs");
         let syntax_tree = syn::parse2::<syn::File>(binding)?;

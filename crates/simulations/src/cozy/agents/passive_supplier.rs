@@ -60,9 +60,12 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         channel.send(SimUpdate::Evm(
             self.token
                 .build_max_approve_router_tx(self.address, self.cozyrouter.address)
-                .unwrap(),
+                .expect("PassiveSupplier failed to build approve router tx."),
         ));
-        self.capital = self.token.read_token_balance(self.address, state).unwrap();
+        self.capital = self
+            .token
+            .read_token_balance(self.address, state)
+            .expect("PassiveSupplier failed to read token balance.");
         self.last_action_time = state.read_timestamp();
     }
 
@@ -73,7 +76,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 
         let mut sets = state.world.sets.values().clone();
         if !sets.is_empty() {
-            sets.sort_by(|a, b| a.apy.partial_cmp(&b.apy).unwrap());
+            sets.sort_by(|a, b| a.apy.partial_cmp(&b.apy).expect("f64 comparison."));
             let deposit_tx = self
                 .cozyrouter
                 .build_deposit_tx(
@@ -85,7 +88,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
                         min_shares_received: EthersU256::from(0),
                     },
                 )
-                .unwrap();
+                .expect("PassiveSupplier failed to build deposit tx.");
             channel.send(SimUpdate::Evm(deposit_tx));
         }
     }
@@ -94,7 +97,10 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
         if !self.is_time_to_act(state.read_timestamp()) {
             return;
         }
-        self.capital = self.token.read_token_balance(self.address, state).unwrap();
+        self.capital = self
+            .token
+            .read_token_balance(self.address, state)
+            .expect("PassiveSupplier failed to read token balance.");
         self.last_action_time = state.read_timestamp();
     }
 }

@@ -3,28 +3,15 @@ use ethers::{
     prelude::BaseContract as EthersBaseContract,
     types::H256 as EthersH256,
 };
-use eyre::Result;
 use revm::primitives::B256;
-use thiserror::Error;
 
-use crate::{EthersBytes, EvmBytes};
+use crate::{contract::errors::SimContractError, EthersBytes, EvmBytes};
 
-#[derive(Error, Debug)]
-pub enum SimContractError {
-    #[error("could not encode function")]
-    EncodeFuncFailure,
-    #[error("could not decode output")]
-    DecodeOutputFailure,
-    #[error("could not decode event")]
-    DecodeEventFailure,
-    #[error("could not decode error")]
-    DecodeErrorFailure,
-}
+type SimContractResult<T> = Result<T, SimContractError>;
 
 #[derive(Debug, Clone)]
 /// A struct that wraps around the ethers `BaseContract` and adds some additional information relevant for revm and the simulation.
 /// # Fields
-/// * `address` - The address of the contract within the relevant [`SimulationEnvironment`].
 /// * `base_contract` - The ethers [`BaseContract`] that holds the ABI.
 /// * `bytecode` - The contract's deployed bytecode.
 pub struct SimContract {
@@ -43,12 +30,12 @@ impl SimContract {
         }
     }
 
-    pub fn encode_constructor(&self, args: impl Tokenize) -> Result<EvmBytes, SimContractError> {
+    pub fn encode_constructor(&self, args: impl Tokenize) -> SimContractResult<EvmBytes> {
         match &self.base_contract.abi().constructor {
             Some(constructor) => {
                 let encoded_vec = constructor
                     .encode_input(self.bytecode.to_vec(), &args.into_tokens())
-                    .map_err(|_| SimContractError::EncodeFuncFailure)?;
+                    .map_err(SimContractError::ConstructorEncodeError)?;
                 Ok(EvmBytes::from(encoded_vec))
             }
             None => Ok(self.bytecode.clone()),
@@ -65,10 +52,10 @@ impl SimContract {
         &self,
         function_name: &str,
         args: impl Tokenize,
-    ) -> Result<EvmBytes, SimContractError> {
+    ) -> SimContractResult<EvmBytes> {
         match self.base_contract.encode(function_name, args) {
             Ok(encoded) => Ok(encoded.into_iter().collect()),
-            _ => Err(SimContractError::EncodeFuncFailure),
+            Err(e) => Err(SimContractError::AbiError(e)),
         }
     }
 
@@ -82,10 +69,10 @@ impl SimContract {
         &self,
         function_name: &str,
         value: EvmBytes,
-    ) -> Result<D, SimContractError> {
+    ) -> SimContractResult<D> {
         self.base_contract
             .decode_output::<D, EvmBytes>(function_name, value)
-            .map_err(|_| SimContractError::DecodeOutputFailure)
+            .map_err(SimContractError::AbiError)
     }
 
     /// Decodes the logs for an event with the [`SimulationContract`].
@@ -100,14 +87,14 @@ impl SimContract {
         function_name: &str,
         log_topics: Vec<B256>,
         log_data: EvmBytes,
-    ) -> Result<D, SimContractError> {
+    ) -> SimContractResult<D> {
         let log_topics: Vec<EthersH256> = log_topics
             .into_iter()
             .map(|topic| EthersH256::from_slice(&topic.0))
             .collect();
         self.base_contract
             .decode_event(function_name, log_topics, log_data.into())
-            .map_err(|_| SimContractError::DecodeEventFailure)
+            .map_err(SimContractError::AbiError)
     }
 
     /// Decodes the error for an error with the [`SimulationContract`].
@@ -116,18 +103,13 @@ impl SimContract {
     /// * `value` - The data of the error.
     /// # Returns
     /// * `Vec<Token>` - The raw decoded error.
-    pub fn decode_error(
-        &self,
-        name: String,
-        value: EvmBytes,
-    ) -> Result<Vec<Token>, SimContractError> {
+    pub fn decode_error(&self, name: String, value: EvmBytes) -> SimContractResult<Vec<Token>> {
         let mut abi_errors = self.base_contract.abi().errors();
-        let predicate = |error: &&ethers::abi::ethabi::AbiError| error.name == name;
         let error = abi_errors
-            .find(predicate)
-            .ok_or(SimContractError::DecodeErrorFailure)?;
+            .find(|error| error.name == name)
+            .ok_or(SimContractError::MissingErrorName(name))?;
         error
             .decode(&value)
-            .map_err(|_| SimContractError::DecodeErrorFailure)
+            .map_err(|e| SimContractError::AbiError(e.into()))
     }
 }

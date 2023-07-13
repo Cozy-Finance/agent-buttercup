@@ -1,10 +1,6 @@
-#![warn(unsafe_code)]
-//! Lib crate for describing simulations.
-
 pub mod address;
 pub mod agent;
 pub mod contract;
-pub mod errors;
 pub mod manager;
 pub mod state;
 pub mod summarizer;

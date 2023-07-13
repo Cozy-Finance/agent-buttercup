@@ -59,18 +59,21 @@ impl Display for PassiveBuyerTxData {
 }
 
 impl FromStr for PassiveBuyerTxData {
-    type Err = String;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut parts = s.split_whitespace().collect::<Vec<_>>();
         if parts.len() != 4 {
-            return Err("Invalid input format".to_string());
+            return Err(anyhow::anyhow!(
+                "PassiveBuyerTxData string must split into four tokens: {}.",
+                s
+            ));
         }
 
-        let amt = EthersU256::from_dec_str(parts.pop().unwrap()).unwrap();
-        let market_id: u16 = parts.pop().unwrap().parse().unwrap();
-        let set_address: Address = parts.pop().unwrap().parse().unwrap();
-        let tx_type: String = parts.pop().unwrap().into();
+        let amt = EthersU256::from_dec_str(parts.pop().expect("Checked parts.len() == 4."))?;
+        let market_id: u16 = parts.pop().expect("Checked parts.len() == 4.").parse()?;
+        let set_address: Address = parts.pop().expect("Checked parts.len() == 4.").parse()?;
+        let tx_type: String = parts.pop().expect("Checked parts.len() == 4.").into();
 
         Ok(PassiveBuyerTxData {
             tx_type: tx_type.into(),
@@ -126,9 +129,12 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         channel.send(SimUpdate::Evm(
             self.token
                 .build_max_approve_router_tx(self.address, self.cozyrouter.address)
-                .unwrap(),
+                .expect("PassiveBuyer failed to build approve tx."),
         ));
-        self.capital = self.token.read_token_balance(self.address, state).unwrap();
+        self.capital = self
+            .token
+            .read_token_balance(self.address, state)
+            .expect("PassiveBuyer failed to read token balance.");
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
@@ -160,14 +166,14 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                 };
                 self.cozyrouter
                     .read_purchase_assets_needed(self.address, state, purchase_args)
-                    .unwrap()
+                    .expect("PassiveBuyer failed to read purchase assets needed.")
             })
             .collect::<Vec<_>>()
             .iter()
             .enumerate()
             .min_by(|(_, a), (_, b)| a.cmp(b))
             .map(|(index, _)| index)
-            .unwrap();
+            .expect("Checked that targets is not empty.");
 
         let (set_addr, set_market_id) = targets[target_set_idx];
         let purchase_args = cozy_router::PurchaseCall {
@@ -180,7 +186,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         let evm_tx = self
             .cozyrouter
             .build_purchase_tx(self.address, purchase_args)
-            .unwrap();
+            .expect("PassiveBuyer failed to build purchase tx.");
 
         channel.send_with_tag(
             SimUpdate::Evm(evm_tx),
@@ -201,18 +207,24 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
         if !self.is_time_to_act(state.read_timestamp()) {
             return;
         }
-        self.capital = self.token.read_token_balance(self.address, state).unwrap();
+        self.capital = self
+            .token
+            .read_token_balance(self.address, state)
+            .expect("PassiveBuyer failed to read token balance.");
         self.last_action_time = state.read_timestamp();
 
         if let Some(update_results) = state.update_results.get(&self.address) {
             for (tag, result) in update_results {
                 match result {
                     SimUpdateResult::Evm(result) if tag.parse::<PassiveBuyerTxData>().is_ok() => {
-                        let tx_data: PassiveBuyerTxData = tag.parse().unwrap();
+                        let tx_data: PassiveBuyerTxData =
+                            tag.parse().expect("PassiveBuyer failed to parse tag.");
                         if tx_data.tx_type == ACTIVE_BUYER_PURCHASE && is_execution_success(result)
                         {
-                            let ptokens_received =
-                                self.cozyrouter.decode_ptokens_received(result).unwrap();
+                            let ptokens_received = self
+                                .cozyrouter
+                                .decode_ptokens_received(result)
+                                .expect("PassiveBuyer failed to decode ptokens received.");
                             match self
                                 .ptokens_owned
                                 .get_mut(&(tx_data.set_address, tx_data.market_id))
@@ -239,7 +251,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             self.protection_owned += self
                 .set_logic
                 .read_protection_balance(self.address, state, *set_addr, *set_market_id, *ptokens)
-                .unwrap();
+                .expect("PassiveBuyer failed to read protection balance.");
         }
     }
 }
@@ -257,7 +269,12 @@ impl PassiveBuyer {
     ) -> Vec<(Address, u16)> {
         sets.iter()
             .filter(|set| set.trigger_lookup.contains_key(trigger))
-            .map(|set| (set.address, *set.trigger_lookup.get(trigger).unwrap()))
+            .map(|set| {
+                (
+                    set.address,
+                    *set.trigger_lookup.get(trigger).expect("Checked in filter."),
+                )
+            })
             .collect::<Vec<_>>()
     }
 }

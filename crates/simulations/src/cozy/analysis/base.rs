@@ -5,13 +5,13 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let workspace_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .to_str()
-        .unwrap();
+        .expect("CARGO_MANIFEST_DIR str.");
     let output_file_name = format!(
         "{}/output/summaries/{}_summary.json",
         workspace_path,
         chrono::Utc::now().to_rfc3339()
     );
-    runner.run(output_file_name.into());
+    runner.run(output_file_name.into())?;
 
     Ok(())
 }

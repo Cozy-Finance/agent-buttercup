@@ -1,5 +1,4 @@
 use bindings::{cost_model_dynamic_level_factory, cost_model_jump_rate_factory};
-use eyre::Result;
 use serde::Deserialize;
 
 use crate::cozy::{
@@ -10,7 +9,9 @@ use crate::cozy::{
     EthersU256,
 };
 
-pub fn build_cost_model_analysis_config_from_file(file: &str) -> Result<config::Config> {
+pub fn build_cost_model_analysis_config_from_file(
+    file: &str,
+) -> Result<config::Config, anyhow::Error> {
     let workspace_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
     let all_configs_dir = workspace_dir.join("src/cozy/configs/cost_model_analysis");
     let config_builder =
@@ -40,7 +41,7 @@ pub struct MisspecificationAnalysis {
 pub fn run_misspecification_analysis() -> Result<(), Box<dyn std::error::Error>> {
     let workspace_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .to_str()
-        .unwrap();
+        .expect("CARGO_MANIFEST_DIR str.");
     let jump_rate_runner = build_cozy_sim_runner_from_dir("cost_model_analysis/jump_rate_model")?;
     let dynamic_level_runner =
         build_cozy_sim_runner_from_dir("cost_model_analysis/dynamic_level_model")?;
@@ -110,10 +111,10 @@ pub fn run_misspecification_analysis() -> Result<(), Box<dyn std::error::Error>>
             );
             jump_rate_runner_mut
                 .clone()
-                .run(jump_rate_output_file_name.into());
+                .run(jump_rate_output_file_name.into())?;
             dynamic_level_runner_mut
                 .clone()
-                .run(dynamic_level_output_file_name.into());
+                .run(dynamic_level_output_file_name.into())?;
         }
 
         kink_cost += step_size;

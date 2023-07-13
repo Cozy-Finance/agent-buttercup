@@ -1,6 +1,5 @@
 use std::borrow::Cow;
 
-use eyre::Result;
 use serde::{Deserialize, Deserializer, Serializer};
 
 use crate::cozy::EthersU256;
