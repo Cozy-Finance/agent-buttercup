@@ -1,7 +1,6 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 pub use bindings::drip_decay_model_constant_factory;
-use eyre::Result;
 use rand_distr::{Bernoulli, Distribution};
 use revm::primitives::{create_address, TxEnv};
 use simulate::{
@@ -12,6 +11,7 @@ use simulate::{
 };
 
 use crate::cozy::{
+    agents::errors::CozyAgentResult,
     bindings_wrapper::*,
     distributions::TriggerProbModel,
     types::CozyTriggerType,
@@ -78,7 +78,7 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
 
                     let (addr, evm_tx) = self
                         .build_deploy_dummy_trigger_tx(state, &mut nonce)
-                        .unwrap();
+                        .expect("TriggerDeployer failed to build dummy trigger tx.");
                     let world_update = CozyUpdate::AddToTriggers(CozyTrigger::new(
                         name.clone(),
                         addr,
@@ -101,7 +101,9 @@ impl Agent<CozyUpdate, CozyWorld> for TriggersDeployer {
             match trigger_prob_model {
                 Some(model) => {
                     let prob = model.step(&mut self.rng);
-                    let triggered = Bernoulli::new(prob).unwrap().sample(&mut self.rng);
+                    let triggered = Bernoulli::new(prob)
+                        .expect("0 <= prob <= 1")
+                        .sample(&mut self.rng);
                     let prob_world_update =
                         CozyUpdate::UpdateTriggerData(name.clone(), model.step(&mut self.rng));
                     channel.send(SimUpdate::World(prob_world_update));
@@ -121,12 +123,12 @@ impl TriggersDeployer {
         &self,
         _state: &SimState<CozyUpdate, CozyWorld>,
         nonce: &mut u64,
-    ) -> Result<(Address, TxEnv)> {
+    ) -> CozyAgentResult<(Address, TxEnv)> {
         let args: EthersAddress = self.manager.address.into();
         let (tx, _) = build_deploy_tx_and_contract(
             self.address,
             DUMMYTRIGGER.abi,
-            DUMMYTRIGGER.bytecode.unwrap(),
+            DUMMYTRIGGER.bytecode.expect("Linked bytecode."),
             args,
         )?;
         let addr = create_address(self.address.into(), *nonce);

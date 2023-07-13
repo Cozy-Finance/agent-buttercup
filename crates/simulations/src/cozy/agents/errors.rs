@@ -1,7 +1,9 @@
-use thiserror::Error;
+use simulate::address::Address;
 
-#[derive(Debug, Error)]
+#[derive(Debug, thiserror::Error)]
 pub enum CozyAgentError {
-    #[error("unregistered address")]
-    UnregisteredAddress,
+    #[error("Unregistered address: {0}.")]
+    UnregisteredAddress(Address),
 }
+
+pub type CozyAgentResult<T> = Result<T, anyhow::Error>;

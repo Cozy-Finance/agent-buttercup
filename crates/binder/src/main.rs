@@ -2,7 +2,6 @@ use std::{collections::HashMap, fs, io::Write, path::PathBuf};
 
 use clap::Parser;
 use ethers_contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, SelectContracts};
-use eyre::Result;
 use multi_metadata::{MultiMetadataAbigen, RawAbiData};
 
 mod multi_metadata;
@@ -83,13 +82,13 @@ impl Binder {
     }
 
     /// Instantiate the `MultiAbigen` and `MultiRawAbis`.
-    fn get_multi(&self) -> Result<(MultiAbigen, MultiMetadataAbigen)> {
+    fn get_multi(&self) -> Result<(MultiAbigen, MultiMetadataAbigen), anyhow::Error> {
         // Counter to increment contract names in case of collisions.
         let mut contract_name_counter: HashMap<String, u64> = HashMap::new();
         // Build a vec of raw abigen data.
         let mut multi_raw_abigen_data = utils::json_files(&self.abis)
             .map(|path| RawAbiData::from_path(path, Some(&mut contract_name_counter)))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Result<Vec<_>, anyhow::Error>>()?;
 
         // Apply filter to `multi_raw_abigen_data`.
         multi_raw_abigen_data.retain(|data| self.get_filter().is_match(&data.name));
@@ -100,14 +99,15 @@ impl Binder {
             .map(|data| {
                 Abigen::new(data.name.clone(), data.abi_source.clone())
                     .map(|abigen| abigen.format(true))
+                    .map_err(|e| anyhow::anyhow!(e))
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Result<Vec<_>, anyhow::Error>>()?;
         let multi_abigen = MultiAbigen::from_abigens(abigens);
-        eyre::ensure!(!multi_abigen.is_empty(), "No contract artifacts found.");
+        anyhow::ensure!(!multi_abigen.is_empty(), "No contract artifacts found.");
 
         // Build `MultiMetadataAbigen`.
         let multi_metadata_abigen = MultiMetadataAbigen::new(multi_raw_abigen_data);
-        eyre::ensure!(
+        anyhow::ensure!(
             !multi_metadata_abigen.is_empty(),
             "No contract artifacts found."
         );
@@ -116,31 +116,35 @@ impl Binder {
     }
 
     /// Check that the existing bindings match the expected abigen output
-    fn check_existing_bindings(&self) -> Result<()> {
+    fn check_existing_bindings(&self) -> Result<(), anyhow::Error> {
         let (multi_abigen, _) = self.get_multi()?;
-        let contract_bindings = multi_abigen.build()?;
+        let contract_bindings = multi_abigen.build().map_err(|e| anyhow::anyhow!(e))?;
 
         println!(
             "Checking bindings for {} contracts.",
             contract_bindings.len()
         );
-        contract_bindings.ensure_consistent_module(self.module_root(), false)?;
+        contract_bindings
+            .ensure_consistent_module(self.module_root(), false)
+            .map_err(|e| anyhow::anyhow!(e))?;
         println!("OK.");
 
         Ok(())
     }
 
-    fn generate_bindings(&self, write_exports: bool) -> Result<()> {
+    fn generate_bindings(&self, write_exports: bool) -> Result<(), anyhow::Error> {
         let (multi_abigen, multi_metadata_abigen) = self.get_multi()?;
 
         // Write contract bindings to crate.
-        let contract_bindings = multi_abigen.build()?;
+        let contract_bindings = multi_abigen.build().map_err(|e| anyhow::anyhow!(e))?;
         println!(
             "Generating contract bindings for {} contracts.",
             contract_bindings.len()
         );
 
-        contract_bindings.write_to_module(self.module_root(), false)?;
+        contract_bindings
+            .write_to_module(self.module_root(), false)
+            .map_err(|e| anyhow::anyhow!(e))?;
 
         let metadata_binding = multi_metadata_abigen.build()?;
         println!(
@@ -162,7 +166,7 @@ impl Binder {
     }
 }
 
-fn main() -> Result<()> {
+fn main() -> Result<(), anyhow::Error> {
     let binder = Binder::parse();
 
     let bindings_exist = binder.bindings_exist();

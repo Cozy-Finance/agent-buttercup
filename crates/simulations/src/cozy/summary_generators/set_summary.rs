@@ -44,7 +44,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
     fn get_summary(
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
-    ) -> eyre::Result<Value> {
+    ) -> Result<Value, anyhow::Error> {
         let mut set_data = vec![];
 
         let sets = sim_state.world.sets.values();

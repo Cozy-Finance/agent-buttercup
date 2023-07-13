@@ -1,7 +1,6 @@
 use std::{collections::HashMap, thread};
 
 use crossbeam_channel::unbounded;
-use eyre::Result;
 
 use crate::{
     agent::{
@@ -9,11 +8,20 @@ use crate::{
         types::AgentId,
         Agent,
     },
-    errors::*,
-    state::{update::UpdateData, world::World, SimState},
+    state::{errors::SimStateError, update::UpdateData, world::World, SimState},
     summarizer::{Summarizer, SummaryGenerator},
     time_policy::TimePolicy,
 };
+
+type SimManagerResult<T> = Result<T, SimManagerError>;
+
+#[derive(thiserror::Error, Debug)]
+pub enum SimManagerError {
+    #[error("Address collision for agent id: {0:?}.")]
+    AddressCollision(AgentId),
+    #[error("Error interacting with state.")]
+    SimStateError(#[from] SimStateError),
+}
 
 pub struct SimManager<U: UpdateData, W: World<WorldUpdateData = U>> {
     pub time_policy: Box<dyn TimePolicy>,
@@ -37,7 +45,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
     }
 
     /// Run the time policy and agents to update the simulation environment.
-    pub fn run_sim(&mut self) {
+    pub fn run_sim(&mut self) -> SimManagerResult<()> {
         // Initiate block time policy.
         self.state
             .update_time_env(self.time_policy.current_time_env());
@@ -57,7 +65,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             });
 
             for update in receiver.iter() {
-                self.state.execute(update);
+                self.state
+                    .execute(update)
+                    .map_err(SimManagerError::SimStateError)?;
             }
 
             // Let agents resolve the step.
@@ -68,7 +78,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             });
 
             // Run summarizers.
-            let _ = self.summarizer.output_summaries(&self.state);
+            self.summarizer.output_summaries(&self.state);
 
             // Clear all results.
             self.state.clear_all_results();
@@ -76,15 +86,14 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
             // Update time policy.
             self.state.update_time_env(self.time_policy.step());
         }
+
+        Ok(())
     }
 
     /// Adds and activates an agent to be put in the collection of agents under the manager's control.
     /// # Arguments
     /// * `new_agent` - The agent to be added to the collection of agents.
-    pub fn activate_agent(
-        &mut self,
-        mut new_agent: Box<dyn Agent<U, W>>,
-    ) -> Result<(), SimManagerError> {
+    pub fn activate_agent(&mut self, mut new_agent: Box<dyn Agent<U, W>>) -> SimManagerResult<()> {
         // Register agent account info.
         let id = new_agent.id();
         if self.agents.contains_key(&id) {
@@ -92,7 +101,8 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         }
 
         self.state
-            .insert_account_info(id.address, new_agent.account_info());
+            .insert_account_info(id.address, new_agent.account_info())
+            .map_err(SimManagerError::SimStateError)?;
 
         // Runs the agent's activation step and queue updates.
         let (sender, receiver) = unbounded::<AgentSimUpdate<U>>();
@@ -102,7 +112,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimManager<U, W> {
         // Execute queued updates.
         drop(sender);
         for update in receiver.iter() {
-            self.state.execute(update);
+            self.state
+                .execute(update)
+                .map_err(SimManagerError::SimStateError)?;
         }
 
         // Resolve activation step.

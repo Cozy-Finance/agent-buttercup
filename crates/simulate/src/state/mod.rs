@@ -5,12 +5,12 @@ use revm::{
     primitives::{AccountInfo, Env, ExecutionResult, TxEnv, U256 as EvmU256},
     EVM,
 };
-use thiserror::Error;
 
 use crate::{
     address::Address,
     agent::agent_channel::AgentSimUpdate,
     state::{
+        errors::SimStateError,
         update::{SimUpdate, SimUpdateResult, UpdateData},
         world::World,
     },
@@ -18,14 +18,11 @@ use crate::{
     utils::*,
 };
 
+pub mod errors;
 pub mod update;
 pub mod world;
 
-#[derive(Error, Debug)]
-pub enum SimStateError {
-    #[error("Evm db error")]
-    EvmDbError,
-}
+type SimStateResult<T> = Result<T, SimStateError>;
 
 #[derive(Clone, Default)]
 pub struct SimState<U: UpdateData, W: World<WorldUpdateData = U>> {
@@ -47,18 +44,17 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         }
     }
 
-    pub fn get_read_db(&self) -> &CacheDB<EmptyDB> {
-        self.evm.db.as_ref().expect("Db not initalized.")
+    pub fn get_read_db(&self) -> SimStateResult<&CacheDB<EmptyDB>> {
+        self.evm.db.as_ref().ok_or(SimStateError::EvmDBNotSet)
     }
 
-    pub fn read_account_info(&self, address: Address) -> AccountInfo {
+    pub fn read_account_info(&self, address: Address) -> SimStateResult<AccountInfo> {
         let account_info = self
-            .get_read_db()
+            .get_read_db()?
             .basic(address.into())
-            .expect("Db not initialized")
-            .expect("Account not found");
-        log::debug!("{:?}", account_info);
-        account_info
+            .map_err(|e| SimStateError::EvmStateError(e.into()))?
+            .ok_or(SimStateError::AccountNotFound(address))?;
+        Ok(account_info)
     }
 
     pub fn read_timestamp(&self) -> EvmU256 {
@@ -69,18 +65,25 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         self.evm.env.block.number
     }
 
-    pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
+    pub fn simulate_evm_tx_ref(
+        &self,
+        tx: &TxEnv,
+        env: Option<Env>,
+    ) -> SimStateResult<ExecutionResult> {
         // Create a sim_evm with no db and cloned and/or passed env (fairly cheap).
         let env = env.unwrap_or(self.evm.env.clone());
         let mut sim_evm = EVM::with_env(env);
         // Set sim_evm's db to a ref of the actual evm's db.
-        sim_evm.database(self.get_read_db());
+        sim_evm.database(self.get_read_db()?);
         // Update env to new tx.
         sim_evm.env.tx = tx.clone();
         // We can now use the sim_evm to simulate the tx without writing to db.
         match sim_evm.transact_ref() {
-            Ok(result_and_state) => result_and_state.result,
-            Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
+            Ok(result_and_state) => Ok(result_and_state.result),
+            Err(e) => Err(SimStateError::EvmStateError(anyhow::format_err!(
+                "Error while simulating evm tx: {:?}",
+                e
+            ))),
         }
     }
 
@@ -93,11 +96,17 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     }
 
     // Add an account to evm.
-    pub fn insert_account_info(&mut self, address: Address, account_info: AccountInfo) {
+    pub fn insert_account_info(
+        &mut self,
+        address: Address,
+        account_info: AccountInfo,
+    ) -> SimStateResult<()> {
         self.evm
             .db()
-            .expect("Db not initialized")
+            .ok_or(SimStateError::EvmDBNotSet)?
             .insert_account_info(address.into(), account_info);
+
+        Ok(())
     }
 
     /// Execute a transaction in the execution environment.
@@ -105,11 +114,14 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn execute_evm_tx(&mut self, tx: TxEnv) -> ExecutionResult {
+    pub fn execute_evm_tx(&mut self, tx: TxEnv) -> SimStateResult<ExecutionResult> {
         self.evm.env.tx = tx;
         match self.evm.transact_commit() {
-            Ok(result) => result,
-            Err(e) => panic!("Raw evm tx execution failed: {:?}.", e),
+            Ok(result) => Ok(result),
+            Err(e) => Err(SimStateError::EvmStateError(anyhow::format_err!(
+                "Error while executing evm tx: {:?}",
+                e
+            ))),
         }
     }
 
@@ -118,11 +130,14 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// * `tx` - The transaction environment that is used to execute the transaction.
     /// # Returns
     /// * `ExecutionResult` - The execution result of the transaction.
-    pub fn simulate_evm_tx(&mut self, tx: &TxEnv) -> ExecutionResult {
+    pub fn simulate_evm_tx(&mut self, tx: &TxEnv) -> SimStateResult<ExecutionResult> {
         self.evm.env.tx = tx.clone();
         match self.evm.transact() {
-            Ok(result_and_state) => result_and_state.result,
-            Err(e) => panic!("Raw evm tx simulation failed: {:?}.", e),
+            Ok(result_and_state) => Ok(result_and_state.result),
+            Err(e) => Err(SimStateError::EvmStateError(anyhow::format_err!(
+                "Error while simulating evm tx: {:?}",
+                e
+            ))),
         }
     }
 
@@ -153,10 +168,10 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         }
     }
 
-    pub fn execute(&mut self, agent_update: AgentSimUpdate<U>) {
+    pub fn execute(&mut self, agent_update: AgentSimUpdate<U>) -> SimStateResult<()> {
         match agent_update.update {
             SimUpdate::Evm(tx) => {
-                let result = self.execute_evm_tx(tx);
+                let result = self.execute_evm_tx(tx)?;
                 if let Some(tag) = agent_update.tag {
                     self.insert_into_update_results(
                         tag,
@@ -176,10 +191,10 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 }
             }
             SimUpdate::Bundle(tx, update) => {
-                let sim_evm_result = self.simulate_evm_tx(&tx);
+                let sim_evm_result = self.simulate_evm_tx(&tx)?;
                 let bundle_success = is_execution_success(&sim_evm_result);
                 if bundle_success {
-                    let evm_result = self.execute_evm_tx(tx);
+                    let evm_result = self.execute_evm_tx(tx)?;
                     let world_result = self.execute_world_update(update);
                     if let Some(tag) = agent_update.tag {
                         self.insert_into_update_results(
@@ -200,13 +215,13 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 let sim_evm_results = txs
                     .iter()
                     .map(|t| self.simulate_evm_tx(t))
-                    .collect::<Vec<_>>();
+                    .collect::<Result<Vec<_>, SimStateError>>()?;
                 let bundle_success = sim_evm_results.iter().map(is_execution_success).all(|x| x);
                 if bundle_success {
                     let evm_results = txs
                         .into_iter()
                         .map(|tx| self.execute_evm_tx(tx))
-                        .collect::<Vec<_>>();
+                        .collect::<Result<Vec<_>, SimStateError>>()?;
                     let world_results = updates
                         .into_iter()
                         .map(|update| self.execute_world_update(update))
@@ -227,5 +242,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
                 }
             }
         }
+
+        Ok(())
     }
 }

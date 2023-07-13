@@ -1,7 +1,5 @@
 use std::path::{Path, PathBuf};
 
-use eyre::Result;
-
 /// Returns a list of absolute paths to all the json files under the root.
 pub fn json_files(root: &impl AsRef<Path>) -> impl Iterator<Item = PathBuf> {
     walkdir::WalkDir::new(root)

@@ -20,6 +20,7 @@ pub trait Agent<U: UpdateData, W: World<WorldUpdateData = U>>: Sync + Send {
         }
     }
 
+    /// Returns the account info of the agent.
     fn account_info(&self) -> AccountInfo {
         AccountInfo::default()
     }

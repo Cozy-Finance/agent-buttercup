@@ -12,7 +12,7 @@ ethers-contract.workspace = true
 revm.workspace = true
 
 thiserror.workspace = true
-eyre.workspace = true
+anyhow.workspace = true
 rand.workspace = true
 
 crossbeam-channel.workspace = true

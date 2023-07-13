@@ -18,7 +18,7 @@ simulations = { path = "./crates/simulations" }
 
 # Error handling
 thiserror = "1.0.40"
-eyre = "0.6.8"
+anyhow = "1.0.7"
 
 # External
 tokio = { version = "1.28.1", features = [

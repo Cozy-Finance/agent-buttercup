@@ -39,7 +39,7 @@ pub struct Exponential {
 
 impl CozyDistribution<f64> for Exponential {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> f64 {
-        let exp = Exp::new(self.rate).unwrap();
+        let exp = Exp::new(self.rate).expect("Exponential distribution rate should be valid.");
         exp.sample(rng)
     }
 }
@@ -49,8 +49,8 @@ impl Exponential {
         let sample = self.sample(rng);
         match &self.time_unit {
             TimeUnit::Second => sample,
-            TimeUnit::Hour => sample * SECONDS_IN_MINUTE.to_f64().unwrap(),
-            TimeUnit::Day => sample * SECONDS_IN_DAY.to_f64().unwrap(),
+            TimeUnit::Hour => sample * SECONDS_IN_MINUTE.to_f64().expect("u64 to f64"),
+            TimeUnit::Day => sample * SECONDS_IN_DAY.to_f64().expect("u64 to f64"),
         }
     }
 }
@@ -112,10 +112,10 @@ impl TriggerProbModel {
             self.annualized_logit_std
                 * (self.step_in_secs as f64 / SECONDS_IN_YEAR as f64)
                     .to_f64()
-                    .unwrap()
+                    .expect("u64 to f64")
                     .sqrt(),
         )
-        .unwrap();
+        .expect("Normal distribution params should be valid.");
         self.current_logit = normal.sample(rng);
         self.current_prob = logistic(self.current_logit);
         self.current_prob
@@ -141,7 +141,8 @@ impl TruncatedNorm {
     }
 
     pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> f64 {
-        let normal = Normal::new(self.mean, self.std).unwrap();
+        let normal =
+            Normal::new(self.mean, self.std).expect("Normal distribution params should be valid.");
 
         let mut sample = normal.sample(rng);
         while !(sample >= self.lower_bd && sample <= self.upper_bd) {

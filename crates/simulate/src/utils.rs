@@ -1,33 +1,14 @@
-//! Module for utility functionality.
-use std::{
-    error::Error,
-    fmt::{Display, Formatter, Result as FmtResult},
-};
-
 use bytes::Bytes;
 use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256 as EvmU256};
 
 use crate::{address::Address, agent::types::AgentTxGas, EvmBytes};
 
-#[derive(Debug)]
-/// Error type for the simulation manager.
-/// # Fields
-/// * `message` - Error message.
-/// * `output` - Byte output of the error.
-pub struct UnpackError {
-    /// Error message.
-    pub message: String,
-    /// Byte output of the error.
-    pub output: Option<Bytes>,
-}
-
-impl Error for UnpackError {}
-
-impl Display for UnpackError {
-    /// Display the error message.
-    fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{}", self.message)
-    }
+#[derive(thiserror::Error, Debug)]
+pub enum FailedExecutionError {
+    #[error("{0}")]
+    Halted(String),
+    #[error("{0}")]
+    Reverted(String, Bytes),
 }
 
 /// Takes an `ExecutionResult` and returns the raw bytes of the output that can then be decoded.
@@ -35,26 +16,23 @@ impl Display for UnpackError {
 /// * `execution_result` - The `ExecutionResult` that we want to unpack.
 /// # Returns
 /// * `Ok(Bytes)` - The raw bytes of the output.
-pub fn unpack_execution(execution_result: ExecutionResult) -> Result<Bytes, UnpackError> {
+pub fn unpack_execution(execution_result: ExecutionResult) -> Result<Bytes, FailedExecutionError> {
     match execution_result {
         ExecutionResult::Success { output, .. } => match output {
             Output::Call(value) => Ok(value),
             Output::Create(value, _address) => Ok(value),
         },
-        ExecutionResult::Halt { reason, gas_used } => Err(UnpackError {
-            message: format!(
-                "This call halted for {:#?} and used {} gas.",
-                reason, gas_used
-            ),
-            output: None,
-        }),
-        ExecutionResult::Revert { output, gas_used } => Err(UnpackError {
-            message: format!(
+        ExecutionResult::Halt { reason, gas_used } => Err(FailedExecutionError::Halted(format!(
+            "This call halted for {:#?} and used {} gas.",
+            reason, gas_used
+        ))),
+        ExecutionResult::Revert { output, gas_used } => Err(FailedExecutionError::Reverted(
+            format!(
                 "This call reverted with output {:#?} and used {} gas.",
                 output, gas_used
             ),
-            output: Some(output),
-        }),
+            output,
+        )),
     }
 }
 

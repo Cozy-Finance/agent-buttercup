@@ -61,7 +61,7 @@ impl Agent<CozyUpdate, CozyWorld> for DripDecayModelsDeployer {
                             state,
                             args.clone(),
                         )
-                        .unwrap();
+                        .expect("DripDecayModelsDeployer failed to build constant model tx.");
                     let world_update = CozyUpdate::AddToDripDecayModels(CozyDripDecayModel::new(
                         (*name).clone(),
                         addr,
