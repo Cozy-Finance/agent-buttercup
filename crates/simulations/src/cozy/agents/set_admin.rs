@@ -11,6 +11,7 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
+    u256::U256,
 };
 
 pub use crate::cozy::constants;
@@ -21,7 +22,6 @@ use crate::cozy::{
     utils::wad,
     world::{CozySet, CozyUpdate, CozyWorld},
     world_contracts::{CozyManager, CozySetLogic},
-    EthersU256,
 };
 
 pub struct SetAdmin {
@@ -129,7 +129,7 @@ impl SetAdmin {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         market_num: usize,
-    ) -> CozyAgentResult<EthersU256> {
+    ) -> CozyAgentResult<U256> {
         let market_data = self
             .set_logic
             .read_market_data(
@@ -143,12 +143,12 @@ impl SetAdmin {
         let total_fees = market_data.purchases_fee_pool + market_data.sales_fee_pool;
         let drip_rate = market_data.last_drip_rate;
 
-        Ok(drip_rate * EthersU256::from(total_fees))
+        Ok(drip_rate * U256::from(total_fees))
     }
 
     fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> CozyAgentResult<f64> {
         let num_markets = self.set_admin_params.market_configs.len();
-        let mut total_market_return = EthersU256::from(0);
+        let mut total_market_return = U256::zero();
         for i in 0..num_markets {
             total_market_return += self.compute_market_return(state, i)?;
         }

@@ -1,10 +1,4 @@
 //! The block time policy that is used to fast forward time in the simulation is handled here.
-
-<<<<<<< HEAD
-use ethers::types::U256 as EthersU256;
-use revm::primitives::U256;
-=======
->>>>>>> 1f1e355 (init refac to custom u256 type)
 use thiserror::Error;
 
 use crate::u256::U256;
@@ -63,8 +57,8 @@ impl FixedTimePolicy {
         }
         Ok(FixedTimePolicy {
             current_time_env: TimeEnv {
-                number: EthersU256::from(start_block_number).into(),
-                timestamp: EthersU256::from(start_block_timestamp).into(),
+                number: start_block_number.into(),
+                timestamp: start_block_timestamp.into(),
             },
             time_per_block,
             blocks_per_step,

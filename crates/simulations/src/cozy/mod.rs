@@ -1,8 +1,8 @@
 pub use ethers::{
     abi::Contract as EthersContract,
-    types::{Bytes as EthersBytes, H160 as EthersAddress, U256 as EthersU256},
+    types::{Bytes as EthersBytes, H160 as EthersAddress},
 };
-pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress, U256 as EvmU256};
+pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
 
 pub mod agents;
 pub mod analysis;
