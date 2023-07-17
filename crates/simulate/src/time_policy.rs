@@ -1,8 +1,13 @@
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 
+<<<<<<< HEAD
 use ethers::types::U256 as EthersU256;
 use revm::primitives::U256;
+=======
+>>>>>>> 1f1e355 (init refac to custom u256 type)
 use thiserror::Error;
+
+use crate::u256::U256;
 
 #[derive(Debug, Copy, Clone)]
 pub struct TimeEnv {

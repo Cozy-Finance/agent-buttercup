@@ -6,6 +6,7 @@ pub mod state;
 pub mod summarizer;
 pub mod time_policy;
 pub mod utils;
+pub mod u256;
 
 pub use ethers::types::{Bytes as EthersBytes, H160 as EthersAddress};
 pub use revm::primitives::{Bytes as EvmBytes, B160 as EvmAddress};
