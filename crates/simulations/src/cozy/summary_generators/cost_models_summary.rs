@@ -6,7 +6,7 @@ use simulate::{address::Address, summarizer::SummaryGenerator};
 
 use crate::cozy::{
     types::CozyCostModelType,
-    utils::{serialize_EthersU256_to_u128, wad_to_float},
+    utils::{serialize_ethers_u256_to_u128, wad_to_float},
     world::{CozyUpdate, CozyWorld},
     world_contracts::{CozyDynamicLevelModel, CozyJumpRateModel, CozySetLogic},
     EthersU256,
@@ -17,13 +17,13 @@ pub struct CostData {
     utilization: f64,
     cost_factor: Option<f64>,
     refund_factor: Option<f64>,
-    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
+    #[serde(serialize_with = "serialize_ethers_u256_to_u128")]
     effective_active_protection: EthersU256,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct CostModelsSummary {
-    #[serde(serialize_with = "serialize_EthersU256_to_u128")]
+    #[serde(serialize_with = "serialize_ethers_u256_to_u128")]
     timestamp: EthersU256,
     set_data: Vec<(Address, Vec<CostData>)>,
 }
@@ -67,17 +67,12 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
             for i in 0..set.num_markets {
                 let utilization = self
                     .set_logic
-                    .read_utilization(self.address, sim_state, set.address, i as u16)
+                    .read_utilization(self.address, sim_state, set.address, i)
                     .unwrap_or(EthersU256::from(0));
 
                 let effective_active_protection = self
                     .set_logic
-                    .read_effective_active_protection(
-                        self.address,
-                        sim_state,
-                        set.address,
-                        i as u16,
-                    )
+                    .read_effective_active_protection(self.address, sim_state, set.address, i)
                     .unwrap_or(EthersU256::from(0));
 
                 let cost_model_addr = set.cost_model_lookup[&i];
@@ -121,14 +116,8 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                         .ok(),
                     )}
                 };
-                let float_cost_factor = match cost_factor {
-                    Some(cost_factor) => Some(wad_to_float(cost_factor)),
-                    None => None,
-                };
-                let float_refund_factor = match refund_factor {
-                    Some(refund_factor) => Some(wad_to_float(refund_factor)),
-                    None => None,
-                };
+                let float_cost_factor = cost_factor.map(wad_to_float);
+                let float_refund_factor = refund_factor.map(wad_to_float);
 
                 cost_data.push(CostData {
                     utilization: wad_to_float(utilization),

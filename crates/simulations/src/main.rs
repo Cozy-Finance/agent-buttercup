@@ -11,7 +11,7 @@ pub enum Sim {
 }
 
 impl Sim {
-    pub fn from_str(name: &str) -> Self {
+    pub fn map_from_str(name: &str) -> Self {
         match name {
             "base" => Sim::Base,
             "cost_model_analysis" => Sim::CostModelAnalysis,
@@ -41,7 +41,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    let sim = args.sim.as_deref().map_or(Sim::Base, Sim::from_str);
+    let sim = args.sim.as_deref().map_or(Sim::Base, Sim::map_from_str);
 
     match sim {
         Sim::Base => cozy::analysis::base::run()?,
