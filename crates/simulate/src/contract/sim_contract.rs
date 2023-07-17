@@ -1,11 +1,9 @@
-use ethers::{
-    abi::{Contract as EthersContract, Detokenize, Token, Tokenize},
-    prelude::BaseContract as EthersBaseContract,
-    types::H256 as EthersH256,
-};
-use revm::primitives::B256;
+use ethers::abi::{Detokenize, Token, Tokenize};
 
-use crate::{contract::errors::SimContractError, EthersBytes, EvmBytes};
+use crate::{
+    contract::errors::SimContractError, EthersBaseContract, EthersBytes, EthersContract,
+    EthersH256, EvmB256, EvmBytes,
+};
 
 type SimContractResult<T> = Result<T, SimContractError>;
 
@@ -85,7 +83,7 @@ impl SimContract {
     pub fn decode_event<D: Detokenize>(
         &self,
         function_name: &str,
-        log_topics: Vec<B256>,
+        log_topics: Vec<EvmB256>,
         log_data: EvmBytes,
     ) -> SimContractResult<D> {
         let log_topics: Vec<EthersH256> = log_topics

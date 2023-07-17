@@ -3,10 +3,10 @@ use std::{
     str::FromStr,
 };
 
-use ethers::types::H160;
 use rand::Rng;
-use revm::primitives::B160;
 use serde::{Deserialize, Serialize};
+
+use crate::{EthersAddress, EvmAddress};
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 #[serde(transparent)]
@@ -43,7 +43,7 @@ impl UpperHex for Address {
 
 impl Display for Address {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", Into::<B160>::into(self.value))?;
+        write!(f, "{}", Into::<EvmAddress>::into(self.value))?;
         Ok(())
     }
 }
@@ -53,30 +53,30 @@ impl FromStr for Address {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Address {
-            value: s.parse::<B160>()?.into(),
+            value: s.parse::<EvmAddress>()?.into(),
         })
     }
 }
 
-impl From<H160> for Address {
-    fn from(h160: H160) -> Self {
+impl From<EthersAddress> for Address {
+    fn from(h160: EthersAddress) -> Self {
         Address { value: h160.into() }
     }
 }
 
-impl From<B160> for Address {
-    fn from(b160: B160) -> Self {
+impl From<EvmAddress> for Address {
+    fn from(b160: EvmAddress) -> Self {
         Address { value: b160.into() }
     }
 }
 
-impl From<Address> for H160 {
+impl From<Address> for EthersAddress {
     fn from(val: Address) -> Self {
         val.value.into()
     }
 }
 
-impl From<Address> for B160 {
+impl From<Address> for EvmAddress {
     fn from(val: Address) -> Self {
         val.value.into()
     }
