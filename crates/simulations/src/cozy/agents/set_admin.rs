@@ -6,7 +6,6 @@ pub use bindings::{
     drip_decay_model_constant_factory, manager,
     set::{AccountingReturn, MarketsReturn},
 };
-use eyre::Result;
 use revm::primitives::bitvec::macros::internal::funty::Fundamental;
 use simulate::{
     address::Address,
@@ -16,6 +15,7 @@ use simulate::{
 
 pub use crate::cozy::constants;
 use crate::cozy::{
+    agents::errors::CozyAgentResult,
     constants::SECONDS_IN_YEAR,
     types::CozySetAdminParams,
     utils::wad,
@@ -85,7 +85,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
         let (set_addr, evm_tx) = self
             .manager
             .build_create_set_tx(self.address, state, create_set_args)
-            .unwrap();
+            .expect("SetAdmin failed to build create set tx.");
         self.set_address = Some(set_addr);
 
         let trigger_lookup = self
@@ -105,8 +105,8 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
             .collect::<HashMap<_, _>>();
 
         let world_update = CozyUpdate::AddToSets(CozySet::new(
-            self.set_name.clone().unwrap().into(),
-            self.set_address.unwrap(),
+            self.set_name.clone().expect("Set name set.").into(),
+            self.set_address.expect("Set address set."),
             trigger_lookup,
             cost_model_lookup,
             self.set_admin_params.market_configs.len() as u16,
@@ -117,8 +117,9 @@ impl Agent<CozyUpdate, CozyWorld> for SetAdmin {
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         channel.send(SimUpdate::World(CozyUpdate::UpdateSetData(
-            self.set_name.clone().unwrap().into(),
-            self.compute_current_apy(state).unwrap(),
+            self.set_name.clone().expect("Set name set.").into(),
+            self.compute_current_apy(state)
+                .expect("SetAdmin failed to compute current apy."),
         )));
     }
 }
@@ -128,11 +129,16 @@ impl SetAdmin {
         &self,
         state: &SimState<CozyUpdate, CozyWorld>,
         market_num: usize,
-    ) -> Result<EthersU256> {
+    ) -> CozyAgentResult<EthersU256> {
         let market_data = self
             .set_logic
-            .read_market_data(self.address, state, self.set_address.unwrap(), market_num)
-            .unwrap();
+            .read_market_data(
+                self.address,
+                state,
+                self.set_address.expect("Set address set."),
+                market_num,
+            )
+            .expect("SetAdmin failed to read market data.");
 
         let total_fees = market_data.purchases_fee_pool + market_data.sales_fee_pool;
         let drip_rate = market_data.last_drip_rate;
@@ -140,7 +146,7 @@ impl SetAdmin {
         Ok(drip_rate * EthersU256::from(total_fees))
     }
 
-    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> Result<f64> {
+    fn compute_current_apy(&self, state: &SimState<CozyUpdate, CozyWorld>) -> CozyAgentResult<f64> {
         let num_markets = self.set_admin_params.market_configs.len();
         let mut total_market_return = EthersU256::from(0);
         for i in 0..num_markets {
@@ -148,8 +154,12 @@ impl SetAdmin {
         }
         let total_assets = self
             .set_logic
-            .read_total_assets(self.address, state, self.set_address.unwrap())
-            .unwrap();
+            .read_total_assets(
+                self.address,
+                state,
+                self.set_address.expect("Set address set."),
+            )
+            .expect("SetAdmin failed to read total assets.");
 
         if total_assets > 0 {
             let apy = (total_market_return / total_assets).as_u128();

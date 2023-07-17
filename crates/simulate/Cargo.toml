@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 bytes.workspace = true
-eyre.workspace = true
+anyhow.workspace = true
 thiserror.workspace = true
 rand.workspace = true
 crossbeam-channel.workspace = true

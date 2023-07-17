@@ -1,7 +1,6 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
 use bindings::cozy_protocol::shared_types::{MarketConfig, SetConfig};
-use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
     address::Address,
@@ -12,6 +11,7 @@ use simulate::{
 };
 
 use crate::cozy::{
+    agents::errors::CozyAgentResult,
     bindings_wrapper::*,
     types::CozyProtocolDeployParams,
     utils::Counter,
@@ -65,11 +65,11 @@ impl Agent<CozyUpdate, CozyWorld> for ProtocolDeployer {
         log::info!("{:?} deploying protocol libraries.", self.name);
         let libraries = self
             .deploy_libraries(state, &channel, &mut nonce_counter)
-            .expect("Error deploying libraries.");
+            .expect("ProtocolDeployer failed to deploy libraries.");
         // Deploy core protocol.
         log::info!("{:?} deploying core protocol.", self.name);
         self.deploy_protocol(state, &channel, &libraries.clone(), &mut nonce_counter)
-            .expect("Error deploying protocol.");
+            .expect("ProtocolDeployer failed to deploy protocol.");
     }
 }
 
@@ -79,7 +79,7 @@ impl ProtocolDeployer {
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: &AgentChannel<CozyUpdate>,
         nonce_counter: &mut Counter,
-    ) -> Result<HashMap<Address, &BindingsWrapper>> {
+    ) -> CozyAgentResult<HashMap<Address, &BindingsWrapper>> {
         let mut libraries: HashMap<Address, &BindingsWrapper> = HashMap::new();
 
         let configurator_addr = Address::from(create_address(
@@ -117,37 +117,37 @@ impl ProtocolDeployer {
         let (configurator_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             CONFIGURATORLIB.abi,
-            CONFIGURATORLIB.bytecode.unwrap(),
+            CONFIGURATORLIB.bytecode.expect("Library bytecode."),
             (),
         )?;
         let (delay_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             DELAYLIB.abi,
-            DELAYLIB.bytecode.unwrap(),
+            DELAYLIB.bytecode.expect("Library bytecode."),
             (),
         )?;
         let (demand_side_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             DEMANDSIDELIB.abi,
-            DEMANDSIDELIB.bytecode.unwrap(),
+            DEMANDSIDELIB.bytecode.expect("Library bytecode."),
             (),
         )?;
         let (redemption_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             REDEMPTIONLIB.abi,
-            REDEMPTIONLIB.bytecode.unwrap(),
+            REDEMPTIONLIB.bytecode.expect("Library bytecode."),
             (),
         )?;
         let (state_transitions_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             STATETRANSITIONSLIB.abi,
-            STATETRANSITIONSLIB.bytecode.unwrap(),
+            STATETRANSITIONSLIB.bytecode.expect("Library bytecode."),
             (),
         )?;
         let (supply_side_lib_tx, _) = build_deploy_tx_and_contract(
             self.address,
             SUPPLYSIDELIB.abi,
-            SUPPLYSIDELIB.bytecode.unwrap(),
+            SUPPLYSIDELIB.bytecode.expect("Library bytecode."),
             (),
         )?;
 
@@ -171,7 +171,7 @@ impl ProtocolDeployer {
         channel: &AgentChannel<CozyUpdate>,
         libraries: &HashMap<Address, &BindingsWrapper>,
         nonce_counter: &mut Counter,
-    ) -> Result<()> {
+    ) -> CozyAgentResult<()> {
         // Pre-compute Cozy protocol addresses
         let manager_addr = EthersAddress::from(create_address(
             self.address.into(),
@@ -224,7 +224,7 @@ impl ProtocolDeployer {
         let (manager_tx, manager_contract) = build_deploy_tx_and_contract(
             self.address,
             MANAGER.abi,
-            MANAGER.bytecode.unwrap(),
+            MANAGER.bytecode.expect("Linked bytecode."),
             manager_args,
         )?;
         evm_updates.push(SimUpdate::Evm(manager_tx));
@@ -241,7 +241,7 @@ impl ProtocolDeployer {
         let (set_logic_tx, set_logic_contract) = build_unlinked_deploy_tx_and_contract(
             self.address,
             SET.abi,
-            SET.unlinked_bytecode.unwrap(),
+            SET.unlinked_bytecode.expect("Unlinked bytecode str."),
             links,
             set_logic_args,
         )?;
@@ -285,7 +285,7 @@ impl ProtocolDeployer {
         let (set_factory_tx, set_factory_contract) = build_deploy_tx_and_contract(
             self.address,
             SETFACTORY.abi,
-            SETFACTORY.bytecode.unwrap(),
+            SETFACTORY.bytecode.expect("Linked bytecode."),
             set_factory_args,
         )?;
         evm_updates.push(SimUpdate::Evm(set_factory_tx));
@@ -302,7 +302,7 @@ impl ProtocolDeployer {
         let (ptoken_logic_tx, ptoken_logic_contract) = build_deploy_tx_and_contract(
             self.address,
             PTOKEN.abi,
-            PTOKEN.bytecode.unwrap(),
+            PTOKEN.bytecode.expect("Linked bytecode."),
             ptoken_logic_args,
         )?;
 
@@ -332,7 +332,7 @@ impl ProtocolDeployer {
         let (ptoken_factory_tx, ptoken_factory_contract) = build_deploy_tx_and_contract(
             self.address,
             PTOKENFACTORY.abi,
-            PTOKENFACTORY.bytecode.unwrap(),
+            PTOKENFACTORY.bytecode.expect("Linked bytecode."),
             ptoken_factory_args,
         )?;
         evm_updates.push(SimUpdate::Evm(ptoken_factory_tx));
@@ -349,7 +349,7 @@ impl ProtocolDeployer {
         let (backstop_tx, backstop_contract) = build_deploy_tx_and_contract(
             self.address,
             BACKSTOP.abi,
-            BACKSTOP.bytecode.unwrap(),
+            BACKSTOP.bytecode.expect("Linked bytecode."),
             backstop_args,
         )?;
         evm_updates.push(SimUpdate::Evm(backstop_tx));
@@ -366,7 +366,7 @@ impl ProtocolDeployer {
         let (cozyrouter_tx, cozyrouter_contract) = build_deploy_tx_and_contract(
             self.address,
             COZYROUTER.abi,
-            COZYROUTER.bytecode.unwrap(),
+            COZYROUTER.bytecode.expect("Linked bytecode."),
             cozyrouter_args,
         )?;
         evm_updates.push(SimUpdate::Evm(cozyrouter_tx));
@@ -403,7 +403,7 @@ impl ProtocolDeployer {
         let (jump_rate_factory_tx, jump_rate_factory_contract) = build_deploy_tx_and_contract(
             self.address,
             COSTMODELJUMPRATEFACTORY.abi,
-            COSTMODELJUMPRATEFACTORY.bytecode.unwrap(),
+            COSTMODELJUMPRATEFACTORY.bytecode.expect("Linked bytecode."),
             (),
         )?;
         evm_updates.push(SimUpdate::Evm(jump_rate_factory_tx));
@@ -420,7 +420,9 @@ impl ProtocolDeployer {
             build_deploy_tx_and_contract(
                 self.address,
                 COSTMODELDYNAMICLEVELFACTORY.abi,
-                COSTMODELDYNAMICLEVELFACTORY.bytecode.unwrap(),
+                COSTMODELDYNAMICLEVELFACTORY
+                    .bytecode
+                    .expect("Linked bytecode."),
                 (),
             )?;
         evm_updates.push(SimUpdate::Evm(dynamic_level_factory_tx));
@@ -436,7 +438,9 @@ impl ProtocolDeployer {
         let (drip_decay_factory_tx, drip_decay_factory_contract) = build_deploy_tx_and_contract(
             self.address,
             DRIPDECAYMODELCONSTANTFACTORY.abi,
-            DRIPDECAYMODELCONSTANTFACTORY.bytecode.unwrap(),
+            DRIPDECAYMODELCONSTANTFACTORY
+                .bytecode
+                .expect("Linked bytecode."),
             (),
         )?;
         evm_updates.push(SimUpdate::Evm(drip_decay_factory_tx));
@@ -453,7 +457,7 @@ impl ProtocolDeployer {
         let (uma_trigger_factory_tx, uma_trigger_factory_contract) = build_deploy_tx_and_contract(
             self.address,
             UMATRIGGERFACTORY.abi,
-            UMATRIGGERFACTORY.bytecode.unwrap(),
+            UMATRIGGERFACTORY.bytecode.expect("Linked bytecode."),
             uma_trigger_factory_args,
         )?;
         evm_updates.push(SimUpdate::Evm(uma_trigger_factory_tx));
@@ -471,7 +475,7 @@ impl ProtocolDeployer {
             build_deploy_tx_and_contract(
                 self.address,
                 CHAINLINKTRIGGERFACTORY.abi,
-                CHAINLINKTRIGGERFACTORY.bytecode.unwrap(),
+                CHAINLINKTRIGGERFACTORY.bytecode.expect("Linked bytecode."),
                 chainlink_trigger_factory_args,
             )?;
         evm_updates.push(SimUpdate::Evm(chainlink_trigger_factory_tx));

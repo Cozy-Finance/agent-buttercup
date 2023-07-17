@@ -5,7 +5,6 @@ use crossbeam_channel::Sender;
 use super::types::AgentId;
 use crate::{
     address::Address,
-    errors::ChannelError,
     state::update::{SimUpdate, UpdateData},
 };
 
@@ -39,8 +38,7 @@ impl<U: UpdateData> AgentChannel<U> {
                 address: self.address,
                 tag: self.tag.clone().or(None),
             })
-            .map_err(ChannelError::SendError)
-            .unwrap();
+            .expect("Agent channel disconnected.");
     }
 
     pub fn send_with_tag(&self, update: SimUpdate<U>, tag: Cow<'static, str>) {
@@ -50,7 +48,6 @@ impl<U: UpdateData> AgentChannel<U> {
                 address: self.address,
                 tag: Some(tag),
             })
-            .map_err(ChannelError::SendError)
-            .unwrap();
+            .expect("Agent channel disconnected.");
     }
 }

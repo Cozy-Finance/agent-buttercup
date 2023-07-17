@@ -1,6 +1,5 @@
 use std::borrow::Cow;
 
-use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
     address::Address,
@@ -10,6 +9,7 @@ use simulate::{
 };
 
 use crate::cozy::{
+    agents::errors::CozyAgentResult,
     bindings_wrapper::*,
     world::{CozyUpdate, CozyWorld},
     world_contracts::Weth,
@@ -40,7 +40,8 @@ impl Agent<CozyUpdate, CozyWorld> for WethDeployer {
         channel: AgentChannel<CozyUpdate>,
     ) {
         log::info!("{:?} deploying wETH.", self.name);
-        let _ = self.deploy_weth(state, channel);
+        self.deploy_weth(state, channel)
+            .expect("Weth deployer failed to deploy wETH.");
     }
 }
 
@@ -49,9 +50,13 @@ impl WethDeployer {
         &mut self,
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
-    ) -> Result<()> {
-        let (evm_tx, weth_contract) =
-            build_deploy_tx_and_contract(self.address, WETH.abi, WETH.bytecode.unwrap(), ())?;
+    ) -> CozyAgentResult<()> {
+        let (evm_tx, weth_contract) = build_deploy_tx_and_contract(
+            self.address,
+            WETH.abi,
+            WETH.bytecode.expect("Linked bytecode."),
+            (),
+        )?;
         channel.send(SimUpdate::Evm(evm_tx));
 
         let weth_addr = create_address(self.address.into(), 0);

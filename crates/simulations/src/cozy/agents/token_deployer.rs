@@ -1,6 +1,5 @@
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
-use eyre::Result;
 use revm::primitives::create_address;
 use simulate::{
     address::Address,
@@ -11,6 +10,7 @@ use simulate::{
 };
 
 use crate::cozy::{
+    agents::errors::CozyAgentResult,
     bindings_wrapper::*,
     constants::BASE_TOKEN,
     types::CozyTokenDeployParams,
@@ -61,7 +61,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
     ) {
         log::info!("{:?} deploying base token.", self.name);
         self.deploy_token(state, channel)
-            .expect("Error deploying token.");
+            .expect("TokenDeployer failed to deploy token.");
     }
 
     fn resolve_activation_step(&mut self, state: &SimState<CozyUpdate, CozyWorld>) {
@@ -71,7 +71,7 @@ impl Agent<CozyUpdate, CozyWorld> for TokenDeployer {
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
         if !self.finished_allocating {
             self.allocate_token(state, channel)
-                .expect("Error allocating tokens");
+                .expect("TokenDeployer failed to allocate tokens.");
             self.finished_allocating = true;
         }
     }
@@ -82,11 +82,11 @@ impl TokenDeployer {
         &mut self,
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
-    ) -> Result<()> {
+    ) -> CozyAgentResult<()> {
         let (evm_tx, dummy_token_contract) = build_deploy_tx_and_contract(
             self.address,
             DUMMYTOKEN.abi,
-            DUMMYTOKEN.bytecode.unwrap(),
+            DUMMYTOKEN.bytecode.expect("Linked bytecode."),
             (
                 self.deploy_args.name.to_string(),
                 self.deploy_args.symbol.to_string(),
@@ -107,18 +107,18 @@ impl TokenDeployer {
         &mut self,
         _state: &SimState<CozyUpdate, CozyWorld>,
         channel: AgentChannel<CozyUpdate>,
-    ) -> Result<()> {
+    ) -> CozyAgentResult<()> {
         for (receiver, amount) in self.allocate_addrs.iter() {
             let receiver_address: EthersAddress = (*receiver).into();
             let call_data = self
                 .token
                 .as_ref()
-                .unwrap()
+                .expect("Token set.")
                 .contract
                 .encode_function("mint", (receiver_address, *amount))?;
             let tx = build_call_tx(
                 self.address,
-                self.token.as_ref().unwrap().address,
+                self.token.as_ref().expect("Token set").address,
                 call_data,
             );
             channel.send(SimUpdate::Evm(tx));

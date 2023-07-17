@@ -67,7 +67,7 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                     let (addr, evm_tx) = self
                         .jump_rate_factory
                         .build_deploy_cost_model_jump_rate_tx(self.address, state, args.clone())
-                        .unwrap();
+                        .expect("Cost mode deployer failed to build jump rate tx.");
                     let world_update = CozyUpdate::AddToCostModels(CozyCostModel::new(
                         (*name).clone(),
                         addr,
@@ -82,7 +82,10 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                                 addr,
                                 SimContract::new(
                                     COSTMODELJUMPRATE.abi.clone(),
-                                    COSTMODELJUMPRATE.bytecode.unwrap().clone(),
+                                    COSTMODELJUMPRATE
+                                        .bytecode
+                                        .expect("Linked bytecode.")
+                                        .clone(),
                                 ),
                             ));
                         channel.send(SimUpdate::World(world_update));
@@ -93,7 +96,7 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                     let (addr, evm_tx) = self
                         .dynamic_level_factory
                         .build_deploy_cost_model_dynamic_level_tx(self.address, state, args.clone())
-                        .unwrap();
+                        .expect("Cost mode deployer failed to build dynamic level tx.");
                     let world_update = CozyUpdate::AddToCostModels(CozyCostModel::new(
                         (*name).clone(),
                         addr,
@@ -108,7 +111,10 @@ impl Agent<CozyUpdate, CozyWorld> for CostModelsDeployer {
                                 addr,
                                 SimContract::new(
                                     COSTMODELDYNAMICLEVEL.abi.clone(),
-                                    COSTMODELDYNAMICLEVEL.bytecode.unwrap().clone(),
+                                    COSTMODELDYNAMICLEVEL
+                                        .bytecode
+                                        .expect("Linked bytecode.")
+                                        .clone(),
                                 ),
                             ));
                         channel.send(SimUpdate::World(world_update));

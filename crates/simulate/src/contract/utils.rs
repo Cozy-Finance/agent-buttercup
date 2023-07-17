@@ -1,8 +1,8 @@
 use ethers::abi::{Contract as EthersContract, Tokenize};
 use ethers_solc::artifacts::BytecodeObject;
-use eyre::{Result, *};
 use revm::primitives::{TransactTo, TxEnv, U256 as EvmU256};
 
+use super::errors::SimContractError;
 use crate::{
     address::Address, agent::types::AgentTxGas, contract::sim_contract::SimContract, EthersAddress,
     EthersBytes, EvmBytes,
@@ -11,12 +11,18 @@ use crate::{
 pub fn build_linked_bytecode(
     unlinked_bytecode_str: &str,
     links: Vec<(&str, &str, EthersAddress)>,
-) -> Result<EvmBytes> {
+) -> Result<EvmBytes, SimContractError> {
     let mut bytecode = BytecodeObject::Unlinked(unlinked_bytecode_str.to_string());
-    bytecode.link_all(links);
+    bytecode.link_all(links.clone());
     match bytecode.resolve() {
         Some(b) => Ok(b.0.clone()),
-        None => Err(eyre!("Could not link bytecode.")),
+        None => Err(SimContractError::BytecodeLinkingError(
+            unlinked_bytecode_str.to_string(),
+            links
+                .into_iter()
+                .map(|(a, b, c)| (a.to_string(), b.to_string(), c))
+                .collect(),
+        )),
     }
 }
 
@@ -25,7 +31,7 @@ pub fn build_deploy_tx_and_contract<T: Tokenize>(
     abi: &EthersContract,
     bytecode: &EthersBytes,
     args: T,
-) -> Result<(TxEnv, SimContract)> {
+) -> Result<(TxEnv, SimContract), SimContractError> {
     let contract = SimContract::new(abi.clone(), bytecode.clone());
     let tx_bytecode = contract.encode_constructor(args)?;
     Ok((build_deploy_tx(sender_addr, tx_bytecode), contract))
@@ -37,7 +43,7 @@ pub fn build_unlinked_deploy_tx_and_contract<T: Tokenize>(
     unlinked_bytecode: &str,
     links: Vec<(&str, &str, EthersAddress)>,
     args: T,
-) -> Result<(TxEnv, SimContract)> {
+) -> Result<(TxEnv, SimContract), SimContractError> {
     let linked_bytecode = build_linked_bytecode(unlinked_bytecode, links)?;
     let contract = SimContract::new(abi.clone(), EthersBytes(linked_bytecode));
     let tx_bytecode = contract.encode_constructor(args)?;

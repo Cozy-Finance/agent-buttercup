@@ -57,7 +57,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
     fn get_summary(
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
-    ) -> eyre::Result<Value> {
+    ) -> Result<Value, anyhow::Error> {
         let sets = sim_state.world.sets.values();
 
         let mut set_data = vec![];
@@ -80,7 +80,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                     .world
                     .cost_models
                     .get_by_addr(&cost_model_addr)
-                    .unwrap();
+                    .expect("Cost model addr obtained from set.cost_model_lookup.");
                 let (cost_factor, refund_factor) = match cost_model.model_type {
                     CozyCostModelType::JumpRate(_) => {
                     (
