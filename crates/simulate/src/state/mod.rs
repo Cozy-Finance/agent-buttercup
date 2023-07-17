@@ -15,8 +15,8 @@ use crate::{
         world::World,
     },
     time_policy::TimeEnv,
+    u256::U256,
     utils::*,
-    address::Address, u256::U256,
 };
 
 pub mod errors;
@@ -91,15 +91,9 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// Update the time env.
     /// # Arguments
     /// * `time_env` - The time env.
-<<<<<<< HEAD
     pub fn update_time_env(&mut self, time_env: TimeEnv) {
-        self.evm.env.block.number = time_env.number;
-        self.evm.env.block.timestamp = time_env.timestamp;
-=======
-    pub fn update_time_env(&mut self, time_env: &TimeEnv) {
         self.evm.env.block.number = time_env.number.into();
         self.evm.env.block.timestamp = time_env.timestamp.into();
->>>>>>> 1f1e355 (init refac to custom u256 type)
     }
 
     // Add an account to evm.

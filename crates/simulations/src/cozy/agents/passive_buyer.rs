@@ -14,6 +14,7 @@ use simulate::{
         update::{SimUpdate, SimUpdateResult},
         SimState,
     },
+    u256::{f64_to_u256, U256},
     utils::is_execution_success,
 };
 
@@ -21,7 +22,6 @@ use crate::cozy::{
     constants::*,
     world::{CozySet, CozyUpdate, CozyWorld},
     world_contracts::{CozyBaseToken, CozyRouter, CozySetLogic},
-    EthersU256, EvmU256,
 };
 
 pub struct PassiveBuyer {
@@ -31,18 +31,18 @@ pub struct PassiveBuyer {
     token: Arc<CozyBaseToken>,
     set_logic: Arc<CozySetLogic>,
     target_trigger: Address,
-    protection_desired: EthersU256,
-    protection_owned: EthersU256,
-    ptokens_owned: HashMap<(Address, u16), EthersU256>,
-    capital: EthersU256,
-    waiting_time: EvmU256,
-    last_action_time: EvmU256,
+    protection_desired: U256,
+    protection_owned: U256,
+    ptokens_owned: HashMap<(Address, u16), U256>,
+    capital: U256,
+    waiting_time: U256,
+    last_action_time: U256,
 }
 
 #[derive(Debug, Clone)]
 pub struct PassiveBuyerTxData {
     tx_type: Cow<'static, str>,
-    amt: EthersU256,
+    amt: U256,
     set_address: Address,
     market_id: u16,
 }
@@ -70,7 +70,7 @@ impl FromStr for PassiveBuyerTxData {
             ));
         }
 
-        let amt = EthersU256::from_dec_str(parts.pop().expect("Checked parts.len() == 4."))?;
+        let amt = U256::from_dec_str(parts.pop().expect("Checked parts.len() == 4."))?;
         let market_id: u16 = parts.pop().expect("Checked parts.len() == 4.").parse()?;
         let set_address: Address = parts.pop().expect("Checked parts.len() == 4.").parse()?;
         let tx_type: String = parts.pop().expect("Checked parts.len() == 4.").into();
@@ -93,7 +93,7 @@ impl PassiveBuyer {
         token: &Arc<CozyBaseToken>,
         set_logic: &Arc<CozySetLogic>,
         target_trigger: Address,
-        protection_desired: EthersU256,
+        protection_desired: U256,
         waiting_time: f64,
     ) -> Self {
         Self {
@@ -104,11 +104,11 @@ impl PassiveBuyer {
             set_logic: set_logic.clone(),
             target_trigger,
             protection_desired,
-            protection_owned: EthersU256::from(0),
+            protection_owned: U256::zero(),
             ptokens_owned: HashMap::new(),
-            capital: EthersU256::from(0),
-            waiting_time: EvmU256::from(waiting_time),
-            last_action_time: EvmU256::from(0),
+            capital: U256::zero(),
+            waiting_time: f64_to_u256(waiting_time),
+            last_action_time: U256::zero(),
         }
     }
 }
@@ -138,7 +138,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
-        if !self.is_time_to_act(state.read_timestamp()) || self.capital <= EthersU256::from(0) {
+        if !self.is_time_to_act(state.read_timestamp()) || self.capital <= U256::zero() {
             return;
         }
 
@@ -162,7 +162,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                     market_id: *market_id,
                     protection: protection_delta,
                     receiver: self.address.into(),
-                    max_cost: EthersU256::MAX,
+                    max_cost: U256::MAX,
                 };
                 self.cozyrouter
                     .read_purchase_assets_needed(self.address, state, purchase_args)
@@ -181,7 +181,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             market_id: set_market_id,
             protection: protection_delta,
             receiver: self.address.into(),
-            max_cost: EthersU256::MAX,
+            max_cost: U256::MAX,
         };
         let evm_tx = self
             .cozyrouter
@@ -236,7 +236,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
                                     );
                                 }
                                 Some(curr_ptokens) => {
-                                    *curr_ptokens += Into::<EthersU256>::into(ptokens_received);
+                                    *curr_ptokens += Into::<U256>::into(ptokens_received);
                                 }
                             };
                         }
@@ -246,7 +246,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
             }
         }
 
-        self.protection_owned = EthersU256::from(0);
+        self.protection_owned = U256::zero();
         for ((set_addr, set_market_id), ptokens) in self.ptokens_owned.iter() {
             self.protection_owned += self
                 .set_logic
@@ -257,7 +257,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveBuyer {
 }
 
 impl PassiveBuyer {
-    fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
+    fn is_time_to_act(&self, curr_timestamp: U256) -> bool {
         (curr_timestamp - self.last_action_time) >= self.waiting_time
     }
 

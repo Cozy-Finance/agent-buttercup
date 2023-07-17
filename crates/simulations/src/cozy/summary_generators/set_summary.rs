@@ -2,13 +2,15 @@ use std::{borrow::Cow, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use simulate::{address::Address, summarizer::SummaryGenerator};
+use simulate::{
+    address::Address,
+    summarizer::SummaryGenerator,
+    u256::{serialize_u256_to_u128, U256},
+};
 
 use crate::cozy::{
-    utils::serialize_ethers_u256_to_u128,
     world::{CozyUpdate, CozyWorld},
     world_contracts::CozySetLogic,
-    EthersU256,
 };
 
 #[derive(Serialize, Deserialize)]
@@ -18,8 +20,8 @@ pub struct SetData {
 
 #[derive(Serialize, Deserialize)]
 pub struct SetSummary {
-    #[serde(serialize_with = "serialize_ethers_u256_to_u128")]
-    timestamp: EthersU256,
+    #[serde(serialize_with = "serialize_u256_to_u128")]
+    timestamp: U256,
     set_data: Vec<(Address, SetData)>,
 }
 
@@ -54,7 +56,7 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for SetSummaryGenerator {
         }
 
         let summary = SetSummary {
-            timestamp: EthersU256::from(sim_state.read_timestamp()),
+            timestamp: sim_state.read_timestamp(),
             set_data,
         };
 

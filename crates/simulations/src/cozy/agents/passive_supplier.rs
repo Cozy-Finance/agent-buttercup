@@ -1,17 +1,16 @@
 use std::{borrow::Cow, sync::Arc};
 
 use bindings::cozy_protocol::cozy_router;
-use revm::primitives::U256 as EvmU256;
 use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     state::{update::SimUpdate, SimState},
+    u256::{f64_to_u256, U256},
 };
 
 use crate::cozy::{
     world::{CozyUpdate, CozyWorld},
     world_contracts::{CozyBaseToken, CozyRouter},
-    EthersU256,
 };
 
 pub struct PassiveSupplier {
@@ -19,9 +18,9 @@ pub struct PassiveSupplier {
     address: Address,
     cozyrouter: Arc<CozyRouter>,
     token: Arc<CozyBaseToken>,
-    capital: EthersU256,
-    waiting_time: EvmU256,
-    last_action_time: EvmU256,
+    capital: U256,
+    waiting_time: U256,
+    last_action_time: U256,
 }
 
 impl PassiveSupplier {
@@ -37,9 +36,9 @@ impl PassiveSupplier {
             address,
             cozyrouter: cozyrouter.clone(),
             token: token.clone(),
-            capital: EthersU256::from(0),
-            waiting_time: EvmU256::from(waiting_time),
-            last_action_time: EvmU256::from(0),
+            capital: U256::zero(),
+            waiting_time: f64_to_u256(waiting_time),
+            last_action_time: U256::zero(),
         }
     }
 }
@@ -70,7 +69,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
     }
 
     fn step(&mut self, state: &SimState<CozyUpdate, CozyWorld>, channel: AgentChannel<CozyUpdate>) {
-        if !self.is_time_to_act(state.read_timestamp()) || self.capital <= EthersU256::from(0) {
+        if !self.is_time_to_act(state.read_timestamp()) || self.capital <= U256::zero() {
             return;
         }
 
@@ -85,7 +84,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
                         set: sets[0].address.into(),
                         assets: self.capital,
                         receiver: self.address.into(),
-                        min_shares_received: EthersU256::from(0),
+                        min_shares_received: U256::zero(),
                     },
                 )
                 .expect("PassiveSupplier failed to build deposit tx.");
@@ -106,7 +105,7 @@ impl Agent<CozyUpdate, CozyWorld> for PassiveSupplier {
 }
 
 impl PassiveSupplier {
-    fn is_time_to_act(&self, curr_timestamp: EvmU256) -> bool {
+    fn is_time_to_act(&self, curr_timestamp: U256) -> bool {
         (curr_timestamp - self.last_action_time) >= self.waiting_time
     }
 }
