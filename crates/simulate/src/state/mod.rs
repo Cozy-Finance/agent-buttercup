@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::HashMap};
 
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB},
-    primitives::{AccountInfo, Env, ExecutionResult, TxEnv, U256 as EvmU256},
+    primitives::{AccountInfo, Env, ExecutionResult, TxEnv},
     EVM,
 };
 use thiserror::Error;
@@ -15,7 +15,7 @@ use crate::{
     },
     time_policy::TimeEnv,
     utils::*,
-    address::Address,
+    address::Address, u256::U256,
 };
 
 pub mod update;
@@ -61,12 +61,12 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
         account_info
     }
 
-    pub fn read_timestamp(&self) -> EvmU256 {
-        self.evm.env.block.timestamp
+    pub fn read_timestamp(&self) -> U256 {
+        U256::from(self.evm.env.block.timestamp)
     }
 
-    pub fn read_block_number(&self) -> EvmU256 {
-        self.evm.env.block.number
+    pub fn read_block_number(&self) -> U256 {
+        U256::from(self.evm.env.block.number)
     }
 
     pub fn simulate_evm_tx_ref(&self, tx: &TxEnv, env: Option<Env>) -> ExecutionResult {
@@ -88,8 +88,8 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> SimState<U, W> {
     /// # Arguments
     /// * `time_env` - The time env.
     pub fn update_time_env(&mut self, time_env: &TimeEnv) {
-        self.evm.env.block.number = time_env.number;
-        self.evm.env.block.timestamp = time_env.timestamp;
+        self.evm.env.block.number = time_env.number.into();
+        self.evm.env.block.timestamp = time_env.timestamp.into();
     }
 
     // Add an account to evm.

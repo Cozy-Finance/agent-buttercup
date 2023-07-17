@@ -1,7 +1,8 @@
 //! The block time policy that is used to fast forward time in the simulation is handled here.
 
-use revm::primitives::U256;
 use thiserror::Error;
+
+use crate::u256::U256;
 
 #[derive(Debug, Copy, Clone)]
 pub struct TimeEnv {
