@@ -6,6 +6,7 @@ use simulate::{
     agent::{agent_channel::AgentChannel, types::AgentId, Agent},
     contract::utils::build_deploy_tx_and_contract,
     state::{update::SimUpdate, SimState},
+    u256::U256,
     utils::build_call_tx,
 };
 
@@ -16,14 +17,14 @@ use crate::cozy::{
     types::CozyTokenDeployParams,
     world::{CozyUpdate, CozyWorld},
     world_contracts::CozyBaseToken,
-    EthersAddress, EthersU256,
+    EthersAddress,
 };
 
 pub struct TokenDeployer {
     name: Cow<'static, str>,
     address: Address,
     deploy_args: CozyTokenDeployParams,
-    allocate_addrs: HashMap<Address, EthersU256>,
+    allocate_addrs: HashMap<Address, U256>,
     finished_allocating: bool,
     token: Option<Arc<CozyBaseToken>>,
 }
@@ -33,7 +34,7 @@ impl TokenDeployer {
         name: Cow<'static, str>,
         address: Address,
         deploy_args: CozyTokenDeployParams,
-        allocate_addrs: HashMap<Address, EthersU256>,
+        allocate_addrs: HashMap<Address, U256>,
     ) -> Self {
         Self {
             name,

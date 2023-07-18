@@ -1,8 +1,9 @@
 use rand::Rng;
 use rand_distr::{num_traits::ToPrimitive, Distribution, Exp, Normal};
 use serde::Deserialize;
+use simulate::u256::{deserialize_string_to_u256, U256};
 
-use crate::cozy::{constants::*, utils::deserialize_string_to_u256, EthersU256};
+use crate::cozy::constants::*;
 
 pub trait CozyDistribution<T> {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> T;
@@ -11,16 +12,16 @@ pub trait CozyDistribution<T> {
 #[derive(Debug, Clone, Deserialize)]
 pub struct U256UniformRange {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    pub min: EthersU256,
+    pub min: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    pub max: EthersU256,
+    pub max: U256,
 }
 
-impl CozyDistribution<EthersU256> for U256UniformRange {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> EthersU256 {
+impl CozyDistribution<U256> for U256UniformRange {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> U256 {
         let mut sample = [0_u8; 32];
         rng.fill(&mut sample[..]);
-        EthersU256::from(sample) % (self.max - self.min) + self.min
+        U256::from(sample) % (self.max - self.min) + self.min
     }
 }
 

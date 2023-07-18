@@ -3,9 +3,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use revm::primitives::U256 as EvmU256;
-
-use crate::address::Address;
+use crate::{address::Address, u256::U256};
 
 #[derive(Debug, Clone)]
 pub struct AgentId {
@@ -29,15 +27,15 @@ impl Eq for AgentId {}
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone)]
 pub struct AgentTxGas {
     pub gas_limit: u64,
-    pub gas_price: EvmU256,
-    pub gas_priority_fee: Option<EvmU256>,
+    pub gas_price: U256,
+    pub gas_priority_fee: Option<U256>,
 }
 
 impl Default for AgentTxGas {
     fn default() -> Self {
         Self {
             gas_limit: u64::MAX,
-            gas_price: EvmU256::ZERO,
+            gas_price: U256::zero(),
             gas_priority_fee: None,
         }
     }

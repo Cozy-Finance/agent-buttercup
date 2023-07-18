@@ -1,12 +1,10 @@
 use bindings::{cost_model_dynamic_level_factory, cost_model_jump_rate_factory};
 use serde::Deserialize;
+use simulate::u256::{deserialize_string_to_u256, U256};
 
 use crate::cozy::{
-    configs::build_cozy_sim_runner_from_dir,
-    distributions::ProbTruncatedNorm,
-    types::*,
-    utils::{deserialize_string_to_u256, wad_to_float},
-    EthersU256,
+    configs::build_cozy_sim_runner_from_dir, distributions::ProbTruncatedNorm, types::*,
+    utils::wad_to_float,
 };
 
 pub fn build_cost_model_analysis_config_from_file(
@@ -22,17 +20,17 @@ pub fn build_cost_model_analysis_config_from_file(
 #[derive(Debug, Deserialize)]
 pub struct MisspecificationAnalysis {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    kink: EthersU256,
+    kink: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    min_kink_cost: EthersU256,
+    min_kink_cost: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    max_kink_cost: EthersU256,
+    max_kink_cost: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    cost_factor_at_full_utilization: EthersU256,
+    cost_factor_at_full_utilization: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    cost_factor_at_zero_utilization: EthersU256,
+    cost_factor_at_zero_utilization: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
-    optimal_zone_rate: EthersU256,
+    optimal_zone_rate: U256,
     agent_std: f64,
     num_runs_per_setting: i32,
     num_steps: i32,

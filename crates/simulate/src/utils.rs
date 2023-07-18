@@ -1,7 +1,7 @@
 use bytes::Bytes;
-use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv, U256 as EvmU256};
+use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv};
 
-use crate::{address::Address, agent::types::AgentTxGas, EvmBytes};
+use crate::{address::Address, agent::types::AgentTxGas, u256::U256, EvmBytes};
 
 #[derive(thiserror::Error, Debug)]
 pub enum FailedExecutionError {
@@ -49,10 +49,10 @@ pub fn build_call_tx(
     TxEnv {
         caller: caller_address.into(),
         gas_limit: tx_gas_settings.gas_limit,
-        gas_price: tx_gas_settings.gas_price,
-        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        gas_price: tx_gas_settings.gas_price.into(),
+        gas_priority_fee: tx_gas_settings.gas_priority_fee.map(|x| x.into()),
         transact_to: TransactTo::Call(receiver_address.into()),
-        value: EvmU256::ZERO,
+        value: U256::zero().into(),
         data: call_data,
         chain_id: None,
         nonce: None,
@@ -64,17 +64,17 @@ pub fn build_call_tx_w_settings(
     caller_address: Address,
     receiver_address: Address,
     call_data: EvmBytes,
-    value: Option<EvmU256>,
+    value: Option<U256>,
     gas_settings: Option<AgentTxGas>,
 ) -> TxEnv {
     let tx_gas_settings = gas_settings.unwrap_or_default();
     TxEnv {
         caller: caller_address.into(),
         gas_limit: tx_gas_settings.gas_limit,
-        gas_price: tx_gas_settings.gas_price,
-        gas_priority_fee: tx_gas_settings.gas_priority_fee,
+        gas_price: tx_gas_settings.gas_price.into(),
+        gas_priority_fee: tx_gas_settings.gas_priority_fee.map(|x| x.into()),
         transact_to: TransactTo::Call(receiver_address.into()),
-        value: value.unwrap_or(EvmU256::ZERO),
+        value: value.unwrap_or(U256::zero()).into(),
         data: call_data,
         chain_id: None,
         nonce: None,

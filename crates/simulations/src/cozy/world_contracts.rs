@@ -13,12 +13,13 @@ use simulate::{
     address::Address,
     contract::sim_contract::SimContract,
     state::SimState,
+    u256::U256,
     utils::{build_call_tx, unpack_execution},
 };
 
 use crate::cozy::{
     world::{CozyUpdate, CozyWorld},
-    EthersAddress, EthersU256,
+    EthersAddress,
 };
 
 pub type CozyWorldContractResult<T> = Result<T, anyhow::Error>;
@@ -203,11 +204,11 @@ impl CozyRouter {
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
         args: cozy_router::PurchaseCall,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let purchase_tx = self.build_purchase_tx(sender_addr, args)?;
         let result = match unpack_execution(state.simulate_evm_tx_ref(&purchase_tx, None)?) {
             Ok(bytes) => bytes,
-            _ => return Ok(EthersU256::MAX),
+            _ => return Ok(U256::MAX),
         };
         let purchase_return = self
             .contract
@@ -218,7 +219,7 @@ impl CozyRouter {
     pub fn decode_ptokens_received(
         &self,
         execution_result: &ExecutionResult,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let purchase_output = self.contract.decode_output::<cozy_router::PurchaseReturn>(
             "purchase",
             unpack_execution(execution_result.clone())?,
@@ -234,7 +235,7 @@ impl CozyBaseToken {
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let sender_ethers_addr: EthersAddress = sender_addr.into();
         let balance_tx = build_call_tx(
             sender_addr,
@@ -243,7 +244,7 @@ impl CozyBaseToken {
                 .encode_function("balanceOf", sender_ethers_addr)?,
         );
         let result = unpack_execution(state.simulate_evm_tx_ref(&balance_tx, None)?)?;
-        let balance: EthersU256 = self.contract.decode_output("balanceOf", result)?;
+        let balance: U256 = self.contract.decode_output("balanceOf", result)?;
         Ok(balance)
     }
 
@@ -257,7 +258,7 @@ impl CozyBaseToken {
             sender_addr,
             self.address,
             self.contract
-                .encode_function("approve", (cozyrouter_ethers_addr, EthersU256::MAX))?,
+                .encode_function("approve", (cozyrouter_ethers_addr, U256::MAX))?,
         ))
     }
 
@@ -265,7 +266,7 @@ impl CozyBaseToken {
         &self,
         sender_addr: Address,
         cozyrouter_addr: Address,
-        amount: EthersU256,
+        amount: U256,
     ) -> CozyWorldContractResult<TxEnv> {
         let cozyrouter_ethers_addr: EthersAddress = cozyrouter_addr.into();
         Ok(build_call_tx(
@@ -286,8 +287,8 @@ impl CozySetLogic {
         state: &SimState<CozyUpdate, CozyWorld>,
         set_addr: Address,
         market_id: u16,
-        ptokens: EthersU256,
-    ) -> CozyWorldContractResult<EthersU256> {
+        ptokens: U256,
+    ) -> CozyWorldContractResult<U256> {
         let balance_tx = build_call_tx(
             sender_addr,
             set_addr,
@@ -295,7 +296,7 @@ impl CozySetLogic {
                 .encode_function("convertToProtection", (market_id, ptokens))?,
         );
         let result = unpack_execution(state.simulate_evm_tx_ref(&balance_tx, None)?)?;
-        let balance: EthersU256 = self.contract.decode_output("convertToProtection", result)?;
+        let balance: U256 = self.contract.decode_output("convertToProtection", result)?;
         Ok(balance)
     }
 
@@ -319,11 +320,11 @@ impl CozySetLogic {
         state: &SimState<CozyUpdate, CozyWorld>,
         set_address: Address,
         market_id: u16,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let remaining_protection_tx =
             self.build_remaining_protection_tx(sender_addr, set_address, market_id)?;
         let result = unpack_execution(state.simulate_evm_tx_ref(&remaining_protection_tx, None)?)?;
-        let remaining_protection_return: EthersU256 =
+        let remaining_protection_return: U256 =
             self.contract.decode_output("remainingProtection", result)?;
         Ok(remaining_protection_return)
     }
@@ -337,7 +338,7 @@ impl CozySetLogic {
     ) -> CozyWorldContractResult<MarketsReturn> {
         let call_data = self
             .contract
-            .encode_function("markets", (EthersU256::from(market_num),))?;
+            .encode_function("markets", (U256::from(market_num),))?;
         let query = build_call_tx(sender_addr, set_address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?)?;
         Ok(self
@@ -366,7 +367,7 @@ impl CozySetLogic {
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
         set_address: Address,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("totalCollateralAvailable", ())?;
@@ -374,7 +375,7 @@ impl CozySetLogic {
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
         let total_protection_available = self
             .contract
-            .decode_output::<EthersU256>("totalCollateralAvailable", result)?;
+            .decode_output::<U256>("totalCollateralAvailable", result)?;
         Ok(total_protection_available)
     }
 
@@ -384,13 +385,11 @@ impl CozySetLogic {
         state: &SimState<CozyUpdate, CozyWorld>,
         set_address: Address,
         market_id: u16,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self.contract.encode_function("utilization", market_id)?;
         let query = build_call_tx(sender_addr, set_address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
-        let utilization = self
-            .contract
-            .decode_output::<EthersU256>("utilization", result)?;
+        let utilization = self.contract.decode_output::<U256>("utilization", result)?;
         Ok(utilization)
     }
 
@@ -400,7 +399,7 @@ impl CozySetLogic {
         state: &SimState<CozyUpdate, CozyWorld>,
         set_address: Address,
         market_id: u16,
-    ) -> CozyWorldContractResult<EthersU256> {
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("effectiveActiveProtection", market_id)?;
@@ -408,7 +407,7 @@ impl CozySetLogic {
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
         let effective_active_protection = self
             .contract
-            .decode_output::<EthersU256>("effectiveActiveProtection", result)?;
+            .decode_output::<U256>("effectiveActiveProtection", result)?;
         Ok(effective_active_protection)
     }
 
@@ -460,16 +459,14 @@ impl CozyJumpRateModel {
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
-        utilization: EthersU256,
-    ) -> CozyWorldContractResult<EthersU256> {
+        utilization: U256,
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("costFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
-        let cost_factor = self
-            .contract
-            .decode_output::<EthersU256>("costFactor", result)?;
+        let cost_factor = self.contract.decode_output::<U256>("costFactor", result)?;
         Ok(cost_factor)
     }
 
@@ -477,8 +474,8 @@ impl CozyJumpRateModel {
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
-        utilization: EthersU256,
-    ) -> CozyWorldContractResult<EthersU256> {
+        utilization: U256,
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("refundFactor", (utilization, utilization))?;
@@ -486,7 +483,7 @@ impl CozyJumpRateModel {
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
         let refund_factor = self
             .contract
-            .decode_output::<EthersU256>("refundFactor", result)?;
+            .decode_output::<U256>("refundFactor", result)?;
         Ok(refund_factor)
     }
 }
@@ -521,16 +518,14 @@ impl CozyDynamicLevelModel {
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
-        utilization: EthersU256,
-    ) -> CozyWorldContractResult<EthersU256> {
+        utilization: U256,
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("costFactor", (utilization, utilization))?;
         let query = build_call_tx(sender_addr, self.address, call_data);
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
-        let cost_factor = self
-            .contract
-            .decode_output::<EthersU256>("costFactor", result)?;
+        let cost_factor = self.contract.decode_output::<U256>("costFactor", result)?;
         Ok(cost_factor)
     }
 
@@ -538,8 +533,8 @@ impl CozyDynamicLevelModel {
         &self,
         sender_addr: Address,
         state: &SimState<CozyUpdate, CozyWorld>,
-        utilization: EthersU256,
-    ) -> CozyWorldContractResult<EthersU256> {
+        utilization: U256,
+    ) -> CozyWorldContractResult<U256> {
         let call_data = self
             .contract
             .encode_function("refundFactor", (utilization, utilization))?;
@@ -547,7 +542,7 @@ impl CozyDynamicLevelModel {
         let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
         let refund_factor = self
             .contract
-            .decode_output::<EthersU256>("refundFactor", result)?;
+            .decode_output::<U256>("refundFactor", result)?;
         Ok(refund_factor)
     }
 }
@@ -607,7 +602,7 @@ impl CozyPtokenLogic {
             sender_addr,
             ptoken_addr,
             self.contract
-                .encode_function("approve", (cozyrouter_ethers_addr, EthersU256::MAX))?,
+                .encode_function("approve", (cozyrouter_ethers_addr, U256::MAX))?,
         ))
     }
 }
