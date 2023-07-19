@@ -1,6 +1,6 @@
-# Simulation Engine
+# Agent Smith
 
-A highly flexible, Rust-based framework for conducting computationally-intensive agent-based simulations in an EVM environment.
+Agent Smith is a flexible, Rust-based framework for conducting computationally-intensive agent-based simulations in an EVM environment.
 
 The simulation engine is built on top of [revm](https://github.com/bluealloy/revm), enabling fast EVM execution without any I/O overhead.
 It was originally inspired by work done on [Arbiter](https://github.com/primitivefinance/arbiter), but ultimately took a very different approach to the design of the core simulation loop and agents.
@@ -102,7 +102,7 @@ Remember to register each generator you want to use with `summarizer.register_su
 
 An example implementation for the Cozy protocol is [here](crates/simulations/src/cozy/summary_generators/).
 
-## Defining agents
+### Defining agents
 
 The [`Agent`](crates/simulate/src/agent/mod.rs) trait object defines an agent in the simulation.
 
@@ -116,7 +116,7 @@ The activation step can be used to run any EVM or world set-up prior to the core
 
 For example implementations of agents in the Cozy protocol, check [here](crates/simulations/src/cozy/agents/).
 
-### Sending updates
+#### Sending updates
 
 Note the signature of `step`:
 ```rust
