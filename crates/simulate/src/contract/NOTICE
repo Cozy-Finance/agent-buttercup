@@ -1,8 +1,8 @@
 Some of the code included in `crates/simulate/src/contract/sim_contract.rs` is
-derivative of work from Primitive Finance's arbiter repository:
+from Primitive Finance's arbiter repository:
 https://github.com/primitivefinance/arbiter
 
-Specifically, modifications were applied to the following piece of source code:
+Specifically, modifications were applied to the following:
 https://github.com/primitivefinance/arbiter/blob/main/crates/simulate/src/environment/contract.rs
 
 The following is a link to their license:
