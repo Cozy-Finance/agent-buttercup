@@ -1,3 +1,5 @@
+/// NOTICE: Please check the `crates/simulate/src/contract/NOTICE` for licensing-related disclosures
+/// for the following code.
 use ethers::abi::{Detokenize, Token, Tokenize};
 
 use crate::{
