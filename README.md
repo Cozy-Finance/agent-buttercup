@@ -1,6 +1,6 @@
-# Agent Smith
+# Agent Buttercup
 
-Agent Smith is a flexible, Rust-based framework for conducting computationally-intensive agent-based simulations in an EVM environment.
+Agent Buttercup is a flexible, Rust-based framework for conducting computationally-intensive, agent-based simulations in an EVM environment.
 
 The simulation engine is built on top of [revm](https://github.com/bluealloy/revm), enabling fast EVM execution without any I/O overhead.
 It was originally inspired by work done on [Arbiter](https://github.com/primitivefinance/arbiter), but ultimately took a very different approach to the design of the core simulation loop and agents.
@@ -51,8 +51,8 @@ The repo is set-up as a workspace with four crates:
 ## Installation
 
 ```
-git clone https://github.com/Cozy-Finance/simulation-engine
-cd simulation-engine
+git clone https://github.com/Cozy-Finance/agent-buttercup
+cd agent-buttercup
 ```
 
 ## Generating contract bindings
@@ -173,7 +173,7 @@ for agent in agents {
 }
 ```
 
-Note the order in which you activate agents introduces on the order of which the agent's `activation_steps` are run.
+Note the order in which you activate agents also introduces an order on which the agent's `activation_steps` are run.
 
 Finally, you can kick off your simulation:
 ```rust
