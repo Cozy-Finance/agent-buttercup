@@ -1,4 +1,6 @@
-# Agent Buttercup
+![](./docs/assets/agent_buttercup.png)
+
+# What is Agent Buttercup?
 
 Agent Buttercup is a flexible, Rust-based framework for conducting computationally-intensive, agent-based simulations in an EVM environment.
 
