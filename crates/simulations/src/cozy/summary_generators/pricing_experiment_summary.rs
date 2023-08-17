@@ -12,51 +12,48 @@ use crate::cozy::{
     types::CozyCostModelType,
     utils::wad_to_float,
     world::{CozyUpdate, CozyWorld},
-    world_contracts::{CozyDynamicLevelModel, CozyJumpRateModel, CozySetLogic},
+    world_contracts::{CozyDynamicLevelModel, CozySetLogic},
 };
 
 #[derive(Serialize, Deserialize)]
-pub struct CostData {
+pub struct PricingExperimentData {
     utilization: f64,
     cost_factor: Option<f64>,
     refund_factor: Option<f64>,
+    cost_factor_in_optimal_zone: Option<f64>,
     #[serde(serialize_with = "serialize_u256_to_u128")]
     effective_active_protection: U256,
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct CostModelsSummary {
+pub struct PricingExperimentSummary {
     #[serde(serialize_with = "serialize_u256_to_u128")]
     timestamp: U256,
-    set_data: Vec<(Address, Vec<CostData>)>,
+    set_data: Vec<(Address, Vec<PricingExperimentData>)>,
 }
 
-pub struct CostModelsSummaryGenerator {
+pub struct PricingExperimentSummaryGenerator {
     summary_name: Cow<'static, str>,
     address: Address,
     set_logic: Arc<CozySetLogic>,
-    jump_rate_model: Option<Arc<CozyJumpRateModel>>,
     dynamic_level_model: Option<Arc<CozyDynamicLevelModel>>,
 }
 
-/// Generates general summary data about the deployed sets in CozyWorld.
-impl CostModelsSummaryGenerator {
+impl PricingExperimentSummaryGenerator {
     pub fn new(
         set_logic: &Arc<CozySetLogic>,
-        jump_rate_model: &Option<Arc<CozyJumpRateModel>>,
         dynamic_level_model: &Option<Arc<CozyDynamicLevelModel>>,
     ) -> Box<Self> {
-        Box::new(CostModelsSummaryGenerator {
-            summary_name: Cow::Owned("Cost Model Summary".to_owned()),
+        Box::new(PricingExperimentSummaryGenerator {
+            summary_name: Cow::Owned("Pricing Experiment Summary".to_owned()),
             address: Address::random(),
             set_logic: set_logic.clone(),
-            jump_rate_model: jump_rate_model.clone(),
             dynamic_level_model: dynamic_level_model.clone(),
         })
     }
 }
 
-impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
+impl SummaryGenerator<CozyUpdate, CozyWorld> for PricingExperimentSummaryGenerator {
     fn get_summary(
         &self,
         sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
@@ -84,49 +81,49 @@ impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
                     .cost_models
                     .get_by_addr(&cost_model_addr)
                     .expect("Cost model addr obtained from set.cost_model_lookup.");
-                let (cost_factor, refund_factor) = match cost_model.model_type {
-                    CozyCostModelType::JumpRate(_) => {
-                        let jump_rate_model_logic = self.jump_rate_model.as_ref().expect(
-                            "Cost model deployer should have deployed dynamic level model logic.",
-                        );
-                        (
-                            jump_rate_model_logic
-                                .read_current_cost_factor(self.address, sim_state, utilization)
-                                .ok(),
-                            jump_rate_model_logic
-                                .read_current_refund_factor(self.address, sim_state, utilization)
-                                .ok(),
-                        )
-                    }
+                let (cost_factor, refund_factor, cost_factor_in_optimal_zone) = match cost_model
+                    .model_type
+                {
                     CozyCostModelType::DynamicLevel(_) => {
-                        let dynamic_rate_model_logic = self.dynamic_level_model.as_ref().expect(
+                        let dynamic_model_logic = self.dynamic_level_model.as_ref().expect(
                             "Cost model deployer should have deployed dynamic level model logic.",
                         );
                         (
-                            dynamic_rate_model_logic
+                            dynamic_model_logic
                                 .read_current_cost_factor(self.address, sim_state, utilization)
                                 .ok(),
-                            dynamic_rate_model_logic
+                            dynamic_model_logic
                                 .read_current_refund_factor(self.address, sim_state, utilization)
+                                .ok(),
+                            dynamic_model_logic
+                                .read_current_cost_factor_in_optimal_zone(
+                                    self.address,
+                                    sim_state,
+                                    utilization,
+                                )
                                 .ok(),
                         )
                     }
+                    _ => panic!("Pricing experiment only uses dynamic cost models."),
                 };
                 let float_cost_factor = cost_factor.map(wad_to_float);
                 let float_refund_factor = refund_factor.map(wad_to_float);
+                let float_cost_factor_in_optimal_zone =
+                    cost_factor_in_optimal_zone.map(wad_to_float);
 
-                cost_data.push(CostData {
+                cost_data.push(PricingExperimentData {
                     utilization: wad_to_float(utilization),
                     effective_active_protection,
                     cost_factor: float_cost_factor,
                     refund_factor: float_refund_factor,
+                    cost_factor_in_optimal_zone: float_cost_factor_in_optimal_zone,
                 });
             }
 
             set_data.push((set.address, cost_data));
         }
 
-        let summary = CostModelsSummary {
+        let summary = PricingExperimentSummary {
             timestamp: sim_state.read_timestamp(),
             set_data,
         };

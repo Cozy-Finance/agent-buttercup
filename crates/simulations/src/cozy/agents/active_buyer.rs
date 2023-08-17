@@ -368,8 +368,6 @@ impl ActiveBuyer {
         market_id: u16,
         my_prob: f64,
     ) -> CozyAgentResult<Option<(TxEnv, ActiveBuyerTxData)>> {
-        let min_refund = (self.capital * float_to_wad(my_prob)) / wad();
-
         let mut sell_amt = match self.ptokens_owned.get(&(set_address, market_id)) {
             None => return Ok(None),
             Some(ptokens_owned) => *ptokens_owned,
@@ -378,6 +376,14 @@ impl ActiveBuyer {
             if sell_amt == U256::zero() {
                 return Ok(None);
             }
+            let sell_amt_value = self.set_logic.read_protection_balance(
+                self.address,
+                state,
+                set_address,
+                market_id,
+                sell_amt,
+            )?;
+            let min_refund = (sell_amt_value * float_to_wad(my_prob)) / wad();
             let sell_args = cozy_router::SellCall {
                 set: set_address.into(),
                 market_id,

@@ -1,6 +1,7 @@
 use std::{borrow::Cow, fmt::Debug, sync::Arc};
 
 use bindings::{
+    cost_model_dynamic_level::GetUpdatedStorageParamsReturn,
     cozy_models::{
         cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
         drip_decay_model_constant_factory,
@@ -514,6 +515,24 @@ impl CozyDynamicLevelFactory {
 impl_basic_world_contract!(CozyDynamicLevelModel);
 
 impl CozyDynamicLevelModel {
+    pub fn read_current_cost_factor_in_optimal_zone(
+        &self,
+        sender_addr: Address,
+        state: &SimState<CozyUpdate, CozyWorld>,
+        utilization: U256,
+    ) -> CozyWorldContractResult<U256> {
+        let call_data = self.contract.encode_function(
+            "getUpdatedStorageParams",
+            (U256::from(state.evm.env.block.timestamp), utilization),
+        )?;
+        let query = build_call_tx(sender_addr, self.address, call_data);
+        let result = unpack_execution(state.simulate_evm_tx_ref(&query, None)?).unwrap();
+        let output = self
+            .contract
+            .decode_output::<GetUpdatedStorageParamsReturn>("getUpdatedStorageParams", result)?;
+        Ok(output.new_cost_factor_in_optimal_zone)
+    }
+
     pub fn read_current_cost_factor(
         &self,
         sender_addr: Address,

@@ -10,13 +10,41 @@ pub use base_model_factory::*;
     non_camel_case_types
 )]
 pub mod base_model_factory {
-    #[rustfmt::skip]
-    const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"isDeployed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]}]";
+    #[allow(deprecated)]
+    fn __abi() -> ::ethers::core::abi::Abi {
+        ::ethers::core::abi::ethabi::Contract {
+            constructor: ::core::option::Option::None,
+            functions: ::core::convert::From::from([(
+                ::std::borrow::ToOwned::to_owned("isDeployed"),
+                ::std::vec![::ethers::core::abi::ethabi::Function {
+                    name: ::std::borrow::ToOwned::to_owned("isDeployed"),
+                    inputs: ::std::vec![::ethers::core::abi::ethabi::Param {
+                        name: ::std::string::String::new(),
+                        kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                        internal_type: ::core::option::Option::Some(
+                            ::std::borrow::ToOwned::to_owned("address"),
+                        ),
+                    },],
+                    outputs: ::std::vec![::ethers::core::abi::ethabi::Param {
+                        name: ::std::string::String::new(),
+                        kind: ::ethers::core::abi::ethabi::ParamType::Bool,
+                        internal_type: ::core::option::Option::Some(
+                            ::std::borrow::ToOwned::to_owned("bool"),
+                        ),
+                    },],
+                    constant: ::core::option::Option::None,
+                    state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                },],
+            )]),
+            events: ::std::collections::BTreeMap::new(),
+            errors: ::std::collections::BTreeMap::new(),
+            receive: false,
+            fallback: false,
+        }
+    }
     ///The parsed JSON ABI of the contract.
     pub static BASEMODELFACTORY_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers_contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+        ::ethers_contract::Lazy::new(__abi);
     pub struct BaseModelFactory<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for BaseModelFactory<M> {
         fn clone(&self) -> Self {
@@ -36,7 +64,7 @@ pub mod base_model_factory {
     }
     impl<M> ::core::fmt::Debug for BaseModelFactory<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(BaseModelFactory))
+            f.debug_tuple(::core::stringify!(BaseModelFactory))
                 .field(&self.address())
                 .finish()
         }

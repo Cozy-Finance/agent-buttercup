@@ -8,6 +8,10 @@ pub mod cozy;
 pub enum Sim {
     Base,
     CostModelAnalysis,
+    KinkCostAnalysis,
+    GrowthRateAnalysis,
+    WidthAnalysis,
+    ScenarioAnalysis,
 }
 
 impl Sim {
@@ -15,6 +19,10 @@ impl Sim {
         match name {
             "base" => Sim::Base,
             "cost_model_analysis" => Sim::CostModelAnalysis,
+            "kink_cost_analysis" => Sim::KinkCostAnalysis,
+            "growth_rate_analysis" => Sim::GrowthRateAnalysis,
+            "width_analysis" => Sim::WidthAnalysis,
+            "scenario_analysis" => Sim::ScenarioAnalysis,
             _ => panic!("Unknown simulation: {}", name),
         }
     }
@@ -46,6 +54,10 @@ pub fn main() -> Result<(), Box<dyn Error>> {
     match sim {
         Sim::Base => cozy::analysis::base::run()?,
         Sim::CostModelAnalysis => cozy::analysis::cost_model_analysis::run()?,
+        Sim::KinkCostAnalysis => cozy::analysis::pricing_experiment::run_kink_location_analysis()?,
+        Sim::GrowthRateAnalysis => cozy::analysis::pricing_experiment::run_growth_rate_analysis()?,
+        Sim::WidthAnalysis => cozy::analysis::pricing_experiment::run_width_analysis()?,
+        Sim::ScenarioAnalysis => cozy::analysis::pricing_experiment::run_scenarios()?,
     }
 
     Ok(())
