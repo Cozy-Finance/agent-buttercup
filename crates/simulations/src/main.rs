@@ -12,6 +12,7 @@ pub enum Sim {
     GrowthRateAnalysis,
     WidthAnalysis,
     ScenarioAnalysis,
+    DecayAnalysis,
 }
 
 impl Sim {
@@ -23,6 +24,7 @@ impl Sim {
             "growth_rate_analysis" => Sim::GrowthRateAnalysis,
             "width_analysis" => Sim::WidthAnalysis,
             "scenario_analysis" => Sim::ScenarioAnalysis,
+            "decay_analysis" => Sim::DecayAnalysis,
             _ => panic!("Unknown simulation: {}", name),
         }
     }
@@ -58,6 +60,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         Sim::GrowthRateAnalysis => cozy::analysis::pricing_experiment::run_growth_rate_analysis()?,
         Sim::WidthAnalysis => cozy::analysis::pricing_experiment::run_width_analysis()?,
         Sim::ScenarioAnalysis => cozy::analysis::pricing_experiment::run_scenarios()?,
+        Sim::DecayAnalysis => cozy::analysis::pricing_experiment::run_decay_analysis()?,
     }
 
     Ok(())
