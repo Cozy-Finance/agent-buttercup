@@ -3,8 +3,8 @@ use serde::Deserialize;
 use simulate::u256::{deserialize_string_to_u256, U256};
 
 use crate::cozy::{
-    configs::build_cozy_sim_runner_from_dir, distributions::ProbTruncatedNorm, types::*,
-    utils::wad_to_float,
+    configs::build_cozy_sim_runner_from_dir, distributions::ProbTruncatedNorm,
+    runner::CozySingleSetSummaryGenerators, types::*, utils::wad_to_float,
 };
 
 pub fn build_cost_model_analysis_config_from_file(
@@ -107,12 +107,20 @@ pub fn run_misspecification_analysis() -> Result<(), Box<dyn std::error::Error>>
                 "{}/output/summaries/misspecification_analysis/dynamic_level_summary_{}_{}.json",
                 workspace_path, kink_cost, i
             );
-            jump_rate_runner_mut
-                .clone()
-                .run(jump_rate_output_file_name.into())?;
-            dynamic_level_runner_mut
-                .clone()
-                .run(dynamic_level_output_file_name.into())?;
+            jump_rate_runner_mut.clone().run(
+                jump_rate_output_file_name.into(),
+                vec![
+                    CozySingleSetSummaryGenerators::Set,
+                    CozySingleSetSummaryGenerators::CostModels,
+                ],
+            )?;
+            dynamic_level_runner_mut.clone().run(
+                dynamic_level_output_file_name.into(),
+                vec![
+                    CozySingleSetSummaryGenerators::Set,
+                    CozySingleSetSummaryGenerators::CostModels,
+                ],
+            )?;
         }
 
         kink_cost += step_size;

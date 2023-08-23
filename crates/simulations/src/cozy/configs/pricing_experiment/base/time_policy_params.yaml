@@ -1,0 +1,7 @@
+time_policy_params:
+  start_block_number: 1
+  start_block_timestamp: 1
+  time_per_block: 86400 # 1day / block
+  blocks_per_step: 1
+  blocks_to_generate: 365 # 365 days
+  time_to_generate: null

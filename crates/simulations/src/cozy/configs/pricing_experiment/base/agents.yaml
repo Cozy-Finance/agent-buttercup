@@ -1,0 +1,31 @@
+passive_buyers_params:
+  num_passive: 0
+  capital_dist:
+    min: "10000000"
+    max: "20000000"
+  protection_desired_dist:
+    min: "10000000"
+    max: "20000000"
+  time_dist:
+    rate: 10
+    time_unit: "Day"
+active_buyers_params:
+  num_active: 15
+  capital_dist:
+    min: "50000000"
+    max: "1000000000"
+  time_dist:
+    rate: 1
+    time_unit: "Hour"
+  trigger_prob_dist:
+    "Static":
+      mean: 0.03
+      std: 0.0
+suppliers_params:
+  num_passive: 5
+  capital_dist:
+    min: "1000000000"
+    max: "2000000000"
+  time_dist:
+    rate: 2
+    time_unit: "Day"

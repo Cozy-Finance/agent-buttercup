@@ -1,5 +1,7 @@
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
-use simulations::cozy::configs::build_cozy_sim_runner_from_dir;
+use simulations::cozy::{
+    configs::build_cozy_sim_runner_from_dir, runner::CozySingleSetSummaryGenerators,
+};
 
 fn from_num_agents(c: &mut Criterion) {
     let mut group = c.benchmark_group("from_num_agents");
@@ -24,7 +26,13 @@ fn from_num_agents(c: &mut Criterion) {
                     runner.passive_buyers_params.num_passive = num_agents;
                     runner.suppliers_params.num_passive = num_agents;
 
-                    runner.run(output_file_name.into());
+                    runner.run(
+                        output_file_name.into(),
+                        vec![
+                            CozySingleSetSummaryGenerators::Set,
+                            CozySingleSetSummaryGenerators::CostModels,
+                        ],
+                    );
                 })
             },
         );

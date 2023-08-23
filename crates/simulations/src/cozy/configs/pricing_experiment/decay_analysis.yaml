@@ -1,0 +1,14 @@
+cost_models:
+  - - "CostModel"
+    - "DynamicLevel":
+        u_low: "400000000000000000"
+        u_high: "600000000000000000"
+        cost_factor_at_zero_utilization: "1000000000000000"
+        cost_factor_in_optimal_zone: "1000000000000000"
+        cost_factor_at_full_utilization: "250000000000000000"
+        optimal_zone_rate: "60000000000"
+agent_mean: 0.0011
+agent_std: 0.02
+min_rate_per_second: "3338740000"
+max_rate_per_second: "72965900000"
+num_steps: 10

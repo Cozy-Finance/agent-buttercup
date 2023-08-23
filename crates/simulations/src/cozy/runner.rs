@@ -19,7 +19,9 @@ use crate::cozy::{
     constants::*,
     distributions::CozyDistribution,
     summary_generators::{
-        cost_models_summary::CostModelsSummaryGenerator, set_summary::SetSummaryGenerator,
+        cost_models_summary::CostModelsSummaryGenerator,
+        pricing_experiment_summary::PricingExperimentSummaryGenerator,
+        set_summary::SetSummaryGenerator,
     },
     types::{
         CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
@@ -28,8 +30,61 @@ use crate::cozy::{
         CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
     },
     utils::deserialize_cow_tuple_vec,
-    world::CozyWorld,
+    world::{CozyUpdate, CozyWorld},
 };
+
+#[derive(Debug, Clone)]
+pub enum CozySingleSetSummaryGenerators {
+    Set,
+    CostModels,
+    PricingExperiment,
+}
+
+impl CozySingleSetSummaryGenerators {
+    pub fn register_generator(&self, sim_manager: &mut SimManager<CozyUpdate, CozyWorld>) {
+        match self {
+            CozySingleSetSummaryGenerators::Set => {
+                sim_manager
+                    .summarizer
+                    .register_summary_generator(SetSummaryGenerator::new(
+                        sim_manager
+                            .get_state()
+                            .world
+                            .set_logic
+                            .as_ref()
+                            .expect("Set logic added to world."),
+                    ));
+            }
+            CozySingleSetSummaryGenerators::CostModels => {
+                sim_manager
+                    .summarizer
+                    .register_summary_generator(CostModelsSummaryGenerator::new(
+                        sim_manager
+                            .get_state()
+                            .world
+                            .set_logic
+                            .as_ref()
+                            .expect("Set logic added to world."),
+                        &sim_manager.get_state().world.jump_rate_model,
+                        &sim_manager.get_state().world.dynamic_level_model,
+                    ));
+            }
+            CozySingleSetSummaryGenerators::PricingExperiment => {
+                sim_manager.summarizer.register_summary_generator(
+                    PricingExperimentSummaryGenerator::new(
+                        sim_manager
+                            .get_state()
+                            .world
+                            .set_logic
+                            .as_ref()
+                            .expect("Set logic added to world."),
+                        &sim_manager.get_state().world.dynamic_level_model,
+                    ),
+                );
+            }
+        }
+    }
+}
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct CozySingleSetSimRunner {
@@ -51,7 +106,11 @@ pub struct CozySingleSetSimRunner {
 }
 
 impl CozySingleSetSimRunner {
-    pub fn run(self, output_file: Cow<'static, str>) -> Result<(), anyhow::Error> {
+    pub fn run(
+        self,
+        output_file: Cow<'static, str>,
+        summary_generators: Vec<CozySingleSetSummaryGenerators>,
+    ) -> Result<(), anyhow::Error> {
         let mut rng = StdRng::seed_from_u64(self.sim_setup_params.rand_seed);
 
         // Create sim manager.
@@ -352,28 +411,9 @@ impl CozySingleSetSimRunner {
         }
 
         // Register summarizer generators.
-        sim_manager
-            .summarizer
-            .register_summary_generator(SetSummaryGenerator::new(
-                sim_manager
-                    .get_state()
-                    .world
-                    .set_logic
-                    .as_ref()
-                    .expect("Set logic added to world."),
-            ));
-        sim_manager
-            .summarizer
-            .register_summary_generator(CostModelsSummaryGenerator::new(
-                sim_manager
-                    .get_state()
-                    .world
-                    .set_logic
-                    .as_ref()
-                    .expect("Set logic added to world."),
-                &sim_manager.get_state().world.jump_rate_model,
-                &sim_manager.get_state().world.dynamic_level_model,
-            ));
+        for generator in summary_generators {
+            generator.register_generator(&mut sim_manager);
+        }
 
         // Run sim.
         sim_manager.run_sim()?;
@@ -390,7 +430,13 @@ mod tests {
     #[test]
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let runner = build_cozy_sim_runner_from_dir("test")?;
-        runner.run(Cow::Borrowed("output/summaries/test_output.json"))?;
+        runner.run(
+            Cow::Borrowed("output/summaries/test_output.json"),
+            vec![
+                CozySingleSetSummaryGenerators::Set,
+                CozySingleSetSummaryGenerators::CostModels,
+            ],
+        )?;
         Ok(())
     }
 }
