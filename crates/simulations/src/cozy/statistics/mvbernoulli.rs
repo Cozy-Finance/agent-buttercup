@@ -11,6 +11,7 @@ use argmin::{
 };
 use nalgebra::{Cholesky, DMatrix, DVector};
 use ordered_float::OrderedFloat;
+#[allow(unused_imports)]
 use rand::{distributions::Distribution, Rng};
 use statrs::{
     distribution::{ContinuousCDF, Normal},

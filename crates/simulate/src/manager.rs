@@ -7,7 +7,7 @@ use crate::{
         Agent,
     },
     state::{
-        update::{EvmStateUpdate, EvmStateUpdateOutput, UpdateData, WorldStateUpdate},
+        update::{EvmStateUpdate, EvmStateUpdateOutput, Update, WorldStateUpdate},
         world::World,
         State, StateError,
     },
@@ -27,8 +27,8 @@ pub enum SimManagerError {
 
 pub struct SimManager<U, W>
 where
-    U: UpdateData,
-    W: World<WorldUpdateData = U>,
+    U: Update,
+    W: World<WorldUpdate = U>,
 {
     pub time_policy: Box<dyn TimePolicy>,
     pub agents: HashMap<Address, Box<dyn Agent<U, W>>>,
@@ -38,8 +38,8 @@ where
 
 impl<U, W> SimManager<U, W>
 where
-    U: UpdateData,
-    W: World<WorldUpdateData = U>,
+    U: Update,
+    W: World<WorldUpdate = U>,
 {
     pub fn new(
         state: State<U, W>,
@@ -82,7 +82,7 @@ where
                     crossbeam_channel::unbounded::<U>();
 
                 let channel_sender = AgentChannelSender::new(
-                    addr.clone(),
+                    *addr,
                     evm_update_sender.clone(),
                     evm_result_sender,
                     world_update_sender.clone(),
@@ -90,8 +90,8 @@ where
                 );
                 let channel_receiver =
                     AgentChannelReceiver::new(evm_result_receiver, world_result_receiver);
-                agent_channel_senders.insert(addr.clone(), channel_sender);
-                agent_channel_receivers.insert(addr.clone(), channel_receiver);
+                agent_channel_senders.insert(*addr, channel_sender);
+                agent_channel_receivers.insert(*addr, channel_receiver);
             }
 
             rayon::scope(|s| {

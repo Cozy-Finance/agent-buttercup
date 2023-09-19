@@ -57,11 +57,10 @@ use crate::cozy::{
     constants::*,
     set_risk_model::SetRiskModel,
     types::{
-        AgentSetRiskParams, AgentSetRiskSampler, ArbitrageurParams, BuyerParams, CozyCostModelType,
-        CozyDripDecayModelType, CozyMarketConfigParams, CozyProtocolDeployParams,
-        CozySetConfigParams, CozySimSetupParams, CozyTokenDeployParams, CozyTriggerType,
-        FixedTimePolicyParams, SupplierParams, SupplierRiskAversionSampler, TriggerRiskParams,
-        TriggerSimulator,
+        AgentSetRiskParams, AgentSetRiskSampler, ArbitrageurParams, BuyerParams, CostModelType,
+        DripDecayModelType, FixedTimePolicyParams, MarketConfigParams, ProtocolDeployParams,
+        SetConfigParams, SimSetupParams, SupplierParams, SupplierRiskAversionSampler,
+        TriggerRiskParams, TriggerSimulator, TriggerType,
     },
     utils::deserialize_cow_tuple_vec,
     world::{CozyUpdate, CozyWorld},
@@ -111,21 +110,20 @@ pub struct SetContracts {
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct CozySimRunner {
-    pub sim_setup_params: CozySimSetupParams,
-    pub protocol_params: CozyProtocolDeployParams,
+    pub sim_setup_params: SimSetupParams,
+    pub protocol_params: ProtocolDeployParams,
     pub time_policy_params: FixedTimePolicyParams,
-    pub base_token_params: CozyTokenDeployParams,
     pub arbitrageur_params: ArbitrageurParams,
     pub buyer_params: BuyerParams,
     pub supplier_params: SupplierParams,
     #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
-    pub triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
+    pub triggers: Vec<(Cow<'static, str>, TriggerType)>,
     #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
-    pub cost_models: Vec<(Cow<'static, str>, CozyCostModelType)>,
+    pub cost_models: Vec<(Cow<'static, str>, CostModelType)>,
     #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
-    pub drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)>,
-    pub market_config_params: Vec<CozyMarketConfigParams>,
-    pub set_config_params: CozySetConfigParams,
+    pub drip_decay_models: Vec<(Cow<'static, str>, DripDecayModelType)>,
+    pub market_config_params: Vec<MarketConfigParams>,
+    pub set_config_params: SetConfigParams,
     pub trigger_risk_params: TriggerRiskParams,
     pub agent_set_risk_params: AgentSetRiskParams,
 }
@@ -201,7 +199,7 @@ impl CozySimRunner {
         // Initialize agent risk sampler.
         let true_annual_probabilities =
             DVector::from(self.trigger_risk_params.annual_probabilities.clone());
-        let true_correlations = trigger_simulator.mvb.corr.clone();
+        let true_correlations = trigger_simulator.mvb.corr;
         let mut agent_set_risk_sampler = AgentSetRiskSampler::new(
             rng.clone(),
             true_annual_probabilities.clone(),
@@ -347,13 +345,13 @@ impl CozySimRunner {
             true_annual_probabilities,
             true_correlations,
             leverage,
-            DVector::from(market_weights.clone()),
+            DVector::from(market_weights),
         );
         let set_analyzer = SetAnalyzer::new(
             SET_ANALYZER.into(),
             Address::random_using(&mut rng),
-            protocol_contracts.clone(),
-            set_contracts.clone(),
+            protocol_contracts,
+            set_contracts,
             true_risk_model,
         );
         manager.activate_agent(Box::new(set_analyzer))?;
@@ -394,12 +392,8 @@ impl CozySimRunner {
 
         // Deploy set.
         println!("Deploying set.");
-        let set_contracts = self.deploy_set(
-            state,
-            &protocol_contracts,
-            admin_addr,
-            state_middleware.clone(),
-        )?;
+        let set_contracts =
+            self.deploy_set(state, &protocol_contracts, admin_addr, state_middleware)?;
         let set_contracts = Arc::new(set_contracts);
 
         Ok((protocol_contracts, set_contracts))
@@ -489,7 +483,7 @@ impl CozySimRunner {
     ) -> Result<ProtocolContracts, Box<dyn std::error::Error>> {
         // Pre-compute Cozy protocol addresses.
         let mut nonce = state
-            .read_account_info(admin_addr.into())
+            .read_account_info(admin_addr)
             .expect("Admin account exists.")
             .nonce;
         let manager_addr: Address = create_address(admin_addr.into(), nonce).into();
@@ -545,7 +539,7 @@ impl CozySimRunner {
             },
             Vec::<MarketConfig>::new(),
         );
-        let _ = state.execute_evm_tx_and_decode(admin_addr, set_logic_initialization)?;
+        state.execute_evm_tx_and_decode(admin_addr, set_logic_initialization)?;
 
         // Deploy set factory.
         let set_factory_args = (manager_addr, set_logic_addr);
@@ -570,7 +564,7 @@ impl CozySimRunner {
         // Initialize ptoken logic.
         let ptoken_initialization =
             ptoken_logic.initialize(Address::zero().into(), Address::zero().into(), 0_u8);
-        let _ = state.execute_evm_tx_and_decode(admin_addr, ptoken_initialization)?;
+        state.execute_evm_tx_and_decode(admin_addr, ptoken_initialization)?;
 
         // Deploy ptoken factory.
         let ptoken_factory_args = (ptoken_logic_addr,);
@@ -657,7 +651,7 @@ impl CozySimRunner {
             uma_trigger_factory_args,
         )?;
         let _uma_trigger_factory =
-            UMATriggerFactory::new(uma_trigger_factory_addr, state_middleware.clone());
+            UMATriggerFactory::new(uma_trigger_factory_addr, state_middleware);
 
         Ok(ProtocolContracts {
             cozy_router,
@@ -701,7 +695,7 @@ impl CozySimRunner {
             println!("Deploying cost model: {:?}.", name);
 
             match cost_model_type {
-                CozyCostModelType::JumpRate(args) => {
+                CostModelType::JumpRate(args) => {
                     let get_model_call = protocol_contracts.jump_rate_factory.get_model(
                         args.kink,
                         args.cost_factor_at_zero_utilization,
@@ -729,7 +723,7 @@ impl CozySimRunner {
                         cost_model_addrs.push(deployed_addr);
                     }
                 }
-                CozyCostModelType::DynamicLevel(args) => {
+                CostModelType::DynamicLevel(args) => {
                     let model_deploy_call = protocol_contracts.dynamic_level_factory.deploy_model(
                         args.u_low,
                         args.u_high,
@@ -755,7 +749,7 @@ impl CozySimRunner {
             println!("Deploying drip decay model: {:?}.", name);
 
             match drip_decay_model_type {
-                CozyDripDecayModelType::Constant(args) => {
+                DripDecayModelType::Constant(args) => {
                     let get_model_call = protocol_contracts
                         .drip_decay_factory
                         .get_model(args.rate_per_second);
@@ -789,7 +783,7 @@ impl CozySimRunner {
             println!("Deploying trigger: {:?}.", name);
 
             match trigger_type {
-                CozyTriggerType::DummyTrigger(_) => {
+                TriggerType::DummyTrigger => {
                     let trigger_addr = state.deploy_evm_contract(
                         admin_addr,
                         &DUMMYTRIGGER_ABI,
@@ -800,8 +794,8 @@ impl CozySimRunner {
                     dummy_triggers.insert(i as u32, trigger);
                     trigger_addrs.push(trigger_addr);
                 }
-                CozyTriggerType::ChainlinkTrigger => unimplemented!("Chainlink trigger."),
-                CozyTriggerType::UmaTrigger => unimplemented!("UMA trigger."),
+                TriggerType::ChainlinkTrigger => unimplemented!("Chainlink trigger."),
+                TriggerType::UmaTrigger => unimplemented!("UMA trigger."),
             }
         }
 
@@ -811,8 +805,8 @@ impl CozySimRunner {
         for (i, params) in self.market_config_params.clone().into_iter().enumerate() {
             market_configs.push(MarketConfig {
                 trigger: trigger_addrs[i].into(),
-                cost_model: cost_model_addrs[i].into(),
-                drip_decay_model: drip_decay_model_addrs[i].into(),
+                cost_model: cost_model_addrs[i],
+                drip_decay_model: drip_decay_model_addrs[i],
                 weight: params.weight,
                 purchase_fee: params.purchase_fee,
                 sale_fee: params.sale_fee,
@@ -823,7 +817,7 @@ impl CozySimRunner {
         let set_create_call = protocol_contracts.manager.create_set(
             admin_addr.into(),
             admin_addr.into(),
-            base_token.address().into(),
+            base_token.address(),
             SetConfig {
                 deposit_fee: self.set_config_params.deposit_fee,
                 leverage_factor: self.set_config_params.leverage_factor,
@@ -864,7 +858,7 @@ impl CozySimRunner {
         to_addr: Address,
         amount: U256,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let _ = state.execute_evm_tx_and_decode(
+        state.execute_evm_tx_and_decode(
             admin_addr,
             set_contracts.base_token.mint(to_addr.into(), amount),
         )?;

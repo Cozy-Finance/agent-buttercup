@@ -1,31 +1,22 @@
 use bindings::{
     cost_model_dynamic_level_factory, cost_model_jump_rate_factory,
-    cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
+    cozy_protocol::shared_types::{Delays, Fees, SetConfig},
     drip_decay_model_constant_factory,
 };
 use nalgebra::{DMatrix, DVector};
-use rand::{rngs::StdRng, Rng, SeedableRng};
-use rand_distr::{Dirichlet, Distribution};
+use rand::rngs::StdRng;
+use rand_distr::Distribution;
 use serde::Deserialize;
-use simulate::{
-    address::Address,
-    u256::{deserialize_string_to_u256, U256},
-};
+use simulate::u256::{deserialize_string_to_u256, U256};
 use statrs::distribution::Beta;
 
-use super::{
-    distributions::LinkedProbTruncatedNorm,
-    statistics::{
-        mvbernoulli::MultivariateBernoulli, mvbeta::MultivariateBeta, wishart::WishartCorrelation,
-    },
-};
-use crate::cozy::distributions::{
-    Exponential, ProbTruncatedNorm, TriggerProbModel, U256UniformRange,
+use super::statistics::{
+    mvbernoulli::MultivariateBernoulli, mvbeta::MultivariateBeta, wishart::WishartCorrelation,
 };
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "cost_model_jump_rate_factory::DeployModelCall")]
-pub struct CozyJumpRateDeployModelCall {
+pub struct JumpRateDeployModelCall {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub kink: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
@@ -38,7 +29,7 @@ pub struct CozyJumpRateDeployModelCall {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "cost_model_dynamic_level_factory::DeployModelCall")]
-pub struct CozyDynamicLevelDeployModelCall {
+pub struct DynamicLevelDeployModelCall {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub u_low: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
@@ -55,42 +46,35 @@ pub struct CozyDynamicLevelDeployModelCall {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "drip_decay_model_constant_factory::DeployModelCall")]
-pub struct CozyDripDecayConstantDeployModelCall {
+pub struct DripDecayConstantDeployModelCall {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub rate_per_second: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub enum CozyCostModelType {
-    #[serde(with = "CozyJumpRateDeployModelCall")]
+pub enum CostModelType {
+    #[serde(with = "JumpRateDeployModelCall")]
     JumpRate(cost_model_jump_rate_factory::DeployModelCall),
-    #[serde(with = "CozyDynamicLevelDeployModelCall")]
+    #[serde(with = "DynamicLevelDeployModelCall")]
     DynamicLevel(cost_model_dynamic_level_factory::DeployModelCall),
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub enum CozyDripDecayModelType {
-    #[serde(with = "CozyDripDecayConstantDeployModelCall")]
+pub enum DripDecayModelType {
+    #[serde(with = "DripDecayConstantDeployModelCall")]
     Constant(drip_decay_model_constant_factory::DeployModelCall),
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub enum CozyTriggerType {
-    DummyTrigger(TriggerProbModel),
+pub enum TriggerType {
+    DummyTrigger,
     UmaTrigger,
     ChainlinkTrigger,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyTokenDeployParams {
-    pub name: String,
-    pub symbol: String,
-    pub decimals: u8,
-}
-
-#[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "Delays")]
-pub struct CozyDelays {
+pub struct ProtocolDelays {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub config_update_delay: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
@@ -105,7 +89,7 @@ pub struct CozyDelays {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(remote = "Fees")]
-pub struct CozyFees {
+pub struct ProtocolFees {
     pub deposit_fee_reserves: u16,
     pub deposit_fee_backstop: u16,
     pub purchase_fee_reserves: u16,
@@ -115,10 +99,10 @@ pub struct CozyFees {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyProtocolDeployParams {
-    #[serde(with = "CozyDelays")]
+pub struct ProtocolDeployParams {
+    #[serde(with = "ProtocolDelays")]
     pub delays: Delays,
-    #[serde(with = "CozyFees")]
+    #[serde(with = "ProtocolFees")]
     pub fees: Fees,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub allowed_markets_per_set: U256,
@@ -134,7 +118,7 @@ pub struct FixedTimePolicyParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozySimSetupParams {
+pub struct SimSetupParams {
     pub rand_seed: u64,
 }
 
@@ -170,20 +154,20 @@ pub struct SupplierParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyMarketConfigParams {
+pub struct MarketConfigParams {
     pub weight: u16,
     pub purchase_fee: u16,
     pub sale_fee: u16,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozySetConfigParams {
+pub struct SetConfigParams {
     pub leverage_factor: u32,
     pub deposit_fee: u16,
 }
 
-impl From<CozySetConfigParams> for SetConfig {
-    fn from(val: CozySetConfigParams) -> Self {
+impl From<SetConfigParams> for SetConfig {
+    fn from(val: SetConfigParams) -> Self {
         SetConfig {
             leverage_factor: val.leverage_factor,
             deposit_fee: val.deposit_fee,

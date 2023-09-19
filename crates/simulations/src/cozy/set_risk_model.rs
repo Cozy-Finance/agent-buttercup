@@ -33,7 +33,7 @@ impl SetRiskModel {
         let total_weighted_prob = market_weights.dot(&annual_probabilities);
         let other_market_weights = (0..n).map(|i| 1. - market_weights[i]).collect::<Vec<f64>>();
         let probability_other_markets_trigger = (0..n)
-            .map(|i| (total_weighted_prob - annual_probabilities[i] * &market_weights[i]))
+            .map(|i| (total_weighted_prob - annual_probabilities[i] * market_weights[i]))
             .collect::<Vec<f64>>();
         let correlation_with_other_markets = (0..n)
             .map(|i| {

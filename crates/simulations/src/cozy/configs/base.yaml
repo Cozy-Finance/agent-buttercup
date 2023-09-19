@@ -15,12 +15,6 @@ protocol_params:
     sale_fee_reserves: 0
     sale_fee_backstop: 0
   allowed_markets_per_set: "50"
-time_policy_params:
-  start_block_number: 1
-  start_block_timestamp: 1
-  time_per_block: 12
-  blocks_per_step: 5000 # 50 * 12 = 600 secs / step
-  time_to_generate: 1296000000
 base_token_params:
   name: "Cozy Base Token"
   symbol: "CBT"

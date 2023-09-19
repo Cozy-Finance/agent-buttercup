@@ -1,5 +1,3 @@
-use std::any;
-
 use ethers::{
     abi::{Detokenize, Function},
     prelude::decode_function_data,
@@ -41,5 +39,5 @@ pub fn decode_output<D: Detokenize>(
     function: &Function,
     output_bytes: EvmBytes,
 ) -> Result<D, ethers::abi::AbiError> {
-    decode_function_data::<D, &[u8]>(&function, &output_bytes.to_vec(), false)
+    decode_function_data::<D, &[u8]>(function, &output_bytes, false)
 }

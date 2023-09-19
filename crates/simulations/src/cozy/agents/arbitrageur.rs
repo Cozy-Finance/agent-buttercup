@@ -115,7 +115,8 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                 let refund_price_percentage =
                     u256_to_f64(refund_value) / u256_to_f64(refund_protection_value);
                 if refund_price_percentage > fair_price_percentage {
-                    let _ = channel.execute_evm_tx(refund_value_tx);
+                    println!("Arbitrageur {} is selling protection.", self.address);
+                    channel.execute_evm_tx(refund_value_tx);
                 }
             }
         } else {
@@ -136,7 +137,7 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                         .expect("Error decoding purchase cost.");
                 let purchase_cost_percentage = u256_to_f64(assets_needed) / u256_to_f64(balance);
                 if purchase_cost_percentage <= fair_price_percentage {
-                    let _ = channel.execute_evm_tx(purchase_cost_tx);
+                    channel.execute_evm_tx(purchase_cost_tx);
                 }
             }
         }
@@ -172,7 +173,7 @@ impl Arbitrageur {
         let riskless_fair_price = self.preferences.risk_model.annual_probabilities[market_idx];
         let leverage = self.preferences.risk_model.leverage;
         if leverage == 1.0 {
-            return riskless_fair_price;
+            riskless_fair_price
         } else {
             let probability_factor = self
                 .preferences
@@ -184,7 +185,7 @@ impl Arbitrageur {
             // with this market, then the fair price should be discounted.
             let adjustment_factor = (1. - leverage * probability_factor)
                 / (1. + leverage * correlation_factor).min(1.0).max(0.0);
-            return riskless_fair_price * adjustment_factor;
+            riskless_fair_price * adjustment_factor
         }
     }
 }

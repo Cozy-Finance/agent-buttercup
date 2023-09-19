@@ -3,7 +3,7 @@ use revm::primitives::AccountInfo;
 use crate::{
     address::Address,
     agent::agent_channel::{AgentChannelReceiver, AgentChannelSender},
-    state::{update::UpdateData, world::World, State},
+    state::{update::Update, world::World, State},
 };
 
 pub mod agent_channel;
@@ -11,8 +11,8 @@ pub mod agent_channel;
 /// Basic traits that every `Agent` must implement in order to properly interact with an EVM and simulation.
 pub trait Agent<U, W>: Sync + Send
 where
-    U: UpdateData,
-    W: World<WorldUpdateData = U>,
+    U: Update,
+    W: World<WorldUpdate = U>,
 {
     /// Returns the address of the agent.
     fn address(&self) -> Address;

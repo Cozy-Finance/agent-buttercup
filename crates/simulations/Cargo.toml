@@ -53,4 +53,3 @@ criterion = "0.5.1"
 [[bench]]
 name = "cozy_benchmark"
 harness = false
-

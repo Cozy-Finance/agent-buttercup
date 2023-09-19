@@ -1,23 +1,9 @@
-use std::{
-    collections::HashMap,
-    f64,
-    hash::{Hash, Hasher},
-};
+use std::f64;
 
-use ::num_traits::abs;
-use argmin::{
-    core::{CostFunction, Error, Executor},
-    solver::brent::BrentOpt,
-};
-use nalgebra::{Cholesky, DMatrix, DVector};
-use ordered_float::OrderedFloat;
+use nalgebra::DVector;
+#[allow(unused_imports)]
 use rand::{distributions::Distribution, Rng};
-use statrs::{
-    distribution::{Beta, ContinuousCDF, Normal},
-    Result as StatsResult, StatsError,
-};
-
-use super::mvnormal::MultivariateNormal;
+use statrs::{distribution::Beta, Result as StatsResult, StatsError};
 
 #[derive(Debug, Clone)]
 pub struct MultivariateBeta {

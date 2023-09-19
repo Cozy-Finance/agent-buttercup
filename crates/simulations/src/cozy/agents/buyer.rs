@@ -114,7 +114,7 @@ impl Agent<CozyUpdate, CozyWorld> for Buyer {
                     u256_to_f64(assets_needed) / u256_to_f64(purchase_amt);
                 let fair_price_percentage = self.compute_fair_cost_percentage(target_market);
                 if purchase_cost_percentage <= fair_price_percentage {
-                    let _ = channel.execute_evm_tx(purchase_cost_tx);
+                    channel.execute_evm_tx(purchase_cost_tx)
                 }
             }
         }
@@ -132,7 +132,7 @@ impl Buyer {
         let riskless_fair_price = self.preferences.risk_model.annual_probabilities[market_idx];
         let leverage = self.preferences.risk_model.leverage;
         if leverage == 1.0 {
-            return riskless_fair_price;
+            riskless_fair_price
         } else {
             let probability_factor = self
                 .preferences
@@ -144,7 +144,7 @@ impl Buyer {
             // with this market, then the fair price should be discounted.
             let adjustment_factor = (1. - leverage * probability_factor)
                 / (1. + leverage * correlation_factor).min(1.0).max(0.0);
-            return riskless_fair_price * adjustment_factor;
+            riskless_fair_price * adjustment_factor
         }
     }
 }

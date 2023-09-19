@@ -203,7 +203,7 @@ impl MultivariateNormal {
             err_help = (((i - 1) as f64) * err_help / ((i + 1) as f64)) + delta.powi(2);
             err = alpha * err_help.sqrt()
         }
-        return (p, err);
+        (p, err)
     }
 
     /// Calculates the probability density function for the multivariate

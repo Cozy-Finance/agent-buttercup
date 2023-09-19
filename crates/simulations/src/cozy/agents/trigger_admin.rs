@@ -1,5 +1,6 @@
 use std::{borrow::Cow, collections::HashSet, sync::Arc};
 
+#[allow(unused_imports)]
 use rand_distr::Distribution;
 use simulate::{
     address::Address,
@@ -58,8 +59,9 @@ impl Agent<CozyUpdate, CozyWorld> for TriggerAdmin {
     fn step(
         &mut self,
         _state: &State<CozyUpdate, CozyWorld>,
-        channel: &AgentChannelSender<CozyUpdate>,
+        _channel: &AgentChannelSender<CozyUpdate>,
     ) {
+        println!("{:?}", _state.world.set_analytics);
         // Sample triggers.
         let trigger_outcomes = self.trigger_simulator.sample();
         let triggered_idxs: Vec<usize> = trigger_outcomes
@@ -70,19 +72,19 @@ impl Agent<CozyUpdate, CozyWorld> for TriggerAdmin {
             .collect();
 
         // Trigger markets if needed.
-        if triggered_idxs.len() > 0 {
+        if !triggered_idxs.is_empty() {
             for idx in triggered_idxs {
                 if self.triggered_markets.get(&idx).is_some() {
                     continue;
                 }
                 self.triggered_markets.insert(idx);
-                let trigger_tx = self
+                let _trigger_tx = self
                     .set
                     .dummy_triggers
                     .get(&(idx as u32))
                     .expect("Trigger index out of bounds.")
                     .trigger();
-                channel.execute_evm_tx(trigger_tx);
+                // _channel.execute_evm_tx(_trigger_tx);
             }
         }
     }

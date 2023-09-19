@@ -5,7 +5,7 @@ use revm::primitives::TxEnv;
 use crate::{
     address::Address,
     state::{
-        update::{EvmStateUpdate, EvmStateUpdateOutput, UpdateData, WorldStateUpdate},
+        update::{EvmStateUpdate, EvmStateUpdateOutput, Update, WorldStateUpdate},
         EvmTxOutput, StateError, StateMiddleware,
     },
     utils::decode_output,
@@ -27,7 +27,7 @@ pub enum AgentChannelError {
     MissingEvmTxFunction,
 }
 
-pub struct AgentChannelSender<U: UpdateData> {
+pub struct AgentChannelSender<U: Update> {
     address: Address,
     pub evm_update_sender: Sender<EvmStateUpdate>,
     pub evm_result_sender: Sender<EvmStateUpdateOutput>,
@@ -35,7 +35,7 @@ pub struct AgentChannelSender<U: UpdateData> {
     pub world_result_sender: Sender<U>,
 }
 
-impl<U: UpdateData> AgentChannelSender<U> {
+impl<U: Update> AgentChannelSender<U> {
     pub fn new(
         address: Address,
         evm_update_sender: Sender<EvmStateUpdate>,
@@ -86,12 +86,12 @@ impl<U: UpdateData> AgentChannelSender<U> {
     }
 }
 
-pub struct AgentChannelReceiver<U: UpdateData> {
+pub struct AgentChannelReceiver<U: Update> {
     pub evm_result_receiver: Receiver<EvmStateUpdateOutput>,
     pub world_result_receiver: Receiver<U>,
 }
 
-impl<U: UpdateData> AgentChannelReceiver<U> {
+impl<U: Update> AgentChannelReceiver<U> {
     pub fn new(
         evm_result_receiver: Receiver<EvmStateUpdateOutput>,
         world_result_receiver: Receiver<U>,
@@ -108,8 +108,8 @@ impl<U: UpdateData> AgentChannelReceiver<U> {
                 EvmStateUpdateOutput::Execute(evm_tx_output, function) => match evm_tx_output {
                     EvmTxOutput::Success(output_bytes) => {
                         let decoded = decode_output(&function, output_bytes)
-                            .map_err(|e| StateError::FunctionOutputDecodeError(e))?;
-                        return Ok(Some(decoded));
+                            .map_err(StateError::FunctionOutputDecodeError)?;
+                        Ok(Some(decoded))
                     }
                     _ => Ok(None),
                 },

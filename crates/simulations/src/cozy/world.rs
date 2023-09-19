@@ -1,11 +1,17 @@
 use std::{fmt::Debug, sync::Arc};
 
 use nalgebra::DVector;
-use simulate::state::{update::UpdateData, world::World};
+use simulate::state::{update::Update, world::World};
 
 #[derive(Debug, Clone)]
 pub struct CozyWorld {
     pub set_analytics: Arc<SetAnalytics>,
+}
+
+impl Default for CozyWorld {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl CozyWorld {
@@ -14,17 +20,17 @@ impl CozyWorld {
         CozyWorld {
             set_analytics: Arc::new(SetAnalytics::new(
                 0.,
-                DVector::zeros(0),
-                DVector::zeros(0),
-                DVector::zeros(0),
+                DVector::<f64>::zeros(0),
+                DVector::<f64>::zeros(0),
+                DVector::<f64>::zeros(0),
             )),
         }
     }
 }
 
 impl World for CozyWorld {
-    type WorldUpdateData = CozyUpdate;
-    fn execute(&mut self, update: Self::WorldUpdateData) -> Option<Self::WorldUpdateData> {
+    type WorldUpdate = CozyUpdate;
+    fn execute(&mut self, update: Self::WorldUpdate) -> Option<Self::WorldUpdate> {
         match update {
             CozyUpdate::UpdateSetAnalytics(new_set_analytics) => {
                 self.set_analytics = Arc::new(new_set_analytics)
@@ -39,7 +45,7 @@ pub enum CozyUpdate {
     UpdateSetAnalytics(SetAnalytics),
 }
 
-impl UpdateData for CozyUpdate {}
+impl Update for CozyUpdate {}
 
 #[derive(Debug, Clone)]
 pub struct SetAnalytics {

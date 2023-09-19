@@ -1,6 +1,0 @@
-triggers:
-  - - "Trigger"
-    - "DummyTrigger":
-        starting_prob: 0.03
-        step_in_secs: 600
-        annualized_logit_std: 0.000000000001

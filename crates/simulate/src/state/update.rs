@@ -4,9 +4,9 @@ use crossbeam_channel::Sender;
 use ethers::{abi::Function, types::transaction::eip2718::TypedTransaction};
 use revm::primitives::TxEnv;
 
-use crate::{address::Address, state::EvmTxOutput, EvmBytes};
+use crate::{address::Address, state::EvmTxOutput};
 
-pub trait UpdateData: Send + Sync + Debug + Clone {}
+pub trait Update: Send + Sync + Debug {}
 
 #[derive(Debug, Clone)]
 pub enum EvmStateUpdate {
@@ -26,7 +26,7 @@ pub enum EvmStateUpdateOutput {
 }
 
 #[derive(Debug, Clone)]
-pub struct WorldStateUpdate<U: UpdateData> {
+pub struct WorldStateUpdate<U: Update> {
     pub update: U,
     pub result_sender: Sender<U>,
 }

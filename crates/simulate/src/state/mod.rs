@@ -1,4 +1,4 @@
-use std::{convert::Infallible, f32::consts::E};
+use std::convert::Infallible;
 
 use ethers::{
     abi::{Detokenize, Tokenize},
@@ -14,7 +14,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::{
     address::Address,
     state::{
-        update::{EvmStateUpdate, EvmStateUpdateOutput, UpdateData},
+        update::{EvmStateUpdate, EvmStateUpdateOutput, Update},
         world::World,
     },
     time_policy::TimeEnv,
@@ -56,11 +56,10 @@ pub enum StateError {
     ChannelSendError,
 }
 
-#[derive(Clone)]
 pub struct State<U, W>
 where
-    U: UpdateData,
-    W: World<WorldUpdateData = U>,
+    U: Update,
+    W: World<WorldUpdate = U>,
 {
     pub evm: EVM<CacheDB<EmptyDB>>,
     pub world: W,
@@ -68,8 +67,8 @@ where
 
 impl<U, W> State<U, W>
 where
-    U: UpdateData,
-    W: World<WorldUpdateData = U>,
+    U: Update,
+    W: World<WorldUpdate = U>,
 {
     pub fn new(world: W) -> Self {
         let mut evm = EVM::new();
@@ -122,7 +121,7 @@ where
 
         let output = sim_evm
             .transact_ref()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         unpack_evm_tx_output(output.result)
     }
 
@@ -138,7 +137,7 @@ where
 
         let output = sim_evm
             .transact_ref()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         unpack_evm_tx_output(output.result)
     }
 
@@ -154,10 +153,9 @@ where
 
         let output = sim_evm
             .transact_ref()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         let output_bytes = unpack_evm_tx_output(output.result)?.parse_success();
-        decode_output(&call.function, output_bytes)
-            .map_err(|e| StateError::FunctionOutputDecodeError(e))
+        decode_output(&call.function, output_bytes).map_err(StateError::FunctionOutputDecodeError)
     }
 
     pub fn execute_evm_tx(&mut self, tx: TxEnv) -> StateResult<EvmTxOutput> {
@@ -166,7 +164,7 @@ where
         let output = self
             .evm
             .transact_commit()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         unpack_evm_tx_output(output)
     }
 
@@ -177,8 +175,7 @@ where
     ) -> StateResult<D> {
         let tx = build_revm_tx(caller, call.tx)?;
         let output_bytes = self.execute_evm_tx(tx)?.parse_success();
-        decode_output(&call.function, output_bytes)
-            .map_err(|e| StateError::FunctionOutputDecodeError(e))
+        decode_output(&call.function, output_bytes).map_err(StateError::FunctionOutputDecodeError)
     }
 
     pub fn execute_evm_tx_state_update(
@@ -223,7 +220,7 @@ where
         let output = self
             .evm
             .transact_commit()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         Ok(unpack_evm_tx_output(output)?.parse_success())
     }
 
@@ -238,7 +235,7 @@ where
             Some(constructor) => {
                 let encoded_vec = constructor
                     .encode_input(bytecode.to_vec(), &args.into_tokens())
-                    .map_err(|e| StateError::ConstructorEncodeError(e))?;
+                    .map_err(StateError::ConstructorEncodeError)?;
                 EvmBytes::from(encoded_vec)
             }
             None => bytecode.0.clone(),
@@ -260,13 +257,13 @@ where
         let output = self
             .evm
             .transact_commit()
-            .map_err(|e| StateError::EvmExecutionError(e))?;
+            .map_err(StateError::EvmExecutionError)?;
         match unpack_evm_tx_output(output) {
             Ok(output) => match output {
-                EvmTxOutput::SuccessCreate(address) => Ok(address.into()),
+                EvmTxOutput::SuccessCreate(address) => Ok(address),
                 _ => unreachable!(),
             },
-            Err(e) => return Err(e),
+            Err(e) => Err(e),
         }
     }
 }

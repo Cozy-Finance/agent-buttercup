@@ -6,10 +6,10 @@ use std::{
 
 use auto_impl::auto_impl;
 
-use crate::state::{update::UpdateData, world::World, State};
+use crate::state::{update::Update, world::World, State};
 
 #[auto_impl(Box)]
-pub trait SummaryGenerator<U: UpdateData, W: World<WorldUpdateData = U>> {
+pub trait SummaryGenerator<U: Update, W: World<WorldUpdate = U>> {
     /// Yield the summary on the given world state.
     fn get_summary(&self, sim_state: &State<U, W>) -> Result<serde_json::Value, anyhow::Error>;
 
@@ -17,14 +17,14 @@ pub trait SummaryGenerator<U: UpdateData, W: World<WorldUpdateData = U>> {
     fn get_summary_name(&self) -> Cow<'static, str>;
 }
 
-pub struct Summarizer<U: UpdateData, W: World<WorldUpdateData = U>> {
+pub struct Summarizer<U: Update, W: World<WorldUpdate = U>> {
     summary_generators: Vec<Box<dyn SummaryGenerator<U, W>>>,
 
     // Output File Name
     writer: BufWriter<File>,
 }
 
-impl<U: UpdateData, W: World<WorldUpdateData = U>> Summarizer<U, W> {
+impl<U: Update, W: World<WorldUpdate = U>> Summarizer<U, W> {
     pub fn new(file_name: Cow<'static, str>) -> Self {
         let file = File::create(file_name.as_ref()).expect("Unable to open output file.");
         Self {

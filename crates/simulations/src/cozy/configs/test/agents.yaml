@@ -1,19 +1,19 @@
 agent_set_risk_params:
-  annual_probabilities_concentration: 1
+  annual_probabilities_concentration: 10
   wishart_corr_df: 10
 buyer_params:
   num: 100
-  market_allocations_dirichlet_alpha: 5.0
-  balance_mean: "10000000000"
-  balance_std: "10000000000"
+  market_allocations_dirichlet_alpha: 1.0
+  balance_mean: "1000000000"
+  balance_std: "10000"
 supplier_params:
-  num: 10
-  wealth_mean: "10000000"
-  wealth_std: "10000000"
+  num: 50
+  wealth_mean: "1000000000"
+  wealth_std: "10000"
   risk_aversion_mean: 0.5
   risk_aversion_concentration: 1
   altruistic_supplier_wealth: "100000000"
 arbitrageur_params:
-  num: 10
+  num: 0
   balance_mean: "1000000"
   balance_std: "1000000"

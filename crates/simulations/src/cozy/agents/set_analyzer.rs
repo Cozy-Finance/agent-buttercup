@@ -20,7 +20,7 @@ use crate::cozy::{
 pub struct SetAnalyzer {
     _name: Cow<'static, str>,
     address: Address,
-    protocol: Arc<ProtocolContracts>,
+    _protocol: Arc<ProtocolContracts>,
     set: Arc<SetContracts>,
     true_risk_model: SetRiskModel,
 }
@@ -29,14 +29,14 @@ impl SetAnalyzer {
     pub fn new(
         _name: Cow<'static, str>,
         address: Address,
-        protocol: Arc<ProtocolContracts>,
+        _protocol: Arc<ProtocolContracts>,
         set: Arc<SetContracts>,
         true_risk_model: SetRiskModel,
     ) -> Self {
         Self {
             _name,
             address,
-            protocol,
+            _protocol,
             set,
             true_risk_model,
         }
@@ -48,14 +48,6 @@ impl Agent<CozyUpdate, CozyWorld> for SetAnalyzer {
         self.address
     }
 
-    fn activation_step(&mut self, state: &mut State<CozyUpdate, CozyWorld>) {
-        let router_approve_tx = self
-            .set
-            .base_token
-            .approve(self.protocol.cozy_router.address(), U256::MAX);
-        let _ = state.execute_evm_tx_and_decode(self.address, router_approve_tx);
-    }
-
     fn step(
         &mut self,
         state: &State<CozyUpdate, CozyWorld>,
@@ -64,7 +56,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAnalyzer {
         let utilizations = self
             .get_utilizations(state)
             .into_iter()
-            .map(|x| wad_to_float(x))
+            .map(wad_to_float)
             .collect::<Vec<f64>>();
         let (market_apys, set_apy) = self.get_apys(state, self.get_per_second_fee_drips(state));
         let portfolio_weights = utilizations
@@ -80,7 +72,7 @@ impl Agent<CozyUpdate, CozyWorld> for SetAnalyzer {
             DVector::from(portfolio_weights),
             DVector::from(utilizations),
         ));
-        let _ = channel.execute_world_update(world_update);
+        channel.execute_world_update(world_update);
     }
 }
 
@@ -132,6 +124,6 @@ impl SetAnalyzer {
                 / (wad().as_u128() as f64);
             return (market_apys, set_apy);
         }
-        return (vec![0.0; per_second_fee_drips.len()], 0.0);
+        (vec![0.0; per_second_fee_drips.len()], 0.0)
     }
 }

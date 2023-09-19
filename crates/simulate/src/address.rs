@@ -89,7 +89,7 @@ impl From<Address> for EvmAddress {
 
 impl Tokenizable for Address {
     fn from_token(token: Token) -> Result<Self, InvalidOutputType> {
-        EthersAddress::from_token(token).map(|address| Address::from(address))
+        EthersAddress::from_token(token).map(Address::from)
     }
 
     fn into_token(self) -> Token {

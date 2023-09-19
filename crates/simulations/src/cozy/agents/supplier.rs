@@ -33,7 +33,7 @@ impl SupplierPreferences {
 
 #[derive(Debug, Clone)]
 pub struct Supplier {
-    name: Cow<'static, str>,
+    _name: Cow<'static, str>,
     address: Address,
     protocol: Arc<ProtocolContracts>,
     set: Arc<SetContracts>,
@@ -43,7 +43,7 @@ pub struct Supplier {
 
 impl Supplier {
     pub fn new(
-        name: Cow<'static, str>,
+        _name: Cow<'static, str>,
         address: Address,
         protocol: Arc<ProtocolContracts>,
         set: Arc<SetContracts>,
@@ -51,7 +51,7 @@ impl Supplier {
         rng: StdRng,
     ) -> Self {
         Self {
-            name,
+            _name,
             address,
             protocol,
             set,
@@ -80,6 +80,12 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
         channel: &AgentChannelSender<CozyUpdate>,
     ) {
         // Get current balance.
+        let balance = state
+            .call_evm_tx_and_decode(
+                self.address,
+                self.set.base_token.balance_of(self.address.into()),
+            )
+            .expect("Error getting balance.");
         let current_set_shares = state
             .call_evm_tx_and_decode(
                 self.address,
@@ -92,6 +98,7 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
                 self.set.set.convert_to_assets(current_set_shares),
             )
             .expect("Error converting shares to assets.");
+        self.preferences.total_wealth = balance + current_value;
 
         // Compute optimal allocation.
         let optimal_allocation = self.compute_optimal_allocation(state);
@@ -99,24 +106,27 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
             f64_to_u256(optimal_allocation) * self.preferences.total_wealth;
 
         // Supply or withdraw to target optimal allocation.
-        if optimal_allocation_value > current_value {
-            let supply_amount = optimal_allocation_value - current_value;
-            let router_supply_tx = self.protocol.cozy_router.deposit(
-                self.set.set.address(),
-                supply_amount,
-                self.address.into(),
-                U256::zero(),
-            );
-            let _ = channel.execute_evm_tx(router_supply_tx);
-        } else if optimal_allocation_value < current_value {
-            let withdraw_amount = current_value - optimal_allocation_value;
-            let router_withdraw_tx = self.protocol.cozy_router.withdraw(
-                self.set.set.address(),
-                withdraw_amount,
-                self.address.into(),
-                U256::zero(),
-            );
-            let _ = channel.execute_evm_tx(router_withdraw_tx);
+        match optimal_allocation_value > current_value {
+            true => {
+                let supply_amount = optimal_allocation_value - current_value;
+                let router_supply_tx = self.protocol.cozy_router.deposit(
+                    self.set.set.address(),
+                    supply_amount,
+                    self.address.into(),
+                    U256::zero(),
+                );
+                channel.execute_evm_tx(router_supply_tx);
+            }
+            false => {
+                let withdraw_amount = current_value - optimal_allocation_value;
+                let router_withdraw_tx = self.protocol.cozy_router.withdraw(
+                    self.set.set.address(),
+                    withdraw_amount,
+                    self.address.into(),
+                    U256::zero(),
+                );
+                channel.execute_evm_tx(router_withdraw_tx);
+            }
         }
     }
 }
@@ -125,7 +135,7 @@ impl Supplier {
     fn compute_optimal_allocation(&self, state: &State<CozyUpdate, CozyWorld>) -> f64 {
         let portfolio_weights = &state.world.set_analytics.portfolio_weights;
         let annual_market_apys = &state.world.set_analytics.portfolio_weights;
-        if portfolio_weights.len() > 0 {
+        if !portfolio_weights.is_empty() {
             let set_variance = self.preferences.risk_model.variance(portfolio_weights);
             let set_risk_premium = self
                 .preferences
