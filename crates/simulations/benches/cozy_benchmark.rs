@@ -1,14 +1,11 @@
-/*
-se criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
-use simulations::cozy::{
-    configs::build_cozy_sim_runner_from_dir, runner::CozySingleSetSummaryGenerators,
-};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use simulations::cozy::configs::build_cozy_sim_runner_from_dir;
 
 fn from_num_agents(c: &mut Criterion) {
     let mut group = c.benchmark_group("from_num_agents");
     group.sample_size(10);
 
-    for num_agents in [1, 10, 100].iter() {
+    for num_agents in [1, 10, 100, 1000].iter() {
         group.bench_with_input(
             BenchmarkId::from_parameter(num_agents),
             num_agents,
@@ -23,19 +20,13 @@ fn from_num_agents(c: &mut Criterion) {
                         workspace_path, num_agents
                     );
 
-                    runner.active_buyers_params.num_active = num_agents;
-                    runner.passive_buyers_params.num_passive = num_agents;
-                    runner.suppliers_params.num_passive = num_agents;
+                    runner.buyer_params.num = num_agents;
+                    runner.supplier_params.num = num_agents;
+                    runner.arbitrageur_params.num = num_agents;
 
-                    runner.run(
-                        output_file_name.into(),
-                        vec![
-                            CozySingleSetSummaryGenerators::Set,
-                            CozySingleSetSummaryGenerators::CostModels,
-                        ],
-                    );
+                    let _ = runner.run(output_file_name.into());
                 })
-            },
+            }
         );
     }
 
@@ -44,10 +35,3 @@ fn from_num_agents(c: &mut Criterion) {
 
 criterion_group!(benches, from_num_agents);
 criterion_main!(benches);
-
-
-*/
-
-pub fn main() {
-    println!("Hello, world!");
-}

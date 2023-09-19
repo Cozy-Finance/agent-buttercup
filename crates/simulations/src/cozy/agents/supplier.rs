@@ -138,7 +138,7 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
                     supply_amount
                 );
                 channel.execute_evm_tx(router_supply_tx);
-            },
+            }
             std::cmp::Ordering::Less => {
                 let withdraw_amount = current_value - optimal_allocation_value;
                 let router_withdraw_tx = self.protocol.cozy_router.withdraw(
