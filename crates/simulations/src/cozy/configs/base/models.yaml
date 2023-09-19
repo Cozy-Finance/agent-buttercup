@@ -1,0 +1,25 @@
+cost_models:
+  - - "CostModel1"
+    - "JumpRate":
+        kink: "500000000000000000"
+        cost_factor_at_zero_utilization: "10000000000000000"
+        cost_factor_at_kink_utilization: "50000000000000000"
+        cost_factor_at_full_utilization: "250000000000000000"
+  - - "CostModel2"
+    - "JumpRate":
+        kink: "500000000000000000"
+        cost_factor_at_zero_utilization: "10000000000000000"
+        cost_factor_at_kink_utilization: "50000000000000000"
+        cost_factor_at_full_utilization: "250000000000000000"
+drip_decay_models:
+  - - "DripDecayModel1"
+    - "Constant":
+        rate_per_second: "9000000000"
+  - - "DripDecayModel2"
+    - "Constant":
+        rate_per_second: "9000000000"
+triggers:
+  - - "Trigger1"
+    - "DummyTrigger":
+  - - "Trigger2"
+    - "DummyTrigger"

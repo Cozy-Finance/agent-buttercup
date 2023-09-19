@@ -401,6 +401,7 @@ impl CozySimRunner {
         Ok((protocol_contracts, set_contracts))
     }
 
+    #[allow(clippy::type_complexity)]
     fn deploy_libraries(
         &self,
         state: &mut State<CozyUpdate, CozyWorld>,

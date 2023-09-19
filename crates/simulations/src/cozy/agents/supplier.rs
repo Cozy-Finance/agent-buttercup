@@ -122,8 +122,9 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
             f64_to_u256(optimal_allocation) * self.preferences.total_wealth;
 
         // Supply or withdraw to target optimal allocation.
-        match optimal_allocation_value > current_value {
-            true => {
+        match optimal_allocation_value.cmp(&current_value) {
+            std::cmp::Ordering::Equal => (),
+            std::cmp::Ordering::Greater => {
                 let supply_amount = optimal_allocation_value - current_value;
                 let router_supply_tx = self.protocol.cozy_router.deposit(
                     self.set.set.address(),
@@ -137,8 +138,8 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
                     supply_amount
                 );
                 channel.execute_evm_tx(router_supply_tx);
-            }
-            false => {
+            },
+            std::cmp::Ordering::Less => {
                 let withdraw_amount = current_value - optimal_allocation_value;
                 let router_withdraw_tx = self.protocol.cozy_router.withdraw(
                     self.set.set.address(),

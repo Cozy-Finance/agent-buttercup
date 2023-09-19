@@ -1,60 +1,40 @@
 use std::error::Error;
 
-use clap::Parser;
+use clap::{ArgEnum, Parser};
 use flexi_logger::{Duplicate, Logger};
 
 pub mod cozy;
 
-pub enum Sim {
+#[derive(Debug, ArgEnum, Clone)]
+#[clap(rename_all = "kebab_case")]
+pub enum CozySimRunner {
     Base,
-    CostModelAnalysis,
-    KinkCostAnalysis,
-    GrowthRateAnalysis,
-    WidthAnalysis,
-    ScenarioAnalysis,
-    DecayAnalysis,
-}
-
-impl Sim {
-    pub fn map_from_str(name: &str) -> Self {
-        match name {
-            "base" => Sim::Base,
-            "cost_model_analysis" => Sim::CostModelAnalysis,
-            "kink_cost_analysis" => Sim::KinkCostAnalysis,
-            "growth_rate_analysis" => Sim::GrowthRateAnalysis,
-            "width_analysis" => Sim::WidthAnalysis,
-            "scenario_analysis" => Sim::ScenarioAnalysis,
-            "decay_analysis" => Sim::DecayAnalysis,
-            _ => panic!("Unknown simulation: {}", name),
-        }
-    }
 }
 
 /// Runs Cozy Simulation
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-struct Args {
+#[clap(author, version, about, long_about = None)]
+struct CozySimSettings {
     /// Specifies the highest log level to use
-    #[arg(short, long)]
+    #[clap(short, long)]
     log_level: String,
     /// Specifies the sim type to run
-    #[arg(short, long)]
-    sim: Option<String>,
+    #[clap(short, long, arg_enum)]
+    sim: Option<CozySimRunner>,
 }
 
 pub fn main() -> Result<(), Box<dyn Error>> {
-    let args = Args::parse();
+    let settings = CozySimSettings::parse();
 
-    let log_level = args.log_level;
+    let log_level = settings.log_level;
     Logger::try_with_str(log_level)?
         .log_to_stdout()
         .duplicate_to_stderr(Duplicate::Warn)
         .start()?;
 
-    let sim = args.sim.as_deref().map_or(Sim::Base, Sim::map_from_str);
-
-    match sim {
-        _ => panic!(),
+    match settings.sim {
+        Some(CozySimRunner::Base) => cozy::analysis::base::run()?,
+        None => cozy::analysis::base::run()?,
     }
 
     Ok(())

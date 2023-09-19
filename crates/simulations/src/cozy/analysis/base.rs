@@ -1,6 +1,4 @@
-use crate::cozy::{
-    configs::build_cozy_sim_runner_from_dir, runner::CozySingleSetSummaryGenerators,
-};
+use crate::cozy::configs::build_cozy_sim_runner_from_dir;
 
 pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     let runner = build_cozy_sim_runner_from_dir("base")?;
@@ -13,13 +11,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
         workspace_path,
         chrono::Utc::now().to_rfc3339()
     );
-    runner.run(
-        output_file_name.into(),
-        vec![
-            CozySingleSetSummaryGenerators::Set,
-            CozySingleSetSummaryGenerators::CostModels,
-        ],
-    )?;
+    runner.run(output_file_name.into())?;
 
     Ok(())
 }
