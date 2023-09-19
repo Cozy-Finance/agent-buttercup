@@ -1,4 +1,5 @@
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+/*
+se criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use simulations::cozy::{
     configs::build_cozy_sim_runner_from_dir, runner::CozySingleSetSummaryGenerators,
 };
@@ -43,3 +44,10 @@ fn from_num_agents(c: &mut Criterion) {
 
 criterion_group!(benches, from_num_agents);
 criterion_main!(benches);
+
+
+*/
+
+pub fn main() {
+    println!("Hello, world!");
+}

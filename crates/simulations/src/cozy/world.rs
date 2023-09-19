@@ -1,6 +1,7 @@
 use std::{fmt::Debug, sync::Arc};
 
 use nalgebra::DVector;
+use serde::{Deserialize, Serialize};
 use simulate::state::{update::Update, World};
 
 #[derive(Debug, Clone)]
@@ -47,7 +48,7 @@ pub enum CozyUpdate {
 
 impl Update for CozyUpdate {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetAnalytics {
     pub set_apy: f64,
     pub market_apys: DVector<f64>,

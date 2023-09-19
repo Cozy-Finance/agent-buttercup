@@ -10,11 +10,11 @@ use simulate::{
 };
 
 use crate::cozy::{
+    decay_normalizer::normalize_constant_decay_price,
     runner::{ProtocolContracts, SetContracts},
     set_risk_model::SetRiskModel,
     types::ReactionTime,
     world::{CozyUpdate, CozyWorld},
-    decay_normalizer::normalize_constant_decay_price
 };
 
 #[derive(Debug, Clone)]
@@ -130,10 +130,12 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                     u256_to_f64(refund_value) / u256_to_f64(refund_protection_value);
                 let refund_price_percentage = normalize_constant_decay_price(
                     refund_price_percentage,
-                    state.call_evm_tx_and_decode(
-                        self.address,
-                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
-                    ).expect("Error getting drip decay rate.")
+                    state
+                        .call_evm_tx_and_decode(
+                            self.address,
+                            self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                        )
+                        .expect("Error getting drip decay rate."),
                 );
                 if refund_price_percentage > fair_price_percentage {
                     log::info!(
@@ -163,10 +165,12 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                 let purchase_cost_percentage = u256_to_f64(assets_needed) / u256_to_f64(balance);
                 let purchase_cost_percentage = normalize_constant_decay_price(
                     purchase_cost_percentage,
-                    state.call_evm_tx_and_decode(
-                        self.address,
-                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
-                    ).expect("Error getting drip decay rate.")
+                    state
+                        .call_evm_tx_and_decode(
+                            self.address,
+                            self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                        )
+                        .expect("Error getting drip decay rate."),
                 );
                 if purchase_cost_percentage <= fair_price_percentage {
                     log::info!(

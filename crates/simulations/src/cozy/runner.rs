@@ -56,6 +56,7 @@ use crate::cozy::{
     },
     constants::*,
     set_risk_model::SetRiskModel,
+    summary_generators::set_summary::SetSummaryGenerator,
     types::{
         AgentSetRiskParams, AgentSetRiskSampler, ArbitrageurParams, BuyerParams, CostModelType,
         DripDecayModelType, FixedTimePolicyParams, MarketConfigParams, ProtocolDeployParams,
@@ -66,21 +67,6 @@ use crate::cozy::{
     world::{CozyUpdate, CozyWorld},
     EthersAddress, EthersBytes,
 };
-
-#[derive(Debug, Clone)]
-pub enum CozySingleSetSummaryGenerators {
-    Set,
-    CostModels,
-    PricingExperiment,
-}
-
-impl CozySingleSetSummaryGenerators {
-    pub fn register_generator(&self, sim_manager: &mut SimManager<CozyUpdate, CozyWorld>) {
-        match self {
-            _ => panic!(),
-        }
-    }
-}
 
 #[derive(Debug, Clone)]
 pub struct ProtocolContracts {
@@ -362,11 +348,15 @@ impl CozySimRunner {
         let set_analyzer = SetAnalyzer::new(
             SET_ANALYZER.into(),
             Address::random_using(&mut rng),
-            protocol_contracts,
-            set_contracts,
+            protocol_contracts.clone(),
+            set_contracts.clone(),
             true_risk_model,
         );
         manager.activate_agent(Box::new(set_analyzer))?;
+
+        // Register set summary generator.
+        let set_summary_generator = SetSummaryGenerator::new(protocol_contracts, set_contracts);
+        manager.register_summary_generator(set_summary_generator);
 
         // Run sim.
         manager.run_sim()?;
@@ -382,17 +372,17 @@ impl CozySimRunner {
         let state_middleware = Arc::new(StateMiddleware());
 
         // Deploy wETH.
-        println!("Deploying wETH.");
+        log::info!("Deploying wETH.");
         let weth_addr =
             state.deploy_evm_contract(admin_addr, &weth9::WETH9_ABI, &weth9::WETH9_BYTECODE, ())?;
         let weth = weth9::WETH9::new(weth_addr, state_middleware.clone());
 
         // Deploy libraries.
-        println!("Deploying libraries.");
+        log::info!("Deploying libraries.");
         let libraries = self.deploy_libraries(state, admin_addr)?;
 
         // Deploy core protocol.
-        println!("Deploying core protocol.");
+        log::info!("Deploying core protocol.");
         let protocol_contracts = self.deploy_protocol(
             state,
             libraries,
@@ -403,7 +393,7 @@ impl CozySimRunner {
         let protocol_contracts = Arc::new(protocol_contracts);
 
         // Deploy set.
-        println!("Deploying set.");
+        log::info!("Deploying set.");
         let set_contracts =
             self.deploy_set(state, &protocol_contracts, admin_addr, state_middleware)?;
         let set_contracts = Arc::new(set_contracts);
@@ -688,7 +678,7 @@ impl CozySimRunner {
         state_middleware: Arc<StateMiddleware>,
     ) -> Result<SetContracts, Box<dyn std::error::Error>> {
         // Deploy base token.
-        println!("Deploying base token.");
+        log::info!("Deploying base token.");
         let base_token_args = ("Cozy Base Token".to_string(), "CBT".to_string(), 6_u8);
         let base_token_addr = state.deploy_evm_contract(
             admin_addr,
@@ -704,7 +694,7 @@ impl CozySimRunner {
             HashMap::new();
         let mut cost_model_addrs = vec![];
         for (i, (name, cost_model_type)) in self.cost_models.iter().enumerate() {
-            println!("Deploying cost model: {:?}.", name);
+            log::info!("Deploying cost model: {:?}.", name);
 
             match cost_model_type {
                 CostModelType::JumpRate(args) => {
@@ -758,7 +748,7 @@ impl CozySimRunner {
             HashMap::new();
         let mut drip_decay_model_addrs = vec![];
         for (i, (name, drip_decay_model_type)) in self.drip_decay_models.iter().enumerate() {
-            println!("Deploying drip decay model: {:?}.", name);
+            log::info!("Deploying drip decay model: {:?}.", name);
 
             match drip_decay_model_type {
                 DripDecayModelType::Constant(args) => {
@@ -792,7 +782,7 @@ impl CozySimRunner {
         let mut dummy_triggers: HashMap<u32, DummyTrigger<StateMiddleware>> = HashMap::new();
         let mut trigger_addrs = vec![];
         for (i, (name, trigger_type)) in self.triggers.iter().enumerate() {
-            println!("Deploying trigger: {:?}.", name);
+            log::info!("Deploying trigger: {:?}.", name);
 
             match trigger_type {
                 TriggerType::DummyTrigger => {
@@ -812,7 +802,7 @@ impl CozySimRunner {
         }
 
         // Create set call.
-        println!("Calling create set.");
+        log::info!("Calling create set.");
         let mut market_configs: Vec<MarketConfig> = vec![];
         for (i, params) in self.market_config_params.clone().into_iter().enumerate() {
             market_configs.push(MarketConfig {
@@ -839,7 +829,7 @@ impl CozySimRunner {
         );
         let set_addr = state.execute_evm_tx_and_decode(admin_addr, set_create_call)?;
         let set = Set::new(set_addr, state_middleware.clone());
-        println!("Set deployed at {:0X}.", set_addr);
+        log::info!("Set deployed at {:0X}.", set_addr);
 
         // Register PToken contracts.
         let mut ptokens: HashMap<u32, PToken<StateMiddleware>> = HashMap::new();
@@ -880,13 +870,12 @@ impl CozySimRunner {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::cozy::configs::build_cozy_sim_runner_from_dir;
 
     #[test]
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let runner = build_cozy_sim_runner_from_dir("test")?;
-        runner.run("test".into());
+        let _ = runner.run("output/summaries/test_output.json".into());
         Ok(())
     }
 }

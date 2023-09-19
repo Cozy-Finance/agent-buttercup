@@ -161,10 +161,7 @@ where
         Ok(())
     }
 
-    pub fn register_summary_generator<T: serde::Serialize>(
-        &mut self,
-        generator: Box<dyn SummaryGenerator<U, W>>,
-    ) {
+    pub fn register_summary_generator(&mut self, generator: Box<dyn SummaryGenerator<U, W>>) {
         self.summarizer.register_summary_generator(generator)
     }
 }
