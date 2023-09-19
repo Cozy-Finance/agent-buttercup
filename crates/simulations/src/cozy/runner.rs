@@ -59,7 +59,7 @@ use crate::cozy::{
     types::{
         AgentSetRiskParams, AgentSetRiskSampler, ArbitrageurParams, BuyerParams, CostModelType,
         DripDecayModelType, FixedTimePolicyParams, MarketConfigParams, ProtocolDeployParams,
-        SetConfigParams, SimSetupParams, SupplierParams, SupplierRiskAversionSampler,
+        ReactionTime, SetConfigParams, SimSetupParams, SupplierParams, SupplierRiskAversionSampler,
         TriggerRiskParams, TriggerSimulator, TriggerType,
     },
     utils::deserialize_cow_tuple_vec,
@@ -135,12 +135,11 @@ impl CozySimRunner {
         let mut state = State::new(world);
         let fixed_time_policy = FixedTimePolicy::new(
             TimeEnv {
-                block_number: self.time_policy_params.start_block_number.into(),
-                block_timestamp: self.time_policy_params.start_block_timestamp.into(),
+                block_number: self.time_policy_params.start_block_number,
+                block_timestamp: self.time_policy_params.start_block_timestamp,
             },
-            self.time_policy_params.time_per_block.into(),
-            self.time_policy_params.blocks_per_step.into(),
-            self.time_policy_params.time_to_generate.into(),
+            self.time_policy_params.time_per_step,
+            self.time_policy_params.time_to_generate,
         );
 
         // Admin agent executes all set-up transactions.
@@ -175,8 +174,7 @@ impl CozySimRunner {
         manager.activate_agent(Box::new(altruistic_supplier))?;
 
         // Run trigger admin activation.
-        let step_time: u64 =
-            (fixed_time_policy.time_per_block * fixed_time_policy.blocks_per_step).as_u64();
+        let step_time: u64 = fixed_time_policy.time_per_step.as_u64();
         let annual_step_factor = SECONDS_IN_YEAR as f64 / step_time as f64;
         let trigger_simulator = TriggerSimulator::new(
             rng.clone(),
@@ -241,6 +239,10 @@ impl CozySimRunner {
                 leverage,
                 DVector::from(market_weights.clone()),
             );
+            let buyer_reaction_time = ReactionTime::new(
+                self.buyer_params.mean_reaction_time,
+                self.time_policy_params.start_block_timestamp,
+            );
             let buyer = Buyer::new(
                 BUYER.into(),
                 Address::random_using(&mut rng),
@@ -249,6 +251,7 @@ impl CozySimRunner {
                 BuyerPreferences::new(
                     buyer_risk_model,
                     market_allocations_dirichlet.sample(&mut rng),
+                    buyer_reaction_time,
                 ),
                 rng.clone(),
             );
@@ -282,11 +285,16 @@ impl CozySimRunner {
                 leverage,
                 DVector::from(market_weights.clone()),
             );
+            let supper_reaction_time = ReactionTime::new(
+                self.supplier_params.mean_reaction_time,
+                self.time_policy_params.start_block_timestamp,
+            );
             let wealth = f64_to_u256(wealth_normal.sample(&mut rng).max(0.0));
             let supplier_preferences = SupplierPreferences::new(
                 supplier_risk_model,
                 risk_aversion_sampler.sample(),
                 wealth,
+                supper_reaction_time,
             );
             let supplier = Supplier::new(
                 SUPPLIER.into(),
@@ -321,12 +329,16 @@ impl CozySimRunner {
                 leverage,
                 DVector::from(market_weights.clone()),
             );
+            let arbitrageur_reaction_time = ReactionTime::new(
+                self.arbitrageur_params.mean_reaction_time,
+                self.time_policy_params.start_block_timestamp,
+            );
             let arbitrageur = Arbitrageur::new(
                 ARBITRAGEUR.into(),
                 Address::random_using(&mut rng),
                 protocol_contracts.clone(),
                 set_contracts.clone(),
-                ArbitrageurPreferences::new(arbitrageur_risk_model),
+                ArbitrageurPreferences::new(arbitrageur_risk_model, arbitrageur_reaction_time),
                 rng.clone(),
             );
             let balance = f64_to_u256(balance_normal.sample(&mut rng).max(0.0));

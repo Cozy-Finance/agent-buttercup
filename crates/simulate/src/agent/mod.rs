@@ -3,7 +3,7 @@ use revm::primitives::AccountInfo;
 use crate::{
     address::Address,
     agent::agent_channel::{AgentChannelReceiver, AgentChannelSender},
-    state::{update::Update, world::World, State},
+    state::{update::Update, State, World},
 };
 
 pub mod agent_channel;

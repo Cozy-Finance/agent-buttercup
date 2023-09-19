@@ -20,10 +20,8 @@ pub trait TimePolicy: Sync + Send {
 #[derive(Debug, Copy, Clone)]
 pub struct FixedTimePolicy {
     current_time_env: TimeEnv,
-    /// Each new block moves the timestamp forward by `time_per_block`.
-    pub time_per_block: U256,
-    /// Each step moves the block number forward by `blocks_per_step`.
-    pub blocks_per_step: U256,
+    /// Each step moves the timestamp forward by `time_per_block` and block number forward by 1.
+    pub time_per_step: U256,
     /// Total amount of time to generate before becoming inactive.
     time_to_generate: U256,
     /// Total amount of generated time.
@@ -31,16 +29,10 @@ pub struct FixedTimePolicy {
 }
 
 impl FixedTimePolicy {
-    pub fn new(
-        current_time_env: TimeEnv,
-        time_per_block: U256,
-        blocks_per_step: U256,
-        time_to_generate: U256,
-    ) -> Self {
+    pub fn new(current_time_env: TimeEnv, time_per_step: U256, time_to_generate: U256) -> Self {
         Self {
             current_time_env,
-            time_per_block,
-            blocks_per_step,
+            time_per_step,
             time_to_generate,
             generated_time: U256::zero(),
         }
@@ -54,11 +46,10 @@ impl TimePolicy for FixedTimePolicy {
 
     fn step(&mut self) -> TimeEnv {
         if self.is_active() {
-            let time_delta = self.time_per_block * self.blocks_per_step;
-            self.generated_time += time_delta;
+            self.generated_time += self.time_per_step;
             self.current_time_env = TimeEnv {
-                block_number: self.current_time_env.block_number + self.blocks_per_step,
-                block_timestamp: self.current_time_env.block_timestamp + time_delta,
+                block_number: self.current_time_env.block_number + 1,
+                block_timestamp: self.current_time_env.block_timestamp + self.time_per_step,
             };
         }
         self.current_time_env

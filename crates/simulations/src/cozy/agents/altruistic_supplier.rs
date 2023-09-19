@@ -54,5 +54,10 @@ impl Agent<CozyUpdate, CozyWorld> for AltruisticSupplier {
         );
         let _ = state.execute_evm_tx_and_decode(self.address, router_approve_tx);
         let _ = state.execute_evm_tx_and_decode(self.address, deposit_tx);
+        log::info!(
+            "Altruistic supplier {} is supplying {} assets.",
+            self.address,
+            balance
+        );
     }
 }

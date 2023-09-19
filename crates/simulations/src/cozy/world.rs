@@ -1,7 +1,7 @@
 use std::{fmt::Debug, sync::Arc};
 
 use nalgebra::DVector;
-use simulate::state::{update::Update, world::World};
+use simulate::state::{update::Update, World};
 
 #[derive(Debug, Clone)]
 pub struct CozyWorld {

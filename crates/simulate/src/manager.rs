@@ -8,8 +8,7 @@ use crate::{
     },
     state::{
         update::{EvmStateUpdate, EvmStateUpdateOutput, Update, WorldStateUpdate},
-        world::World,
-        State, StateError,
+        State, StateError, World,
     },
     summarizer::{Summarizer, SummaryGenerator},
     time_policy::TimePolicy,

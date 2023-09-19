@@ -12,17 +12,23 @@ use simulate::{
 use crate::cozy::{
     runner::{ProtocolContracts, SetContracts},
     set_risk_model::SetRiskModel,
+    types::ReactionTime,
     world::{CozyUpdate, CozyWorld},
+    decay_normalizer::normalize_constant_decay_price
 };
 
 #[derive(Debug, Clone)]
 pub struct ArbitrageurPreferences {
     risk_model: SetRiskModel,
+    reaction_time: ReactionTime,
 }
 
 impl ArbitrageurPreferences {
-    pub fn new(risk_model: SetRiskModel) -> Self {
-        Self { risk_model }
+    pub fn new(risk_model: SetRiskModel, reaction_time: ReactionTime) -> Self {
+        Self {
+            risk_model,
+            reaction_time,
+        }
     }
 }
 
@@ -79,6 +85,14 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
         state: &State<CozyUpdate, CozyWorld>,
         channel: &AgentChannelSender<CozyUpdate>,
     ) {
+        if !self
+            .preferences
+            .reaction_time
+            .time_to_react(state.timestamp(), &mut self.rng)
+        {
+            return;
+        }
+
         // Get current balance.
         let balance = state
             .call_evm_tx_and_decode(
@@ -114,8 +128,19 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                         .expect("Error decoding purchase cost.");
                 let refund_price_percentage =
                     u256_to_f64(refund_value) / u256_to_f64(refund_protection_value);
+                let refund_price_percentage = normalize_constant_decay_price(
+                    refund_price_percentage,
+                    state.call_evm_tx_and_decode(
+                        self.address,
+                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                    ).expect("Error getting drip decay rate.")
+                );
                 if refund_price_percentage > fair_price_percentage {
-                    println!("Arbitrageur {} is selling protection.", self.address);
+                    log::info!(
+                        "Arbitrageur {} is selling {} protection.",
+                        self.address,
+                        refund_protection_value
+                    );
                     channel.execute_evm_tx(refund_value_tx);
                 }
             }
@@ -136,7 +161,19 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
                     decode_output(&purchase_cost_tx.function, output_bytes)
                         .expect("Error decoding purchase cost.");
                 let purchase_cost_percentage = u256_to_f64(assets_needed) / u256_to_f64(balance);
+                let purchase_cost_percentage = normalize_constant_decay_price(
+                    purchase_cost_percentage,
+                    state.call_evm_tx_and_decode(
+                        self.address,
+                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                    ).expect("Error getting drip decay rate.")
+                );
                 if purchase_cost_percentage <= fair_price_percentage {
+                    log::info!(
+                        "Arbitrageur {} is buying {} protection.",
+                        self.address,
+                        balance
+                    );
                     channel.execute_evm_tx(purchase_cost_tx);
                 }
             }

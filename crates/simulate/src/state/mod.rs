@@ -3,6 +3,9 @@ use std::convert::Infallible;
 use ethers::{
     abi::{Detokenize, Tokenize},
     contract::ContractCall,
+    prelude::ProviderError,
+    providers::{JsonRpcClient, Middleware, MiddlewareError, Provider},
+    types::transaction::eip2718::TypedTransaction,
 };
 use revm::{
     db::{CacheDB, DatabaseRef, EmptyDB},
@@ -13,10 +16,7 @@ use serde::{de::DeserializeOwned, Serialize};
 
 use crate::{
     address::Address,
-    state::{
-        update::{EvmStateUpdate, EvmStateUpdateOutput, Update},
-        world::World,
-    },
+    state::update::{EvmStateUpdate, EvmStateUpdateOutput, Update, WorldStateUpdate},
     time_policy::TimeEnv,
     u256::U256,
     utils::{decode_output, GasSettings},
@@ -24,17 +24,13 @@ use crate::{
 };
 
 pub mod update;
-pub mod world;
+
+pub trait World: Sync + Send {
+    type WorldUpdate: Update;
+    fn execute(&mut self, update: Self::WorldUpdate) -> Option<Self::WorldUpdate>;
+}
 
 pub type StateResult<T> = core::result::Result<T, StateError>;
-
-use ethers::{
-    prelude::ProviderError,
-    providers::{JsonRpcClient, Middleware, MiddlewareError, Provider},
-    types::transaction::eip2718::TypedTransaction,
-};
-
-use self::update::WorldStateUpdate;
 
 #[derive(thiserror::Error, Debug)]
 pub enum StateError {
@@ -90,11 +86,11 @@ where
         Ok(account_info)
     }
 
-    pub fn read_timestamp(&self) -> U256 {
+    pub fn timestamp(&self) -> U256 {
         U256::from(self.evm.env.block.timestamp)
     }
 
-    pub fn read_block_number(&self) -> U256 {
+    pub fn block_number(&self) -> U256 {
         U256::from(self.evm.env.block.number)
     }
 

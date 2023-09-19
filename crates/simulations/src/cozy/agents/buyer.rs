@@ -11,8 +11,10 @@ use simulate::{
 };
 
 use crate::cozy::{
+    decay_normalizer::normalize_constant_decay_price,
     runner::{ProtocolContracts, SetContracts},
     set_risk_model::SetRiskModel,
+    types::ReactionTime,
     world::{CozyUpdate, CozyWorld},
 };
 
@@ -20,13 +22,19 @@ use crate::cozy::{
 pub struct BuyerPreferences {
     risk_model: SetRiskModel,
     market_allocations: DVector<f64>,
+    reaction_time: ReactionTime,
 }
 
 impl BuyerPreferences {
-    pub fn new(risk_model: SetRiskModel, market_allocations: DVector<f64>) -> Self {
+    pub fn new(
+        risk_model: SetRiskModel,
+        market_allocations: DVector<f64>,
+        reaction_time: ReactionTime,
+    ) -> Self {
         Self {
             risk_model,
             market_allocations,
+            reaction_time,
         }
     }
 }
@@ -79,6 +87,14 @@ impl Agent<CozyUpdate, CozyWorld> for Buyer {
         state: &State<CozyUpdate, CozyWorld>,
         channel: &AgentChannelSender<CozyUpdate>,
     ) {
+        if !self
+            .preferences
+            .reaction_time
+            .time_to_react(state.timestamp(), &mut self.rng)
+        {
+            return;
+        }
+
         // Get current balance.
         let balance = state
             .call_evm_tx_and_decode(
@@ -107,13 +123,28 @@ impl Agent<CozyUpdate, CozyWorld> for Buyer {
                 .call_evm_tx(self.address, purchase_cost_tx.clone())
                 .expect("Error getting purchase cost.");
             if let simulate::state::EvmTxOutput::Success(output_bytes) = purchase_cost_call {
-                let (assets_needed, _): (U256, U256) =
+                let (assets_needed, protection_amt): (U256, U256) =
                     decode_output(&purchase_cost_tx.function, output_bytes)
                         .expect("Error decoding purchase cost.");
                 let purchase_cost_percentage =
                     u256_to_f64(assets_needed) / u256_to_f64(purchase_amt);
+                let purchase_cost_percentage = normalize_constant_decay_price(
+                    purchase_cost_percentage,
+                    state
+                        .call_evm_tx_and_decode(
+                            self.address,
+                            self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                        )
+                        .expect("Error getting drip decay rate."),
+                );
+
                 let fair_price_percentage = self.compute_fair_cost_percentage(target_market);
                 if purchase_cost_percentage <= fair_price_percentage {
+                    log::info!(
+                        "Buyering {} is buying {} protection.",
+                        self.address,
+                        protection_amt
+                    );
                     channel.execute_evm_tx(purchase_cost_tx)
                 }
             }

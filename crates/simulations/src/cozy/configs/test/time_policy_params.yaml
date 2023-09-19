@@ -1,6 +1,5 @@
 time_policy_params:
-  start_block_number: 1
-  start_block_timestamp: 1
-  time_per_block: 12
-  blocks_per_step: 7200 # 1 day / step
-  time_to_generate: 86400000 # 100 days
+  start_block_number: "1"
+  start_block_timestamp: "1"
+  time_per_step: "86400"
+  time_to_generate: "86400000" # 100 days

@@ -6,7 +6,7 @@ use std::{
 
 use auto_impl::auto_impl;
 
-use crate::state::{update::Update, world::World, State};
+use crate::state::{update::Update, State, World};
 
 #[auto_impl(Box)]
 pub trait SummaryGenerator<U: Update, W: World<WorldUpdate = U>> {

@@ -7,8 +7,8 @@ use nalgebra::{DMatrix, DVector};
 use rand::rngs::StdRng;
 use rand_distr::Distribution;
 use serde::Deserialize;
-use simulate::u256::{deserialize_string_to_u256, U256};
-use statrs::distribution::Beta;
+use simulate::u256::{deserialize_string_to_u256, f64_to_u256, u256_to_f64, U256};
+use statrs::distribution::{Beta, Exp};
 
 use super::statistics::{
     mvbernoulli::MultivariateBernoulli, mvbeta::MultivariateBeta, wishart::WishartCorrelation,
@@ -110,11 +110,14 @@ pub struct ProtocolDeployParams {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct FixedTimePolicyParams {
-    pub start_block_number: u64,
-    pub start_block_timestamp: u64,
-    pub time_per_block: u64,
-    pub blocks_per_step: u64,
-    pub time_to_generate: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub start_block_number: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub start_block_timestamp: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub time_per_step: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub time_to_generate: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -129,6 +132,8 @@ pub struct ArbitrageurParams {
     pub balance_mean: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub balance_std: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub mean_reaction_time: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -139,6 +144,8 @@ pub struct BuyerParams {
     pub balance_mean: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub balance_std: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub mean_reaction_time: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -151,6 +158,8 @@ pub struct SupplierParams {
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub wealth_std: U256,
     pub altruistic_supplier_wealth: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub mean_reaction_time: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -261,5 +270,31 @@ impl SupplierRiskAversionSampler {
 
     pub fn sample(&mut self) -> f64 {
         self.beta.sample(&mut self.rng)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ReactionTime {
+    exp: Exp,
+    last_reaction_time: U256,
+}
+
+impl ReactionTime {
+    pub fn new(mean_reaction_time: U256, last_reaction_time: U256) -> Self {
+        let exp = Exp::new(1. / u256_to_f64(mean_reaction_time)).unwrap();
+        Self {
+            exp,
+            last_reaction_time,
+        }
+    }
+
+    pub fn time_to_react(&mut self, current_time: U256, rng: &mut StdRng) -> bool {
+        let waiting_time = f64_to_u256(self.exp.sample(rng));
+        if current_time - self.last_reaction_time > waiting_time {
+            self.last_reaction_time = current_time;
+            true
+        } else {
+            false
+        }
     }
 }

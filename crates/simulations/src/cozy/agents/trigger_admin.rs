@@ -61,7 +61,6 @@ impl Agent<CozyUpdate, CozyWorld> for TriggerAdmin {
         _state: &State<CozyUpdate, CozyWorld>,
         _channel: &AgentChannelSender<CozyUpdate>,
     ) {
-        println!("{:?}", _state.world.set_analytics);
         // Sample triggers.
         let trigger_outcomes = self.trigger_simulator.sample();
         let triggered_idxs: Vec<usize> = trigger_outcomes

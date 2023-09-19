@@ -15,7 +15,3 @@ protocol_params:
     sale_fee_reserves: 0
     sale_fee_backstop: 0
   allowed_markets_per_set: "50"
-base_token_params:
-  name: "Cozy Base Token"
-  symbol: "CBT"
-  decimals: 6

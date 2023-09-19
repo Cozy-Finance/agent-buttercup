@@ -11,6 +11,7 @@ use simulate::{
 use crate::cozy::{
     runner::{ProtocolContracts, SetContracts},
     set_risk_model::SetRiskModel,
+    types::ReactionTime,
     world::{CozyUpdate, CozyWorld},
 };
 
@@ -19,14 +20,21 @@ pub struct SupplierPreferences {
     risk_model: SetRiskModel,
     risk_aversion: f64,
     total_wealth: U256,
+    reaction_time: ReactionTime,
 }
 
 impl SupplierPreferences {
-    pub fn new(risk_model: SetRiskModel, risk_aversion: f64, total_wealth: U256) -> Self {
+    pub fn new(
+        risk_model: SetRiskModel,
+        risk_aversion: f64,
+        total_wealth: U256,
+        reaction_time: ReactionTime,
+    ) -> Self {
         Self {
             risk_model,
             risk_aversion,
             total_wealth,
+            reaction_time,
         }
     }
 }
@@ -79,6 +87,14 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
         state: &State<CozyUpdate, CozyWorld>,
         channel: &AgentChannelSender<CozyUpdate>,
     ) {
+        if !self
+            .preferences
+            .reaction_time
+            .time_to_react(state.timestamp(), &mut self.rng)
+        {
+            return;
+        }
+
         // Get current balance.
         let balance = state
             .call_evm_tx_and_decode(
@@ -115,6 +131,11 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
                     self.address.into(),
                     U256::zero(),
                 );
+                log::info!(
+                    "Supplier {} is deposting {} assets.",
+                    self.address,
+                    supply_amount
+                );
                 channel.execute_evm_tx(router_supply_tx);
             }
             false => {
@@ -124,6 +145,11 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
                     withdraw_amount,
                     self.address.into(),
                     U256::zero(),
+                );
+                log::info!(
+                    "Supplier {} is withdrawing {} assets.",
+                    self.address,
+                    withdraw_amount
                 );
                 channel.execute_evm_tx(router_withdraw_tx);
             }
