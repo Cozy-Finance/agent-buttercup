@@ -26,7 +26,7 @@ fn from_num_agents(c: &mut Criterion) {
 
                     let _ = runner.run(output_file_name.into());
                 })
-            }
+            },
         );
     }
 
