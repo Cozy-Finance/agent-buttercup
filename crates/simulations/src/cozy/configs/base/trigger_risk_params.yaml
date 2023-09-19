@@ -1,0 +1,4 @@
+trigger_risk_params:
+  annual_probabilities:
+    - 0.999
+  correlation: 0.99

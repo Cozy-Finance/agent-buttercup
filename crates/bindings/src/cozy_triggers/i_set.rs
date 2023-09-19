@@ -7,16 +7,45 @@ pub use i_set::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod i_set {
-    #[rustfmt::skip]
-    const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"newMarketState_\",\"type\":\"uint8\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"updateMarketState\",\"outputs\":[]}]";
+    #[allow(deprecated)]
+    fn __abi() -> ::ethers::core::abi::Abi {
+        ::ethers::core::abi::ethabi::Contract {
+            constructor: ::core::option::Option::None,
+            functions: ::core::convert::From::from([
+                (
+                    ::std::borrow::ToOwned::to_owned("updateMarketState"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("updateMarketState"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("newMarketState_"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(8usize),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("enum MarketState"),
+                                    ),
+                                },
+                            ],
+                            outputs: ::std::vec![],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+            ]),
+            events: ::std::collections::BTreeMap::new(),
+            errors: ::std::collections::BTreeMap::new(),
+            receive: false,
+            fallback: false,
+        }
+    }
     ///The parsed JSON ABI of the contract.
-    pub static ISET_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers_contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static ISET_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(
+        __abi,
+    );
     pub struct ISet<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for ISet<M> {
         fn clone(&self) -> Self {
@@ -36,9 +65,7 @@ pub mod i_set {
     }
     impl<M> ::core::fmt::Debug for ISet<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(ISet))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(::core::stringify!(ISet)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> ISet<M> {
@@ -48,11 +75,13 @@ pub mod i_set {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers_contract::Contract::new(
-                address.into(),
-                ISET_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers_contract::Contract::new(
+                    address.into(),
+                    ISET_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `updateMarketState` (0x7a75fdde) function
         pub fn update_market_state(
@@ -64,7 +93,8 @@ pub mod i_set {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for ISet<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
+    for ISet<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -78,7 +108,7 @@ pub mod i_set {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "updateMarketState", abi = "updateMarketState(uint8)")]
     pub struct UpdateMarketStateCall {

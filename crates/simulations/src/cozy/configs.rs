@@ -1,6 +1,6 @@
 use std::fs;
 
-use crate::cozy::runner::CozySingleSetSimRunner;
+use crate::cozy::runner::CozySimRunner;
 
 pub fn build_config_from_dir(dir: &str) -> Result<config::Config, anyhow::Error> {
     let workspace_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
@@ -29,7 +29,7 @@ pub fn build_config_from_dir(dir: &str) -> Result<config::Config, anyhow::Error>
     Ok(config_builder.build()?)
 }
 
-pub fn build_cozy_sim_runner_from_dir(dir: &str) -> Result<CozySingleSetSimRunner, anyhow::Error> {
+pub fn build_cozy_sim_runner_from_dir(dir: &str) -> Result<CozySimRunner, anyhow::Error> {
     let config = build_config_from_dir(dir)?;
-    Ok(config.try_deserialize::<CozySingleSetSimRunner>()?)
+    Ok(config.try_deserialize::<CozySimRunner>()?)
 }

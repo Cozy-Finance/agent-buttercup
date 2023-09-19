@@ -1,4 +1,7 @@
 market_config_params:
-  - weight: 10000
+  - weight: 5000
+    purchase_fee: 0
+    sale_fee: 0
+  - weight: 5000
     purchase_fee: 0
     sale_fee: 0

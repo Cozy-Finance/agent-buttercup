@@ -1,83 +1,45 @@
-use bytes::Bytes;
-use revm::primitives::{ExecutionResult, Output, TransactTo, TxEnv};
+use std::any;
 
-use crate::{address::Address, agent::types::AgentTxGas, u256::U256, EvmBytes};
+use ethers::{
+    abi::{Detokenize, Function},
+    prelude::decode_function_data,
+};
+use ethers_solc::artifacts::BytecodeObject;
 
-#[derive(thiserror::Error, Debug)]
-pub enum FailedExecutionError {
-    #[error("{0}")]
-    Halted(String),
-    #[error("{0}")]
-    Reverted(String, Bytes),
+use crate::{u256::U256, EthersAddress, EvmBytes};
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone)]
+pub struct GasSettings {
+    pub gas_limit: u64,
+    pub gas_price: U256,
+    pub gas_priority_fee: Option<U256>,
 }
 
-/// Takes an `ExecutionResult` and returns the raw bytes of the output that can then be decoded.
-/// # Arguments
-/// * `execution_result` - The `ExecutionResult` that we want to unpack.
-/// # Returns
-/// * `Ok(Bytes)` - The raw bytes of the output.
-pub fn unpack_execution(execution_result: ExecutionResult) -> Result<Bytes, FailedExecutionError> {
-    match execution_result {
-        ExecutionResult::Success { output, .. } => match output {
-            Output::Call(value) => Ok(value),
-            Output::Create(value, _address) => Ok(value),
-        },
-        ExecutionResult::Halt { reason, gas_used } => Err(FailedExecutionError::Halted(format!(
-            "This call halted for {:#?} and used {} gas.",
-            reason, gas_used
-        ))),
-        ExecutionResult::Revert { output, gas_used } => Err(FailedExecutionError::Reverted(
-            format!(
-                "This call reverted with output {:#?} and used {} gas.",
-                output, gas_used
-            ),
-            output,
-        )),
+impl Default for GasSettings {
+    fn default() -> Self {
+        Self {
+            gas_limit: u64::MAX,
+            gas_price: U256::zero(),
+            gas_priority_fee: None,
+        }
     }
 }
 
-pub fn is_execution_success(execution_result: &ExecutionResult) -> bool {
-    matches!(execution_result, ExecutionResult::Success { .. })
-}
-
-pub fn build_call_tx(
-    caller_address: Address,
-    receiver_address: Address,
-    call_data: EvmBytes,
-) -> TxEnv {
-    let tx_gas_settings = AgentTxGas::default();
-    TxEnv {
-        caller: caller_address.into(),
-        gas_limit: tx_gas_settings.gas_limit,
-        gas_price: tx_gas_settings.gas_price.into(),
-        gas_priority_fee: tx_gas_settings.gas_priority_fee.map(|x| x.into()),
-        transact_to: TransactTo::Call(receiver_address.into()),
-        value: U256::zero().into(),
-        data: call_data,
-        chain_id: None,
-        nonce: None,
-        access_list: Vec::new(),
+pub fn build_linked_bytecode(
+    unlinked_bytecode_str: &str,
+    links: Vec<(&str, &str, EthersAddress)>,
+) -> Result<EvmBytes, anyhow::Error> {
+    let mut bytecode = BytecodeObject::Unlinked(unlinked_bytecode_str.to_string());
+    bytecode.link_all(links);
+    match bytecode.resolve() {
+        Some(b) => Ok(b.0.clone()),
+        None => Err(anyhow::format_err!("Error linking bytecode")),
     }
 }
 
-pub fn build_call_tx_w_settings(
-    caller_address: Address,
-    receiver_address: Address,
-    call_data: EvmBytes,
-    value: Option<U256>,
-    gas_settings: Option<AgentTxGas>,
-) -> TxEnv {
-    let tx_gas_settings = gas_settings.unwrap_or_default();
-    TxEnv {
-        caller: caller_address.into(),
-        gas_limit: tx_gas_settings.gas_limit,
-        gas_price: tx_gas_settings.gas_price.into(),
-        gas_priority_fee: tx_gas_settings.gas_priority_fee.map(|x| x.into()),
-        transact_to: TransactTo::Call(receiver_address.into()),
-        value: value.unwrap_or(U256::zero()).into(),
-        data: call_data,
-        chain_id: None,
-        nonce: None,
-        access_list: Vec::new(),
-    }
+pub fn decode_output<D: Detokenize>(
+    function: &Function,
+    output_bytes: EvmBytes,
+) -> Result<D, ethers::abi::AbiError> {
+    decode_function_data::<D, &[u8]>(&function, &output_bytes.to_vec(), false)
 }

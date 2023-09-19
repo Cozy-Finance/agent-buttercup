@@ -19,9 +19,8 @@ time_policy_params:
   start_block_number: 1
   start_block_timestamp: 1
   time_per_block: 12
-  blocks_per_step: 50 # 50 * 12 = 600 secs / step
-  blocks_to_generate: 500000 # ~70 days
-  time_to_generate: null
+  blocks_per_step: 5000 # 50 * 12 = 600 secs / step
+  time_to_generate: 1296000000
 base_token_params:
   name: "Cozy Base Token"
   symbol: "CBT"

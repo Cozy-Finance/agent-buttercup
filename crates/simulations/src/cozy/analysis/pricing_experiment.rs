@@ -118,7 +118,6 @@ pub fn run_kink_location_analysis() -> Result<(), Box<dyn std::error::Error>> {
 
     while u_opt <= kink_location_config.max_u_opt {
         let mut dynamic_level_runner_mut = dynamic_level_runner.clone();
-        println!("optimal_zone_rate: {}", optimal_zone_rate);
 
         dynamic_level_runner_mut.cost_models = vec![(
             "DynamicLevel".into(),

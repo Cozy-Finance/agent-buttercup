@@ -6,12 +6,12 @@ use std::{
 
 use auto_impl::auto_impl;
 
-use crate::state::{update::UpdateData, world::World, SimState};
+use crate::state::{update::UpdateData, world::World, State};
 
 #[auto_impl(Box)]
 pub trait SummaryGenerator<U: UpdateData, W: World<WorldUpdateData = U>> {
     /// Yield the summary on the given world state.
-    fn get_summary(&self, sim_state: &SimState<U, W>) -> Result<serde_json::Value, anyhow::Error>;
+    fn get_summary(&self, sim_state: &State<U, W>) -> Result<serde_json::Value, anyhow::Error>;
 
     /// The name of the summary.
     fn get_summary_name(&self) -> Cow<'static, str>;
@@ -33,7 +33,7 @@ impl<U: UpdateData, W: World<WorldUpdateData = U>> Summarizer<U, W> {
         }
     }
 
-    pub fn output_summaries(&mut self, sim_state: &SimState<U, W>) {
+    pub fn output_summaries(&mut self, sim_state: &State<U, W>) {
         for summary_generator in &self.summary_generators {
             let summary_result = summary_generator.get_summary(sim_state);
             log::debug!(

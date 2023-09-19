@@ -59,7 +59,7 @@ impl CostModelsSummaryGenerator {
 impl SummaryGenerator<CozyUpdate, CozyWorld> for CostModelsSummaryGenerator {
     fn get_summary(
         &self,
-        sim_state: &simulate::state::SimState<CozyUpdate, CozyWorld>,
+        sim_state: &simulate::state::State<CozyUpdate, CozyWorld>,
     ) -> Result<Value, anyhow::Error> {
         let sets = sim_state.world.sets.values();
 

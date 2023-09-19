@@ -3,14 +3,22 @@ use bindings::{
     cozy_protocol::shared_types::{Delays, Fees, MarketConfig, SetConfig},
     drip_decay_model_constant_factory,
 };
-use rand::Rng;
+use nalgebra::{DMatrix, DVector};
+use rand::{rngs::StdRng, Rng, SeedableRng};
+use rand_distr::{Dirichlet, Distribution};
 use serde::Deserialize;
 use simulate::{
     address::Address,
     u256::{deserialize_string_to_u256, U256},
 };
+use statrs::distribution::Beta;
 
-use super::distributions::LinkedProbTruncatedNorm;
+use super::{
+    distributions::LinkedProbTruncatedNorm,
+    statistics::{
+        mvbernoulli::MultivariateBernoulli, mvbeta::MultivariateBeta, wishart::WishartCorrelation,
+    },
+};
 use crate::cozy::distributions::{
     Exponential, ProbTruncatedNorm, TriggerProbModel, U256UniformRange,
 };
@@ -117,13 +125,12 @@ pub struct CozyProtocolDeployParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyFixedTimePolicyParams {
+pub struct FixedTimePolicyParams {
     pub start_block_number: u64,
     pub start_block_timestamp: u64,
     pub time_per_block: u64,
     pub blocks_per_step: u64,
-    pub blocks_to_generate: Option<u64>,
-    pub time_to_generate: Option<u64>,
+    pub time_to_generate: u64,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -132,41 +139,34 @@ pub struct CozySimSetupParams {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyPassiveBuyersParams {
-    pub num_passive: u64,
-    pub capital_dist: U256UniformRange,
-    pub protection_desired_dist: U256UniformRange,
-    pub time_dist: Exponential,
+pub struct ArbitrageurParams {
+    pub num: u64,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub balance_mean: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub balance_std: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub enum CozyAgentTriggerProbModel {
-    Static(ProbTruncatedNorm),
-    Dynamic(LinkedProbTruncatedNorm),
-}
-
-impl CozyAgentTriggerProbModel {
-    pub fn sample<R: Rng + ?Sized>(&self, rng: &mut R, oracle_prob: f64) -> f64 {
-        match self {
-            CozyAgentTriggerProbModel::Static(dist) => dist.sample(rng),
-            CozyAgentTriggerProbModel::Dynamic(dist) => dist.sample(oracle_prob, rng),
-        }
-    }
+pub struct BuyerParams {
+    pub num: u64,
+    pub market_allocations_dirichlet_alpha: f64,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub balance_mean: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub balance_std: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct CozyActiveBuyersParams {
-    pub num_active: u64,
-    pub capital_dist: U256UniformRange,
-    pub time_dist: Exponential,
-    pub trigger_prob_dist: CozyAgentTriggerProbModel,
-}
-
-#[derive(Debug, Clone, Deserialize)]
-pub struct CozySuppliersParams {
-    pub num_passive: u64,
-    pub capital_dist: U256UniformRange,
-    pub time_dist: Exponential,
+pub struct SupplierParams {
+    pub num: u64,
+    pub risk_aversion_mean: f64,
+    pub risk_aversion_concentration: f64,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub wealth_mean: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
+    pub wealth_std: U256,
+    pub altruistic_supplier_wealth: U256,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -191,10 +191,91 @@ impl From<CozySetConfigParams> for SetConfig {
     }
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct TriggerRiskParams {
+    pub annual_probabilities: Vec<f64>,
+    pub pairwise_corr: f64,
+}
+
 #[derive(Debug, Clone)]
-pub struct CozySetAdminParams {
-    pub asset: Address,
-    pub set_config: SetConfig,
-    pub market_configs: Vec<MarketConfig>,
-    pub salt: Option<[u8; 32]>,
+pub struct TriggerSimulator {
+    rng: rand::rngs::StdRng,
+    pub mvb: MultivariateBernoulli,
+}
+
+impl TriggerSimulator {
+    pub fn new(rng: StdRng, probabilities: Vec<f64>, correlation: f64) -> Self {
+        let n = probabilities.len();
+        let corr_matrix =
+            nalgebra::DMatrix::from_fn(n, n, |i, j| if i == j { 1.0 } else { correlation })
+                .as_slice()
+                .to_vec();
+        let mvb = MultivariateBernoulli::new(probabilities, corr_matrix)
+            .expect("Error creating multivariate Bernoulli.");
+        Self { rng, mvb }
+    }
+
+    pub fn sample(&mut self) -> DVector<f64> {
+        self.mvb.sample(&mut self.rng)
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct AgentSetRiskParams {
+    pub annual_probabilities_concentration: f64,
+    pub wishart_corr_df: f64,
+}
+
+#[derive(Debug, Clone)]
+pub struct AgentSetRiskSampler {
+    rng: rand::rngs::StdRng,
+    mv_beta: MultivariateBeta,
+    wishart_corr: WishartCorrelation,
+}
+
+impl AgentSetRiskSampler {
+    pub fn new(
+        rng: StdRng,
+        annual_probabilities: DVector<f64>,
+        corr_matrix: DMatrix<f64>,
+        annual_probabilities_concentration: f64,
+        wishart_corr_df: f64,
+    ) -> Self {
+        let mv_beta = MultivariateBeta::new(
+            annual_probabilities.as_slice().to_vec(),
+            annual_probabilities_concentration,
+        )
+        .expect("Error creating multivariate Beta.");
+        let wishart_corr = WishartCorrelation::new(wishart_corr_df, corr_matrix)
+            .expect("Error creating Wishart correlation.");
+        Self {
+            rng,
+            mv_beta,
+            wishart_corr,
+        }
+    }
+
+    pub fn sample(&mut self) -> (DVector<f64>, DMatrix<f64>) {
+        (
+            self.mv_beta.sample(&mut self.rng),
+            self.wishart_corr.sample(&mut self.rng),
+        )
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct SupplierRiskAversionSampler {
+    rng: rand::rngs::StdRng,
+    beta: Beta,
+}
+
+impl SupplierRiskAversionSampler {
+    pub fn new(rng: StdRng, mean: f64, concentration: f64) -> Self {
+        let beta = Beta::new(mean * concentration, (1. - mean) * concentration).unwrap();
+        Self { rng, beta }
+    }
+
+    pub fn sample(&mut self) -> f64 {
+        self.beta.sample(&mut self.rng)
+    }
 }

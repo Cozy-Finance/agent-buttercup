@@ -1,5 +1,10 @@
 triggers:
-  - - "Trigger"
+  - - "Trigger1"
+    - "DummyTrigger":
+        starting_prob: 0.02
+        step_in_secs: 600
+        annualized_logit_std: 0.0001
+  - - "Trigger2"
     - "DummyTrigger":
         starting_prob: 0.02
         step_in_secs: 600

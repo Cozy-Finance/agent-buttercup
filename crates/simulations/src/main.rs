@@ -54,13 +54,7 @@ pub fn main() -> Result<(), Box<dyn Error>> {
     let sim = args.sim.as_deref().map_or(Sim::Base, Sim::map_from_str);
 
     match sim {
-        Sim::Base => cozy::analysis::base::run()?,
-        Sim::CostModelAnalysis => cozy::analysis::cost_model_analysis::run()?,
-        Sim::KinkCostAnalysis => cozy::analysis::pricing_experiment::run_kink_location_analysis()?,
-        Sim::GrowthRateAnalysis => cozy::analysis::pricing_experiment::run_growth_rate_analysis()?,
-        Sim::WidthAnalysis => cozy::analysis::pricing_experiment::run_width_analysis()?,
-        Sim::ScenarioAnalysis => cozy::analysis::pricing_experiment::run_scenarios()?,
-        Sim::DecayAnalysis => cozy::analysis::pricing_experiment::run_decay_analysis()?,
+        _ => panic!(),
     }
 
     Ok(())

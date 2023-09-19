@@ -1,6 +1,5 @@
 pub mod address;
 pub mod agent;
-pub mod contract;
 pub mod manager;
 pub mod state;
 pub mod summarizer;

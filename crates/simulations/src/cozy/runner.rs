@@ -1,36 +1,71 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
-use bindings::cozy_protocol::shared_types::MarketConfig;
-use rand::{rngs::StdRng, Rng, SeedableRng};
+use bindings::{
+    chainlink_trigger_factory::*,
+    cozy_models::{
+        cost_model_dynamic_level::*, cost_model_dynamic_level_factory::*, cost_model_jump_rate::*,
+        cost_model_jump_rate_factory::*, drip_decay_model_constant::*,
+        drip_decay_model_constant_factory::*,
+    },
+    cozy_protocol::{
+        backstop::*,
+        configurator_lib::*,
+        cozy_router::*,
+        delay_lib::*,
+        demand_side_lib::*,
+        manager::*,
+        metadata::*,
+        p_token::*,
+        p_token_factory::*,
+        redemption_lib::*,
+        set::*,
+        set_factory::*,
+        shared_types::{MarketConfig, SetConfig},
+        state_transitions_lib::*,
+        supply_side_lib::*,
+    },
+    dummy_token::*,
+    dummy_trigger::*,
+    uma_trigger_factory::*,
+    weth::weth9::*,
+};
+use nalgebra::DVector;
+use rand::{rngs::StdRng, SeedableRng};
+use rand_distr::Distribution;
+use revm::primitives::create_address;
 use serde::Deserialize;
 use simulate::{
-    address::Address, manager::SimManager, state::SimState, summarizer::Summarizer,
-    time_policy::FixedTimePolicy,
+    address::Address,
+    agent::Agent,
+    manager::SimManager,
+    state::{State, StateMiddleware},
+    summarizer::Summarizer,
+    time_policy::{FixedTimePolicy, TimeEnv},
+    u256::{U256, *},
 };
+use statrs::distribution::{Dirichlet, Normal};
 
 use crate::cozy::{
     agents::{
-        active_buyer::ActiveBuyer, cost_models_deployer::CostModelsDeployer,
-        drip_decay_models_deployer::DripDecayModelsDeployer, passive_buyer::PassiveBuyer,
-        passive_supplier::PassiveSupplier, protocol_deployer::ProtocolDeployer,
-        set_admin::SetAdmin, token_deployer::TokenDeployer, triggers_deployer::TriggersDeployer,
-        weth_deployer::WethDeployer,
+        altruistic_supplier::AltruisticSupplier,
+        arbitrageur::{Arbitrageur, ArbitrageurPreferences},
+        buyer::{Buyer, BuyerPreferences},
+        set_analyzer::SetAnalyzer,
+        supplier::{Supplier, SupplierPreferences},
+        trigger_admin::TriggerAdmin,
     },
     constants::*,
-    distributions::CozyDistribution,
-    summary_generators::{
-        cost_models_summary::CostModelsSummaryGenerator,
-        pricing_experiment_summary::PricingExperimentSummaryGenerator,
-        set_summary::SetSummaryGenerator,
-    },
+    set_risk_model::SetRiskModel,
     types::{
-        CozyActiveBuyersParams, CozyCostModelType, CozyDripDecayModelType,
-        CozyFixedTimePolicyParams, CozyMarketConfigParams, CozyPassiveBuyersParams,
-        CozyProtocolDeployParams, CozySetAdminParams, CozySetConfigParams, CozySimSetupParams,
-        CozySuppliersParams, CozyTokenDeployParams, CozyTriggerType,
+        AgentSetRiskParams, AgentSetRiskSampler, ArbitrageurParams, BuyerParams, CozyCostModelType,
+        CozyDripDecayModelType, CozyMarketConfigParams, CozyProtocolDeployParams,
+        CozySetConfigParams, CozySimSetupParams, CozyTokenDeployParams, CozyTriggerType,
+        FixedTimePolicyParams, SupplierParams, SupplierRiskAversionSampler, TriggerRiskParams,
+        TriggerSimulator,
     },
     utils::deserialize_cow_tuple_vec,
     world::{CozyUpdate, CozyWorld},
+    EthersAddress, EthersBytes,
 };
 
 #[derive(Debug, Clone)]
@@ -43,58 +78,46 @@ pub enum CozySingleSetSummaryGenerators {
 impl CozySingleSetSummaryGenerators {
     pub fn register_generator(&self, sim_manager: &mut SimManager<CozyUpdate, CozyWorld>) {
         match self {
-            CozySingleSetSummaryGenerators::Set => {
-                sim_manager
-                    .summarizer
-                    .register_summary_generator(SetSummaryGenerator::new(
-                        sim_manager
-                            .get_state()
-                            .world
-                            .set_logic
-                            .as_ref()
-                            .expect("Set logic added to world."),
-                    ));
-            }
-            CozySingleSetSummaryGenerators::CostModels => {
-                sim_manager
-                    .summarizer
-                    .register_summary_generator(CostModelsSummaryGenerator::new(
-                        sim_manager
-                            .get_state()
-                            .world
-                            .set_logic
-                            .as_ref()
-                            .expect("Set logic added to world."),
-                        &sim_manager.get_state().world.jump_rate_model,
-                        &sim_manager.get_state().world.dynamic_level_model,
-                    ));
-            }
-            CozySingleSetSummaryGenerators::PricingExperiment => {
-                sim_manager.summarizer.register_summary_generator(
-                    PricingExperimentSummaryGenerator::new(
-                        sim_manager
-                            .get_state()
-                            .world
-                            .set_logic
-                            .as_ref()
-                            .expect("Set logic added to world."),
-                        &sim_manager.get_state().world.dynamic_level_model,
-                    ),
-                );
-            }
+            _ => panic!(),
         }
     }
 }
 
+#[derive(Debug, Clone)]
+pub struct ProtocolContracts {
+    pub cozy_router: CozyRouter<StateMiddleware>,
+    pub set_factory: SetFactory<StateMiddleware>,
+    pub set_logic: Set<StateMiddleware>,
+    pub ptoken_logic: PToken<StateMiddleware>,
+    pub manager: Manager<StateMiddleware>,
+    pub backstop: Backstop<StateMiddleware>,
+    pub dynamic_level_factory: CostModelDynamicLevelFactory<StateMiddleware>,
+    pub jump_rate_factory: CostModelJumpRateFactory<StateMiddleware>,
+    pub drip_decay_factory: DripDecayModelConstantFactory<StateMiddleware>,
+    pub _chainlink_trigger_factory: ChainlinkTriggerFactory<StateMiddleware>,
+    pub _uma_trigger_factory: UMATriggerFactory<StateMiddleware>,
+}
+
+#[derive(Debug, Clone)]
+pub struct SetContracts {
+    pub base_token: DummyToken<StateMiddleware>,
+    pub set: Set<StateMiddleware>,
+    pub jump_rate_models: HashMap<u32, CostModelJumpRate<StateMiddleware>>,
+    pub dynamic_level_models: HashMap<u32, CostModelDynamicLevel<StateMiddleware>>,
+    pub drip_decay_models: HashMap<u32, DripDecayModelConstant<StateMiddleware>>,
+    pub dummy_triggers: HashMap<u32, DummyTrigger<StateMiddleware>>,
+    pub ptokens: HashMap<u32, PToken<StateMiddleware>>,
+}
+
 #[derive(Deserialize, Debug, Clone)]
-pub struct CozySingleSetSimRunner {
+pub struct CozySimRunner {
     pub sim_setup_params: CozySimSetupParams,
     pub protocol_params: CozyProtocolDeployParams,
-    pub time_policy_params: CozyFixedTimePolicyParams,
+    pub time_policy_params: FixedTimePolicyParams,
     pub base_token_params: CozyTokenDeployParams,
-    pub passive_buyers_params: CozyPassiveBuyersParams,
-    pub active_buyers_params: CozyActiveBuyersParams,
-    pub suppliers_params: CozySuppliersParams,
+    pub arbitrageur_params: ArbitrageurParams,
+    pub buyer_params: BuyerParams,
+    pub supplier_params: SupplierParams,
     #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
     pub triggers: Vec<(Cow<'static, str>, CozyTriggerType)>,
     #[serde(deserialize_with = "deserialize_cow_tuple_vec")]
@@ -103,321 +126,748 @@ pub struct CozySingleSetSimRunner {
     pub drip_decay_models: Vec<(Cow<'static, str>, CozyDripDecayModelType)>,
     pub market_config_params: Vec<CozyMarketConfigParams>,
     pub set_config_params: CozySetConfigParams,
+    pub trigger_risk_params: TriggerRiskParams,
+    pub agent_set_risk_params: AgentSetRiskParams,
 }
 
-impl CozySingleSetSimRunner {
-    pub fn run(
-        self,
-        output_file: Cow<'static, str>,
-        summary_generators: Vec<CozySingleSetSummaryGenerators>,
-    ) -> Result<(), anyhow::Error> {
-        let mut rng = StdRng::seed_from_u64(self.sim_setup_params.rand_seed);
-
-        // Create sim manager.
-        let world_state = CozyWorld::new();
-        let sim_state = SimState::new(world_state);
+impl CozySimRunner {
+    pub fn run(&self, output_file: Cow<'static, str>) -> Result<(), Box<dyn std::error::Error>> {
+        // Initiate world, state and time policy.
+        let world = CozyWorld::new();
+        let mut state = State::new(world);
         let fixed_time_policy = FixedTimePolicy::new(
-            self.time_policy_params.start_block_number,
-            self.time_policy_params.start_block_timestamp,
-            self.time_policy_params.time_per_block,
-            self.time_policy_params.blocks_per_step,
-            self.time_policy_params.blocks_to_generate,
-            self.time_policy_params.time_to_generate,
-        )
-        .expect("FixedTimePolicy params error.");
-        let mut sim_manager = SimManager::new(
-            sim_state,
+            TimeEnv {
+                block_number: self.time_policy_params.start_block_number.into(),
+                block_timestamp: self.time_policy_params.start_block_timestamp.into(),
+            },
+            self.time_policy_params.time_per_block.into(),
+            self.time_policy_params.blocks_per_step.into(),
+            self.time_policy_params.time_to_generate.into(),
+        );
+
+        // Admin agent executes all set-up transactions.
+        let mut rng = StdRng::seed_from_u64(self.sim_setup_params.rand_seed);
+        let admin_addr = Address::random_using(&mut rng);
+
+        // Set-up all protocol contracts and set contracts.
+        let (protocol_contracts, set_contracts) = self.setup(&mut state, admin_addr)?;
+        let num_markets = self.market_config_params.len();
+
+        // Initiate manager.
+        let mut manager = SimManager::new(
+            state,
             Box::new(fixed_time_policy),
             Summarizer::new(output_file),
         );
 
-        // Create and activate agents.
-        // Weth deployer.
-        let weth_deployer = Box::new(WethDeployer::new(
-            WETH_DEPLOYER.into(),
+        // Run altruistic supplier activation.
+        let altruistic_supplier = AltruisticSupplier::new(
+            ALTRUISTIC_SUPPLIER.into(),
             Address::random_using(&mut rng),
-        ));
-        sim_manager.activate_agent(weth_deployer)?;
+            protocol_contracts.clone(),
+            set_contracts.clone(),
+        );
+        self.deal(
+            manager.get_state_mut(),
+            &set_contracts,
+            admin_addr,
+            altruistic_supplier.address(),
+            self.supplier_params.altruistic_supplier_wealth,
+        )?;
+        manager.activate_agent(Box::new(altruistic_supplier))?;
 
-        // Protocol deployer.
-        let protocol_deployer = Box::new(ProtocolDeployer::new(
-            PROTOCOL_DEPLOYER.into(),
-            Address::random_using(&mut rng),
-            self.protocol_params,
-            sim_manager
-                .get_state()
-                .world
-                .weth
-                .as_ref()
-                .expect("Weth added to world."),
-        ));
-        sim_manager.activate_agent(protocol_deployer)?;
-
-        // Pre-generate <Address, Capital> map for passive buyers and suppliers.
-        let mut passive_buyers_map = HashMap::new();
-        for _i in 0..self.passive_buyers_params.num_passive {
-            passive_buyers_map.insert(
-                Address::random_using(&mut rng),
-                self.passive_buyers_params.capital_dist.sample(&mut rng),
-            );
-        }
-        let mut active_buyers_map = HashMap::new();
-        for _i in 0..self.active_buyers_params.num_active {
-            active_buyers_map.insert(
-                Address::random_using(&mut rng),
-                self.active_buyers_params.capital_dist.sample(&mut rng),
-            );
-        }
-        let mut suppliers_map = HashMap::new();
-        for _i in 0..self.suppliers_params.num_passive {
-            suppliers_map.insert(
-                Address::random_using(&mut rng),
-                self.suppliers_params.capital_dist.sample(&mut rng),
-            );
-        }
-
-        // Base token deployer.
-        let mut allocate_addrs = passive_buyers_map.clone();
-        allocate_addrs.extend(active_buyers_map.clone());
-        allocate_addrs.extend(suppliers_map.clone());
-        let base_token_deployer = Box::new(TokenDeployer::new(
-            BASE_TOKEN_DEPLOYER.into(),
-            Address::random_using(&mut rng),
-            self.base_token_params,
-            allocate_addrs,
-        ));
-        sim_manager.activate_agent(base_token_deployer)?;
-
-        // Cost models deployer.
-        let cost_models_deployer = Box::new(CostModelsDeployer::new(
-            COST_MODELS_DEPLOYER.into(),
-            Address::random_using(&mut rng),
-            self.cost_models.iter().cloned().collect(),
-            sim_manager
-                .get_state()
-                .world
-                .jump_rate_factory
-                .as_ref()
-                .expect("Jump rate factory added to world."),
-            sim_manager
-                .get_state()
-                .world
-                .dynamic_level_factory
-                .as_ref()
-                .expect("Dynamic level factory added to world."),
-        ));
-        sim_manager.activate_agent(cost_models_deployer)?;
-
-        // Drip decay models deployer.
-        let drip_decay_models_deployer = Box::new(DripDecayModelsDeployer::new(
-            DRIP_DECAY_MODELS_DEPLOYER.into(),
-            Address::random_using(&mut rng),
-            self.drip_decay_models.iter().cloned().collect(),
-            sim_manager
-                .get_state()
-                .world
-                .drip_decay_constant_factory
-                .as_ref()
-                .expect("Drip decay constant factory added to world."),
-        ));
-        sim_manager.activate_agent(drip_decay_models_deployer)?;
-
-        // Triggers deployer.
-        let triggers_deployer = Box::new(TriggersDeployer::new(
-            TRIGGERS_DEPLOYER.into(),
-            Address::random_using(&mut rng),
-            self.triggers.iter().cloned().collect(),
-            sim_manager
-                .get_state()
-                .world
-                .uma_trigger_factory
-                .as_ref()
-                .expect("Uma trigger factory added to world."),
-            sim_manager
-                .get_state()
-                .world
-                .chainlink_trigger_factory
-                .as_ref()
-                .expect("Chainlink trigger factory added to world."),
-            sim_manager
-                .get_state()
-                .world
-                .manager
-                .as_ref()
-                .expect("Manager added to world."),
+        // Run trigger admin activation.
+        let step_time: u64 =
+            (fixed_time_policy.time_per_block * fixed_time_policy.blocks_per_step).as_u64();
+        let annual_step_factor = SECONDS_IN_YEAR as f64 / step_time as f64;
+        let trigger_simulator = TriggerSimulator::new(
             rng.clone(),
-        ));
-        sim_manager.activate_agent(triggers_deployer)?;
-
-        // Store cost model, drip decay model and trigger contracts.
-        let world_cost_models = sim_manager.get_state().world.cost_models.clone();
-        let world_drip_decay_models = sim_manager.get_state().world.drip_decay_models.clone();
-        let world_triggers = sim_manager.get_state().world.triggers.clone();
-
-        // Set admin.
-        let mut market_configs = vec![];
-        for (i, market_config_param) in self.market_config_params.into_iter().enumerate() {
-            let cost_model_addr = world_cost_models
-                .get_addr(&self.cost_models[i].0)
-                .expect("Cost models added to world.");
-            let drip_decay_model_addr = world_drip_decay_models
-                .get_addr(&self.drip_decay_models[i].0)
-                .expect("Drip decay models added to world.");
-            let trigger_addr = world_triggers
-                .get_addr(&self.triggers[i].0)
-                .expect("Triggers added to world.");
-            market_configs.push(MarketConfig {
-                trigger: trigger_addr.into(),
-                cost_model: cost_model_addr.into(),
-                drip_decay_model: drip_decay_model_addr.into(),
-                weight: market_config_param.weight,
-                purchase_fee: market_config_param.purchase_fee,
-                sale_fee: market_config_param.sale_fee,
-            })
-        }
-        let salt: Option<[u8; 32]> = Some(rng.gen());
-        let base_asset_addr = sim_manager
-            .get_state()
-            .world
-            .base_token
-            .as_ref()
-            .expect("Base token added to world.")
-            .address;
-        let set_params = CozySetAdminParams {
-            asset: base_asset_addr,
-            set_config: self.set_config_params.into(),
-            market_configs,
-            salt,
-        };
-
-        let set_admin = Box::new(SetAdmin::new(
-            SET_ADMIN.into(),
+            self.trigger_risk_params
+                .annual_probabilities
+                .iter()
+                .map(|x| x / annual_step_factor)
+                .collect(),
+            self.trigger_risk_params.pairwise_corr,
+        );
+        let trigger_admin = TriggerAdmin::new(
+            TRIGGER_ADMIN.into(),
             Address::random_using(&mut rng),
-            set_params,
-            sim_manager
-                .get_state()
-                .world
-                .set_logic
-                .as_ref()
-                .expect("Set logic added to world."),
-            sim_manager
-                .get_state()
-                .world
-                .manager
-                .as_ref()
-                .expect("Manager added to world."),
-        ));
-        sim_manager.activate_agent(set_admin)?;
+            protocol_contracts.clone(),
+            set_contracts.clone(),
+            trigger_simulator.clone(),
+        );
+        manager.activate_agent(Box::new(trigger_admin))?;
 
-        // Passive buyers.
-        let world_triggers_vec = world_triggers
-            .values()
+        // Initialize agent risk sampler.
+        let true_annual_probabilities =
+            DVector::from(self.trigger_risk_params.annual_probabilities.clone());
+        let true_correlations = trigger_simulator.mvb.corr.clone();
+        let mut agent_set_risk_sampler = AgentSetRiskSampler::new(
+            rng.clone(),
+            true_annual_probabilities.clone(),
+            true_correlations.clone(),
+            self.agent_set_risk_params
+                .annual_probabilities_concentration,
+            self.agent_set_risk_params.wishart_corr_df,
+        );
+
+        // Run buyer activations.
+        let leverage = self.set_config_params.leverage_factor as f64 / ZOC as f64;
+        let raw_market_weights = self
+            .market_config_params
             .iter()
-            .map(|wt| wt.address)
+            .map(|x| x.weight)
             .collect::<Vec<_>>();
-        for (i, (addr, _)) in passive_buyers_map.into_iter().enumerate() {
-            let name = format!("{}{}", PASSIVE_BUYER, i + 1);
-            let passive_buyer = Box::new(PassiveBuyer::new(
-                name.into(),
-                addr,
-                sim_manager
-                    .get_state()
-                    .world
-                    .cozy_router
-                    .as_ref()
-                    .expect("Rouer added to world."),
-                sim_manager
-                    .get_state()
-                    .world
-                    .base_token
-                    .as_ref()
-                    .expect("Base token added to world."),
-                sim_manager
-                    .get_state()
-                    .world
-                    .set_logic
-                    .as_ref()
-                    .expect("Set logic added to world."),
-                world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
-                self.passive_buyers_params
-                    .protection_desired_dist
-                    .sample(&mut rng),
-                self.passive_buyers_params
-                    .time_dist
-                    .sample_in_secs(&mut rng),
-            ));
-            sim_manager.activate_agent(passive_buyer)?;
-        }
+        let raw_markets_weights_sum = raw_market_weights.iter().sum::<u16>() as f64;
+        let market_weights = raw_market_weights
+            .iter()
+            .map(|x| (*x as f64 / raw_markets_weights_sum))
+            .collect::<Vec<_>>();
+        let market_allocations_dirichlet = Dirichlet::new(vec![
+            self.buyer_params.market_allocations_dirichlet_alpha
+                / num_markets as f64;
+            num_markets
+        ])
+        .expect("Error creating Dirichlet.");
+        let balance_normal = Normal::new(
+            u256_to_f64(self.buyer_params.balance_mean),
+            u256_to_f64(self.buyer_params.balance_std),
+        )
+        .expect("Error creating normal.");
 
-        // Active buyers.
-        for (i, (addr, _)) in active_buyers_map.into_iter().enumerate() {
-            let name = format!("{}{}", ACTIVE_BUYER, i + 1);
-            let passive_buyer = Box::new(ActiveBuyer::new(
-                name.into(),
-                addr,
-                sim_manager
-                    .get_state()
-                    .world
-                    .cozy_router
-                    .as_ref()
-                    .expect("Router added to world."),
-                sim_manager
-                    .get_state()
-                    .world
-                    .base_token
-                    .as_ref()
-                    .expect("Base Token added to world"),
-                sim_manager
-                    .get_state()
-                    .world
-                    .set_logic
-                    .as_ref()
-                    .expect("Set logic added to world."),
-                sim_manager
-                    .get_state()
-                    .world
-                    .ptoken_logic
-                    .as_ref()
-                    .expect("Ptoken logic added to world."),
-                world_triggers_vec[rng.gen_range(0..world_triggers_vec.len())],
-                self.active_buyers_params.time_dist.sample_in_secs(&mut rng),
-                self.active_buyers_params.trigger_prob_dist.clone(),
+        for _ in 0..self.buyer_params.num {
+            let (annual_probabilities, corr) = agent_set_risk_sampler.sample();
+            let buyer_risk_model = SetRiskModel::new(
+                annual_probabilities,
+                corr,
+                leverage,
+                DVector::from(market_weights.clone()),
+            );
+            let buyer = Buyer::new(
+                BUYER.into(),
+                Address::random_using(&mut rng),
+                protocol_contracts.clone(),
+                set_contracts.clone(),
+                BuyerPreferences::new(
+                    buyer_risk_model,
+                    market_allocations_dirichlet.sample(&mut rng),
+                ),
                 rng.clone(),
-            ));
-            sim_manager.activate_agent(passive_buyer)?;
+            );
+            let balance = f64_to_u256(balance_normal.sample(&mut rng).max(0.0));
+            self.deal(
+                manager.get_state_mut(),
+                &set_contracts,
+                admin_addr,
+                buyer.address(),
+                balance,
+            )?;
+            manager.activate_agent(Box::new(buyer))?;
         }
 
-        // Passive suppliers.
-        for (i, (addr, _)) in suppliers_map.into_iter().enumerate() {
-            let name = format!("{}{}", PASSIVE_SUPPLIER, i + 1);
-            let passive_supplier = Box::new(PassiveSupplier::new(
-                name.into(),
-                addr,
-                sim_manager
-                    .get_state()
-                    .world
-                    .cozy_router
-                    .as_ref()
-                    .expect("Router added to world."),
-                sim_manager
-                    .get_state()
-                    .world
-                    .base_token
-                    .as_ref()
-                    .expect("Base Token added to world"),
-                self.suppliers_params.time_dist.sample_in_secs(&mut rng),
-            ));
-            sim_manager.activate_agent(passive_supplier)?;
+        // Run supplier activations.
+        let wealth_normal = Normal::new(
+            u256_to_f64(self.supplier_params.wealth_mean),
+            u256_to_f64(self.supplier_params.wealth_std),
+        )
+        .expect("Error creating normal.");
+        let mut risk_aversion_sampler = SupplierRiskAversionSampler::new(
+            rng.clone(),
+            self.supplier_params.risk_aversion_mean,
+            self.supplier_params.risk_aversion_concentration,
+        );
+        for _ in 0..self.supplier_params.num {
+            let (annual_probabilities, corr) = agent_set_risk_sampler.sample();
+            let supplier_risk_model = SetRiskModel::new(
+                annual_probabilities,
+                corr,
+                leverage,
+                DVector::from(market_weights.clone()),
+            );
+            let wealth = f64_to_u256(wealth_normal.sample(&mut rng).max(0.0));
+            let supplier_preferences = SupplierPreferences::new(
+                supplier_risk_model,
+                risk_aversion_sampler.sample(),
+                wealth,
+            );
+            let supplier = Supplier::new(
+                SUPPLIER.into(),
+                Address::random_using(&mut rng),
+                protocol_contracts.clone(),
+                set_contracts.clone(),
+                supplier_preferences,
+                rng.clone(),
+            );
+            self.deal(
+                manager.get_state_mut(),
+                &set_contracts,
+                admin_addr,
+                supplier.address(),
+                wealth,
+            )?;
+            manager.activate_agent(Box::new(supplier))?;
         }
 
-        // Register summarizer generators.
-        for generator in summary_generators {
-            generator.register_generator(&mut sim_manager);
+        // Run arbitrageur activations.
+        let balance_normal = Normal::new(
+            u256_to_f64(self.arbitrageur_params.balance_mean),
+            u256_to_f64(self.arbitrageur_params.balance_std),
+        )
+        .expect("Error creating normal.");
+
+        for _ in 0..self.arbitrageur_params.num {
+            let (annual_probabilities, corr) = agent_set_risk_sampler.sample();
+            let arbitrageur_risk_model = SetRiskModel::new(
+                annual_probabilities,
+                corr,
+                leverage,
+                DVector::from(market_weights.clone()),
+            );
+            let arbitrageur = Arbitrageur::new(
+                ARBITRAGEUR.into(),
+                Address::random_using(&mut rng),
+                protocol_contracts.clone(),
+                set_contracts.clone(),
+                ArbitrageurPreferences::new(arbitrageur_risk_model),
+                rng.clone(),
+            );
+            let balance = f64_to_u256(balance_normal.sample(&mut rng).max(0.0));
+            self.deal(
+                manager.get_state_mut(),
+                &set_contracts,
+                admin_addr,
+                arbitrageur.address(),
+                balance,
+            )?;
+            manager.activate_agent(Box::new(arbitrageur))?;
         }
+
+        // Run set analyzer activations.
+        let true_risk_model = SetRiskModel::new(
+            true_annual_probabilities,
+            true_correlations,
+            leverage,
+            DVector::from(market_weights.clone()),
+        );
+        let set_analyzer = SetAnalyzer::new(
+            SET_ANALYZER.into(),
+            Address::random_using(&mut rng),
+            protocol_contracts.clone(),
+            set_contracts.clone(),
+            true_risk_model,
+        );
+        manager.activate_agent(Box::new(set_analyzer))?;
 
         // Run sim.
-        sim_manager.run_sim()?;
+        manager.run_sim()?;
 
+        Ok(())
+    }
+
+    pub fn setup(
+        &self,
+        state: &mut State<CozyUpdate, CozyWorld>,
+        admin_addr: Address,
+    ) -> Result<(Arc<ProtocolContracts>, Arc<SetContracts>), Box<dyn std::error::Error>> {
+        let state_middleware = Arc::new(StateMiddleware());
+
+        // Deploy wETH.
+        println!("Deploying wETH.");
+        let weth_addr =
+            state.deploy_evm_contract(admin_addr, &weth9::WETH9_ABI, &weth9::WETH9_BYTECODE, ())?;
+        let weth = weth9::WETH9::new(weth_addr, state_middleware.clone());
+
+        // Deploy libraries.
+        println!("Deploying libraries.");
+        let libraries = self.deploy_libraries(state, admin_addr)?;
+
+        // Deploy core protocol.
+        println!("Deploying core protocol.");
+        let protocol_contracts = self.deploy_protocol(
+            state,
+            libraries,
+            admin_addr,
+            weth.address().into(),
+            state_middleware.clone(),
+        )?;
+        let protocol_contracts = Arc::new(protocol_contracts);
+
+        // Deploy set.
+        println!("Deploying set.");
+        let set_contracts = self.deploy_set(
+            state,
+            &protocol_contracts,
+            admin_addr,
+            state_middleware.clone(),
+        )?;
+        let set_contracts = Arc::new(set_contracts);
+
+        Ok((protocol_contracts, set_contracts))
+    }
+
+    fn deploy_libraries(
+        &self,
+        state: &mut State<CozyUpdate, CozyWorld>,
+        admin_addr: Address,
+    ) -> Result<Vec<(&str, &str, EthersAddress)>, Box<dyn std::error::Error>> {
+        let mut libraries: Vec<(&str, &str, EthersAddress)> = vec![];
+
+        let configurator_lib_addr = state.deploy_evm_contract(
+            admin_addr,
+            &CONFIGURATORLIB_ABI,
+            &CONFIGURATORLIB_BYTECODE,
+            (),
+        )?;
+        libraries.push((
+            CONFIGURATORLIB_PATH,
+            CONFIGURATORLIB_NAME,
+            configurator_lib_addr.into(),
+        ));
+
+        let delay_lib_addr =
+            state.deploy_evm_contract(admin_addr, &DELAYLIB_ABI, &DELAYLIB_BYTECODE, ())?;
+        libraries.push((DELAYLIB_PATH, DELAYLIB_NAME, delay_lib_addr.into()));
+
+        let demand_side_lib_addr = state.deploy_evm_contract(
+            admin_addr,
+            &DEMANDSIDELIB_ABI,
+            &DEMANDSIDELIB_BYTECODE,
+            (),
+        )?;
+        libraries.push((
+            DEMANDSIDELIB_PATH,
+            DEMANDSIDELIB_NAME,
+            demand_side_lib_addr.into(),
+        ));
+
+        let redemption_lib_addr = state.deploy_evm_contract(
+            admin_addr,
+            &REDEMPTIONLIB_ABI,
+            &REDEMPTIONLIB_BYTECODE,
+            (),
+        )?;
+        libraries.push((
+            REDEMPTIONLIB_PATH,
+            REDEMPTIONLIB_NAME,
+            redemption_lib_addr.into(),
+        ));
+
+        let state_transitions_lib_addr = state.deploy_evm_contract(
+            admin_addr,
+            &STATETRANSITIONSLIB_ABI,
+            &STATETRANSITIONSLIB_BYTECODE,
+            (),
+        )?;
+        libraries.push((
+            STATETRANSITIONSLIB_PATH,
+            STATETRANSITIONSLIB_NAME,
+            state_transitions_lib_addr.into(),
+        ));
+
+        let supply_side_lib_addr = state.deploy_evm_contract(
+            admin_addr,
+            &SUPPLYSIDELIB_ABI,
+            &SUPPLYSIDELIB_BYTECODE,
+            (),
+        )?;
+        libraries.push((
+            SUPPLYSIDELIB_PATH,
+            SUPPLYSIDELIB_NAME,
+            supply_side_lib_addr.into(),
+        ));
+
+        Ok(libraries)
+    }
+
+    fn deploy_protocol(
+        &self,
+        state: &mut State<CozyUpdate, CozyWorld>,
+        libraries: Vec<(&str, &str, EthersAddress)>,
+        admin_addr: Address,
+        weth_addr: Address,
+        state_middleware: Arc<StateMiddleware>,
+    ) -> Result<ProtocolContracts, Box<dyn std::error::Error>> {
+        // Pre-compute Cozy protocol addresses.
+        let mut nonce = state
+            .read_account_info(admin_addr.into())
+            .expect("Admin account exists.")
+            .nonce;
+        let manager_addr: Address = create_address(admin_addr.into(), nonce).into();
+        nonce += 1;
+        let set_logic_addr: Address = create_address(admin_addr.into(), nonce).into();
+        // Next nonce is initialization of the Set logic.
+        nonce += 2;
+        let set_factory_addr: Address = create_address(admin_addr.into(), nonce).into();
+        nonce += 1;
+        let ptoken_logic_addr: Address = create_address(admin_addr.into(), nonce).into();
+        // Next nonce is initialization of the PToken logic.
+        nonce += 2;
+        let ptoken_factory_addr: Address = create_address(admin_addr.into(), nonce).into();
+        nonce += 1;
+        let backstop_addr: Address = create_address(admin_addr.into(), nonce).into();
+        nonce += 1;
+        let cozyrouter_addr: Address = create_address(admin_addr.into(), nonce).into();
+
+        // Deploy manager.
+        let manager_args = (
+            backstop_addr,
+            set_factory_addr,
+            admin_addr,
+            admin_addr,
+            self.protocol_params.delays.clone(),
+            self.protocol_params.fees.clone(),
+            self.protocol_params.allowed_markets_per_set,
+        );
+        let _ =
+            state.deploy_evm_contract(admin_addr, &MANAGER_ABI, &MANAGER_BYTECODE, manager_args)?;
+        let manager = Manager::new(manager_addr, state_middleware.clone());
+
+        // Deploy set logic.
+        let set_logic_args = (manager_addr, ptoken_factory_addr, backstop_addr);
+        let set_bytecode =
+            simulate::utils::build_linked_bytecode(SET_RAW_BYTECODE, libraries.clone())?;
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &SET_ABI,
+            &EthersBytes::from(set_bytecode),
+            set_logic_args,
+        )?;
+        let set_logic = set::Set::new(set_logic_addr, state_middleware.clone());
+
+        // Initialize set logic.
+        let set_logic_initialization = set_logic.initialize(
+            Address::zero().into(),
+            Address::zero().into(),
+            weth_addr.into(),
+            SetConfig {
+                deposit_fee: 0,
+                leverage_factor: 0,
+            },
+            Vec::<MarketConfig>::new(),
+        );
+        let _ = state.execute_evm_tx_and_decode(admin_addr, set_logic_initialization)?;
+
+        // Deploy set factory.
+        let set_factory_args = (manager_addr, set_logic_addr);
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &SETFACTORY_ABI,
+            &SETFACTORY_BYTECODE,
+            set_factory_args,
+        )?;
+        let set_factory = SetFactory::new(set_factory_addr, state_middleware.clone());
+
+        // Deploy ptoken logic.
+        let ptoken_logic_args = (manager_addr,);
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &PTOKEN_ABI,
+            &PTOKEN_BYTECODE,
+            ptoken_logic_args,
+        )?;
+        let ptoken_logic = PToken::new(ptoken_logic_addr, state_middleware.clone());
+
+        // Initialize ptoken logic.
+        let ptoken_initialization =
+            ptoken_logic.initialize(Address::zero().into(), Address::zero().into(), 0_u8);
+        let _ = state.execute_evm_tx_and_decode(admin_addr, ptoken_initialization)?;
+
+        // Deploy ptoken factory.
+        let ptoken_factory_args = (ptoken_logic_addr,);
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &PTOKENFACTORY_ABI,
+            &PTOKENFACTORY_BYTECODE,
+            ptoken_factory_args,
+        )?;
+
+        // Deploy backstop.
+        let backstop_args = (manager_addr, weth_addr);
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &BACKSTOP_ABI,
+            &BACKSTOP_BYTECODE,
+            backstop_args,
+        )?;
+        let backstop = Backstop::new(backstop_addr, state_middleware.clone());
+
+        // Deploy CozyRouter.
+        let cozyrouter_args = (manager_addr, weth_addr, weth_addr, weth_addr);
+        let _ = state.deploy_evm_contract(
+            admin_addr,
+            &COZYROUTER_ABI,
+            &COZYROUTER_BYTECODE,
+            cozyrouter_args,
+        )?;
+        let cozy_router = CozyRouter::new(cozyrouter_addr, state_middleware.clone());
+
+        // Deploy cost model jump rate factory.
+        let cost_model_jump_rate_factory_addr = state.deploy_evm_contract(
+            admin_addr,
+            &COSTMODELJUMPRATEFACTORY_ABI,
+            &COSTMODELJUMPRATEFACTORY_BYTECODE,
+            (),
+        )?;
+        let jump_rate_factory = CostModelJumpRateFactory::new(
+            cost_model_jump_rate_factory_addr,
+            state_middleware.clone(),
+        );
+
+        // Deploy cost model dynamic level factory.
+        let cost_model_dynamic_level_factory_addr = state.deploy_evm_contract(
+            admin_addr,
+            &COSTMODELDYNAMICLEVELFACTORY_ABI,
+            &COSTMODELDYNAMICLEVELFACTORY_BYTECODE,
+            (),
+        )?;
+        let dynamic_level_factory = CostModelDynamicLevelFactory::new(
+            cost_model_dynamic_level_factory_addr,
+            state_middleware.clone(),
+        );
+
+        // Deploy drip decay model factory.
+        let drip_decay_model_factory_addr = state.deploy_evm_contract(
+            admin_addr,
+            &DRIPDECAYMODELCONSTANTFACTORY_ABI,
+            &DRIPDECAYMODELCONSTANTFACTORY_BYTECODE,
+            (),
+        )?;
+        let drip_decay_factory = DripDecayModelConstantFactory::new(
+            drip_decay_model_factory_addr,
+            state_middleware.clone(),
+        );
+
+        // Deploy chainlink trigger factory.
+        let chainlink_trigger_factory_args = (manager_addr,);
+        let chainlink_trigger_factory_addr = state.deploy_evm_contract(
+            admin_addr,
+            &CHAINLINKTRIGGERFACTORY_ABI,
+            &CHAINLINKTRIGGERFACTORY_BYTECODE,
+            chainlink_trigger_factory_args,
+        )?;
+        let _chainlink_trigger_factory =
+            ChainlinkTriggerFactory::new(chainlink_trigger_factory_addr, state_middleware.clone());
+
+        // Deploy UMA trigger factory.
+        let uma_trigger_factory_args = (manager_addr, manager_addr);
+        let uma_trigger_factory_addr = state.deploy_evm_contract(
+            admin_addr,
+            &UMATRIGGERFACTORY_ABI,
+            &UMATRIGGERFACTORY_BYTECODE,
+            uma_trigger_factory_args,
+        )?;
+        let _uma_trigger_factory =
+            UMATriggerFactory::new(uma_trigger_factory_addr, state_middleware.clone());
+
+        Ok(ProtocolContracts {
+            cozy_router,
+            set_factory,
+            set_logic,
+            ptoken_logic,
+            manager,
+            backstop,
+            dynamic_level_factory,
+            jump_rate_factory,
+            drip_decay_factory,
+            _chainlink_trigger_factory,
+            _uma_trigger_factory,
+        })
+    }
+
+    fn deploy_set(
+        &self,
+        state: &mut State<CozyUpdate, CozyWorld>,
+        protocol_contracts: &ProtocolContracts,
+        admin_addr: Address,
+        state_middleware: Arc<StateMiddleware>,
+    ) -> Result<SetContracts, Box<dyn std::error::Error>> {
+        // Deploy base token.
+        println!("Deploying base token.");
+        let base_token_args = ("Cozy Base Token".to_string(), "CBT".to_string(), 6_u8);
+        let base_token_addr = state.deploy_evm_contract(
+            admin_addr,
+            &DUMMYTOKEN_ABI,
+            &DUMMYTOKEN_BYTECODE,
+            base_token_args,
+        )?;
+        let base_token = DummyToken::new(base_token_addr, state_middleware.clone());
+
+        // Deploy cost models.
+        let mut jump_rate_models: HashMap<u32, CostModelJumpRate<StateMiddleware>> = HashMap::new();
+        let mut dynamic_level_models: HashMap<u32, CostModelDynamicLevel<StateMiddleware>> =
+            HashMap::new();
+        let mut cost_model_addrs = vec![];
+        for (i, (name, cost_model_type)) in self.cost_models.iter().enumerate() {
+            println!("Deploying cost model: {:?}.", name);
+
+            match cost_model_type {
+                CozyCostModelType::JumpRate(args) => {
+                    let get_model_call = protocol_contracts.jump_rate_factory.get_model(
+                        args.kink,
+                        args.cost_factor_at_zero_utilization,
+                        args.cost_factor_at_kink_utilization,
+                        args.cost_factor_at_full_utilization,
+                    );
+                    let deployed_addr = state
+                        .call_evm_tx_and_decode(admin_addr, get_model_call)
+                        .expect("Error determining if cost model deployed.");
+                    if deployed_addr == Address::zero().into() {
+                        let model_deploy_call = protocol_contracts.jump_rate_factory.deploy_model(
+                            args.kink,
+                            args.cost_factor_at_zero_utilization,
+                            args.cost_factor_at_kink_utilization,
+                            args.cost_factor_at_full_utilization,
+                        );
+                        let model_addr =
+                            state.execute_evm_tx_and_decode(admin_addr, model_deploy_call)?;
+                        let model = CostModelJumpRate::new(model_addr, state_middleware.clone());
+                        jump_rate_models.insert(i as u32, model);
+                        cost_model_addrs.push(model_addr);
+                    } else {
+                        let model = CostModelJumpRate::new(deployed_addr, state_middleware.clone());
+                        jump_rate_models.insert(i as u32, model);
+                        cost_model_addrs.push(deployed_addr);
+                    }
+                }
+                CozyCostModelType::DynamicLevel(args) => {
+                    let model_deploy_call = protocol_contracts.dynamic_level_factory.deploy_model(
+                        args.u_low,
+                        args.u_high,
+                        args.cost_factor_at_zero_utilization,
+                        args.cost_factor_at_full_utilization,
+                        args.cost_factor_in_optimal_zone,
+                        args.optimal_zone_rate,
+                    );
+                    let model_addr =
+                        state.execute_evm_tx_and_decode(admin_addr, model_deploy_call)?;
+                    let model = CostModelDynamicLevel::new(model_addr, state_middleware.clone());
+                    dynamic_level_models.insert(i as u32, model);
+                    cost_model_addrs.push(model_addr);
+                }
+            }
+        }
+
+        // Deploy drip decay models.
+        let mut drip_decay_models: HashMap<u32, DripDecayModelConstant<StateMiddleware>> =
+            HashMap::new();
+        let mut drip_decay_model_addrs = vec![];
+        for (i, (name, drip_decay_model_type)) in self.drip_decay_models.iter().enumerate() {
+            println!("Deploying drip decay model: {:?}.", name);
+
+            match drip_decay_model_type {
+                CozyDripDecayModelType::Constant(args) => {
+                    let get_model_call = protocol_contracts
+                        .drip_decay_factory
+                        .get_model(args.rate_per_second);
+                    let deployed_addr = state
+                        .call_evm_tx_and_decode(admin_addr, get_model_call)
+                        .expect("Error determining if cost model deployed.");
+                    if deployed_addr == Address::zero().into() {
+                        let model_deploy_call = protocol_contracts
+                            .drip_decay_factory
+                            .deploy_model(args.rate_per_second);
+                        let model_addr =
+                            state.execute_evm_tx_and_decode(admin_addr, model_deploy_call)?;
+                        let model =
+                            DripDecayModelConstant::new(model_addr, state_middleware.clone());
+                        drip_decay_models.insert(i as u32, model);
+                        drip_decay_model_addrs.push(model_addr);
+                    } else {
+                        let model =
+                            DripDecayModelConstant::new(deployed_addr, state_middleware.clone());
+                        drip_decay_models.insert(i as u32, model);
+                        drip_decay_model_addrs.push(deployed_addr);
+                    }
+                }
+            }
+        }
+
+        // Deploy triggers.
+        let mut dummy_triggers: HashMap<u32, DummyTrigger<StateMiddleware>> = HashMap::new();
+        let mut trigger_addrs = vec![];
+        for (i, (name, trigger_type)) in self.triggers.iter().enumerate() {
+            println!("Deploying trigger: {:?}.", name);
+
+            match trigger_type {
+                CozyTriggerType::DummyTrigger(_) => {
+                    let trigger_addr = state.deploy_evm_contract(
+                        admin_addr,
+                        &DUMMYTRIGGER_ABI,
+                        &DUMMYTRIGGER_BYTECODE,
+                        (protocol_contracts.manager.address(),),
+                    )?;
+                    let trigger = DummyTrigger::new(trigger_addr, state_middleware.clone());
+                    dummy_triggers.insert(i as u32, trigger);
+                    trigger_addrs.push(trigger_addr);
+                }
+                CozyTriggerType::ChainlinkTrigger => unimplemented!("Chainlink trigger."),
+                CozyTriggerType::UmaTrigger => unimplemented!("UMA trigger."),
+            }
+        }
+
+        // Create set call.
+        println!("Calling create set.");
+        let mut market_configs: Vec<MarketConfig> = vec![];
+        for (i, params) in self.market_config_params.clone().into_iter().enumerate() {
+            market_configs.push(MarketConfig {
+                trigger: trigger_addrs[i].into(),
+                cost_model: cost_model_addrs[i].into(),
+                drip_decay_model: drip_decay_model_addrs[i].into(),
+                weight: params.weight,
+                purchase_fee: params.purchase_fee,
+                sale_fee: params.sale_fee,
+            });
+        }
+        market_configs.sort_by(|a, b| a.trigger.cmp(&b.trigger));
+
+        let set_create_call = protocol_contracts.manager.create_set(
+            admin_addr.into(),
+            admin_addr.into(),
+            base_token.address().into(),
+            SetConfig {
+                deposit_fee: self.set_config_params.deposit_fee,
+                leverage_factor: self.set_config_params.leverage_factor,
+            },
+            market_configs,
+            rand::random::<[u8; 32]>(),
+        );
+        let set_addr = state.execute_evm_tx_and_decode(admin_addr, set_create_call)?;
+        let set = Set::new(set_addr, state_middleware.clone());
+        println!("Set deployed at {:0X}.", set_addr);
+
+        // Register PToken contracts.
+        let mut ptokens: HashMap<u32, PToken<StateMiddleware>> = HashMap::new();
+        for i in 0..self.market_config_params.len() {
+            let (ptoken_addr, _, _, _, _, _, _, _, _, _) = state
+                .call_evm_tx_and_decode(admin_addr, set.markets(U256::from(i)))
+                .expect("Error getting protection token address.");
+            let ptoken = PToken::new(ptoken_addr, state_middleware.clone());
+            ptokens.insert(i as u32, ptoken);
+        }
+
+        Ok(SetContracts {
+            base_token,
+            set,
+            jump_rate_models,
+            dynamic_level_models,
+            drip_decay_models,
+            dummy_triggers,
+            ptokens,
+        })
+    }
+
+    pub fn deal(
+        &self,
+        state: &mut State<CozyUpdate, CozyWorld>,
+        set_contracts: &SetContracts,
+        admin_addr: Address,
+        to_addr: Address,
+        amount: U256,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        let _ = state.execute_evm_tx_and_decode(
+            admin_addr,
+            set_contracts.base_token.mint(to_addr.into(), amount),
+        )?;
         Ok(())
     }
 }
@@ -430,13 +880,7 @@ mod tests {
     #[test]
     fn test_runner() -> Result<(), Box<dyn std::error::Error>> {
         let runner = build_cozy_sim_runner_from_dir("test")?;
-        runner.run(
-            Cow::Borrowed("output/summaries/test_output.json"),
-            vec![
-                CozySingleSetSummaryGenerators::Set,
-                CozySingleSetSummaryGenerators::CostModels,
-            ],
-        )?;
+        runner.run("test".into());
         Ok(())
     }
 }
