@@ -3,7 +3,10 @@ use std::{borrow::Cow, sync::Arc};
 use rand::rngs::StdRng;
 use simulate::{
     address::Address,
-    agent::{agent_channel::AgentChannelSender, Agent},
+    agent::{
+        agent_channel::{AgentChannelReceiver, AgentChannelSender},
+        Agent,
+    },
     state::State,
     u256::{U256, *},
 };
@@ -14,6 +17,25 @@ use crate::cozy::{
     types::ReactionTime,
     world::{CozyUpdate, CozyWorld},
 };
+
+#[derive(Debug, Clone)]
+pub struct RedemptionTracker {
+    pub queued: bool,
+    pub queue_timestamp: Option<U256>,
+    pub redemption_id: Option<u64>,
+    pub redemption_delay: Option<u32>,
+}
+
+impl RedemptionTracker {
+    pub fn new(queued: bool) -> Self {
+        Self {
+            queued,
+            queue_timestamp: None,
+            redemption_id: None,
+            redemption_delay: None,
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct SupplierPreferences {
@@ -46,6 +68,7 @@ pub struct Supplier {
     protocol: Arc<ProtocolContracts>,
     set: Arc<SetContracts>,
     preferences: SupplierPreferences,
+    redemption_tracker: RedemptionTracker,
     rng: StdRng,
 }
 
@@ -64,6 +87,7 @@ impl Supplier {
             protocol,
             set,
             preferences,
+            redemption_tracker: RedemptionTracker::new(false),
             rng,
         }
     }
@@ -87,6 +111,34 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
         state: &State<CozyUpdate, CozyWorld>,
         channel: &AgentChannelSender<CozyUpdate>,
     ) {
+        if self.redemption_tracker.queued {
+            let realized_delay = state.timestamp()
+                - self
+                    .redemption_tracker
+                    .queue_timestamp
+                    .expect("Error getting queue timestamp.");
+            if realized_delay.as_u32()
+                > self
+                    .redemption_tracker
+                    .redemption_delay
+                    .expect("Error getting redemption delay.")
+            {
+                let id = self
+                    .redemption_tracker
+                    .redemption_id
+                    .expect("Error getting redemption id.");
+                let complete_redeem_tx = self.set.set.complete_redeem(id);
+                channel.execute_evm_tx(complete_redeem_tx);
+                self.redemption_tracker = RedemptionTracker::new(false);
+                log::info!(
+                    "Supplier {} is completing redemption id {}.",
+                    self.address,
+                    id
+                );
+                return;
+            }
+        }
+
         if !self
             .preferences
             .reaction_time
@@ -141,18 +193,53 @@ impl Agent<CozyUpdate, CozyWorld> for Supplier {
             }
             std::cmp::Ordering::Less => {
                 let withdraw_amount = current_value - optimal_allocation_value;
-                let router_withdraw_tx = self.protocol.cozy_router.withdraw(
-                    self.set.set.address(),
-                    withdraw_amount,
-                    self.address.into(),
-                    U256::zero(),
-                );
+                let redeem_shares = state
+                    .call_evm_tx_and_decode(
+                        self.address,
+                        self.set.set.convert_to_shares(withdraw_amount),
+                    )
+                    .expect("Error converting assets to shares.");
+                let redeem_tx =
+                    self.set
+                        .set
+                        .redeem(redeem_shares, self.address.into(), self.address.into());
                 log::info!(
                     "Supplier {} is withdrawing {} assets.",
                     self.address,
                     withdraw_amount
                 );
-                channel.execute_evm_tx(router_withdraw_tx);
+                channel.execute_evm_tx(redeem_tx);
+                self.redemption_tracker = RedemptionTracker::new(true);
+            }
+        }
+    }
+
+    fn resolve_step(
+        &mut self,
+        state: &State<CozyUpdate, CozyWorld>,
+        channel: &AgentChannelReceiver<CozyUpdate>,
+    ) {
+        if !self.redemption_tracker.queued {
+            return;
+        }
+        if let Ok(redemption_output) = channel.receive_evm_tx_output() {
+            match redemption_output {
+                Some(successful_redemption_output) => {
+                    let (id, _): (u64, U256) = successful_redemption_output;
+                    self.redemption_tracker.redemption_id = Some(id);
+                    self.redemption_tracker.queue_timestamp = Some(state.timestamp());
+                    self.redemption_tracker.redemption_delay = Some(
+                        state
+                            .call_evm_tx_and_decode(
+                                self.address,
+                                self.protocol.manager.redemption_delay(),
+                            )
+                            .expect("Error getting redemption delay."),
+                    )
+                }
+                None => {
+                    self.redemption_tracker.queued = false;
+                }
             }
         }
     }

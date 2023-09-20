@@ -112,80 +112,118 @@ impl Agent<CozyUpdate, CozyWorld> for Arbitrageur {
         let fair_price_percentage = self.compute_fair_cost_percentage(target_market);
         if current_protection_value > U256::zero() {
             // Sell if you can arbitrage.
-            let refund_value_tx = self.protocol.cozy_router.sell(
-                self.set.set.address(),
-                target_market as u16,
+            self.execute_arbitrage_sale(
+                state,
+                channel,
+                fair_price_percentage,
+                target_market,
                 current_ptokens,
-                self.address.into(),
-                U256::zero(),
             );
-            let refund_value_call = state
-                .call_evm_tx(self.address, refund_value_tx.clone())
-                .expect("Error getting refund value.");
-            if let simulate::state::EvmTxOutput::Success(output_bytes) = refund_value_call {
-                let (refund_value, refund_protection_value): (U256, U256) =
-                    decode_output(&refund_value_tx.function, output_bytes)
-                        .expect("Error decoding purchase cost.");
-                let refund_price_percentage =
-                    u256_to_f64(refund_value) / u256_to_f64(refund_protection_value);
-                let refund_price_percentage = normalize_constant_decay_price(
-                    refund_price_percentage,
-                    state
-                        .call_evm_tx_and_decode(
-                            self.address,
-                            self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
-                        )
-                        .expect("Error getting drip decay rate."),
-                );
-                if refund_price_percentage > fair_price_percentage {
-                    log::info!(
-                        "Arbitrageur {} is selling {} protection.",
-                        self.address,
-                        refund_protection_value
-                    );
-                    channel.execute_evm_tx(refund_value_tx);
-                }
-            }
         } else {
             // Buy if you can arbitrage.
-            let purchase_cost_tx = self.protocol.cozy_router.purchase(
-                self.set.set.address(),
-                target_market as u16,
+            self.execute_arbitrage_buy(
+                state,
+                channel,
+                fair_price_percentage,
+                target_market,
                 balance,
-                self.address.into(),
-                U256::MAX,
             );
-            let purchase_cost_call = state
-                .call_evm_tx(self.address, purchase_cost_tx.clone())
-                .expect("Error getting purchase cost.");
-            if let simulate::state::EvmTxOutput::Success(output_bytes) = purchase_cost_call {
-                let (assets_needed, _): (U256, U256) =
-                    decode_output(&purchase_cost_tx.function, output_bytes)
-                        .expect("Error decoding purchase cost.");
-                let purchase_cost_percentage = u256_to_f64(assets_needed) / u256_to_f64(balance);
-                let purchase_cost_percentage = normalize_constant_decay_price(
-                    purchase_cost_percentage,
-                    state
-                        .call_evm_tx_and_decode(
-                            self.address,
-                            self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
-                        )
-                        .expect("Error getting drip decay rate."),
-                );
-                if purchase_cost_percentage <= fair_price_percentage {
-                    log::info!(
-                        "Arbitrageur {} is buying {} protection.",
-                        self.address,
-                        balance
-                    );
-                    channel.execute_evm_tx(purchase_cost_tx);
-                }
-            }
         }
     }
 }
 
 impl Arbitrageur {
+    fn execute_arbitrage_sale(
+        &mut self,
+        state: &State<CozyUpdate, CozyWorld>,
+        channel: &AgentChannelSender<CozyUpdate>,
+        fair_price_percentage: f64,
+        target_market: usize,
+        current_ptokens: U256,
+    ) -> bool {
+        let refund_value_tx = self.protocol.cozy_router.sell(
+            self.set.set.address(),
+            target_market as u16,
+            current_ptokens,
+            self.address.into(),
+            U256::zero(),
+        );
+        let refund_value_call = state
+            .call_evm_tx(self.address, refund_value_tx.clone())
+            .expect("Error getting refund value.");
+        if let simulate::state::EvmTxOutput::Success(output_bytes) = refund_value_call {
+            let (refund_value, refund_protection_value): (U256, U256) =
+                decode_output(&refund_value_tx.function, output_bytes)
+                    .expect("Error decoding refund amount.");
+            let refund_price_percentage =
+                u256_to_f64(refund_value) / u256_to_f64(refund_protection_value);
+            let refund_price_percentage = normalize_constant_decay_price(
+                refund_price_percentage,
+                state
+                    .call_evm_tx_and_decode(
+                        self.address,
+                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                    )
+                    .expect("Error getting drip decay rate."),
+            );
+            if refund_price_percentage > fair_price_percentage {
+                log::info!(
+                    "Arbitrageur {} is selling {} protection.",
+                    self.address,
+                    refund_protection_value
+                );
+                channel.execute_evm_tx(refund_value_tx);
+                return true;
+            }
+        }
+        false
+    }
+
+    fn execute_arbitrage_buy(
+        &mut self,
+        state: &State<CozyUpdate, CozyWorld>,
+        channel: &AgentChannelSender<CozyUpdate>,
+        fair_price_percentage: f64,
+        target_market: usize,
+        balance: U256,
+    ) -> bool {
+        let purchase_cost_tx = self.protocol.cozy_router.purchase(
+            self.set.set.address(),
+            target_market as u16,
+            balance,
+            self.address.into(),
+            U256::MAX,
+        );
+        let purchase_cost_call = state
+            .call_evm_tx(self.address, purchase_cost_tx.clone())
+            .expect("Error getting purchase cost.");
+        if let simulate::state::EvmTxOutput::Success(output_bytes) = purchase_cost_call {
+            let (assets_needed, _): (U256, U256) =
+                decode_output(&purchase_cost_tx.function, output_bytes)
+                    .expect("Error decoding purchase cost.");
+            let purchase_cost_percentage = u256_to_f64(assets_needed) / u256_to_f64(balance);
+            let purchase_cost_percentage = normalize_constant_decay_price(
+                purchase_cost_percentage,
+                state
+                    .call_evm_tx_and_decode(
+                        self.address,
+                        self.set.drip_decay_models[&(target_market as u32)].rate_per_second(),
+                    )
+                    .expect("Error getting drip decay rate."),
+            );
+            if purchase_cost_percentage <= fair_price_percentage {
+                log::info!(
+                    "Arbitrageur {} is buying {} protection.",
+                    self.address,
+                    balance
+                );
+                channel.execute_evm_tx(purchase_cost_tx);
+                return true;
+            }
+        }
+        false
+    }
+
     fn get_protection_owned(
         &self,
         state: &State<CozyUpdate, CozyWorld>,

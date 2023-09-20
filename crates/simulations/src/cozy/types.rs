@@ -157,6 +157,7 @@ pub struct SupplierParams {
     pub wealth_mean: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub wealth_std: U256,
+    #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub altruistic_supplier_wealth: U256,
     #[serde(deserialize_with = "deserialize_string_to_u256")]
     pub mean_reaction_time: U256,

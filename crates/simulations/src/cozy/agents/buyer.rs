@@ -141,7 +141,7 @@ impl Agent<CozyUpdate, CozyWorld> for Buyer {
                 let fair_price_percentage = self.compute_fair_cost_percentage(target_market);
                 if purchase_cost_percentage <= fair_price_percentage {
                     log::info!(
-                        "Buyering {} is buying {} protection.",
+                        "Buyer {} is buying {} protection.",
                         self.address,
                         protection_amt
                     );
