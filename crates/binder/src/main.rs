@@ -10,30 +10,30 @@ mod utils;
 #[derive(Parser)]
 struct Binder {
     /// Path to where the raw abis are stored.
-    #[arg(long)]
+    #[clap(long)]
     pub abis: PathBuf,
 
     /// Path to the bindings library.
-    #[arg(long)]
+    #[clap(long)]
     pub bindings: PathBuf,
 
     /// Create bindings only for contracts whose names match the specified filter(s)
-    #[arg(long, required = false)]
+    #[clap(long, required = false)]
     pub select: Vec<regex::Regex>,
 
     /// Create bindings only for contracts whose names do not match the specified filter(s)
-    #[arg(long, conflicts_with = "select", required = false)]
+    #[clap(long, conflicts_with = "select", required = false)]
     pub skip: Vec<regex::Regex>,
 
     /// The name of the Rust module to generate.
-    #[arg(long, value_name = "NAME")]
+    #[clap(long, value_name = "NAME")]
     mod_name: String,
 
     /// Overwrite existing generated bindings.
     ///
     /// By default, the command will check that the bindings are correct, and then exit. If
     /// --overwrite is passed, it will instead delete and overwrite the bindings.
-    #[arg(long, default_value_t = false)]
+    #[clap(long, default_value_t = false)]
     overwrite: bool,
 }
 

@@ -8,6 +8,10 @@ pub fn f64_to_u256(x: f64) -> U256 {
     EvmU256::from(x).into()
 }
 
+pub fn u256_to_f64(x: U256) -> f64 {
+    x.as_u128() as f64
+}
+
 pub fn deserialize_string_to_u256<'de, D>(deserializer: D) -> Result<U256, D::Error>
 where
     D: Deserializer<'de>,

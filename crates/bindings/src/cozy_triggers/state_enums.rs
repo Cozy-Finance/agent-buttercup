@@ -7,16 +7,24 @@ pub use state_enums::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod state_enums {
-    #[rustfmt::skip]
-    const __ABI: &str = "[]";
+    #[allow(deprecated)]
+    fn __abi() -> ::ethers::core::abi::Abi {
+        ::ethers::core::abi::ethabi::Contract {
+            constructor: ::core::option::Option::None,
+            functions: ::std::collections::BTreeMap::new(),
+            events: ::std::collections::BTreeMap::new(),
+            errors: ::std::collections::BTreeMap::new(),
+            receive: false,
+            fallback: false,
+        }
+    }
     ///The parsed JSON ABI of the contract.
-    pub static STATEENUMS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers_contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static STATEENUMS_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(
+        __abi,
+    );
     pub struct StateEnums<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for StateEnums<M> {
         fn clone(&self) -> Self {
@@ -36,9 +44,7 @@ pub mod state_enums {
     }
     impl<M> ::core::fmt::Debug for StateEnums<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(StateEnums))
-                .field(&self.address())
-                .finish()
+            f.debug_tuple(::core::stringify!(StateEnums)).field(&self.address()).finish()
         }
     }
     impl<M: ::ethers::providers::Middleware> StateEnums<M> {
@@ -48,14 +54,17 @@ pub mod state_enums {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers_contract::Contract::new(
-                address.into(),
-                STATEENUMS_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers_contract::Contract::new(
+                    address.into(),
+                    STATEENUMS_ABI.clone(),
+                    client,
+                ),
+            )
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for StateEnums<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
+    for StateEnums<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }

@@ -1,7 +1,0 @@
-time_policy_params:
-  start_block_number: 1
-  start_block_timestamp: 1
-  time_per_block: 120
-  blocks_per_step: 50 # 50 * 12 = 600 secs / step
-  blocks_to_generate: 5000
-  time_to_generate: null

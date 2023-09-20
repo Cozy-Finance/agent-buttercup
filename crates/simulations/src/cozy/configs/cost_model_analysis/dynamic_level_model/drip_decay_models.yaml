@@ -1,4 +1,0 @@
-drip_decay_models:
-  - - "DripDecayModel"
-    - "Constant":
-        rate_per_second: "9000000000"

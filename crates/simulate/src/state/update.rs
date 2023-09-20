@@ -1,21 +1,32 @@
 use std::fmt::Debug;
 
-use revm::primitives::{ExecutionResult, TxEnv};
+use crossbeam_channel::Sender;
+use ethers::{abi::Function, types::transaction::eip2718::TypedTransaction};
+use revm::primitives::TxEnv;
 
-pub trait UpdateData: Send + Sync + Debug + Clone {}
+use crate::{address::Address, state::EvmTxOutput};
+
+pub trait Update: Send + Sync + Debug {}
 
 #[derive(Debug, Clone)]
-pub enum SimUpdate<U: UpdateData> {
-    Evm(TxEnv),
-    World(U),
-    Bundle(TxEnv, U),
-    MultiBundle(Vec<TxEnv>, Vec<U>),
+pub enum EvmStateUpdate {
+    Execute(
+        Address,
+        TypedTransaction,
+        Function,
+        Sender<EvmStateUpdateOutput>,
+    ),
+    ExecuteRaw(Address, TxEnv, Sender<EvmStateUpdateOutput>),
 }
 
 #[derive(Debug, Clone)]
-pub enum SimUpdateResult<U: UpdateData> {
-    Evm(ExecutionResult),
-    World(Option<U>),
-    Bundle(bool, ExecutionResult, Option<U>),
-    MultiBundle(bool, Vec<ExecutionResult>, Vec<Option<U>>),
+pub enum EvmStateUpdateOutput {
+    Execute(EvmTxOutput, Function),
+    ExecuteRaw(EvmTxOutput),
+}
+
+#[derive(Debug, Clone)]
+pub struct WorldStateUpdate<U: Update> {
+    pub update: U,
+    pub result_sender: Sender<U>,
 }

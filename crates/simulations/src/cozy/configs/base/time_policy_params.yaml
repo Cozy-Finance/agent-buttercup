@@ -1,0 +1,5 @@
+time_policy_params:
+  start_block_number: "1"
+  start_block_timestamp: "1"
+  time_per_step: "86400"
+  time_to_generate: "172800000" # 200 days

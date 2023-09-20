@@ -3,6 +3,7 @@ use std::{
     str::FromStr,
 };
 
+use ethers::abi::{InvalidOutputType, Token, Tokenizable};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
@@ -16,6 +17,10 @@ pub struct Address {
 }
 
 impl Address {
+    pub fn zero() -> Self {
+        Address { value: [0; 20] }
+    }
+
     pub fn random() -> Self {
         Address {
             value: rand::random::<[u8; 20]>(),
@@ -79,5 +84,15 @@ impl From<Address> for EthersAddress {
 impl From<Address> for EvmAddress {
     fn from(val: Address) -> Self {
         val.value.into()
+    }
+}
+
+impl Tokenizable for Address {
+    fn from_token(token: Token) -> Result<Self, InvalidOutputType> {
+        EthersAddress::from_token(token).map(Address::from)
+    }
+
+    fn into_token(self) -> Token {
+        Token::Address(self.into())
     }
 }

@@ -7,16 +7,533 @@ pub use iuma_trigger::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types
+    non_camel_case_types,
 )]
 pub mod iuma_trigger {
-    #[rustfmt::skip]
-    const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[],\"indexed\":false}],\"type\":\"event\",\"name\":\"SetAdded\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"state\",\"type\":\"uint8\",\"components\":[],\"indexed\":true}],\"type\":\"event\",\"name\":\"TriggerStateUpdated\",\"outputs\":[],\"anonymous\":false},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"MAX_SET_LENGTH\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\",\"name\":\"acknowledged\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"contract ISet\",\"name\":\"set\",\"type\":\"address\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"addSet\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"bondAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getOracle\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSets\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"getSetsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"manager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"oracleFinder\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceProposed\",\"outputs\":[]},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_identifier\",\"type\":\"bytes32\",\"components\":[]},{\"internalType\":\"uint256\",\"name\":\"_timestamp\",\"type\":\"uint256\",\"components\":[]},{\"internalType\":\"bytes\",\"name\":\"_ancillaryData\",\"type\":\"bytes\",\"components\":[]},{\"internalType\":\"int256\",\"name\":\"_answer\",\"type\":\"int256\",\"components\":[]}],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"priceSettled\",\"outputs\":[]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"proposalDisputeWindow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"query\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"queryIdentifier\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"requestTimestamp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"rewardToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"runProgrammaticCheck\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\",\"components\":[]}],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"sets\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"shouldTrigger\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\",\"components\":[]}]},{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"name\":\"state\",\"outputs\":[{\"internalType\":\"enum MarketState\",\"name\":\"\",\"type\":\"uint8\",\"components\":[]}]}]";
+    #[allow(deprecated)]
+    fn __abi() -> ::ethers::core::abi::Abi {
+        ::ethers::core::abi::ethabi::Contract {
+            constructor: ::core::option::Option::None,
+            functions: ::core::convert::From::from([
+                (
+                    ::std::borrow::ToOwned::to_owned("MAX_SET_LENGTH"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("MAX_SET_LENGTH"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("acknowledged"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("acknowledged"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Bool,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bool"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::Pure,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("addSet"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("addSet"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("set"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("contract ISet"),
+                                    ),
+                                },
+                            ],
+                            outputs: ::std::vec![],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("bondAmount"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("bondAmount"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("getOracle"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("getOracle"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("getSets"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("getSets"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Array(
+                                        ::std::boxed::Box::new(
+                                            ::ethers::core::abi::ethabi::ParamType::Address,
+                                        ),
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address[]"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("getSetsLength"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("getSetsLength"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("manager"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("manager"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("oracleFinder"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("oracleFinder"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("priceProposed"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("priceProposed"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_identifier"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::FixedBytes(
+                                        32usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bytes32"),
+                                    ),
+                                },
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_timestamp"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_ancillaryData"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Bytes,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bytes"),
+                                    ),
+                                },
+                            ],
+                            outputs: ::std::vec![],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("priceSettled"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("priceSettled"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_identifier"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::FixedBytes(
+                                        32usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bytes32"),
+                                    ),
+                                },
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_timestamp"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_ancillaryData"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Bytes,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bytes"),
+                                    ),
+                                },
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::borrow::ToOwned::to_owned("_answer"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Int(256usize),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("int256"),
+                                    ),
+                                },
+                            ],
+                            outputs: ::std::vec![],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("proposalDisputeWindow"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned(
+                                "proposalDisputeWindow",
+                            ),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("query"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("query"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::String,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("string"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("queryIdentifier"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("queryIdentifier"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::FixedBytes(
+                                        32usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bytes32"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("requestTimestamp"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("requestTimestamp"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("rewardToken"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("rewardToken"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("runProgrammaticCheck"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned(
+                                "runProgrammaticCheck",
+                            ),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(8usize),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint8"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("sets"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("sets"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(
+                                        256usize,
+                                    ),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("uint256"),
+                                    ),
+                                },
+                            ],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("address"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("shouldTrigger"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("shouldTrigger"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Bool,
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("bool"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::View,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("state"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Function {
+                            name: ::std::borrow::ToOwned::to_owned("state"),
+                            inputs: ::std::vec![],
+                            outputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::Param {
+                                    name: ::std::string::String::new(),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(8usize),
+                                    internal_type: ::core::option::Option::Some(
+                                        ::std::borrow::ToOwned::to_owned("enum MarketState"),
+                                    ),
+                                },
+                            ],
+                            constant: ::core::option::Option::None,
+                            state_mutability: ::ethers::core::abi::ethabi::StateMutability::NonPayable,
+                        },
+                    ],
+                ),
+            ]),
+            events: ::core::convert::From::from([
+                (
+                    ::std::borrow::ToOwned::to_owned("SetAdded"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Event {
+                            name: ::std::borrow::ToOwned::to_owned("SetAdded"),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::EventParam {
+                                    name: ::std::borrow::ToOwned::to_owned("set"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Address,
+                                    indexed: false,
+                                },
+                            ],
+                            anonymous: false,
+                        },
+                    ],
+                ),
+                (
+                    ::std::borrow::ToOwned::to_owned("TriggerStateUpdated"),
+                    ::std::vec![
+                        ::ethers::core::abi::ethabi::Event {
+                            name: ::std::borrow::ToOwned::to_owned(
+                                "TriggerStateUpdated",
+                            ),
+                            inputs: ::std::vec![
+                                ::ethers::core::abi::ethabi::EventParam {
+                                    name: ::std::borrow::ToOwned::to_owned("state"),
+                                    kind: ::ethers::core::abi::ethabi::ParamType::Uint(8usize),
+                                    indexed: true,
+                                },
+                            ],
+                            anonymous: false,
+                        },
+                    ],
+                ),
+            ]),
+            errors: ::std::collections::BTreeMap::new(),
+            receive: false,
+            fallback: false,
+        }
+    }
     ///The parsed JSON ABI of the contract.
-    pub static IUMATRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> =
-        ::ethers_contract::Lazy::new(|| {
-            ::ethers::core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
-        });
+    pub static IUMATRIGGER_ABI: ::ethers_contract::Lazy<::ethers::core::abi::Abi> = ::ethers_contract::Lazy::new(
+        __abi,
+    );
     pub struct IUMATrigger<M>(::ethers_contract::Contract<M>);
     impl<M> ::core::clone::Clone for IUMATrigger<M> {
         fn clone(&self) -> Self {
@@ -36,7 +553,7 @@ pub mod iuma_trigger {
     }
     impl<M> ::core::fmt::Debug for IUMATrigger<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(stringify!(IUMATrigger))
+            f.debug_tuple(::core::stringify!(IUMATrigger))
                 .field(&self.address())
                 .finish()
         }
@@ -48,11 +565,13 @@ pub mod iuma_trigger {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(::ethers_contract::Contract::new(
-                address.into(),
-                IUMATRIGGER_ABI.clone(),
-                client,
-            ))
+            Self(
+                ::ethers_contract::Contract::new(
+                    address.into(),
+                    IUMATRIGGER_ABI.clone(),
+                    client,
+                ),
+            )
         }
         ///Calls the contract's `MAX_SET_LENGTH` (0x59537144) function
         pub fn max_set_length(
@@ -63,7 +582,9 @@ pub mod iuma_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `acknowledged` (0x086c298d) function
-        pub fn acknowledged(&self) -> ::ethers_contract::builders::ContractCall<M, bool> {
+        pub fn acknowledged(
+            &self,
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([8, 108, 41, 141], ())
                 .expect("method not found (this should never happen)")
@@ -88,7 +609,10 @@ pub mod iuma_trigger {
         ///Calls the contract's `getOracle` (0x833b1fce) function
         pub fn get_oracle(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers_contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([131, 59, 31, 206], ())
                 .expect("method not found (this should never happen)")
@@ -115,7 +639,10 @@ pub mod iuma_trigger {
         ///Calls the contract's `manager` (0x481c6a75) function
         pub fn manager(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers_contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([72, 28, 106, 117], ())
                 .expect("method not found (this should never happen)")
@@ -123,7 +650,10 @@ pub mod iuma_trigger {
         ///Calls the contract's `oracleFinder` (0x9ceb3ea2) function
         pub fn oracle_finder(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers_contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([156, 235, 62, 162], ())
                 .expect("method not found (this should never happen)")
@@ -136,7 +666,10 @@ pub mod iuma_trigger {
             ancillary_data: ::ethers::core::types::Bytes,
         ) -> ::ethers_contract::builders::ContractCall<M, ()> {
             self.0
-                .method_hash([156, 47, 209, 223], (identifier, timestamp, ancillary_data))
+                .method_hash(
+                    [156, 47, 209, 223],
+                    (identifier, timestamp, ancillary_data),
+                )
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `priceSettled` (0x04cc1fd5) function
@@ -163,13 +696,17 @@ pub mod iuma_trigger {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `query` (0x2c46b205) function
-        pub fn query(&self) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
+        pub fn query(
+            &self,
+        ) -> ::ethers_contract::builders::ContractCall<M, ::std::string::String> {
             self.0
                 .method_hash([44, 70, 178, 5], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `queryIdentifier` (0x51119862) function
-        pub fn query_identifier(&self) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
+        pub fn query_identifier(
+            &self,
+        ) -> ::ethers_contract::builders::ContractCall<M, [u8; 32]> {
             self.0
                 .method_hash([81, 17, 152, 98], ())
                 .expect("method not found (this should never happen)")
@@ -185,13 +722,18 @@ pub mod iuma_trigger {
         ///Calls the contract's `rewardToken` (0xf7c618c1) function
         pub fn reward_token(
             &self,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers_contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([247, 198, 24, 193], ())
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `runProgrammaticCheck` (0x37a0afc1) function
-        pub fn run_programmatic_check(&self) -> ::ethers_contract::builders::ContractCall<M, u8> {
+        pub fn run_programmatic_check(
+            &self,
+        ) -> ::ethers_contract::builders::ContractCall<M, u8> {
             self.0
                 .method_hash([55, 160, 175, 193], ())
                 .expect("method not found (this should never happen)")
@@ -200,13 +742,18 @@ pub mod iuma_trigger {
         pub fn sets(
             &self,
             p0: ::ethers::core::types::U256,
-        ) -> ::ethers_contract::builders::ContractCall<M, ::ethers::core::types::Address> {
+        ) -> ::ethers_contract::builders::ContractCall<
+            M,
+            ::ethers::core::types::Address,
+        > {
             self.0
                 .method_hash([91, 34, 127, 155], p0)
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `shouldTrigger` (0x4f4ab8b0) function
-        pub fn should_trigger(&self) -> ::ethers_contract::builders::ContractCall<M, bool> {
+        pub fn should_trigger(
+            &self,
+        ) -> ::ethers_contract::builders::ContractCall<M, bool> {
             self.0
                 .method_hash([79, 74, 184, 176], ())
                 .expect("method not found (this should never happen)")
@@ -226,19 +773,26 @@ pub mod iuma_trigger {
         ///Gets the contract's `TriggerStateUpdated` event
         pub fn trigger_state_updated_filter(
             &self,
-        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, TriggerStateUpdatedFilter>
-        {
+        ) -> ::ethers_contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            TriggerStateUpdatedFilter,
+        > {
             self.0.event()
         }
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers_contract::builders::Event<::std::sync::Arc<M>, M, IUMATriggerEvents> {
-            self.0
-                .event_with_filter(::core::default::Default::default())
+        ) -> ::ethers_contract::builders::Event<
+            ::std::sync::Arc<M>,
+            M,
+            IUMATriggerEvents,
+        > {
+            self.0.event_with_filter(::core::default::Default::default())
         }
     }
-    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>> for IUMATrigger<M> {
+    impl<M: ::ethers::providers::Middleware> From<::ethers_contract::Contract<M>>
+    for IUMATrigger<M> {
         fn from(contract: ::ethers_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -251,7 +805,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "SetAdded", abi = "SetAdded(address)")]
     pub struct SetAddedFilter {
@@ -265,7 +819,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethevent(name = "TriggerStateUpdated", abi = "TriggerStateUpdated(uint8)")]
     pub struct TriggerStateUpdatedFilter {
@@ -295,7 +849,9 @@ pub mod iuma_trigger {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::SetAddedFilter(element) => ::core::fmt::Display::fmt(element, f),
-                Self::TriggerStateUpdatedFilter(element) => ::core::fmt::Display::fmt(element, f),
+                Self::TriggerStateUpdatedFilter(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
             }
         }
     }
@@ -318,7 +874,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "MAX_SET_LENGTH", abi = "MAX_SET_LENGTH()")]
     pub struct MaxSetLengthCall;
@@ -331,7 +887,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "acknowledged", abi = "acknowledged()")]
     pub struct AcknowledgedCall;
@@ -344,7 +900,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "addSet", abi = "addSet(address)")]
     pub struct AddSetCall {
@@ -359,7 +915,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "bondAmount", abi = "bondAmount()")]
     pub struct BondAmountCall;
@@ -372,7 +928,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getOracle", abi = "getOracle()")]
     pub struct GetOracleCall;
@@ -385,7 +941,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getSets", abi = "getSets()")]
     pub struct GetSetsCall;
@@ -398,7 +954,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "getSetsLength", abi = "getSetsLength()")]
     pub struct GetSetsLengthCall;
@@ -411,7 +967,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "manager", abi = "manager()")]
     pub struct ManagerCall;
@@ -424,7 +980,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "oracleFinder", abi = "oracleFinder()")]
     pub struct OracleFinderCall;
@@ -437,7 +993,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "priceProposed", abi = "priceProposed(bytes32,uint256,bytes)")]
     pub struct PriceProposedCall {
@@ -454,12 +1010,9 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
-    #[ethcall(
-        name = "priceSettled",
-        abi = "priceSettled(bytes32,uint256,bytes,int256)"
-    )]
+    #[ethcall(name = "priceSettled", abi = "priceSettled(bytes32,uint256,bytes,int256)")]
     pub struct PriceSettledCall {
         pub identifier: [u8; 32],
         pub timestamp: ::ethers::core::types::U256,
@@ -475,7 +1028,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "proposalDisputeWindow", abi = "proposalDisputeWindow()")]
     pub struct ProposalDisputeWindowCall;
@@ -488,7 +1041,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "query", abi = "query()")]
     pub struct QueryCall;
@@ -501,7 +1054,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "queryIdentifier", abi = "queryIdentifier()")]
     pub struct QueryIdentifierCall;
@@ -514,7 +1067,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "requestTimestamp", abi = "requestTimestamp()")]
     pub struct RequestTimestampCall;
@@ -527,7 +1080,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "rewardToken", abi = "rewardToken()")]
     pub struct RewardTokenCall;
@@ -540,7 +1093,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "runProgrammaticCheck", abi = "runProgrammaticCheck()")]
     pub struct RunProgrammaticCheckCall;
@@ -553,7 +1106,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "sets", abi = "sets(uint256)")]
     pub struct SetsCall(pub ::ethers::core::types::U256);
@@ -566,7 +1119,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "shouldTrigger", abi = "shouldTrigger()")]
     pub struct ShouldTriggerCall;
@@ -579,7 +1132,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     #[ethcall(name = "state", abi = "state()")]
     pub struct StateCall;
@@ -612,79 +1165,90 @@ pub mod iuma_trigger {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <MaxSetLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::MaxSetLength(decoded));
             }
-            if let Ok(decoded) = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <AcknowledgedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Acknowledged(decoded));
             }
-            if let Ok(decoded) = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <AddSetCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::AddSet(decoded));
             }
-            if let Ok(decoded) = <BondAmountCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <BondAmountCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::BondAmount(decoded));
             }
-            if let Ok(decoded) = <GetOracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetOracleCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetOracle(decoded));
             }
-            if let Ok(decoded) = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <GetSetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSets(decoded));
             }
-            if let Ok(decoded) = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <GetSetsLengthCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::GetSetsLength(decoded));
             }
-            if let Ok(decoded) = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <ManagerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Manager(decoded));
             }
-            if let Ok(decoded) = <OracleFinderCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <OracleFinderCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::OracleFinder(decoded));
             }
-            if let Ok(decoded) = <PriceProposedCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <PriceProposedCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::PriceProposed(decoded));
             }
-            if let Ok(decoded) = <PriceSettledCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <PriceSettledCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::PriceSettled(decoded));
             }
-            if let Ok(decoded) =
-                <ProposalDisputeWindowCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ProposalDisputeWindowCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::ProposalDisputeWindow(decoded));
             }
-            if let Ok(decoded) = <QueryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <QueryCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Query(decoded));
             }
-            if let Ok(decoded) =
-                <QueryIdentifierCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <QueryIdentifierCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::QueryIdentifier(decoded));
             }
-            if let Ok(decoded) =
-                <RequestTimestampCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <RequestTimestampCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::RequestTimestamp(decoded));
             }
-            if let Ok(decoded) = <RewardTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <RewardTokenCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::RewardToken(decoded));
             }
-            if let Ok(decoded) =
-                <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <RunProgrammaticCheckCall as ::ethers::core::abi::AbiDecode>::decode(
+                    data,
+                ) {
                 return Ok(Self::RunProgrammaticCheck(decoded));
             }
-            if let Ok(decoded) = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <SetsCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Sets(decoded));
             }
-            if let Ok(decoded) = <ShouldTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data)
-            {
+            if let Ok(decoded)
+                = <ShouldTriggerCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::ShouldTrigger(decoded));
             }
-            if let Ok(decoded) = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded)
+                = <StateCall as ::ethers::core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::State(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData.into())
@@ -693,29 +1257,53 @@ pub mod iuma_trigger {
     impl ::ethers::core::abi::AbiEncode for IUMATriggerCalls {
         fn encode(self) -> Vec<u8> {
             match self {
-                Self::MaxSetLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::Acknowledged(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::MaxSetLength(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::Acknowledged(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::AddSet(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::BondAmount(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetOracle(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::BondAmount(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::GetOracle(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::GetSets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::GetSetsLength(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::GetSetsLength(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::Manager(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::OracleFinder(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PriceProposed(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::PriceSettled(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::OracleFinder(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::PriceProposed(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::PriceSettled(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::ProposalDisputeWindow(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Query(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::QueryIdentifier(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::RequestTimestamp(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::RewardToken(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::QueryIdentifier(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::RequestTimestamp(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
+                Self::RewardToken(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::RunProgrammaticCheck(element) => {
                     ::ethers::core::abi::AbiEncode::encode(element)
                 }
                 Self::Sets(element) => ::ethers::core::abi::AbiEncode::encode(element),
-                Self::ShouldTrigger(element) => ::ethers::core::abi::AbiEncode::encode(element),
+                Self::ShouldTrigger(element) => {
+                    ::ethers::core::abi::AbiEncode::encode(element)
+                }
                 Self::State(element) => ::ethers::core::abi::AbiEncode::encode(element),
             }
         }
@@ -734,12 +1322,16 @@ pub mod iuma_trigger {
                 Self::OracleFinder(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PriceProposed(element) => ::core::fmt::Display::fmt(element, f),
                 Self::PriceSettled(element) => ::core::fmt::Display::fmt(element, f),
-                Self::ProposalDisputeWindow(element) => ::core::fmt::Display::fmt(element, f),
+                Self::ProposalDisputeWindow(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::Query(element) => ::core::fmt::Display::fmt(element, f),
                 Self::QueryIdentifier(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RequestTimestamp(element) => ::core::fmt::Display::fmt(element, f),
                 Self::RewardToken(element) => ::core::fmt::Display::fmt(element, f),
-                Self::RunProgrammaticCheck(element) => ::core::fmt::Display::fmt(element, f),
+                Self::RunProgrammaticCheck(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::Sets(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ShouldTrigger(element) => ::core::fmt::Display::fmt(element, f),
                 Self::State(element) => ::core::fmt::Display::fmt(element, f),
@@ -855,7 +1447,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct MaxSetLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `acknowledged` function with signature `acknowledged()` and selector `0x086c298d`
@@ -867,7 +1459,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct AcknowledgedReturn(pub bool);
     ///Container type for all return fields from the `bondAmount` function with signature `bondAmount()` and selector `0x80f323a7`
@@ -879,7 +1471,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct BondAmountReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `getOracle` function with signature `getOracle()` and selector `0x833b1fce`
@@ -891,7 +1483,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetOracleReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `getSets` function with signature `getSets()` and selector `0x2cf7c531`
@@ -903,7 +1495,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetSetsReturn(pub ::std::vec::Vec<::ethers::core::types::Address>);
     ///Container type for all return fields from the `getSetsLength` function with signature `getSetsLength()` and selector `0xe86376c5`
@@ -915,7 +1507,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct GetSetsLengthReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `manager` function with signature `manager()` and selector `0x481c6a75`
@@ -927,7 +1519,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ManagerReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `oracleFinder` function with signature `oracleFinder()` and selector `0x9ceb3ea2`
@@ -939,7 +1531,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct OracleFinderReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `proposalDisputeWindow` function with signature `proposalDisputeWindow()` and selector `0xb365441b`
@@ -951,7 +1543,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ProposalDisputeWindowReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `query` function with signature `query()` and selector `0x2c46b205`
@@ -963,7 +1555,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct QueryReturn(pub ::std::string::String);
     ///Container type for all return fields from the `queryIdentifier` function with signature `queryIdentifier()` and selector `0x51119862`
@@ -975,7 +1567,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct QueryIdentifierReturn(pub [u8; 32]);
     ///Container type for all return fields from the `requestTimestamp` function with signature `requestTimestamp()` and selector `0x3e66a647`
@@ -987,7 +1579,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RequestTimestampReturn(pub ::ethers::core::types::U256);
     ///Container type for all return fields from the `rewardToken` function with signature `rewardToken()` and selector `0xf7c618c1`
@@ -999,7 +1591,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RewardTokenReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `runProgrammaticCheck` function with signature `runProgrammaticCheck()` and selector `0x37a0afc1`
@@ -1011,7 +1603,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct RunProgrammaticCheckReturn(pub u8);
     ///Container type for all return fields from the `sets` function with signature `sets(uint256)` and selector `0x5b227f9b`
@@ -1023,7 +1615,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct SetsReturn(pub ::ethers::core::types::Address);
     ///Container type for all return fields from the `shouldTrigger` function with signature `shouldTrigger()` and selector `0x4f4ab8b0`
@@ -1035,7 +1627,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct ShouldTriggerReturn(pub bool);
     ///Container type for all return fields from the `state` function with signature `state()` and selector `0xc19d93fb`
@@ -1047,7 +1639,7 @@ pub mod iuma_trigger {
         Debug,
         PartialEq,
         Eq,
-        Hash,
+        Hash
     )]
     pub struct StateReturn(pub u8);
 }

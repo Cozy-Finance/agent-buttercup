@@ -1,0 +1,5 @@
+trigger_risk_params:
+  annual_probabilities:
+    - 0.05
+    - 0.05
+  pairwise_corr: 0.0

@@ -1,31 +1,22 @@
-passive_buyers_params:
-  num_passive: 1
-  capital_dist:
-    min: "1000000"
-    max: "2000000"
-  protection_desired_dist:
-    min: "1000000"
-    max: "2000000"
-  time_dist:
-    rate: 2 # average 10-day waiting period
-    time_unit: "Day"
-active_buyers_params:
-  num_active: 1
-  capital_dist:
-    min: "1000000"
-    max: "2000000"
-  time_dist:
-    rate: 2 # average 2-day waiting period
-    time_unit: "Day"
-  trigger_prob_dist:
-    "Static":
-      mean: 0.02
-      std: 0.001
-suppliers_params:
-  num_passive: 1
-  capital_dist:
-    min: "10000000"
-    max: "20000000"
-  time_dist:
-    rate: 2 # average 10-day waiting period
-    time_unit: "Day"
+agent_set_risk_params:
+  annual_probabilities_concentration: 10000000000
+  wishart_corr_df: 10
+buyer_params:
+  num: 100
+  market_allocations_dirichlet_alpha: 1.0
+  balance_mean: "1000000000"
+  balance_std: "10000"
+  mean_reaction_time: "432000" # 5 days
+supplier_params:
+  num: 50
+  wealth_mean: "1000000000"
+  wealth_std: "10000"
+  risk_aversion_mean: 0.5
+  risk_aversion_concentration: 1
+  altruistic_supplier_wealth: "100000000"
+  mean_reaction_time: "1296000" # 15 days
+arbitrageur_params:
+  num: 5
+  balance_mean: "1000000"
+  balance_std: "1000000"
+  mean_reaction_time: "432000" # 5 days
