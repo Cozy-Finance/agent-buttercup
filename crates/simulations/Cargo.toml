@@ -34,7 +34,7 @@ statrs = "0.16"
 nalgebra = { version = "0.29", features = ["rand", "serde-serialize"] }
 primes = "0.3.0"
 argmin = "0.8.1"
-ordered-float = "3.9.1"
+ordered-float = "4.1.0"
 rand_distr = "0.4.3"
 num-traits = "0.2.15"
 auto_impl = "1.1.0"
