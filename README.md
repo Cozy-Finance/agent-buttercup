@@ -143,14 +143,12 @@ fn step(&mut self, &mut self, state: &State<U, W>, channel: &AgentChannelReceive
 ```
 The agent can retrieve the results from evm and world updates executed during `step`.
 
-
-The agent can optionally tag updates with a string:
 ```rust
 let token_approval_result: bool = channel.receive_evm_tx_output()?;
 let price_update_result = channel.receive_world_update_output()?;
 ```
 
-Unlike `step` and `resolve_step`, the agent gets an immutable reference to state during `activation_step` and are free to mutate it as needed. They do not need to use a `channel` to send updates or retrieve results.
+Unlike `step` and `resolve_step`, the agent gets a mutable reference to state during `activation_step` and are free to mutate it as needed. They do not need to use a `channel` to send updates or retrieve results.
 ```rust
 let token_approval = token_contract.approve(
     approved_address,
