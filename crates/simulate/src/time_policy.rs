@@ -6,7 +6,7 @@ pub struct TimeEnv {
     pub block_timestamp: U256,
 }
 
-pub trait TimePolicy: Sync + Send {
+pub trait TimePolicy {
     /// Returns the current time env.
     fn current_time_env(&self) -> TimeEnv;
 

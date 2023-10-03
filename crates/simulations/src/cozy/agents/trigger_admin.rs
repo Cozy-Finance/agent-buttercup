@@ -6,7 +6,6 @@ use simulate::{
     address::Address,
     agent::{agent_channel::AgentChannelSender, Agent},
     state::State,
-    u256::U256,
 };
 
 use crate::cozy::{
@@ -18,7 +17,7 @@ use crate::cozy::{
 pub struct TriggerAdmin {
     _name: Cow<'static, str>,
     address: Address,
-    protocol: Arc<ProtocolContracts>,
+    _protocol: Arc<ProtocolContracts>,
     set: Arc<SetContracts>,
     trigger_simulator: TriggerSimulator,
     triggered_markets: HashSet<usize>,
@@ -28,14 +27,14 @@ impl TriggerAdmin {
     pub fn new(
         _name: Cow<'static, str>,
         address: Address,
-        protocol: Arc<ProtocolContracts>,
+        _protocol: Arc<ProtocolContracts>,
         set: Arc<SetContracts>,
         trigger_simulator: TriggerSimulator,
     ) -> Self {
         Self {
             _name,
             address,
-            protocol,
+            _protocol,
             set,
             trigger_simulator,
             triggered_markets: HashSet::new(),
@@ -46,14 +45,6 @@ impl TriggerAdmin {
 impl Agent<CozyUpdate, CozyWorld> for TriggerAdmin {
     fn address(&self) -> Address {
         self.address
-    }
-
-    fn activation_step(&mut self, state: &mut State<CozyUpdate, CozyWorld>) {
-        let router_approve_tx = self
-            .set
-            .base_token
-            .approve(self.protocol.cozy_router.address(), U256::MAX);
-        let _ = state.execute_evm_tx_and_decode(self.address, router_approve_tx);
     }
 
     fn step(

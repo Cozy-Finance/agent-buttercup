@@ -13,6 +13,7 @@ use crate::{
     summarizer::{Summarizer, SummaryGenerator},
     time_policy::TimePolicy,
 };
+use revm::primitives::AccountInfo;
 
 type SimManagerResult<T> = Result<T, SimManagerError>;
 
@@ -149,7 +150,7 @@ where
             return Err(SimManagerError::AddressCollision(addr));
         }
         self.state
-            .add_account(addr, new_agent.account_info())
+            .add_account(addr, AccountInfo::default())
             .map_err(SimManagerError::StateError)?;
 
         // Run agent's activation step.

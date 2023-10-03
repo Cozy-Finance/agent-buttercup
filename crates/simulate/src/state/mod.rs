@@ -77,15 +77,6 @@ where
         self.evm.db.as_ref().ok_or(StateError::EvmDBNotSet)
     }
 
-    pub fn read_account_info(&self, address: Address) -> StateResult<AccountInfo> {
-        let account_info = self
-            .get_read_db()?
-            .basic(address.into())
-            .map_err(|e| StateError::EvmExecutionError(EVMError::Database(e)))?
-            .ok_or(StateError::EvmAccountNotFound(address))?;
-        Ok(account_info)
-    }
-
     pub fn timestamp(&self) -> U256 {
         U256::from(self.evm.env.block.timestamp)
     }
@@ -98,6 +89,15 @@ where
     pub fn update_time(&mut self, time_env: TimeEnv) {
         self.evm.env.block.number = time_env.block_number.into();
         self.evm.env.block.timestamp = time_env.block_timestamp.into();
+    }
+
+    pub fn read_account_info(&self, address: Address) -> StateResult<AccountInfo> {
+        let account_info = self
+            .get_read_db()?
+            .basic(address.into())
+            .map_err(|e| StateError::EvmExecutionError(EVMError::Database(e)))?
+            .ok_or(StateError::EvmAccountNotFound(address))?;
+        Ok(account_info)
     }
 
     /// Add an account to the evm.
@@ -196,20 +196,6 @@ where
         Ok(())
     }
 
-    pub fn execute_world_state_update(
-        &mut self,
-        world_state_update: WorldStateUpdate<U>,
-    ) -> StateResult<()> {
-        let result = self.world.execute(world_state_update.update);
-        if let Some(result) = result {
-            world_state_update
-                .result_sender
-                .send(result)
-                .map_err(|_| StateError::ChannelSendError)?;
-        }
-        Ok(())
-    }
-
     pub fn execute_call_raw<D: Detokenize>(&mut self, tx: TxEnv) -> StateResult<EvmBytes> {
         self.evm.env.tx = tx;
 
@@ -261,6 +247,20 @@ where
             },
             Err(e) => Err(e),
         }
+    }
+
+    pub fn execute_world_state_update(
+        &mut self,
+        world_state_update: WorldStateUpdate<U>,
+    ) -> StateResult<()> {
+        let result = self.world.execute(world_state_update.update);
+        if let Some(result) = result {
+            world_state_update
+                .result_sender
+                .send(result)
+                .map_err(|_| StateError::ChannelSendError)?;
+        }
+        Ok(())
     }
 }
 

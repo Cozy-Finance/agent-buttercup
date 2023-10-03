@@ -15,7 +15,7 @@ where
     W: World<WorldUpdate = U>,
 {
     /// Yield the summary on the given world state.
-    fn get_summary(&self, sim_state: &State<U, W>) -> Result<serde_json::Value, anyhow::Error>;
+    fn get_summary(&self, state: &State<U, W>) -> Result<serde_json::Value, anyhow::Error>;
 
     /// The name of the summary.
     fn get_summary_name(&self) -> Cow<'static, str>;
@@ -45,9 +45,9 @@ where
         }
     }
 
-    pub fn output_summaries(&mut self, sim_state: &State<U, W>) {
+    pub fn output_summaries(&mut self, state: &State<U, W>) {
         for summary_generator in &self.summary_generators {
-            let summary_result = summary_generator.get_summary(sim_state);
+            let summary_result = summary_generator.get_summary(state);
             log::debug!(
                 "{}: {:?}",
                 summary_generator.get_summary_name(),

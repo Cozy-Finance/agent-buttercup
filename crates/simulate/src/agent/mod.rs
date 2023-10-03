@@ -1,5 +1,3 @@
-use revm::primitives::AccountInfo;
-
 use crate::{
     address::Address,
     agent::agent_channel::{AgentChannelReceiver, AgentChannelSender},
@@ -17,17 +15,12 @@ where
     /// Returns the address of the agent.
     fn address(&self) -> Address;
 
-    /// Returns the account info of the agent.
-    fn account_info(&self) -> AccountInfo {
-        AccountInfo::default()
-    }
-
-    /// Executes actions against the simulation as soon as the agent is activated.
+    /// Executes actions against state as soon as the agent is activated.
     fn activation_step(&mut self, _state: &mut State<U, W>) {}
 
-    /// Executes the agents actions against the simulation environment.
+    /// Executes the agents actions against state in each step.
     fn step(&mut self, _state: &State<U, W>, _channel: &AgentChannelSender<U>) {}
 
-    /// Executes the agents actions against the simulation environment.
+    /// Allows agent to resolve step by reading state and receiving tx outcomes.
     fn resolve_step(&mut self, _state: &State<U, W>, _channel: &AgentChannelReceiver<U>) {}
 }
